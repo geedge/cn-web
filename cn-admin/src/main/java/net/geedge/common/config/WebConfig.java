@@ -1,0 +1,89 @@
+/**
+
+ *
+
+ *
+
+ */
+
+package net.geedge.common.config;
+
+import java.sql.SQLException;
+import java.util.Properties;
+
+import org.apache.ibatis.mapping.DatabaseIdProvider;
+import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import net.geedge.common.interceptor.LicenseInterceptor;
+import net.geedge.common.interceptor.SysMenuInterceptor;
+import net.geedge.common.utils.Constant;
+import net.geedge.common.utils.SQLUtils;
+import net.geedge.common.utils.SpringContextUtils;
+import net.geedge.common.utils.SqlHelper.MysqlHelper;
+import net.geedge.common.utils.SqlHelper.OracleHelper;
+import net.geedge.common.utils.SqlHelper.PostgresqlHelper;
+import net.geedge.modules.sys.service.SysConfigService;
+
+/**
+ * WebMvc配置
+ *
+
+ */
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Bean
+    public DatabaseIdProvider getDatabaseIdProvider(){
+        DatabaseIdProvider databaseIdProvider = new VendorDatabaseIdProvider();
+        Properties properties = new Properties();
+        properties.setProperty("Oracle","oracle");
+        properties.setProperty("MySQL","mysql");
+        properties.setProperty("DB2","db2");
+        properties.setProperty("Derby","derby");
+        properties.setProperty("H2","h2");
+        properties.setProperty("HSQL","hsql");
+        properties.setProperty("Informix","informix");
+        properties.setProperty("MS-SQL","ms-sql");
+        properties.setProperty("PostgreSQL","postgresql");
+        properties.setProperty("Sybase","sybase");
+        properties.setProperty("Hana","hana");
+        databaseIdProvider.setProperties(properties);
+
+        return databaseIdProvider;
+    }
+    @Bean
+    public SQLUtils getSqlUtils() throws SQLException {
+        switch (Constant.DB_TYPE){
+            case Constant.MYSQL:
+                return new MysqlHelper();
+            case Constant.POSTGRESQL:
+                return new PostgresqlHelper();
+            case Constant.ORACLE:
+                return new OracleHelper();
+            default:
+                return new MysqlHelper();
+        }
+    }
+
+    /**
+     * license校验拦截器
+     * @return
+     */
+    @Bean
+    LicenseInterceptor licenseInterceptor() {
+        return new LicenseInterceptor();
+    }
+    
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+    	//添加license 拦截器，排除 license 接口
+    	registry.addInterceptor(licenseInterceptor()).excludePathPatterns("/sys/license/**","/api/v1/alerts","/api/v2/alerts","/setup/**");
+    	
+        SysConfigService sysConfigService = (SysConfigService) SpringContextUtils.getBean("sysConfigService");
+        registry.addInterceptor(new SysMenuInterceptor(sysConfigService)).addPathPatterns("/sys/menu/**");
+    }
+}

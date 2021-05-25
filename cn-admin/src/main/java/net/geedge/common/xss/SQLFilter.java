@@ -1,0 +1,49 @@
+/**
+ *
+ */
+
+package net.geedge.common.xss;
+
+import net.geedge.common.exception.CNException;
+import net.geedge.common.utils.RCode;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.regex.Pattern;
+
+/**
+ * SQL过滤
+ *
+ * @author Mark sunlightcs@gmail.com
+ */
+public class SQLFilter {
+
+    private static String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\\b(select|update|union|and|or|delete|insert|trancate|char|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
+
+    private static Pattern sqlPattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+
+    /**
+     * SQL注入过滤
+     * @param str  待验证的字符串
+     */
+    public static String sqlInject(String str) {
+        if (StringUtils.isBlank(str)) {
+            return null;
+        }
+
+        //转换成小写
+        String str1 = str.toLowerCase();
+
+        String s = "";
+        if (str1.startsWith("-")) {
+            s = str1.substring(1);
+        } else {
+            s = str1;
+        }
+
+        if (sqlPattern.matcher(s).matches()) {
+            throw new CNException(RCode.ERROR);
+        }
+
+        return str;
+    }
+}

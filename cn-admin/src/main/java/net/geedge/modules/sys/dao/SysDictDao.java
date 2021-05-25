@@ -1,0 +1,33 @@
+/**
+
+ *
+
+ *
+
+ */
+
+package net.geedge.modules.sys.dao;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import net.geedge.modules.sys.entity.SysDictEntity;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 数据字典
+ *
+
+ */
+@Mapper
+public interface SysDictDao extends BaseMapper<SysDictEntity> {
+	List<SysDictEntity> queryNodeImgList();
+
+    List<SysDictEntity> querySysDictListWithPage(IPage<SysDictEntity> page, @Param("params")Map<String, Object> params);
+    List<SysDictEntity> querySysDictList(@Param("params")Map<String, Object> params);
+
+    Integer getMaxTypeCode(@Param("type")String type);
+}

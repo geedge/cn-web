@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.geedge.modules.sys.dao.SysMenuDao">
+
+	<select id="getRoleMenuList" resultType="net.geedge.modules.sys.entity.SysMenuEntity">
+		SELECT
+			sm.*
+		FROM
+			sys_role_menu rm
+			LEFT JOIN sys_menu sm ON rm.menu_id = sm.id
+		WHERE
+			rm.role_id = #{roleId}
+	</select>
+</mapper>

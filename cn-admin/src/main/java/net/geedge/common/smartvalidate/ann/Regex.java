@@ -1,0 +1,12 @@
+package net.geedge.common.smartvalidate.ann;
+
+import java.lang.annotation.*;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD})
+@Documented
+public @interface Regex {
+    String value();
+    String code() default "999";
+    String msg() default "error";
+}

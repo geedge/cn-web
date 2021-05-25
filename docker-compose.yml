@@ -1,0 +1,6 @@
+version: '2'
+services:
+  nz-admin:
+    image: cn/admin
+    ports:
+      - "8080:8080"
