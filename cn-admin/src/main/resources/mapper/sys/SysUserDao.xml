@@ -12,16 +12,7 @@
 
 	<select id="queryList" resultType="net.geedge.modules.sys.entity.SysUserEntity">
 		SELECT
-			su.id,
-			su.username,
-			su.status,
-			su.email,
-			su.create_at,
-			su.source,
-			su.name,
-			su.mobile,
-			su.last_login_time,
-			su.last_login_ip
+			*
 		FROM
 			sys_user su
 		<where>
@@ -34,6 +25,9 @@
 
 			<if test="params.name != null and params.name != ''">
 				AND (su.username like CONCAT('%', #{params.name}, '%') or su.name like CONCAT('%', #{params.name}, '%'))
+			</if>
+			<if test="params.q != null and params.q !=''">
+				AND (su.username like CONCAT('%', #{params.q}, '%') or su.name like CONCAT('%', #{params.q}, '%') or su.email like CONCAT('%', #{params.q}, '%') or su.mobile like CONCAT('%', #{params.q}, '%')) 
 			</if>
 		</where>
 	</select>

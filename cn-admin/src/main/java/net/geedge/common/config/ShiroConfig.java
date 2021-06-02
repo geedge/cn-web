@@ -218,11 +218,11 @@ public class ShiroConfig {
 
 	private Integer getTimeOutData() {
 		SysConfigEntity configEntity = sysconfigService.getOne(new QueryWrapper<SysConfigEntity>().lambda()
-				.eq(SysConfigEntity::getParamKey, Constant.SYSCONFIG_SESSION_TIMEOUT_KEY));
+				.eq(SysConfigEntity::getCkey, Constant.SYSCONFIG_SESSION_TIMEOUT_KEY));
 		Integer loginExpiration = 30;
 		if (Tool.ObjectUtil.isNotEmpty(configEntity)) {
-			loginExpiration = StrUtil.isNotBlank(configEntity.getParamValue())
-					? Integer.valueOf(configEntity.getParamValue())
+			loginExpiration = StrUtil.isNotBlank(configEntity.getCvalue())
+					? Integer.valueOf(configEntity.getCvalue())
 					: loginExpiration;
 		}
 		return loginExpiration;

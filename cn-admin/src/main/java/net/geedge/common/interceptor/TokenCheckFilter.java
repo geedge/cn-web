@@ -110,7 +110,7 @@ public class TokenCheckFilter extends AccessControlFilter {
         	String time = DateUtil.format(now , "yyyy-MM-dd hh:mm:ss");
         	// 查询sys_api_key是否有该token记录
         	SysApiKey apiKey = sysApiKeyDao.selectOne(new QueryWrapper<SysApiKey>().lambda().eq(SysApiKey::getToken, requestToken)
-        			.and(wrapper -> wrapper.ge(SysApiKey::getExpireAt,time).or().isNull(SysApiKey::getExpireAt)));
+        			.and(wrapper -> wrapper.ge(SysApiKey::getEtime,time).or().isNull(SysApiKey::getEtime)));
         	// 如果有的话则认证通过  同时将该值存放到redis里
         	if(Tool.ObjectUtil.isEmpty(apiKey)) {
         		// 如果没有则 返回响应值
@@ -126,7 +126,7 @@ public class TokenCheckFilter extends AccessControlFilter {
         		
         		
         		//获取存在缓存中的过期时间
-        		Date expireAt = apiKey.getExpireAt();
+        		Date expireAt = apiKey.getEtime();
         		
         		SimpleSession session = new SimpleSession();
     			SysUserEntity user = new SysUserEntity();

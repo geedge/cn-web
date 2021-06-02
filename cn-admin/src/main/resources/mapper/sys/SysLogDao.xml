@@ -11,12 +11,12 @@
 	        <result property="operaId" column="opera_id"/>
 	        <result property="method" column="method"/>
 	        <result property="params" column="params"/>
-			<result property="time" column="time"/>
+			<result property="duration" column="duration"/>
 			<result property="ip" column="ip"/>
 			<result property="state" column="state"/>
 			<result property="response" column="response"/>
 			<result property="exception" column="exception"/>
-			<result property="createDate" column="create_date"/>
+			<result property="ctime" column="ctime"/>
 			<result property="username" column="username"/>
 			
 	        <association property="apiKey" javaType="net.geedge.modules.sys.entity.SysApiKey">
@@ -39,7 +39,7 @@
                         <if test="params.operation != null and params.operation != ''">
                                 AND sl.operation like CONCAT('%', #{params.operation}, '%')
                         </if>
-                        <if test="params.state != null and params.state != ''">
+                        <if test="params.state != null">
                                 AND sl.state = #{params.state}
                         </if>
                         <if test="params.type != null and params.type != ''">
@@ -72,10 +72,13 @@
                         <if test="params.exception != null and params.exception != ''">
                         	AND sl.exception = #{params.exception}
                         </if>
+                        <if test="params.q != null and params.q != ''">
+                        	AND (su.name like CONCAT('%', #{params.q}, '%') or su.username like CONCAT('%', #{params.q}, '%') or sl.type like CONCAT('%', #{params.q}, '%') or sl.opera_id like CONCAT('%', #{params.q}, '%') or sl.params like CONCAT('%', #{params.q}, '%') or sl.response like CONCAT('%', #{params.q}, '%') or sl.exception like CONCAT('%', #{params.q}, '%'))
+                        </if>
                     </where>
 
             <if test="params.orderBy == null or params.orderBy == ''">
-                ORDER BY sl.create_date DESC
+                ORDER BY sl.ctime DESC
             </if>
         </select>
 </mapper>

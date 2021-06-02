@@ -66,7 +66,7 @@ public class SysRoleController extends AbstractController {
      */
 	@PostMapping
 	@SysLog(operation = OperationEnum.ADD,type = TypeEnum.SYSTEM)
-	@RequiresPermissions("sys:role:save")
+	/*@RequiresPermissions("sys:role:save")*/
 	public R save(@RequestBody SysRoleEntity role){
 		sysRoleService.saveRole(role);
 		return R.ok().put("id", role.getId());
@@ -79,7 +79,7 @@ public class SysRoleController extends AbstractController {
 	 */
 	@PutMapping
 	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
-	@RequiresPermissions("sys:role:update")
+	/*@RequiresPermissions("sys:role:update")*/
 	public R update(@RequestBody SysRoleEntity role){
 		ValidateUtils.is(role.getId()).notNull(RCode.SYS_ROLE_ID_ISNULL);
 		sysRoleService.update(role);
@@ -93,7 +93,7 @@ public class SysRoleController extends AbstractController {
 	 */
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE,type = TypeEnum.SYSTEM)
-	@RequiresPermissions("sys:role:delete")
+	/*@RequiresPermissions("sys:role:delete")*/
 	public R delete(@RequestParam Integer... ids) {
 		ValidateUtils.is(ids).notNull(RCode.SYS_ROLE_ID_ISNULL);
 

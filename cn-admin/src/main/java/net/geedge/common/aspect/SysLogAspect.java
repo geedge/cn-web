@@ -118,7 +118,7 @@ public class SysLogAspect {
 		sysLog.setType(syslog.type().getValue());
 		sysLog.setResponse(JSON.toJSONString(r));
 		sysLog.setException(Tool.StrUtil.utf8Str(r.get("msg")));
-		sysLog.setTime(0L);
+		sysLog.setDuration(0L);
 
 		// 获取request
 		HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
@@ -168,8 +168,8 @@ public class SysLogAspect {
 			}
 		}
 
-		sysLog.setCreateDate(new Date());
-		sysLog.setState("fail");
+		sysLog.setCtime(new Date());
+		sysLog.setState(0);
 
 
 		sysLogService.save(sysLog);
@@ -204,9 +204,9 @@ public class SysLogAspect {
 
 		// 由于 导出功能没有返回值 记录为 success , 原因为导出中若有异常会经过 saveExceptionLog（） 方法
 		if ("export".equals(operationType)) {
-			sysLog.setState("success");
+			sysLog.setState(1);
 		} else {
-			String state = "200".equals(r.get("code").toString()) ? "success" : "fail";
+			Integer state = "200".equals(r.get("code").toString()) ? 1 : 0;
 			sysLog.setState(state);
 		}
 
@@ -254,8 +254,8 @@ public class SysLogAspect {
 		// 设置IP地址
 		sysLog.setIp(IPUtils.getIpAddr(request));
 
-		sysLog.setTime(time);
-		sysLog.setCreateDate(new Date());
+		sysLog.setDuration(time);
+		sysLog.setCtime(new Date());
 
 		sysLog.setApiKeyId(apiKeyId);
 		// 保存系统日志 注： 查询操作若无异常不记录操作日志

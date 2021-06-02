@@ -8,9 +8,11 @@
 
 package net.geedge.modules.sys.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.utils.CommonUtil;
@@ -23,9 +25,7 @@ import net.geedge.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service("sysDictService")
@@ -36,6 +36,9 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+    	if (ObjectUtil.isNotEmpty(params.get("ids"))) {
+            params.put("ids", Arrays.asList(String.valueOf(params.get("ids")).split(StringPool.COMMA)));
+        }
 		IPage<SysDictEntity> page=this.page(new Query(SysDictEntity.class).getPage(params));
 
 		List<SysDictEntity> list=this.baseMapper.querySysDictListWithPage(page,params);
@@ -47,15 +50,6 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
 	@Override
 	public List<SysDictEntity> queryList(Map<String, Object> params) {
 		List<SysDictEntity> list = this.baseMapper.querySysDictList(params);
-		if (!CommonUtil.isNull(list)) {
-        	for (SysDictEntity s : list) {
-        		if (!CommonUtil.isNull(s.getI18nCode())) {
-        			String queryValue = i18nService.queryValue(s.getI18nCode());
-        			s.setValue(queryValue);
-        		}
-        	}
-        }
-        
 		return list;
 	}
 	
@@ -82,9 +76,6 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
 	@Override
 	public boolean save(SysDictEntity dict) {
 		super.save(dict);
-		if(StrUtil.equals(dict.getType(),Constant.DICT_NAME_LANG)) {
-			updateLangCache();
-		}
 		return true;
 	}
 	
@@ -113,28 +104,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
 		}
 
 		updateById(dict);
-
-		if (langUpdate) {
-			updateLangCache();
-		}
 		return true;
 	}
-
-	@Override
-	public void updateLangCache() {
-		Constant.langList.clear();
-		HashMap<String, Object> params = new HashMap<>();
-		params.put("type", Constant.DICT_NAME_LANG);
-		List<SysDictEntity> queryList = queryList(params);
-		for (SysDictEntity d : queryList) {
-			Map<String, String> lang = new HashMap<>();
-			lang.put("name", d.getRemark());
-			lang.put("value", d.getValue());
-			Constant.langList.add(lang);
-		}
-	}
-
-
 	/**
 	 *  name type 下 value 值不能重复
 	 * @param id
@@ -155,21 +126,15 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
 	}
 
 	@Override
-	public Integer queryMaxTypeCode(String type) {
-		Integer maxCode=this.baseMapper.getMaxTypeCode(type);
-		return maxCode;
-	}
-
-	@Override
 	public void checkSysDicValue(String type, String value, RCode errCode) {
-		List<SysDictEntity> list = this.list(new QueryWrapper<SysDictEntity>().lambda().eq(SysDictEntity::getType, type).eq(SysDictEntity::getValue, value).eq(SysDictEntity::getDelFlag, 0));
+		List<SysDictEntity> list = this.list(new QueryWrapper<SysDictEntity>().lambda().eq(SysDictEntity::getType, type).eq(SysDictEntity::getValue, value).eq(SysDictEntity::getState, 0));
 		if(list==null ||list.size()<1){
 			throw new CNException(errCode);
 		}
 	}
 	@Override
 	public void checkSysDicCode(String type, Integer code, RCode errCode) {
-		List<SysDictEntity> list = this.list(new QueryWrapper<SysDictEntity>().lambda().eq(SysDictEntity::getType, type).eq(SysDictEntity::getCode, code).eq(SysDictEntity::getDelFlag, 0));
+		List<SysDictEntity> list = this.list(new QueryWrapper<SysDictEntity>().lambda().eq(SysDictEntity::getType, type).eq(SysDictEntity::getCode, code).eq(SysDictEntity::getState, 0));
 		if(list==null ||list.size()<1){
 			throw new CNException(errCode);
 		}
@@ -177,7 +142,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
 
 	@Override
 	public List<SysDictEntity> querySysDicByType(String type) {
-		List<SysDictEntity> list = this.list(new QueryWrapper<SysDictEntity>().lambda().eq(SysDictEntity::getType, type).eq(SysDictEntity::getDelFlag, 0));
+		List<SysDictEntity> list = this.list(new QueryWrapper<SysDictEntity>().lambda().eq(SysDictEntity::getType, type).eq(SysDictEntity::getState, 0));
 		return list;
 	}
 
@@ -187,23 +152,24 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
 		if(StringUtils.isBlank(dict.getName())){
 			dict.setName(dict.getValue());
 		}
-		//字典码，后台根据已有最大code值 +1 填写
-		if( dict.getCode()==null){
-			Integer maxCode=this.queryMaxTypeCode(dict.getType());
-			if(maxCode != null){
-				maxCode+=1;
-			}else{
-				maxCode=1;
+		//字典码，类型相同不能有相同code
+		if(Tool.ObjectUtil.isNotEmpty(dict.getCode())) {
+			SysDictEntity one = this.getOne(new QueryWrapper<SysDictEntity>().lambda().eq(SysDictEntity::getType, dict.getType()).eq(SysDictEntity::getCode, dict.getCode()).ne(ObjectUtil.isNotEmpty(dict.getId()), SysDictEntity::getId,dict.getId()));
+			if(Tool.ObjectUtil.isNotEmpty(one)) {
+				throw new CNException(RCode.SYS_DICT_CODE_EXISTS);
 			}
-
-			dict.setCode(maxCode);
-		}else{
+		}else {
 			throw new CNException(RCode.SYS_DICT_CODE_ISNULL);
 		}
-
+	
 		Long userId = ShiroUtils.getUserId();
-		dict.setOperator(userId);
-		dict.setOpTime(new Date());
+		dict.setUby(userId);
+		dict.setUtime(new Date());
 		this.save(dict);
+	}
+
+	@Override
+	public SysDictEntity queryInfo(Long id) {
+		return this.baseMapper.selectInfo(id);
 	}
 }

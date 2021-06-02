@@ -24,10 +24,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import cn.hutool.core.util.ObjectUtil;
+import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.entity.SysDictEntity;
 import net.geedge.modules.sys.service.SysDictService;
 
@@ -53,7 +58,7 @@ public class SysDictController extends AbstractController {
      */
     @RequestMapping("/{id}")
     public R info(@PathVariable("id") Long id){
-        SysDictEntity dict = sysDictService.getById(id);
+        SysDictEntity dict = sysDictService.queryInfo(id);
         return R.ok(dict);
     }
 
@@ -81,8 +86,14 @@ public class SysDictController extends AbstractController {
         if(StringUtils.isBlank(dict.getName())){
             dict.setName(dict.getValue());
         }
-        dict.setOperator(getUserId());
-        dict.setOpTime(new Date());
+        if(Tool.ObjectUtil.isNotEmpty(dict.getCode())) {
+			SysDictEntity one = sysDictService.getOne(new QueryWrapper<SysDictEntity>().lambda().eq(SysDictEntity::getType, dict.getType()).eq(SysDictEntity::getCode, dict.getCode()).ne(ObjectUtil.isNotEmpty(dict.getId()), SysDictEntity::getId,dict.getId()));
+			if(Tool.ObjectUtil.isNotEmpty(one)) {
+				throw new CNException(RCode.SYS_DICT_CODE_EXISTS);
+			}
+		}
+        dict.setUby(getUserId());
+        dict.setUtime(new Date());
         sysDictService.update(dict);
         return R.ok().putData("id", dict.getId());
     }

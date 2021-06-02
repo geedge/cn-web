@@ -4,12 +4,12 @@
 
 	<!-- 根据key，更新value -->
 	<update id="updateValueByKey" parameterType="map">
-		update sys_config set param_value = #{paramValue} where param_key = #{paramKey}
+		update sys_config set cvalue = #{paramValue} where ckey = #{paramKey}
 	</update>
 
 	<!-- 根据key，查询value -->
 	<select id="queryByKey" parameterType="string" resultType="net.geedge.modules.sys.entity.SysConfigEntity">
-		select * from sys_config where param_key = #{paramKey}
+		select * from sys_config where ckey = #{paramKey}
 	</select>
     
     <!-- reset清空表数据信息	-->

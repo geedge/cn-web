@@ -10,9 +10,42 @@
         <result property="lang" column="lang"/>
         <result property="value" column="value"/>
         <result property="remark" column="remark"/>
-        <result property="operator" column="operator"/>
-        <result property="opTime" column="op_time"/>
+        <result property="name" column="name"/>
+        <result property="utime" column="utime"/>
+        <result property="uby" column="uby"/>
+        <association property="uuser" column="uby" select="queryUserById"></association>
     </resultMap>
 
-
+	<select id="selectInfo" resultMap="sysI18nMap">
+		select * from sys_i18n where id = #{id}
+	</select>
+	
+	<select id="selectSysI18nListWithPage" resultMap="sysI18nMap">
+		select * from 
+		sys_i18n
+		<where>
+			<if test="params.ids != null and params.ids.size > 0 ">
+				id in 
+					<foreach item="id" collection="params.ids" separator="," open="(" close=")" index="">
+			       		#{id}
+				     </foreach>
+			</if>
+			<if test="params.q != null and params.q != ''">
+				and (lang like CONCAT('%', #{params.q}, '%') or code like CONCAT('%', #{params.q}, '%') or value like CONCAT('%', #{params.q}, '%'))
+			</if>
+			<if test="params.value != null and params.value != ''">
+				and value=#{params.value}
+			</if>
+			<if test="params.lang != null and params.lang != ''">
+				and lang=#{params.lang}
+			</if>
+			<if test="params.code != null and params.code != ''">
+				and code=#{params.code}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
+		select id,username from sys_user where id=#{id} and status=1
+	</select>
 </mapper>

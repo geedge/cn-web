@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.PageUtils;
@@ -30,10 +30,8 @@ public class SysApiKeyServiceImpl extends ServiceImpl<SysApiKeyDao,SysApiKey> im
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		IPage result = new Query(SysApiKey.class).getPage(params);
-		String ids = (String) params.get("ids");
-        if(StrUtil.isNotBlank(ids)) {
-        	List<String> listIds = Arrays.asList(ids.split(","));
-        	params.put("ids",listIds);
+		if (ObjectUtil.isNotEmpty(params.get("ids"))) {
+            params.put("ids", Arrays.asList(String.valueOf(params.get("ids")).split(StringPool.COMMA)));
         }
 		List<SysApiKey> rows = this.baseMapper.queryList(result, params);
 		result.setRecords(rows);
@@ -52,8 +50,8 @@ public class SysApiKeyServiceImpl extends ServiceImpl<SysApiKeyDao,SysApiKey> im
 		String uuid = UUID.randomUUID().toString();
 		
 		sysApiKey.setToken(uuid);
-		sysApiKey.setCreateBy(ShiroUtils.getUserId().intValue());
-		sysApiKey.setCreateAt(new Date());
+		sysApiKey.setUby(ShiroUtils.getUserId().intValue());
+		sysApiKey.setUtime(new Date());
 		this.save(sysApiKey);
 		return sysApiKey.getId();
 	}

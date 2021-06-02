@@ -46,7 +46,7 @@ public class SysDictEntity implements Serializable {
 	 * 字典码
 	 */
 	@NotBlank(message="字典码不能为空")
-	private Integer code;
+	private String code;
 	/**
 	 * 字典值
 	 */
@@ -55,38 +55,31 @@ public class SysDictEntity implements Serializable {
 	/**
 	 * 排序
 	 */
-	private Integer orderNum;
+	private Integer sort;
 	/**
 	 * 备注
 	 */
 	private String remark;
 	/**
-	 * 删除标记  -1：已删除  0：正常
-	 */
-	@TableLogic
-	private Integer delFlag;
-	
-	/**
 	 * 操作人
 	 */
-	private Long operator;
+	private Long uby;
 	
 	/**
 	 * 操作时间
 	 */
-	private Date opTime;
+	private Date utime;
 	
 	/**
 	 * 国际化code
 	 */
-	private String i18nCode;
+	private String i18n;
+	
+	private Integer state;
 
-	/**
-	 * 用于撤销具体某次批量导入的uuid
-	 */
-	private String seq;
+	private Integer buildIn;
 
 	@TableField(exist = false)
-	private SysUserEntity operatorUser;
+	private SysUserEntity uuser;
 
 }

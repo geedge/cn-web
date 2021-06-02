@@ -10,10 +10,14 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.hutool.core.exceptions.UtilException;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -92,9 +96,13 @@ public class SysLicenseController extends AbstractController {
 	 * 上传license
 	 * @throws  
 	 */
-	@PostMapping("/upload")
+	@PutMapping("/upload")
 	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.LICENSE)
 	public R uploadLicense(@RequestParam("file") MultipartFile file) throws IOException {
+        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        if(!StrUtil.equals(suffix, "xml")) {
+        	throw new CNException(RCode.LICENSE_FILE_TYPE_ERROR);
+        }
 		ValidateUtils.is(file).notNull(RCode.LICENSE_FILE_IS_NULL);
 		byte[] bytes = file.getBytes();
 		//获取文件内容

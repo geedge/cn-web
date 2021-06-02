@@ -105,13 +105,13 @@ public class SysLoginController extends AbstractController {
 			obj.put("token", subject.getSession().getId().toString());
 			// 查询系统配置信息
 			String[] paramkeys = {"system_name", "system_logo", "timezone", "default_cabinet_usize", "map_center_config", "unsaved_change","prometheus_federation_enabled"};
-			List<SysConfigEntity> configEntityList = configService.list(new LambdaUpdateWrapper<SysConfigEntity>().in(SysConfigEntity::getParamKey, paramkeys));
+			List<SysConfigEntity> configEntityList = configService.list(new LambdaUpdateWrapper<SysConfigEntity>().in(SysConfigEntity::getCkey, paramkeys));
 			for (SysConfigEntity configEntity : configEntityList) {
-				if ("timezone".equals(configEntity.getParamKey())) {
-					Timezone timezoneEntity = timezoneService.getOne(new LambdaUpdateWrapper<Timezone>().eq(Timezone::getName, configEntity.getParamValue()));
+				if ("timezone".equals(configEntity.getCkey())) {
+					Timezone timezoneEntity = timezoneService.getOne(new LambdaUpdateWrapper<Timezone>().eq(Timezone::getName, configEntity.getCvalue()));
 					obj.put("offset", timezoneEntity.getOffset());
 				}
-				obj.put(Tool.StrUtil.toCamelCase(configEntity.getParamKey()), configEntity.getParamValue());
+				obj.put(Tool.StrUtil.toCamelCase(configEntity.getCkey()), configEntity.getCvalue());
 			}
 
             // 获取request
@@ -151,8 +151,6 @@ public class SysLoginController extends AbstractController {
 		}catch (RuntimeException e){
 				logger.debug("登出操作删除redis信息失败，失败key：{}",requestToken);
 		}
-
-
 		return R.ok();
 	}
 

@@ -48,10 +48,10 @@ public class SysInfoServiceImpl implements SysInfoService {
     public Map getAboutInfo() {
         Map resultMap = new HashMap(4);
         // 1. nehza 系统版本
-        SysConfigEntity sysVersion = sysConfigDao.selectOne(new QueryWrapper<SysConfigEntity>().lambda().eq(SysConfigEntity::getParamKey, Constant.SYSCONFIG_KEY_SYSTEM_VERSION));
+        SysConfigEntity sysVersion = new SysConfigEntity();
         Map sysVersionMap = new HashMap(4);
         sysVersionMap.put("name", "cn Monitoring System");
-        sysVersionMap.put("version", sysVersion.getParamValue());
+        sysVersionMap.put("version", sysVersion.getCvalue());
 
         resultMap.put("cn", sysVersionMap);
 

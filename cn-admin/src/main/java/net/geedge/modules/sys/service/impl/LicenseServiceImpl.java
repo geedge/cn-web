@@ -84,18 +84,18 @@ public class LicenseServiceImpl implements LicenseService {
 		String token = Tool.LicenseUtil.getMachineID();
 		if (Tool.StrUtil.isBlank(token)) {
 			SysConfigEntity entity = sysConfigService
-					.getOne(new QueryWrapper<SysConfigEntity>().eq("param_key", licenseTokenKey));
-			if (entity == null || Tool.StrUtil.isBlank(entity.getParamValue())) {
+					.getOne(new QueryWrapper<SysConfigEntity>().eq("ckey", licenseTokenKey));
+			if (entity == null || Tool.StrUtil.isBlank(entity.getCvalue())) {
 				token = Tool.IdUtil.fastSimpleUUID();
 				if (entity == null) {
 					entity = new SysConfigEntity();
 				}
-				entity.setParamKey(licenseTokenKey);
-				entity.setParamValue(token);
+				entity.setCkey(licenseTokenKey);
+				entity.setCvalue(token);
 				entity.setRemark("Automatic generated");
 				sysConfigService.saveOrUpdate(entity);
 			}
-			token = entity.getParamValue();
+			token = entity.getCvalue();
 		}
 		return token;
 	}
@@ -103,12 +103,12 @@ public class LicenseServiceImpl implements LicenseService {
 	@Override
 	public LicenseEntity getLicenseEntity() {
 		SysConfigEntity entity = sysConfigService
-				.getOne(new QueryWrapper<SysConfigEntity>().eq("param_key", licenseConfigKey));
-		if (entity == null || Tool.StrUtil.isBlank(entity.getParamValue())) {
+				.getOne(new QueryWrapper<SysConfigEntity>().lambda().eq(SysConfigEntity::getCkey, licenseConfigKey));
+		if (entity == null || Tool.StrUtil.isBlank(entity.getCvalue())) {
 			return null;
 		}
 		// 证书由xml转为 map
-		LicenseEntity licenseEntity = Tool.LicenseUtil.xmlToLicenseBean(entity.getParamValue());
+		LicenseEntity licenseEntity = Tool.LicenseUtil.xmlToLicenseBean(entity.getCvalue());
 		return licenseEntity;
 	}
 
@@ -118,12 +118,12 @@ public class LicenseServiceImpl implements LicenseService {
 	@Override
 	public void uploadLicenseEntity(LicenseEntity license) {
 		SysConfigEntity entity = sysConfigService
-				.getOne(new QueryWrapper<SysConfigEntity>().eq("param_key", licenseConfigKey));
+				.getOne(new QueryWrapper<SysConfigEntity>().lambda().eq(SysConfigEntity::getCkey, licenseConfigKey));
 		if (entity == null) {
 			entity = new SysConfigEntity();
 		}
-		entity.setParamKey(licenseConfigKey);
-		entity.setParamValue(Tool.LicenseUtil.licenseBeanToXml(license, false));
+		entity.setCkey(licenseConfigKey);
+		entity.setCvalue(Tool.LicenseUtil.licenseBeanToXml(license, false));
 		entity.setRemark(license.getSignature().getDigestValue());
 		sysConfigService.saveOrUpdate(entity);
 

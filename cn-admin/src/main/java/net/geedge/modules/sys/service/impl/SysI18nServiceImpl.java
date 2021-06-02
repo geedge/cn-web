@@ -3,12 +3,17 @@ package net.geedge.modules.sys.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.geedge.common.config.I18nConfig;
+
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.utils.CommonUtil;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
+import net.geedge.common.utils.RCode;
 import net.geedge.modules.sys.dao.SysI18nDao;
 import net.geedge.modules.sys.entity.SysI18nEntity;
 import net.geedge.modules.sys.service.SysDictService;
@@ -22,9 +27,13 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service("sysI18nService")
@@ -34,19 +43,17 @@ public class SysI18nServiceImpl extends ServiceImpl<SysI18nDao, SysI18nEntity> i
 	private Environment env;
 	@Autowired
     private SysDictService dictService;
-	@Autowired
-    private I18nConfig i18nConfig;
 	
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<SysI18nEntity> page = this.page(
-                new Query(SysI18nEntity.class).getPage(params),
-                new QueryWrapper<SysI18nEntity>()
-                	.like(!StringUtils.isEmpty((String)params.get("code")), "code", (String)params.get("code"))
-                	.eq(!StringUtils.isEmpty((String)params.get("lang")), "lang", (String)params.get("lang"))
-                	.like(!StringUtils.isEmpty((String)params.get("value")), "value", (String)params.get("value"))
-        );
+    	if (ObjectUtil.isNotEmpty(params.get("ids"))) {
+            params.put("ids", Arrays.asList(String.valueOf(params.get("ids")).split(StringPool.COMMA)));
+        }
+    	IPage<SysI18nEntity> page=this.page(new Query(SysI18nEntity.class).getPage(params));
 
+		List<SysI18nEntity> list=this.baseMapper.selectSysI18nListWithPage(page,params);
+
+		page.setRecords(list);
         return new PageUtils(page);
     }
 
@@ -68,46 +75,35 @@ public class SysI18nServiceImpl extends ServiceImpl<SysI18nDao, SysI18nEntity> i
     	return locale;
     }
     
-    /** 
-     * 根据code查询国际化值，自动获取当前语言
-     */
-    public String queryValue(String code) {
-    	return queryValue(code, getLocale());
-    }
-    
-    public String queryValue(String code, String lang) {
-    	return queryValue(code, new Locale(lang));
-    }
-    
-    public String queryValue(String code, Locale locale) {
-    	return i18nConfig.getSourceFromCache(code, locale);
-    }
-    
-    public Map<String, String> getCurrLang() {
-    	String lang = getLocale().getLanguage();
-    	if (CommonUtil.isNull(Constant.langList)) {
-			dictService.updateLangCache();
-		}
-    	for (Map<String, String> l : Constant.langList){
-    		if (l.get("value").equals(lang)) {
-    			return l;
-    		}
-    	}
-    	return null;
-    }
-    
 	@Override
 	public boolean check(SysI18nEntity sysI18n) {
 		boolean dumpFlag = true; //记录是否重复(code+lang)，true为重复
 		List<SysI18nEntity> list = list(new QueryWrapper<SysI18nEntity>()
 									.eq(true, "code", sysI18n.getCode())
-									. eq(true, "lang", sysI18n.getLang())
-									. eq(true, "del_flag", Constant.DELFLAG_FALSE));
+									. eq(true, "lang", sysI18n.getLang()));
 		//当只有一个结果并且这个结果是自身时，或没有结果时，说明不重复
-		if ((list == null || list.size() == 0) ||
-				(list != null && list.size() == 1 && list.get(0).getId().longValue() == sysI18n.getId().longValue())) {
+		if (ObjectUtil.isEmpty(list)) {
 			dumpFlag = false;
 		}
 		return dumpFlag;
+	}
+
+	@Override
+	public SysI18nEntity queryInfo(Long id) {
+		return this.baseMapper.selectInfo(id);
+	}
+
+	@Override
+	public Map selectLang(String l) {
+		Map result =new HashMap();
+		List<String> langs = StrUtil.split(l, StrUtil.C_COMMA);
+		if(ObjectUtil.isNotEmpty(langs)) {
+			for(String lang:langs) {
+				List<SysI18nEntity> datas = this.list(new QueryWrapper<SysI18nEntity>().lambda().eq(SysI18nEntity::getLang, lang));
+				Map<String, String> collect = datas.stream().collect(Collectors.toMap(SysI18nEntity::getCode, SysI18nEntity::getValue));
+				result.put(lang, collect);
+			}
+		}
+		return result;
 	}
 }

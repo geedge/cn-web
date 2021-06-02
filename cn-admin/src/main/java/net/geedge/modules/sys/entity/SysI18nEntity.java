@@ -25,6 +25,7 @@ public class SysI18nEntity implements Serializable {
 	 */
 	@TableId(type=IdType.INPUT)
 	private Long id;
+	private String name;
 	/**
 	 * i18n code
 	 */
@@ -42,17 +43,13 @@ public class SysI18nEntity implements Serializable {
 	 */
 	private String remark;
 	/**
-	 * 操作人
-	 */
-	@JsonIgnore
-	private Long operator;
-	/**
 	 * 操作时间
 	 */
 	@JsonIgnore
-	private Date opTime;
-	@JsonIgnore
-	@TableLogic
-	private String delFlag;
-
+	private Date utime;
+	
+	private Long uby;
+	
+	@TableField(exist = false)
+	private SysUserEntity uuser;
 }

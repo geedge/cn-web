@@ -24,8 +24,7 @@ public class SysMenuEntity implements Serializable {
 
     private String i18n;
 
-    @TableField(strategy = FieldStrategy.IGNORED)
-    private Integer parentId;
+    private Integer pid;
 
     // 后端使用 shiro 权限管理 多个用逗号分隔
     private String perms;
@@ -37,7 +36,7 @@ public class SysMenuEntity implements Serializable {
     private String route;
 
     // 排序 默认：1
-    private Integer orderNum;
+    private Integer sort;
 
     /**
      * 图标
@@ -48,8 +47,10 @@ public class SysMenuEntity implements Serializable {
      * 必要权限，如编辑按钮需要 勾选查看权限
      * 填写内容为 sys_menu.id，多个逗号分隔
      */
-    private String required;
+    private String refer;
 
     @TableField(exist = false)
     private List<SysMenuEntity> children;
+    
+    private Integer state;
 }

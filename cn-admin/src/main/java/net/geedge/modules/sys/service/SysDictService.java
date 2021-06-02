@@ -31,8 +31,6 @@ public interface SysDictService extends IService<SysDictEntity> {
 	
 	boolean update(SysDictEntity dict);
 	
-	void updateLangCache();
-
     /**
      *  name type 下 value 值不能重复
      * @param id
@@ -43,8 +41,6 @@ public interface SysDictService extends IService<SysDictEntity> {
      */
     boolean dictValueCheck(Long id, String name, String type, String value);
 
-    Integer queryMaxTypeCode(String type);
-
     void checkSysDicValue(String type, String value, RCode errCode);
 
     void checkSysDicCode(String type, Integer code, RCode errCode);
@@ -52,5 +48,7 @@ public interface SysDictService extends IService<SysDictEntity> {
     List<SysDictEntity> querySysDicByType(String type);
 
     void saveSysDict(SysDictEntity dict);
+    
+    SysDictEntity queryInfo(Long id);
 }
 

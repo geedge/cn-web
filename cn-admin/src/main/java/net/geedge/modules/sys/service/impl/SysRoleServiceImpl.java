@@ -1,11 +1,13 @@
 package net.geedge.modules.sys.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
@@ -52,13 +54,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<SysRoleEntity> page = this.page(
-                new Query(SysRoleEntity.class).getPage(params),
-                new LambdaUpdateWrapper<SysRoleEntity>()
-                        .eq(Tool.ObjectUtil.isNotEmpty(params.get("id")), SysRoleEntity::getId, params.get("id"))
-                        .like(Tool.ObjectUtil.isNotEmpty(params.get("name")), SysRoleEntity::getName, params.get("name"))
-        );
+    	if (ObjectUtil.isNotEmpty(params.get("ids"))) {
+            params.put("ids", Arrays.asList(String.valueOf(params.get("ids")).split(StringPool.COMMA)));
+        }
+    	IPage<SysRoleEntity> page=this.page(new Query(SysRoleEntity.class).getPage(params));
 
+		List<SysRoleEntity> list=this.baseMapper.selectSysRoleListWithPage(page,params);
+		page.setRecords(list);
         return new PageUtils(page);
     }
 
@@ -81,7 +83,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
      */
     private void validateRoleInfo(SysRoleEntity role) {
         String name = role.getName();
-        ValidateUtils.is(name).notNull(RCode.SYS_ROLE_NAME_ISNULL);
+        ValidateUtils.is(name).notNull(RCode.SYS_ROLE_NAME_ISNULL)
+        .and(role.getRemark()).notNull(RCode.SYS_ROLE_REMARK_ISNULL);
 
         // 校验名称重复
         List<SysRoleEntity> list = this.list(new QueryWrapper<SysRoleEntity>().lambda().eq(SysRoleEntity::getName, name));
@@ -105,6 +108,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
             if (!menuIdList.contains(menuId))
                 throw new CNException(RCode.SYS_MENU_ISNULL);
         }
+        
+        role.setUby(ShiroUtils.getUserId());
+        role.setUtime(new Date());
     }
 
     @Override
@@ -197,7 +203,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
         Map resultData = new HashMap(4);
         List<SysMenuEntity> menuList = sysMenuService.getMenuList(null);
 
-       /* List<SysMenuEntity> roleMenuList = sysMenuService.getRoleMenuList(roleId);
+        /* List<SysMenuEntity> roleMenuList = sysMenuService.getRoleMenuList(roleId);
         List<Integer> selectedIds = Collections.emptyList();
         if(CollectionUtils.isNotEmpty(roleMenuList))
             selectedIds = sysMenuService.getSelectedMenuIds(roleMenuList);*/

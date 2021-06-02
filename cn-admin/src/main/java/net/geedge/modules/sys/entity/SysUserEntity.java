@@ -28,6 +28,7 @@ public class SysUserEntity implements Serializable {
 	@TableId
 	private Long id;
 
+	private String name;
 	/**
 	 * 用户名
 	 */
@@ -46,6 +47,15 @@ public class SysUserEntity implements Serializable {
 	 */
 	private String salt;
 
+	private String lastLoginIp;
+	
+	private Date lastLoginTime;
+	
+	/**
+	 * 创建时间
+	 */
+	private Date ctime;
+	private Integer cby;
 	/**
 	 * 邮箱
 	 */
@@ -53,16 +63,17 @@ public class SysUserEntity implements Serializable {
 	@Email(message="邮箱格式不正确", groups = {AddGroup.class, UpdateGroup.class})
 	private String email;
 
+	private String mobile;
 	/**
 	 * 状态  0：禁用   1：正常
 	 */
 	private Integer status;
-	
 	/**
-	 * 语言
+	 * 来源
 	 */
-	private String lang;
+	private String source;
 	
+	private Integer buildIn;
 	/**
 	 * 角色ID列表
 	 */
@@ -74,26 +85,8 @@ public class SysUserEntity implements Serializable {
 	 */
 	@TableField(exist=false)
 	private List<Long> usergroupIds;
-	
-	private String mobile;
-	
-	/**
-	 * 创建时间
-	 */
-	private Date createAt;
-	
-	private Integer createBy;
 
-	private String name;
 	
-	/**
-	 * 来源
-	 */
-	private String source;
-
-	private String lastLoginIp;
-	
-	private Date lastLoginTime;
 	
 	/**
 	 * 用户关联角色列表

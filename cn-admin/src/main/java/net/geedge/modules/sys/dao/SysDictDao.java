@@ -30,4 +30,6 @@ public interface SysDictDao extends BaseMapper<SysDictEntity> {
     List<SysDictEntity> querySysDictList(@Param("params")Map<String, Object> params);
 
     Integer getMaxTypeCode(@Param("type")String type);
+    
+    SysDictEntity selectInfo(@Param("id")Long id);
 }

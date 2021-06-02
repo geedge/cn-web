@@ -33,12 +33,23 @@ public class SysLogEntity implements Serializable {
 	 */
 	private Integer userId;
 
+	private Integer apiKeyId;
+	
 	@TableField(exist = false)
 	private String username;
 	/**
 	 * 用户操作
 	 */
 	private String operation;
+	/**
+	 *类型
+	 */
+	private String type;
+	private String operaId;
+	/**
+	 * IP地址
+	 */
+	private String ip;
 	/**
 	 * 请求方法
 	 */
@@ -50,36 +61,18 @@ public class SysLogEntity implements Serializable {
 	/**
 	 * 执行时长(毫秒)
 	 */
-	private Long time;
-	/**
-	 * IP地址
-	 */
-	private String ip;
-	/**
-	 *类型
-	 */
-	private String type;
-	/**
-	 *
-	 */
-	private String operaId;
-	/**
-	 *
-	 */
-	private String state;
+	private Long duration;
+	private Integer state;
 	private String response;
-	/**
-	 *
-	 */
 	private String exception;
 
 	/**
 	 * 创建时间
 	 */
-	private Date createDate;
+	private Date ctime;
 	
 	@TableField(exist = false)
 	private SysApiKey apiKey;
 
-	private Integer apiKeyId;
+	
 }

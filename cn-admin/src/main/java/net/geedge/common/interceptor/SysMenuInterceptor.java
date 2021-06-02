@@ -29,8 +29,8 @@ public class SysMenuInterceptor extends HandlerInterceptorAdapter {
             return true;
         } else {
             SysUserEntity user = ShiroUtils.getUserEntity();
-            SysConfigEntity developDdmin = sysConfigService.getOne(new LambdaQueryWrapper<SysConfigEntity>().eq(SysConfigEntity::getParamKey, "develop_admin"));
-            if(!StrUtil.equals(user.getUsername(),developDdmin.getParamValue())) {
+            SysConfigEntity developDdmin = sysConfigService.getOne(new LambdaQueryWrapper<SysConfigEntity>().eq(SysConfigEntity::getCkey, "develop_admin"));
+            if(!StrUtil.equals(user.getUsername(),developDdmin.getCvalue())) {
                 response.sendError(HttpStatus.SC_NOT_FOUND, "Not Found");
                 return false;
             }

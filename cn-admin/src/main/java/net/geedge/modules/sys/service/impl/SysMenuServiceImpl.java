@@ -3,6 +3,8 @@ package net.geedge.modules.sys.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import cn.hutool.core.util.ObjectUtil;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.Constant;
@@ -31,7 +33,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 
 	@Override
 	public List<SysMenuEntity> getMenuList(Integer id) {
-		List<SysMenuEntity> menuList = this.list(new LambdaQueryWrapper<SysMenuEntity>().eq(id != null, SysMenuEntity::getId, id).orderByAsc(SysMenuEntity::getOrderNum));
+		List<SysMenuEntity> menuList = this.list(new LambdaQueryWrapper<SysMenuEntity>().eq(ObjectUtil.isNotEmpty(id), SysMenuEntity::getId, id).orderByAsc(SysMenuEntity::getSort));
 		if (CollectionUtils.isEmpty(menuList) || menuList.size() == 1)
 			return menuList;
 		menuList = this.getMenuTreeList(menuList, 0);
@@ -53,7 +55,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 				.and(menu.getCode()).notNull(RCode.SYS_MENU_CODE_ISNULL)
 				.and(menu.getI18n()).notNull(RCode.SYS_MENU_I18N_ISNULL)
 				.and(menu.getType()).notNull(RCode.SYS_MENU_TYPE_ISNULL)
-				.and(menu.getOrderNum()).notNull(RCode.SYS_MENU_ORDERNUM_ISNULL);
+				.and(menu.getSort()).notNull(RCode.SYS_MENU_ORDERNUM_ISNULL);
 
 		// code 唯一 校验
 		List<SysMenuEntity> list = this.list(new QueryWrapper<SysMenuEntity>().lambda().eq(SysMenuEntity::getCode, menu.getCode()));
@@ -79,8 +81,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 		}
 
 		// 存在上级ID时间,校验上级菜单是否存在
-		if (menu.getParentId() != null && menu.getParentId() != 0) {
-			SysMenuEntity parent = this.getById(menu.getParentId());
+		if (menu.getPid() != null && menu.getPid() != 0) {
+			SysMenuEntity parent = this.getById(menu.getPid());
 			if (parent == null)
 				throw new CNException(RCode.SYS_MENU_ISNULL);
 
@@ -100,8 +102,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 		// 参数信息校验
 		this.validateMenuInfo(menu);
 
-		if (menu.getParentId() == null)
-			menu.setParentId(0);
+		if (menu.getPid() == null)
+			menu.setPid(0);
 
 		this.save(menu);
 	}
@@ -111,8 +113,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 		// 参数信息校验
 		this.validateMenuInfo(menu);
 
-		if (menu.getParentId() == null)
-			menu.setParentId(0);
+		if (menu.getPid() == null)
+			menu.setPid(0);
 
 		this.updateById(menu);
 	}
@@ -120,7 +122,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 	@Override
 	public void delete(Integer[] ids) {
 		List<SysMenuEntity> menuList = this.list();
-		Set<Integer> parentIds = menuList.stream().map(SysMenuEntity::getParentId).collect(Collectors.toSet());
+		Set<Integer> parentIds = menuList.stream().map(SysMenuEntity::getPid).collect(Collectors.toSet());
 
 		// 判断是否有子菜单或按钮
 		for (Integer id : ids) {
@@ -186,7 +188,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 		List<SysMenuEntity> resultList = new ArrayList<>();
 		for (SysMenuEntity menu : menuList) {
 			Integer id = menu.getId();
-			Integer pid = menu.getParentId();
+			Integer pid = menu.getPid();
 			if (parentId.equals(pid)) {
 				menu.setChildren(this.getMenuTreeList(menuList, id));
 				resultList.add(menu);
@@ -227,7 +229,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 
 	@Override
 	public List<SysMenuEntity> getMenuByLeafMenu(List<SysMenuEntity> leafMenuList) {
-		List<SysMenuEntity> menuList = this.list(new LambdaQueryWrapper<SysMenuEntity>().orderByAsc(SysMenuEntity::getOrderNum));
+		List<SysMenuEntity> menuList = this.list(new LambdaQueryWrapper<SysMenuEntity>().orderByAsc(SysMenuEntity::getSort));
 		Map<Integer, SysMenuEntity> idAndMenuList = new HashMap<>();
 		for (SysMenuEntity entity : menuList) {
 			idAndMenuList.put(entity.getId(), entity);
@@ -238,12 +240,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 			this.getParentMenu(idAndMenuList, pojo, list);
 		}
 		list.addAll(leafMenuList);
-		list = list.stream().sorted(Comparator.comparing(SysMenuEntity::getOrderNum)).distinct().collect(Collectors.toList());
+		list = list.stream().sorted(Comparator.comparing(SysMenuEntity::getSort)).distinct().collect(Collectors.toList());
 		return list;
 	}
 
 	private void getParentMenu(Map<Integer, SysMenuEntity> idAndMenuList, SysMenuEntity pojo, List<SysMenuEntity> list) {
-		SysMenuEntity parentMenu = idAndMenuList.get(pojo.getParentId());
+		SysMenuEntity parentMenu = idAndMenuList.get(pojo.getPid());
 		if (parentMenu != null) {
 			list.add(parentMenu);
 			this.getParentMenu(idAndMenuList, parentMenu, list);

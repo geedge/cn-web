@@ -9,6 +9,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @RestController
@@ -34,7 +35,7 @@ public class SysApiKeyController {
 	
 	@PostMapping
 	@SysLog(operation = OperationEnum.ADD,type = TypeEnum.SYSTEMAPIKEY)
-	@RequiresPermissions({"sys:apiKey:save"})
+	/*@RequiresPermissions({"sys:apiKey:save"})*/
 	public R addSysApiKey(@RequestBody SysApiKey sysApiKey) {
 		ValidateUtils.is(sysApiKey.getName()).notNull(RCode.SYSAPIKEY_NAME_ISNULL)
 		.and(sysApiKey.getRoleId()).notNull(RCode.SYSAPIKEY_ROLEID_ISNULL);
@@ -44,7 +45,7 @@ public class SysApiKeyController {
 	
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE,type = TypeEnum.SYSTEMAPIKEY)
-	@RequiresPermissions({"sys:apiKey:delete"})
+	/*@RequiresPermissions({"sys:apiKey:delete"})*/
 	public R removeSysApiKey(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.SYSAPIKEY_ID_ISNULL);
 		sysApiKeyService.removeSysApiKeys(ids);

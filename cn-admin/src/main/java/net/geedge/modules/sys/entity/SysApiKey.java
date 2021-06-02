@@ -19,11 +19,11 @@ public class SysApiKey {
 	
 	private Integer roleId;
 	
-	private Integer createBy;
+	private Integer uby;
 	
-	private Date createAt;
+	private Date utime;
 	
-	private Date expireAt;
+	private Date etime;
 	
 	@TableField(exist = false)
 	private SysUserEntity createUser;

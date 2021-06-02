@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import net.geedge.common.utils.PageUtils;
@@ -50,11 +52,16 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogDao, SysLogEntity> impl
             List<Long> userIds = userList.stream().map(SysUserEntity::getId).distinct().collect(Collectors.toList());
             params.put("userIds", userIds);
         }
-
-        String ids = (String) params.get("operaId");
-        if(StrUtil.isNotBlank(ids)) {
-        	List<String> listIds = Arrays.asList(ids.split(","));
-        	params.put("operaId",listIds);
+        if (ObjectUtil.isNotEmpty(params.get("operaId"))) {
+            params.put("operaId", Arrays.asList(String.valueOf(params.get("operaId")).split(StringPool.COMMA)));
+        }
+        if(ObjectUtil.isNotEmpty(params.get("state"))) {
+        	String state = (String) params.get("state");
+        	if(StrUtil.equals(state, "success")) {
+        		params.put("state",1);
+        	}else {
+        		params.put("state",0);
+        	}
         }
         IPage page = new Query(SysLogEntity.class).getPage(params);
         List<SysLogEntity> sysLogEntities = sysLogDao.queryList(page, params);

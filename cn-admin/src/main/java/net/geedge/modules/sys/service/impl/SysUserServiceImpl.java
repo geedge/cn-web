@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
@@ -67,10 +68,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
-		String ids = (String) params.get("ids");
-        if(StrUtil.isNotBlank(ids)) {
-        	List<String> listIds = Arrays.asList(ids.split(","));
-        	params.put("ids",listIds);
+		if (ObjectUtil.isNotEmpty(params.get("ids"))) {
+            params.put("ids", Arrays.asList(String.valueOf(params.get("ids")).split(StringPool.COMMA)));
         }
 		IPage page = new Query(SysUserEntity.class).getPage(params);
 		List<SysUserEntity> userList = baseMapper.queryList(page, params);
@@ -106,7 +105,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     private void validateUserInfo(SysUserEntity user) {
 	    Integer status = user.getStatus();
         ValidateUtils.is(user.getUsername()).notNull(RCode.SYS_USER_USERNAME_ISNULL)
-                .and(status).notNull(RCode.SYS_USER_STATUS_ISNULL).and(user.getName()).notNull(RCode.SYS_USER_NAME_ISNULL);
+                .and(status).notNull(RCode.SYS_USER_STATUS_ISNULL).and(user.getName()).notNull(RCode.SYS_USER_NAME_ISNULL)
+                .and(user.getPin()).notNull(RCode.SYS_USER_PASSWORD_ISNULL);
 
         List<SysUserEntity> list = this.list(new QueryWrapper<SysUserEntity>().lambda().eq(SysUserEntity::getName, user.getName()).ne(ObjectUtil.isNotEmpty(user.getId()),SysUserEntity::getId, user.getId()));
         if(ObjectUtil.isNotEmpty(list)) {
@@ -141,12 +141,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		// 校验 user 相关信息
 		this.validateUserInfo(user);
 
-		user.setCreateAt(new Date());
+		user.setCtime(new Date());
 		//sha256加密
 		String salt = RandomStringUtils.randomAlphanumeric(20);
 		user.setSalt(salt);
 		user.setPin(ShiroUtils.sha256(user.getPin(), user.getSalt()));
-		user.setCreateBy(ShiroUtils.getUserId().intValue());
+		user.setCby(ShiroUtils.getUserId().intValue());
 		this.save(user);
 
 		// 保存用户 和 角色 关联关系
@@ -176,7 +176,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 			user.setPin(ShiroUtils.sha256(user.getPin(), userEntity.getSalt()));
 		}
 
-		user.setCreateBy(ShiroUtils.getUserId().intValue());
+		user.setCby(ShiroUtils.getUserId().intValue());
 		this.updateById(user);
 
 		// 处理用户角色关系

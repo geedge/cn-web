@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,7 +24,9 @@ public class SysRoleEntity implements Serializable {
 
     @TableField(strategy = FieldStrategy.IGNORED)
     private String remark;
-
+    
+    private Long uby;
+    private Date utime;
     private Integer buildIn;
 
     @TableField(exist = false)

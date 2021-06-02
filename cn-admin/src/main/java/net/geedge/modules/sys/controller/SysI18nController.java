@@ -1,6 +1,5 @@
 package net.geedge.modules.sys.controller;
 
-import net.geedge.common.config.I18nConfig;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.smartvalidate.utils.CommonUtil;
@@ -28,8 +27,6 @@ public class SysI18nController {
     private SysI18nService sysI18nService;
     @Autowired
     private SysDictService dictService;
-    @Autowired
-    private I18nConfig i18nConfig;
     
     /**
      * 列表
@@ -42,8 +39,8 @@ public class SysI18nController {
 
     @GetMapping("/{id}")
     public R detail(@PathVariable Long id) {
-    	ValidateUtils.is(id).notNull();
-    	SysI18nEntity byId = sysI18nService.getById(id);
+    	ValidateUtils.is(id).notNull(RCode.SYS_I18N_ID_ISNULL);
+    	SysI18nEntity byId = sysI18nService.queryInfo(id);
     	return R.ok(byId);
     }
     
@@ -52,20 +49,16 @@ public class SysI18nController {
      */
     @PostMapping
     public R save(@RequestBody SysI18nEntity sysI18n){
-    	ValidateUtils.is(sysI18n.getCode()).notNull()
-    				 .and(sysI18n.getLang()).notNull()
-    				 .and(sysI18n.getValue()).notNull();
-    	if (!checkLang(sysI18n.getLang())) { //检查lang是否合法
-    		throw new CNException(RCode.SYS_I18N_NOSUCHLANG);
-    	}
+    	ValidateUtils.is(sysI18n.getCode()).notNull(RCode.SYS_I18N_CODE_ISNULL)
+    				 .and(sysI18n.getLang()).notNull(RCode.SYS_I18N_LANG_ISNULL)
+    				 .and(sysI18n.getValue()).notNull(RCode.SYS_I18N_VALUE_ISNULL)
+    				 .and(sysI18n.getName()).notNull(RCode.SYS_I18N_NAME_ISNULL);
     	if (sysI18nService.check(sysI18n)) { //检查是否重复，true为重复
 			throw new CNException(RCode.SYS_I18N_DUPLICATE);
     	} else {
-    		sysI18n.setOperator(ShiroUtils.getUserId());
-    		sysI18n.setOpTime(new Date());
+    		sysI18n.setUtime(new Date());
+    		sysI18n.setUby(ShiroUtils.getUserId());
     		sysI18nService.save(sysI18n);
-    		//刷新缓存
-    		i18nConfig.reload();
     		return R.ok();
     	}
     }
@@ -75,21 +68,17 @@ public class SysI18nController {
      */
     @PutMapping
     public R update(@RequestBody SysI18nEntity sysI18n){
-    	ValidateUtils.is(sysI18n.getCode()).notNull()
-					 .and(sysI18n.getLang()).notNull()
-					 .and(sysI18n.getValue()).notNull()
-					 .and(sysI18n.getId()).notNull();
-    	if (!checkLang(sysI18n.getLang())) { //检查lang是否合法
-			throw new CNException(RCode.SYS_I18N_NOSUCHLANG);
-    	}
+    	ValidateUtils.is(sysI18n.getCode()).notNull(RCode.SYS_I18N_CODE_ISNULL)
+					 .and(sysI18n.getLang()).notNull(RCode.SYS_I18N_LANG_ISNULL)
+					 .and(sysI18n.getValue()).notNull(RCode.SYS_I18N_VALUE_ISNULL)
+					 .and(sysI18n.getId()).notNull(RCode.SYS_I18N_ID_ISNULL)
+					 .and(sysI18n.getName()).notNull(RCode.SYS_I18N_NAME_ISNULL);
     	if (sysI18nService.check(sysI18n)) { //检查是否重复，true为重复
 			throw new CNException(RCode.SYS_I18N_DUPLICATE);
     	} else {
-	    	sysI18n.setOperator(ShiroUtils.getUserId());
-	    	sysI18n.setOpTime(new Date());
+	    	sysI18n.setUtime(new Date());
+	    	sysI18n.setUby(ShiroUtils.getUserId());
 			sysI18nService.updateById(sysI18n);
-			//刷新缓存
-			i18nConfig.reload();
 			return R.ok();
     	}
     }
@@ -98,28 +87,16 @@ public class SysI18nController {
      * 删除
      */
     @DeleteMapping
-    public R delete(@RequestBody Long[] ids){
-    	ValidateUtils.is(ids).notNull();
-    	sysI18nService.removeByIds(Arrays.asList(ids));
-    	//刷新缓存
-    	i18nConfig.reload();
+    public R delete(@RequestParam String ids){
+    	ValidateUtils.is(ids).notNull(RCode.SYS_I18N_ID_ISNULL);
+    	sysI18nService.removeByIds(Arrays.asList(ids.split(",")));
 		return R.ok();
     }
-    
-    /**
-     * 校验语种是否合法
-     * @param lang
-     * @return true:合法  false:不合法
-     */
-    private boolean checkLang(String lang) {
-		if (CommonUtil.isNull(Constant.langList)) {
-			dictService.updateLangCache();
-		}
-		for (Map<String, String> l : Constant.langList) {
-			if (l.get("value").equals(lang)) {
-				return true;
-			}
-		}
-		return false;
-	}
+
+    @GetMapping("/lang")
+    public R lang(@RequestParam String l) {
+    	ValidateUtils.is(l).notNull(RCode.SYS_I18N_PARAM_ISNULL);
+    	Map result = sysI18nService.selectLang(l);
+    	return R.ok(result);
+    }
 }

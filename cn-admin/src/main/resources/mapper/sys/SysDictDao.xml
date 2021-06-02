@@ -8,13 +8,13 @@
 		<result column="name" property="name"></result>
 		<result column="code" property="code"></result>
 		<result column="value" property="value"></result>
-		<result column="i18n_code" property="i18nCode"></result>
-		<result column="order_num" property="orderNum"></result>
+		<result column="i18n" property="i18n"></result>
+		<result column="sort" property="sort"></result>
 		<result column="remark" property="remark"></result>
-		<result column="del_flag" property="delFlag"></result>
-		<result column="operator" property="operator"></result>
-		<result column="op_time" property="opTime"></result>
-		<association property="operatorUser" column="operator" select="queryUserById"></association>
+		<result column="state" property="state"></result>
+		<result column="uby" property="uby"></result>
+		<result column="utime" property="utime"></result>
+		<association property="uuser" column="uby" select="queryUserById"></association>
 	</resultMap>
 
 
@@ -26,25 +26,39 @@
 		</where>
 	</select>
 
-	<select	id="querySysDictListWithPage" resultMap="sysDictResultMap">
-		select id,name,type,code,value,order_num,remark,operator,op_time
-		from sys_dict
-		<where>
-			del_flag=0
-			<if test="params.type != null and params.type != ''">
-				and type=#{params.type}
-			</if>
-			<if test="params.value != null and params.value != ''">
-				and value=#{params.value}
-			</if>
-		</where>
-		order by order_num
+	<select id="selectInfo" resultMap="sysDictResultMap">
+		select * from sys_dict where state =1 and id = #{id}
 	</select>
-	<select	id="querySysDictList" resultMap="sysDictResultMap">
-		select id,name,type,code,value,order_num,remark,operator,op_time
+
+	<select	id="querySysDictListWithPage" resultMap="sysDictResultMap">
+		select *
 		from sys_dict
 		<where>
-			del_flag=0
+			state=1
+			<if test="params.q != null and params.q != ''">
+				and (name like CONCAT('%', #{params.q}, '%') or code like CONCAT('%', #{params.q}, '%') or value like CONCAT('%', #{params.q}, '%') or remark like CONCAT('%', #{params.q}, '%') )
+			</if>
+			<if test="params.type != null and params.type != ''">
+				and type=#{params.type}
+			</if>
+			<if test="params.value != null and params.value != ''">
+				and value=#{params.value}
+			</if>
+			<if test="params.ids != null and params.ids.size > 0 ">
+				and id in 
+					<foreach item="id" collection="params.ids" separator="," open="(" close=")" index="">
+			       		#{id}
+				     </foreach>
+			</if>
+		</where>
+		order by type,sort
+	</select>
+	
+	<select	id="querySysDictList" resultMap="sysDictResultMap">
+		select id,name,type,code,value,sort,remark,uby,utime,i18n
+		from sys_dict
+		<where>
+			state=1
 			<if test="params.type != null and params.type != ''">
 				and type=#{params.type}
 			</if>
@@ -52,7 +66,6 @@
 				and value=#{params.value}
 			</if>
 		</where>
-		order by order_num
 	</select>
 
 	<select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">

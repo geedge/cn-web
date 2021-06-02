@@ -177,7 +177,7 @@ public class UserRealm extends AuthorizingRealm {
 		if (user == null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(token.getPassword());
-			user = getLdapAuthentication(token.getUsername(), sb.toString());
+//			user = getLdapAuthentication(token.getUsername(), sb.toString());
 			if (user == null) {
 				throw new IncorrectCredentialsException("账号或密码不正确");
 			}
@@ -197,7 +197,8 @@ public class UserRealm extends AuthorizingRealm {
 			//ldap非首次登陆，更新同步内容
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append(token.getPassword());
-			SysUserEntity tmpUser = getLdapAuthentication(token.getUsername(), stringBuilder.toString());
+//			SysUserEntity tmpUser = getLdapAuthentication(token.getUsername(), stringBuilder.toString());
+			SysUserEntity tmpUser = null;
 			if(tmpUser == null) {
 				// 验证失败 则登录失败
 				throw new IncorrectCredentialsException("账号或密码不正确");
@@ -235,7 +236,7 @@ public class UserRealm extends AuthorizingRealm {
 	 * ldap登录验证
 	 * 
 	 * @return
-	 */
+	 
 	@SuppressWarnings("unchecked")
 	public SysUserEntity getLdapAuthentication(String userName, String pin) {
 		// 获取sys_config中的ldap信息 判断是否支持ldap登录
@@ -333,5 +334,5 @@ public class UserRealm extends AuthorizingRealm {
 		}
 		return entity;
 	}
-
+*/
 }
