@@ -1,0 +1,76 @@
+package net.geedge.modules.panel.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import cn.hutool.core.util.ObjectUtil;
+import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
+import net.geedge.modules.panel.entity.VisualChart;
+import net.geedge.modules.panel.service.VisualChartService;
+
+@RestController
+@RequestMapping("/visual/chart")
+public class VisualChartController {
+	@Autowired
+	private VisualChartService visualChartService;
+	
+	@RequestMapping("/{id}")
+	public R queryInfo(@PathVariable Integer id) {
+		VisualChart visualChart = visualChartService.queryInfo(id);
+		return R.ok(visualChart);
+	}
+	
+	@RequestMapping
+	public R queryList(@RequestParam Map<String,Object> params) {
+		PageUtils result = visualChartService.queryPage(params);
+		return R.ok(result);
+	}
+	
+	@PostMapping
+	public R saveChart(@RequestBody VisualChart chart) {
+		Integer id = visualChartService.saveOrUpdateChart(chart);
+		return R.ok().putData("id", id);
+	}
+	
+	@PutMapping
+	public R modifyChart(@RequestBody VisualChart chart) {
+		Integer id = visualChartService.saveOrUpdateChart(chart);
+		return R.ok().putData("id", id);
+	}
+	
+	@DeleteMapping
+	public R removeCharts(@RequestParam String ids) {
+		visualChartService.removeChart(ids);
+		return R.ok();
+	}
+	
+	@PutMapping("/layout")
+	public R layout(@RequestBody List<VisualChart> charts) {
+		ValidateUtils.is(charts).notNull(RCode.NOT_NULL_ERROR);
+		for(VisualChart chart : charts) {
+			ValidateUtils.is(chart.getX()).notNull(RCode.CHART_X_ISNULL)
+			.and(chart.getY()).notNull(RCode.CHART_Y_ISNULL)
+			.and(chart.getW()).notNull(RCode.CHART_W_ISNULL)
+			.and(chart.getH()).notNull(RCode.CHART_H_ISNULL)
+			.and(chart.getId()).notNull(RCode.CHART_ID_ISNULL);
+			if(ObjectUtil.isEmpty(chart.getPid())) {
+				chart.setPid(0);
+			}
+		}
+		visualChartService.layout(charts);
+		return R.ok();
+	}
+}

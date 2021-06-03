@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.panel.dao.VisualChartDao">
+    
+    <resultMap id="visualChartResult" type="net.geedge.modules.panel.entity.VisualChart">
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="i18n" column="i18n"></result>
+        <result property="panelId" column="panel_id"></result>
+        <result property="pid" column="pid"></result>
+        <result property="type" column="type"></result>
+        <result property="x" column="x"></result>
+        <result property="y" column="y"></result>
+        <result property="w" column="w"></result>
+        <result property="h" column="h"></result>
+        <result property="params" column="params"></result>
+ 		<result property="cby" column="cby"/>
+        <result property="ctime" column="ctime"></result>
+        <result property="uby" column="uby"></result>
+        <result property="utime" column="utime"></result>
+        <result property="remark" column="remark"></result>
+        <result property="state" column="state"></result>
+        <result property="buildIn" column="build_in"></result>
+        <association property="panel" column="panel_id" select="queryPanelById"></association>
+        <association property="uuser" column="uby" select="queryUserById"></association>
+        <association property="cuser" column="cby" select="queryUserById"></association>
+        <association property="parent" column="pid" select="selectInfo"></association>
+    </resultMap>
+
+	<select id="queryPage" resultMap="visualChartResult">
+		select * from 
+		visual_chart
+		<where>
+			panel_id = #{params.panelId}
+		</where>
+	</select>
+	
+	<select id="queryList" resultMap="visualChartResult">
+		select * from 
+		visual_chart
+		<where>
+			<if test="param.pids != null and param.pids.size>0">
+				and pid in 
+					<foreach item="pid" collection="param.pids" separator="," open="(" close=")" index="">
+			       		#{pid}
+				     </foreach>
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectInfo" resultMap="visualChartResult">
+		select * from 
+		visual_chart
+		where id = #{id}
+	</select>
+	
+	<select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
+		select id,username from sys_user where id=#{id} and status=1
+	</select>
+	
+	<select id="queryPanelById" resultType="net.geedge.modules.panel.entity.VisualPanel">
+		select id,name from visual_panel where id=#{id}
+	</select>
+</mapper>
