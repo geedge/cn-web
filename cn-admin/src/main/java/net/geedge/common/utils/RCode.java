@@ -40,11 +40,11 @@ public enum RCode {
     PANEL_NAME_ISNULL(121000, "Panel name can not be empty"),
     PANEL_ID_ISNULL(121001, "Panel ID can not be empty"),
     PANEL_NAME_DUPLICATE(122002, "Panel name is duplicate"),
-    PANEL_TYPE_ISNULL(121003, "Panel type can not be empty when link is not empty"),
-    PANEL_TYPE_INVALIDE(124004, "Panel type must be dashboard, asset, project, module, endpoint or model"),
+    PANEL_TYPE_ISNULL(121003, "Panel type can not be empty"),
+    PANEL_TYPE_INVALIDE(124004, "Panel type error"),
     PANEL_LINK_ISNULL(121005,"Panel link can not be empty when the type is not dashboard"),
     PANEL_BUILDIN_CAN_NOT_REMOVE(127006, "This panel is built-in and cannot be deleted"),
-    CHART_TITLE_ISNULL(121007, "Chart title can not be empty"),
+    CHART_NAME_ISNULL(121007, "Chart name can not be empty"),
     CHART_SPAN_ISNULL(121008, "Chart span can not be empty"),
     CHART_HEIGHT_ISNULL(121009, "Chart height can not be empty"),
     CHART_TYPE_ISNULL(121010, "Chart type can not be empty"),
@@ -106,6 +106,10 @@ public enum RCode {
     CHART_VARID_ERROR(121066,"varid param error"),
     CHART_GROUP_NAME_DUPLICATE(121067,"chart type is group name is duplicate"),
     CHART_HEIGHT_INVALIDE(123068, "Chart height should be between 1 and 12"),
+    CHART_X_ISNULL(121016, "Chart x can not be empty"),
+    CHART_Y_ISNULL(121016, "Chart y can not be empty"),
+    CHART_W_ISNULL(121016, "Chart weight can not be empty"),
+    CHART_H_ISNULL(121016, "Chart height can not be empty"),
 
 
     /**

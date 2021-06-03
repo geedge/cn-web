@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.panel.dao.VisualPanelDao">
+    
+    <resultMap id="visualPanelResult" type="net.geedge.modules.panel.entity.VisualPanel">
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="i18n" column="i18n"></result>
+        <result property="type" column="type"></result>
+        <result property="params" column="params"></result>
+ 		<result property="cby" column="cby"/>
+        <result property="ctime" column="ctime"></result>
+        <result property="uby" column="uby"></result>
+        <result property="utime" column="utime"></result>
+        <result property="remark" column="remark"></result>
+        <result property="state" column="state"></result>
+        <result property="buildIn" column="build_in"></result>
+        <association property="uuser" column="uby" select="queryUserById"></association>
+        <association property="cuser" column="cby" select="queryUserById"></association>
+    </resultMap>
+    
+    <select id="selectInfo" resultMap="visualPanelResult">
+    	select * from visual_panel where id = #{id}
+    </select>
+    
+    
+    <select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
+		select id,username from sys_user where id=#{id} and status=1
+	</select>
+	
+	<select id="queryPage" resultMap="visualPanelResult">
+		select * from 
+		visual_panel 
+		<where>
+			type = #{params.type}
+			<if test="params.ids != null and params.ids.size > 0 ">
+				and id in 
+					<foreach item="id" collection="params.ids" separator="," open="(" close=")" index="">
+			       		#{id}
+				     </foreach>
+			</if>
+			<if test="params.name !=null and params.name !=''">
+				and name like CONCAT('%', #{params.name}, '%')
+			</if>
+			<if test="params.q !=null and params.q !=''">
+				and name like CONCAT('%', #{params.q}, '%')
+			</if>
+		</where>
+	</select>
+</mapper>
