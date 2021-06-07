@@ -111,7 +111,16 @@ public enum RCode {
     CHART_W_ISNULL(121016, "Chart weight can not be empty"),
     CHART_H_ISNULL(121016, "Chart height can not be empty"),
 
-
+    GALAXY_PROXY_ID_ISNULL(210001,"galaxy proxy id can not be empty"),
+    GALAXY_PROXY_NAME_ISNULL(210002,"galaxy proxy name can not be empty"),
+    GALAXY_PROXY_PATH_ISNULL(210003,"galaxy proxy path can not be empty"),
+    GALAXY_PROXY_METHOD_ISNULL(210004,"galaxy proxy method can not be empty"),
+    GALAXY_PROXY_VERSION_ISNULL(210005,"galaxy proxy version can not be empty"),
+    GALAXY_PROXY_TARGET_URL_ISNULL(210006,"galaxy proxy target url can not be empty"),
+    GALAXY_PROXY_TARGET_PARAM_ISNULL(210007,"galaxy proxy target param can not be empty"),
+    GALAXY_PROXY_TARGET_HEADER_ISNULL(210008,"galaxy proxy target header can not be empty"),
+    GALAXY_PROXY_PRE_HANDLE_ISNULL(210009,"galaxy proxy pre handle can not be empty"),
+    GALAXY_PROXY_POST_HANDLE_ISNULL(210010,"galaxy proxy post handle can not be empty"),
     /**
      * setting菜单项相关
      */

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.galaxy.dao.GalaxyProxyDao">
+    
+    <resultMap id="galaxyProxyResult" type="net.geedge.modules.galaxy.entity.GalaxyProxy">
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="path" column="path"></result>
+        <result property="version" column="version"></result>
+        <result property="method" column="method"></result>
+        <result property="targetUrl" column="target_url"></result>
+        <result property="targetParam" column="target_param"></result>
+        <result property="targetHeader" column="target_header"></result>
+        <result property="preHandle" column="pre_handler"></result>
+        <result property="postHandle" column="post_handle"></result>
+        <result property="ctime" column="ctime"></result>
+        <result property="utime" column="utime"></result>
+        <result property="remark" column="remark"></result>
+        <result property="state" column="state"></result>
+    </resultMap>
+    
+    <select id="selectInfo" resultMap="galaxyProxyResult">
+    	select * from galaxy_proxy where id = #{id}
+    </select>
+    
+	<select id="queryPage" resultMap="galaxyProxyResult">
+		select * from 
+		galaxy_proxy 
+		<where>
+			<if test="params.q !=null and params.q !=''">
+				and (path like CONCAT('%', #{params.q}, '%') or target_url like CONCAT('%', #{params.q}, '%') or target_param like CONCAT('%', #{params.q}, '%') or target_header like CONCAT('%', #{params.q}, '%') or remark like CONCAT('%', #{params.q}, '%') )
+			</if>
+		</where>
+	</select>
+</mapper>
