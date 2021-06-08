@@ -121,6 +121,7 @@ public enum RCode {
     GALAXY_PROXY_TARGET_HEADER_ISNULL(210008,"galaxy proxy target header can not be empty"),
     GALAXY_PROXY_PRE_HANDLE_ISNULL(210009,"galaxy proxy pre handle can not be empty"),
     GALAXY_PROXY_POST_HANDLE_ISNULL(210010,"galaxy proxy post handle can not be empty"),
+    GALAXY_PROXY_CONFIG_URL_ISNULL(21001,"galaxy proxy config url is empty"),
     /**
      * setting菜单项相关
      */

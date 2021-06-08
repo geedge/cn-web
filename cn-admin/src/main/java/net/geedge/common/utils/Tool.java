@@ -13,7 +13,6 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
@@ -1143,4 +1142,6 @@ public class Tool {
 	    }
 	    
 	}
+	
+	public static class FreeMarkerUtil extends net.geedge.common.utils.FreeMarkerUtil {}
 }
