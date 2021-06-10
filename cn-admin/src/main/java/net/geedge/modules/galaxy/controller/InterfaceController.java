@@ -148,6 +148,9 @@ public class InterfaceController extends AbstractController {
 			HttpHeaders responseHeader = responseEntity.getHeaders();
 			logger.info("targetUrl : {},statusCode : {}", targetUrl,statusCode.toString());
 			LinkedHashMap body = responseEntity.getBody();
+			if(logger.isDebugEnabled()) {
+				logger.debug("target body: {}", Tool.JSONUtil.toJsonStr(body));
+			}
 			int code = statusCode.value();
 			// 代理返回 错误，直接返回
 			if(code > 399) {
@@ -156,11 +159,11 @@ public class InterfaceController extends AbstractController {
 			}
 			//请求galaxy接口
 			/*处理接口返回的内容*/
+			bindings.put("status", code);
+			bindings.put("result", body);
+			bindings.put("responseHeader", responseHeader);
 			if (Tool.StrUtil.isNotBlank(postHandle)) {
-				bindings.put("status", code);
-				bindings.put("result", body);
-				bindings.put("responseHeader", responseHeader);
-				Object eval = jsEngine.eval(postHandle, bindings);
+				jsEngine.eval(postHandle, bindings);
 			}
 			response.reset();
 			/*组织响应前端的内容*/
