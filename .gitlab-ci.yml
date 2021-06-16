@@ -1,0 +1,38 @@
+#stages定义pipeline的全部阶段(stage),阶段内所有任务并行执行,
+#全部执行成功开始下一阶段任务,任何阶段内任意job执行失败都会导致pipeline失败,
+#所有stage，job执行成功后pipeline会显示pass。如果未定义stages,则默认有build、
+#install,install_clean和build_imag三个阶段,如果未定义stage，则默认test阶段
+
+#这里定义三个阶段（stages），install,install_clean和build_image,stages中的阶段按写的顺序进行，先执行install,然后执行install_clean,然后在执行build_image
+stages:
+  - install
+  - build_image
+
+#job的名称,自定义
+install:
+  #上面定义的stages
+  stage: install
+  #执行的脚本内容
+  script:
+    - echo 'install job'
+  only:
+    - dev-cicd
+
+
+
+#job的名称,自定义
+build_image:
+  #上面定义的stages
+  stage: build_image
+  #执行的脚本内容
+  script:
+    - echo 'build_image job'
+  #when用于当前一阶段任务故障或者忽略故障的job任务，主要用于清理发生故障时的后续措施。
+  #可选项
+  #on_success - 默认参数，前一阶段任务成功时才执行
+  #on_failure - 前一阶段任务故障时才执行
+  #always - 无论前一阶段任务是否成功都执行
+  #manual - 手动设置，比较复杂，略过。
+  when: on_success
+  only:
+    - dev-cicd
