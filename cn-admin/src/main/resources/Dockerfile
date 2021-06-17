@@ -1,7 +1,7 @@
 ARG JDK_IMAGE
 #设置依赖于jdk:1.8.0_73(自定义jdk),需要在docker中安装该版本的jdk,如不想使用该版本,可自行指定jdk版本
 FROM ${JDK_IMAGE}
-MAINTAINER renkaige renkaige@zdjizhi.com
+MAINTAINER shizhendong shizhendong@zdjizhi.com
 
 #设置时区,编码(防止中文乱码)等环境变量
 ENV TimeZone=Asia/Shanghai LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 PATH=$PATH:/home/ceiec/cyber-narrator/go/bin
