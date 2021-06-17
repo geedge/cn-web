@@ -392,7 +392,7 @@
 					<buildArgs>
 						<!--向Dockerfile中传入参数,k-v格式-->
 <!--						<JDK_IMAGE>${docker.registry}:${docker.registry.port}/common/jdk:1.8.0_73</JDK_IMAGE>-->
-						<JDK_IMAGE>java</JDK_IMAGE>
+						<JDK_IMAGE>${docker.registry}:${docker.registry.port}/common/jdk:1.8.0_73</JDK_IMAGE>
 						<JAR_FILE>${project.build.finalName}.xjar</JAR_FILE>
 					</buildArgs>
 					<resources>
