@@ -12,7 +12,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.plaf.ToolBarUI;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -66,7 +68,13 @@ public class InterfaceController extends AbstractController {
 		}
 		logger.info("request path : {}", servletPath);
 		/* 请求参数 */
-		Map parameter = request.getParameterMap();
+		Map<String, String[]> parameterMap = request.getParameterMap();
+		Map parameter = Tool.MapUtil.newHashMap();
+		for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+			String[] value = entry.getValue();
+			parameter.put(entry.getKey(), ArrayUtils.isNotEmpty(value) ? value[0] : "");
+		}
+
 		if(logger.isDebugEnabled()) {
 			logger.debug("request path : {},method : {},parameter : {}", servletPath,method,Tool.JSONUtil.toJsonStr(parameter));
 		}

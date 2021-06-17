@@ -29,7 +29,7 @@ spring:
       enabled: true
 
   flyway:
-    enabled: true              # 是否开启
+    enabled: false              # 是否开启
     encoding: UTF-8            # 编码
     sql-migration-prefix: V    # 脚本文件的前缀，默认为V
     sql-migration-separator: __ #  双下划线
@@ -65,7 +65,7 @@ spring:
           config:
             multi-statement-allow: true
 logging:
-  config: classpath:./config/logback-spring.xml
+  config: ./config/logback-spring.xml
 
 #mybatis
 mybatis-plus:

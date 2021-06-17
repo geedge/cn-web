@@ -9,7 +9,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import net.geedge.modules.sys.entity.LicenseEntity;
 import net.geedge.modules.sys.service.LicenseService;
-@Configuration
+//@Configuration
 public class LicenseInterceptor extends HandlerInterceptorAdapter {
 
 	@Autowired

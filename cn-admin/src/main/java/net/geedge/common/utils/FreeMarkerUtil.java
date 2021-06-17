@@ -2,6 +2,9 @@ package net.geedge.common.utils;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import cn.hutool.cache.impl.LFUCache;
 import freemarker.cache.StringTemplateLoader;
