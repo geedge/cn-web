@@ -48,8 +48,10 @@ build_image:
   stage: build_image
   #执行的脚本内容
   script:
-    - echo 'tag名称是'
-    - echo $CI_COMMIT_TAG
+    - echo 'id'
+    - echo $CI_CONCURRENT_ID
+    - echo 'id'
+    - echo $CI_CONCURRENT_PROJECT_ID
     - echo '提交的版本是'
     - echo $CI_COMMIT_REF_NAME
     - echo 'exec build_image'
