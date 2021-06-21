@@ -22,7 +22,7 @@ package:
   #执行的脚本内容
   script:
     - echo 'exec mvn clean package'
-    - mvn clean package
+    - mvn clean package -Dxjar.password=$XJAR_PIN
   only:
     - dev-cicd
   tags:
