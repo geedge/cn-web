@@ -377,7 +377,9 @@
 						${docker.registry}:${docker.registry.port}/${docker.registry.project.name}/${project.build.finalName}
 					</imageName>
 					<!--build 时强制覆盖 tag，配合 imageTags 使用-->
+<!--
 					<forceTags>true</forceTags>
+-->
 					<imageTags>
 						<!--指定镜像的tag,可以指定多个标签-->
 						<!--<imageTag>${project.version}</imageTag>
