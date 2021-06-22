@@ -1,4 +1,4 @@
-#stages定义pipeline的全部阶段(stage),阶段内所有任务并行执行,12
+#stages定义pipeline的全部阶段(stage),阶段内所有任务并行执行,123
 #全部执行成功开始下一阶段任务,任何阶段内任意job执行失败都会导致pipeline失败,
 #所有stage，job执行成功后pipeline会显示pass。如果未定义stages,则默认有build、
 #install,install_clean和build_imag三个阶段,如果未定义stage，则默认test阶段
