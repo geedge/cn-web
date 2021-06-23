@@ -102,6 +102,7 @@ public class SysLoginController extends AbstractController {
 			String loginToken= Tool.IdUtil.simpleUUID();
 			subject.getSession().setAttribute("token",loginToken);
 			Map<String, Object> obj = new HashMap<>();
+			obj.put("1", "1");
 			obj.put("token", subject.getSession().getId().toString());
 			// 查询系统配置信息
 			String[] paramkeys = {"system_name", "system_logo", "timezone", "default_cabinet_usize", "map_center_config", "unsaved_change","prometheus_federation_enabled"};
