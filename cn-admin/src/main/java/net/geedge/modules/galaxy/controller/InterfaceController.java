@@ -74,7 +74,13 @@ public class InterfaceController extends AbstractController {
 		}
 		logger.info("request path : {}", servletPath);
 		/* 请求参数 */
-		Map parameter = request.getParameterMap();
+		Map<String,String[]> param = request.getParameterMap();
+		
+		Map parameter = Tool.MapUtil.newHashMap();
+		for(String key :param.keySet()) {
+			parameter.put(key, (param.get(key))[0]);
+		}
+		
 		if(logger.isDebugEnabled()) {
 			logger.debug("request path : {},method : {},parameter : {}", servletPath,method,Tool.JSONUtil.toJsonStr(parameter));
 		}
