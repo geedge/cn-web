@@ -180,6 +180,8 @@ public class InterfaceController extends AbstractController {
 			if(Tool.CollUtil.isNotEmpty(responseHeader)) {
 				responseHeader.forEach((k,v) -> response.setHeader(k, Tool.StrUtil.join(";", v.toArray())));
 			}
+			response.setHeader("Access-Control-Allow-Origin", "*");
+
 			Tool.IoUtil.writeUtf8(response.getOutputStream(), false, Tool.JSONUtil.toJsonStr(bindings.get("result")));
 			response.flushBuffer();
 		} catch (ScriptException e) {
