@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.script.Bindings;
@@ -49,6 +50,8 @@ public class InterfaceController extends AbstractController {
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	private final static List<String> HEADER_LIST = Tool.ListUtil.toList("HOST","REFERER","ORIGIN");
+	
 	@RequestMapping("/interface/**")
 	@SuppressWarnings("all")
 	public void index(HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateException {
@@ -60,7 +63,12 @@ public class InterfaceController extends AbstractController {
 		Enumeration<String> headerNames = request.getHeaderNames();
 		Map<String, String> headers = Tool.MapUtil.newHashMap();
 		for (; headerNames.hasMoreElements();) {
+			
 			String key = headerNames.nextElement();
+			//解决跨域问题
+			if(HEADER_LIST.contains(key.toUpperCase())) {
+				continue;
+			}
 			String value = request.getHeader(key);
 			headers.put(key, value);
 		}
