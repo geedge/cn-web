@@ -79,7 +79,7 @@ public class SysInfoServiceImpl implements SysInfoService {
 
     @Override
     public Object getGitVersionInfo() {
-        String gitLog = Tool.FileUtil.readUtf8String(Constant.CN_ROOT_PATH + File.separator + "git.log");
+        String gitLog = Tool.FileUtil.readUtf8String("git.log");
         String[] split = gitLog.split("\n");
         return Arrays.asList(split);
     }

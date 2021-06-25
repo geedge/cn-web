@@ -239,6 +239,24 @@
 			</resource>
 		</resources>
 		<plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.4</version>
+				<configuration>
+					<timestampFormat>yyyyMMddHHmmss</timestampFormat><!--设置时间格式  ${timestamp}  -->
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>create-timestamp</goal>
+						</goals>
+					</execution>
+				</executions>
+				<inherited>false</inherited>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -359,14 +377,13 @@
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<version>1.2.2</version>
 				<configuration>
 					<!--maven的settings.xml中设置的harbor仓库账户密码,server.id-->
 					<serverId>153-docker-repo</serverId>
 					<!--提交到harbor的仓库地址,ip,端口-->
 					<registryUrl>${docker.registry}:${docker.registry.port}</registryUrl>
 					<!--是否向镜像registry(harbor)中推送镜像,如果为false则需要在执行mvn时添加-DpushImage参数-->
-					<pushImage>true</pushImage>
 					<!--生成的镜像名称,镜像名称，只能有 a-z 小写字母(不能有大写字母)，0-9 ，下划线"_"，和点"." 组成
                         192.168.40.153:9080表示仓库地址，
                         tsg表示组织名称,
@@ -377,13 +394,9 @@
 						${docker.registry}:${docker.registry.port}/${docker.registry.project.name}/${project.build.finalName}
 					</imageName>
 					<!--build 时强制覆盖 tag，配合 imageTags 使用-->
-<!--
 					<forceTags>true</forceTags>
--->
 					<imageTags>
-						<!--指定镜像的tag,可以指定多个标签-->
-						<!--<imageTag>${project.version}</imageTag>
-						<imageTag>latest</imageTag>-->
+						<imageTag>${timestamp}</imageTag>
 					</imageTags>
 
 					<!--Dockerfile的路径,下面放置Dockerfile文件及Dockerfile中依赖的内容,例如config文件夹(数据卷共享)-->
@@ -414,6 +427,7 @@
 							<directory>${project.build.directory}/classes/</directory>
 						</resource>-->
 					</resources>
+					<pushImage>true</pushImage>
 					<!--指定构建docker镜像的机器-->
 					<dockerHost>http://${docker.build}:${docker.build.port}</dockerHost>
 				</configuration>
