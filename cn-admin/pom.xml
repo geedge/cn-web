@@ -25,7 +25,7 @@
 
 
 		<!--先将镜像build到${docker.build}的docker中,然后再根据imageName向对应的docker.registry中推送,可以build完不push,这俩可以是一个机器-->
-		<docker.build>192.168.44.64</docker.build>
+		<docker.build>192.168.40.153</docker.build>
 		<!--docker-build的端口-->
 		<docker.build.port>2375</docker.build.port>
 		<!--docker-registry地址-->
@@ -33,7 +33,7 @@
 		<!--docker-registry的端口-->
 		<docker.registry.port>9080</docker.registry.port>
 		<!--docker-registry中项目名称-->
-		<docker.registry.project.name>test</docker.registry.project.name>
+		<docker.registry.project.name>cyber-test</docker.registry.project.name>
 	</properties>
 
 	<dependencies>
@@ -395,9 +395,9 @@
 					</imageName>
 					<!--build 时强制覆盖 tag，配合 imageTags 使用-->
 					<forceTags>true</forceTags>
-					<imageTags>
+					<!--<imageTags>
 						<imageTag>${timestamp}</imageTag>
-					</imageTags>
+					</imageTags>-->
 
 					<!--Dockerfile的路径,下面放置Dockerfile文件及Dockerfile中依赖的内容,例如config文件夹(数据卷共享)-->
 					<dockerDirectory>src/main/resources</dockerDirectory>
