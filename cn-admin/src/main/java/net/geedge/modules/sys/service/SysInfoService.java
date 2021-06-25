@@ -6,5 +6,5 @@ public interface SysInfoService {
 
     Map getAboutInfo();
 
-    Map getGitVersionInfo();
+    Object getGitVersionInfo();
 }

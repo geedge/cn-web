@@ -33,7 +33,7 @@
 		<!--docker-registry的端口-->
 		<docker.registry.port>9080</docker.registry.port>
 		<!--docker-registry中项目名称-->
-		<docker.registry.project.name>cyber-narrator</docker.registry.project.name>
+		<docker.registry.project.name>test</docker.registry.project.name>
 	</properties>
 
 	<dependencies>

@@ -1,14 +1,7 @@
 package net.geedge.modules.sys.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeMap;
+import java.io.File;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -85,54 +78,9 @@ public class SysInfoServiceImpl implements SysInfoService {
     }
 
     @Override
-    public Map getGitVersionInfo() {
-        try {
-            String versionJson = Tool.FileUtil.readUtf8String("git.properties");
-            JSONObject jsonObject = JSON.parseObject(versionJson.toString());
-            Set<Map.Entry<String, Object>> entrySet = jsonObject.entrySet();
-            if (CollectionUtils.isNotEmpty(entrySet)) {
-                // 默认排序 a-z
-                Map<String, Object> sortMap = new TreeMap<>(new Comparator<String>() {
-                    public int compare(String obj1, String obj2) {
-                        return obj1.compareTo(obj2);
-                    }
-                });
-                Map<String, Object> collect = entrySet.stream()
-                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (o, n) -> n));
-                sortMap.putAll(collect);
-                return sortMap;
-            }
-        } catch (IORuntimeException e) {
-            log.error("读取 git.properties 文件信息失败，错误信息是：" + e);
-        }
-
-        /*ClassLoader classLoader = getClass().getClassLoader();
-        try (InputStream inputStream = classLoader.getResourceAsStream("git.properties");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));) {
-            StringBuilder versionJson = null;
-            String line;
-            versionJson = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                versionJson.append(line);
-            }
-
-            JSONObject jsonObject = JSON.parseObject(versionJson.toString());
-            Set<Map.Entry<String, Object>> entrySet = jsonObject.entrySet();
-            if (CollectionUtils.isNotEmpty(entrySet)) {
-                // 默认排序 a-z
-                Map<String, Object> sortMap = new TreeMap<>(new Comparator<String>() {
-                    public int compare(String obj1, String obj2) {
-                        return obj1.compareTo(obj2);
-                    }
-                });
-                Map<String, Object> collect = entrySet.stream()
-                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (o, n) -> n));
-                sortMap.putAll(collect);
-                return sortMap;
-            }
-        } catch (IOException e) {
-            log.error("读取 git.properties 文件信息失败，错误信息是：" + e);
-        }*/
-        return Collections.emptyMap();
+    public Object getGitVersionInfo() {
+        String gitLog = Tool.FileUtil.readUtf8String(Constant.CN_ROOT_PATH + File.separator + "git.log");
+        String[] split = gitLog.split("\n");
+        return Arrays.asList(split);
     }
 }
