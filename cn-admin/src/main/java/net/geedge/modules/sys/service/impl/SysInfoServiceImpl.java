@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.util.*;
 
 @Service("sysInfoService")
@@ -71,7 +72,9 @@ public class SysInfoServiceImpl implements SysInfoService {
     @Override
     public Map getGitVersionInfo() {
         try {
-            String gitLog = Tool.FileUtil.readUtf8String("git.log");
+//            String gitLog = Tool.FileUtil.readUtf8String("git.log");
+            InputStream is = this.getClass().getResourceAsStream("/git.log");
+            String gitLog = Tool.IoUtil.read(is, "utf-8");
             String[] split = gitLog.split("\n");
             Map map = new HashMap();
             map.put("list", Arrays.asList(split));
