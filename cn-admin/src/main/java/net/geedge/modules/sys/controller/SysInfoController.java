@@ -30,7 +30,7 @@ public class SysInfoController {
         return R.ok(aboutInfo);
     }
 
-    @GetMapping("/buildInfo")
+    @GetMapping("/gitLog")
     public R getVersionInfo() {
         return R.ok(sysInfoService.getGitVersionInfo());
     }

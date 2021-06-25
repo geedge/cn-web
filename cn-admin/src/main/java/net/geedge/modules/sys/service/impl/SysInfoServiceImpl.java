@@ -1,17 +1,11 @@
 package net.geedge.modules.sys.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections.CollectionUtils;
+import cn.hutool.core.io.IORuntimeException;
+import cn.hutool.log.Log;
+import net.geedge.common.utils.Tool;
+import net.geedge.modules.sys.dao.SysConfigDao;
+import net.geedge.modules.sys.entity.SysConfigEntity;
+import net.geedge.modules.sys.service.SysInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -20,17 +14,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
-import cn.hutool.core.io.IORuntimeException;
-import cn.hutool.log.Log;
-import net.geedge.common.utils.Constant;
-import net.geedge.common.utils.Tool;
-import net.geedge.modules.sys.dao.SysConfigDao;
-import net.geedge.modules.sys.entity.SysConfigEntity;
-import net.geedge.modules.sys.service.SysInfoService;
+import java.util.*;
 
 @Service("sysInfoService")
 public class SysInfoServiceImpl implements SysInfoService {
@@ -87,52 +71,14 @@ public class SysInfoServiceImpl implements SysInfoService {
     @Override
     public Map getGitVersionInfo() {
         try {
-            String versionJson = Tool.FileUtil.readUtf8String("git.properties");
-            JSONObject jsonObject = JSON.parseObject(versionJson.toString());
-            Set<Map.Entry<String, Object>> entrySet = jsonObject.entrySet();
-            if (CollectionUtils.isNotEmpty(entrySet)) {
-                // 默认排序 a-z
-                Map<String, Object> sortMap = new TreeMap<>(new Comparator<String>() {
-                    public int compare(String obj1, String obj2) {
-                        return obj1.compareTo(obj2);
-                    }
-                });
-                Map<String, Object> collect = entrySet.stream()
-                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (o, n) -> n));
-                sortMap.putAll(collect);
-                return sortMap;
-            }
+            String gitLog = Tool.FileUtil.readUtf8String("git.log");
+            String[] split = gitLog.split("\n");
+            Map map = new HashMap();
+            map.put("list", Arrays.asList(split));
+            return map;
         } catch (IORuntimeException e) {
-            log.error("读取 git.properties 文件信息失败，错误信息是：" + e);
+            log.error("读取 git.log 文件信息失败，错误信息是：" + e);
         }
-
-        /*ClassLoader classLoader = getClass().getClassLoader();
-        try (InputStream inputStream = classLoader.getResourceAsStream("git.properties");
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));) {
-            StringBuilder versionJson = null;
-            String line;
-            versionJson = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                versionJson.append(line);
-            }
-
-            JSONObject jsonObject = JSON.parseObject(versionJson.toString());
-            Set<Map.Entry<String, Object>> entrySet = jsonObject.entrySet();
-            if (CollectionUtils.isNotEmpty(entrySet)) {
-                // 默认排序 a-z
-                Map<String, Object> sortMap = new TreeMap<>(new Comparator<String>() {
-                    public int compare(String obj1, String obj2) {
-                        return obj1.compareTo(obj2);
-                    }
-                });
-                Map<String, Object> collect = entrySet.stream()
-                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (o, n) -> n));
-                sortMap.putAll(collect);
-                return sortMap;
-            }
-        } catch (IOException e) {
-            log.error("读取 git.properties 文件信息失败，错误信息是：" + e);
-        }*/
         return Collections.emptyMap();
     }
 }

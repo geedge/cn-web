@@ -5,6 +5,7 @@
 
 #这里定义三个阶段（stages），install,install_clean和build_image,stages中的阶段按写的顺序进行，先执行install,然后执行install_clean,然后在执行build_image
 stages:
+  - gen_git-log
   - build_image
   - package_clean
   - package
@@ -14,6 +15,18 @@ variables:
 
 before_script:
   - export CNWEB_TAG=$(date +%Y%m%d%H%M%S)
+
+generate_git-log:
+  stage: gen_git-log
+  script:
+    - "git log -100 --pretty=format:'%ad : %s' >> ./cn-admin/src/main/resources/git.log"
+  artifacts:
+    paths:
+      - ./cn-admin/src/main/resources/git.log
+  only:
+    - dev
+  tags:
+    - GN-XXG-Server
 
 #job的名称,自定义
 package:
