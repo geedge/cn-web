@@ -1,6 +1,9 @@
 package net.geedge.modules.galaxy.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -228,7 +231,13 @@ public class InterfaceController extends AbstractController {
 					sb.append("?");
 				}
 				params.forEach((k,v) -> {
-					sb.append(k).append("=").append(v).append("&");
+					try {
+						String encode = URLEncoder.encode(v, "UTF-8").replaceAll("\\+", "%20");
+						sb.append(k).append("=").append(encode).append("&");
+					} catch (UnsupportedEncodingException e) {
+						logger.error(e);
+					}
+					// sb.append(k).append("=").append(v).append("&");
 				});
 				sb.deleteCharAt(sb.length()-1);
 				url = sb.toString();
@@ -236,7 +245,7 @@ public class InterfaceController extends AbstractController {
 		}else {
 			httpEntity = new HttpEntity(params,httpHeaders);
 		}
-		responseEntity = restTemplate.exchange(url, HttpMethod.resolve(method), httpEntity, responseType);
+		responseEntity = restTemplate.exchange(URI.create(url), HttpMethod.resolve(method), httpEntity, responseType);
 		return responseEntity;
 	}
 	
