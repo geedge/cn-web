@@ -10,10 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
+import javax.script.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -116,7 +113,7 @@ public class InterfaceController extends AbstractController {
 		//获取单例 js 引擎
 		ScriptEngine jsEngine = Tool.ScriptUtil.getJsEngine();
 		//设置 js bindings
-		Bindings bindings = jsEngine.getBindings(ScriptContext.ENGINE_SCOPE);
+		Bindings bindings = jsEngine.createBindings();
 		bindings.put("nowTimestamp", System.currentTimeMillis());//当前时间戳
 		bindings.put("code", 200);
 		bindings.put("msg", "");
