@@ -26,8 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import cn.hutool.core.util.StrUtil;
 import freemarker.template.TemplateException;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.RCode;
@@ -184,10 +186,16 @@ public class InterfaceController extends AbstractController {
 			response.setStatus(code);
 			responseHeader = (HttpHeaders)bindings.get("responseHeader");
 			if(Tool.CollUtil.isNotEmpty(responseHeader)) {
-				responseHeader.forEach((k,v) -> response.setHeader(k, Tool.StrUtil.join(";", v.toArray())));
+				//responseHeader.forEach((k,v) -> response.setHeader(k, Tool.StrUtil.join(";", v.toArray())));
+				responseHeader.forEach((k,v) -> {
+					if(StrUtil.equals(k, "Content-Length")) {
+						response.setHeader(k, Tool.StrUtil.join(";", (Tool.JSONUtil.toJsonStr(bindings.get("result"))).getBytes().length));
+					}else {
+						response.setHeader(k, Tool.StrUtil.join(";", v.toArray()));
+					}
+				});
 			}
 			response.setHeader("Access-Control-Allow-Origin", "*");
-
 			Tool.IoUtil.writeUtf8(response.getOutputStream(), false, Tool.JSONUtil.toJsonStr(bindings.get("result")));
 			response.flushBuffer();
 		} catch (ScriptException e) {
