@@ -73,7 +73,7 @@ public class SysUserController extends AbstractController {
 	public R info(@PathVariable("id") Long id){
 		ValidateUtils.is(id).notNull(RCode.SYS_USER_ID_ISNULL);
 		SysUserEntity user = sysUserService.queryUserInfo(id);
-		return R.ok().put("user", user);
+		return R.ok().put("data", user);
 	}
 
 	/**
