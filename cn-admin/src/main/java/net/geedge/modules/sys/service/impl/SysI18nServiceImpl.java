@@ -78,9 +78,9 @@ public class SysI18nServiceImpl extends ServiceImpl<SysI18nDao, SysI18nEntity> i
 	@Override
 	public boolean check(SysI18nEntity sysI18n) {
 		boolean dumpFlag = true; //记录是否重复(code+lang)，true为重复
-		List<SysI18nEntity> list = list(new QueryWrapper<SysI18nEntity>()
-									.eq(true, "code", sysI18n.getCode())
-									. eq(true, "lang", sysI18n.getLang()));
+		List<SysI18nEntity> list = list(new QueryWrapper<SysI18nEntity>().lambda()
+									.eq(true, SysI18nEntity::getCode, sysI18n.getCode())
+									. eq(true, SysI18nEntity::getLang, sysI18n.getLang()).ne(ObjectUtil.isNotEmpty(sysI18n.getId()),SysI18nEntity::getId, sysI18n.getId()));
 		//当只有一个结果并且这个结果是自身时，或没有结果时，说明不重复
 		if (ObjectUtil.isEmpty(list)) {
 			dumpFlag = false;
