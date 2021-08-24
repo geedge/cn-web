@@ -16,6 +16,7 @@ import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.galaxy.entity.GalaxyProxy;
 import net.geedge.modules.galaxy.service.GalaxyProxyService;
 
@@ -39,22 +40,29 @@ public class GalaxyProxyController {
 	}
 	
 	@PostMapping
-	public R savePanel(@RequestBody GalaxyProxy galaxyProxy) {
+	public R save(@RequestBody GalaxyProxy galaxyProxy) {
 		Integer id = galaxyProxyService.saveOrUpdateGalaxyProxy(galaxyProxy);
 		return R.ok().putData("id", id);
 	}
 	
 	@PutMapping
-	public R modifyPanel(@RequestBody GalaxyProxy galaxyProxy) {
+	public R modify(@RequestBody GalaxyProxy galaxyProxy) {
 		ValidateUtils.is(galaxyProxy.getId()).notNull(RCode.GALAXY_PROXY_ID_ISNULL);
 		Integer id = galaxyProxyService.saveOrUpdateGalaxyProxy(galaxyProxy);
 		return R.ok().putData("id", id);
 	}
 	
 	@DeleteMapping
-	public R removePane(@RequestParam String ids) {
+	public R remove(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.GALAXY_PROXY_ID_ISNULL);
 		galaxyProxyService.removeGalaxyProxy(ids);
 		return R.ok();
 	}
+	
+	@PutMapping(path = "clearCache")
+	public R clearCache() {
+		Tool.FreeMarkerUtil.clearTemlateCache();
+		return R.ok();
+	}
+	
 }

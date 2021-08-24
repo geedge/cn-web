@@ -16,6 +16,13 @@ public class FreeMarkerUtil {
 	static LFUCache<Object,Object> templateCache = Tool.CacheUtil.newLFUCache(100);
 
 	/**
+	 * 清空缓存
+	 */
+	public static void clearTemlateCache() {
+		templateCache.clear();
+	}
+	
+	/**
 	 * 获取模板
 	 * @param templateStr
 	 * @param templateKey

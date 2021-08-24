@@ -16,10 +16,10 @@ import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.galaxy.dao.GalaxyProxyDao;
 import net.geedge.modules.galaxy.entity.GalaxyProxy;
 import net.geedge.modules.galaxy.service.GalaxyProxyService;
-import net.geedge.modules.panel.entity.VisualPanel;
 
 @Service("galaxyProxyService")
 public class GalaxyProxyImpl extends ServiceImpl<GalaxyProxyDao, GalaxyProxy> implements GalaxyProxyService {
@@ -47,6 +47,8 @@ public class GalaxyProxyImpl extends ServiceImpl<GalaxyProxyDao, GalaxyProxy> im
 		}
 		galaxyProxy.setUtime(new Date());
 		this.saveOrUpdate(galaxyProxy);
+		//清空缓存
+		Tool.FreeMarkerUtil.clearTemlateCache();
 		return galaxyProxy.getId();
 	}
 
@@ -59,10 +61,20 @@ public class GalaxyProxyImpl extends ServiceImpl<GalaxyProxyDao, GalaxyProxy> im
 	public void ValidateGalaxyProxy(GalaxyProxy galaxyProxy) {
 		ValidateUtils.is(galaxyProxy.getName()).notNull(RCode.GALAXY_PROXY_NAME_ISNULL)
 		.and(galaxyProxy.getMethod()).notNull(RCode.GALAXY_PROXY_METHOD_ISNULL)
-		.and(galaxyProxy.getTargetUrl()).notNull(RCode.GALAXY_PROXY_TARGET_URL_ISNULL)
-		.and(galaxyProxy.getTargetParam()).notNull(RCode.GALAXY_PROXY_TARGET_PARAM_ISNULL)
-		.and(galaxyProxy.getTargetHeader()).notNull(RCode.GALAXY_PROXY_TARGET_HEADER_ISNULL)
-		.and(galaxyProxy.getPreHandle()).notNull(RCode.GALAXY_PROXY_PRE_HANDLE_ISNULL)
-		.and(galaxyProxy.getPostHandle()).notNull(RCode.GALAXY_PROXY_POST_HANDLE_ISNULL);
+		.and(galaxyProxy.getTargetUrl()).notNull(RCode.GALAXY_PROXY_TARGET_URL_ISNULL);
+		
+		//设置默认值
+		if(Tool.StrUtil.isBlank(galaxyProxy.getTargetParam())) {
+			galaxyProxy.setTargetParam(Tool.StrUtil.EMPTY);
+		}
+		if(Tool.StrUtil.isBlank(galaxyProxy.getTargetHeader())) {
+			galaxyProxy.setTargetHeader(Tool.StrUtil.EMPTY_JSON);
+		}
+		if(Tool.StrUtil.isBlank(galaxyProxy.getPreHandle())) {
+			galaxyProxy.setPreHandle(Tool.StrUtil.EMPTY);
+		}
+		if(Tool.StrUtil.isBlank(galaxyProxy.getPostHandle())) {
+			galaxyProxy.setPostHandle(Tool.StrUtil.EMPTY);
+		}
 	}
 }
