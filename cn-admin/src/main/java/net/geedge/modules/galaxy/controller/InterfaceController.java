@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
@@ -54,6 +56,18 @@ public class InterfaceController extends AbstractController {
 	private RestTemplate restTemplate;
 	
 	private final static List<String> HEADER_LIST = Tool.ListUtil.toList("HOST","REFERER","ORIGIN");
+	/**
+	 * cors 响应头
+	 */
+	private final static Map<String,String> CORS_HEADER = new LinkedHashMap<String, String>();
+	
+	static {
+		CORS_HEADER.put("Access-Control-Allow-Origin", "*");
+		CORS_HEADER.put("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+		CORS_HEADER.put("Access-Control-Allow-Headers", "*");
+		CORS_HEADER.put("Access-Control-Max-Age", "86400");
+	}
+	 
 	
 	@RequestMapping("/interface/**")
 	@SuppressWarnings("all")
@@ -200,7 +214,8 @@ public class InterfaceController extends AbstractController {
 					}
 				});
 			}
-			response.setHeader("Access-Control-Allow-Origin", "*");
+			//设置 cors 响应头
+			this.setCorsHeaders(response);
 			Tool.IoUtil.writeUtf8(response.getOutputStream(), false, Tool.JSONUtil.toJsonStr(bindings.get("result")));
 			response.flushBuffer();
 		} catch (ScriptException e) {
@@ -209,6 +224,13 @@ public class InterfaceController extends AbstractController {
 
 	}
 
+	private void setCorsHeaders(HttpServletResponse response) {
+		Set<Entry<String,String>> entrySet = CORS_HEADER.entrySet();
+		entrySet.forEach((en)->{
+			response.setHeader(en.getKey(), en.getValue());
+		});
+	}
+	
 	/**
 	 * 响应错误信息
 	 * @param response
@@ -220,12 +242,16 @@ public class InterfaceController extends AbstractController {
 	private void responseError(HttpServletResponse response,int code,String msg,String body) throws IOException {
 		response.reset();
 		response.setStatus(code, msg);
+		//设置 cors 响应头
+		this.setCorsHeaders(response);
 		response.setHeader("Content-Type", "application/json;charset=UTF-8");
 		if(body != null) {
 			Tool.IoUtil.writeUtf8(response.getOutputStream(), false, body);
 		}
 		response.flushBuffer();
 	}
+	
+	
 	
 	@SuppressWarnings("all")
 	private  RequestEntity buildRequestEntity(String url,String method,MultiValueMap httpHeaders,Map<String,String> params) {
