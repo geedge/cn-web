@@ -24,15 +24,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
-import cn.hutool.core.util.StrUtil;
 import net.geedge.common.interceptor.TokenCheckFilter;
-import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysApiKeyDao;
 import net.geedge.modules.sys.dao.SysUserDao;
-import net.geedge.modules.sys.entity.SysConfigEntity;
 import net.geedge.modules.sys.service.SysConfigService;
 import net.geedge.modules.sys.shiro.MySessionManager;
 import net.geedge.modules.sys.shiro.ShiroUtils;
@@ -217,14 +212,14 @@ public class ShiroConfig {
 	}
 
 	private Integer getTimeOutData() {
-		SysConfigEntity configEntity = sysconfigService.getOne(new QueryWrapper<SysConfigEntity>().lambda()
-				.eq(SysConfigEntity::getCkey, Constant.SYSCONFIG_SESSION_TIMEOUT_KEY));
-		Integer loginExpiration = 30;
-		if (Tool.ObjectUtil.isNotEmpty(configEntity)) {
-			loginExpiration = StrUtil.isNotBlank(configEntity.getCvalue())
-					? Integer.valueOf(configEntity.getCvalue())
-					: loginExpiration;
-		}
-		return loginExpiration;
+		/*
+		 * SysConfigEntity configEntity = sysconfigService.getOne(new
+		 * QueryWrapper<SysConfigEntity>().lambda() .eq(SysConfigEntity::getCkey,
+		 * Constant.SYSCONFIG_SESSION_TIMEOUT_KEY)); Integer loginExpiration = 30; if
+		 * (Tool.ObjectUtil.isNotEmpty(configEntity)) { loginExpiration =
+		 * StrUtil.isNotBlank(configEntity.getCvalue()) ?
+		 * Integer.valueOf(configEntity.getCvalue()) : loginExpiration; }
+		 */
+		return 60;
 	}
 }
