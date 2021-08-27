@@ -219,10 +219,12 @@ public class InterfaceController extends AbstractController {
 	 */
 	private void responseError(HttpServletResponse response,int code,String msg,String body) throws IOException {
 		response.reset();
-		response.sendError(code, msg);
+		response.setStatus(code, msg);
+		response.setHeader("Content-Type", "application/json;charset=UTF-8");
 		if(body != null) {
 			Tool.IoUtil.writeUtf8(response.getOutputStream(), false, body);
 		}
+		response.flushBuffer();
 	}
 	
 	@SuppressWarnings("all")

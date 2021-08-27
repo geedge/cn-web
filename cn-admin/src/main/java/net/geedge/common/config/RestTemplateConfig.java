@@ -11,6 +11,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import cn.hutool.log.Log;
@@ -25,8 +26,9 @@ public class RestTemplateConfig {
 	private int connectTimeout;
 	
     @Bean
-    public RestTemplate restTemplate(ClientHttpRequestFactory factory){
+    public RestTemplate restTemplate(ClientHttpRequestFactory factory,ResponseErrorHandler errorHandler){
     	RestTemplate restTemplate = new RestTemplate(factory);
+    	restTemplate.setErrorHandler(errorHandler);
     	restTemplate.setInterceptors(Tool.CollUtil.toList(new ClientHttpRequestInterceptor() {
     		@Override
     	    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
@@ -64,4 +66,24 @@ public class RestTemplateConfig {
         return factory;
     }
  
+    /**
+     * resttemplate 请求响应不抛出异常
+     * @return
+     */
+    @Bean
+    public ResponseErrorHandler responseErrorHandler() {
+    	return new ResponseErrorHandler() {
+			
+			@Override
+			public boolean hasError(ClientHttpResponse response) throws IOException {
+				int rawStatusCode = response.getRawStatusCode();
+				return rawStatusCode >= 400;
+			}
+			
+			@Override
+			public void handleError(ClientHttpResponse response) throws IOException {
+				log.warn("resttemplate response error,StatusCode:{}", response.getRawStatusCode());
+			}
+		};
+    }
 }
