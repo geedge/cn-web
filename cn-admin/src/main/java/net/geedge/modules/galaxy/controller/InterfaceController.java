@@ -10,15 +10,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.script.*;
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -26,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import cn.hutool.core.util.StrUtil;
@@ -158,12 +159,16 @@ public class InterfaceController extends AbstractController {
 				logger.debug("headers : {} ", Tool.JSONUtil.toJsonStr(headers));
 				logger.debug("parameter : {} ", Tool.JSONUtil.toJsonStr(parameter));
 			}
-		    //代理 http 请求
-			ResponseEntity<LinkedHashMap> responseEntity = this.exchange(targetUrl, method, httpHeaders, parameter, LinkedHashMap.class);
+		    //构造请求参数
+			RequestEntity requestEntity = this.buildRequestEntity(targetUrl, method, httpHeaders, parameter);
+			//发送请求，获取响应结果
+			ResponseEntity<LinkedHashMap> responseEntity = restTemplate.exchange(requestEntity, LinkedHashMap.class);
 			HttpStatus statusCode = responseEntity.getStatusCode();
 			HttpHeaders responseHeader = responseEntity.getHeaders();
 			logger.info("targetUrl : {},statusCode : {}", targetUrl,statusCode.toString());
 			LinkedHashMap body = responseEntity.getBody();
+			//返回实际请求url,便于开发测试
+			body.put("originalUrl", requestEntity.getUrl().toString());
 			if(logger.isDebugEnabled()) {
 				logger.debug("target body: {}", Tool.JSONUtil.toJsonStr(body));
 			}
@@ -221,12 +226,10 @@ public class InterfaceController extends AbstractController {
 	}
 	
 	@SuppressWarnings("all")
-	private <T> ResponseEntity<T> exchange(String url,String method,MultiValueMap httpHeaders,Map<String,String> params,Class<T> responseType) {
-		
-		HttpEntity httpEntity = null;
-		ResponseEntity<T> responseEntity = null;
-		if(Tool.StrUtil.equalsIgnoreCase(method, "GET")) {
-			httpEntity = new HttpEntity(httpHeaders);
+	private  RequestEntity buildRequestEntity(String url,String method,MultiValueMap httpHeaders,Map<String,String> params) {
+		boolean isGet = Tool.StrUtil.equalsIgnoreCase(method, "GET");
+		RequestEntity requestEntity = null;
+		if(isGet) {
 			if(Tool.MapUtil.isNotEmpty(params)) {
 				if(url.endsWith("/")) {
 					url = url.substring(0, url.length() -1);
@@ -247,11 +250,11 @@ public class InterfaceController extends AbstractController {
 				sb.deleteCharAt(sb.length()-1);
 				url = sb.toString();
 			}
-		}else {
-			httpEntity = new HttpEntity(params,httpHeaders);
 		}
-		responseEntity = restTemplate.exchange(URI.create(url), HttpMethod.resolve(method), httpEntity, responseType);
-		return responseEntity;
+		requestEntity = new RequestEntity((isGet?null:params),httpHeaders, HttpMethod.valueOf(method), URI.create(url));
+		return requestEntity;
 	}
+	
+
 	
 }
