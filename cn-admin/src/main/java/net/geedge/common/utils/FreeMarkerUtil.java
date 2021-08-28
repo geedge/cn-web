@@ -11,8 +11,7 @@ import freemarker.template.TemplateException;
 
 public class FreeMarkerUtil {
 
-	// 创建配置类
-	static Configuration configuration = new Configuration(Configuration.getVersion());
+	
 	static LFUCache<Object,Object> templateCache = Tool.CacheUtil.newLFUCache(100);
 
 	/**
@@ -32,6 +31,8 @@ public class FreeMarkerUtil {
 	public static Template stringToTemplate(String name, String templateContent) throws IOException {
 		Template template = (Template)templateCache.get(name);
 		if(template == null) {
+			// 创建配置类
+			Configuration configuration = new Configuration(Configuration.getVersion());
 			//创建模板加载器
 	        StringTemplateLoader templateLoader = new StringTemplateLoader();
 	        // 存入模板
