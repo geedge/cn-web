@@ -292,6 +292,12 @@
 							<goal>build</goal>
 						</goals>
 						<phase>package</phase>
+						<configuration>
+							<excludes>
+                                <exclude>/db/*</exclude>
+                                <exclude>/static/**/*</exclude>
+                            </excludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
