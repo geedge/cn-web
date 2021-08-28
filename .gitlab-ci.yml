@@ -35,7 +35,7 @@ package:
   #执行的脚本内容
   script:
     - echo 'exec mvn clean package'
-    - mvn clean package -Dxjar.password=$XJAR_PIN
+    - mvn clean package -Dxjar.password=$XJAR_PIN -Dxjar.excludes=/db/*,/static/**/*
   only:
     - dev
   tags:
