@@ -25,7 +25,7 @@
 
 
 		<!--先将镜像build到${docker.build}的docker中,然后再根据imageName向对应的docker.registry中推送,可以build完不push,这俩可以是一个机器-->
-		<docker.build>192.168.40.153</docker.build>
+		<docker.build>192.168.44.64</docker.build>
 		<!--docker-build的端口-->
 		<docker.build.port>2375</docker.build.port>
 		<!--docker-registry地址-->
@@ -377,7 +377,7 @@
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>1.2.2</version>
+				<version>1.0.0</version>
 				<configuration>
 					<!--maven的settings.xml中设置的harbor仓库账户密码,server.id-->
 					<serverId>153-docker-repo</serverId>
