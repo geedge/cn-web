@@ -34,9 +34,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import cn.hutool.core.util.StrUtil;
 import freemarker.template.TemplateException;
+import net.geedge.common.annotation.SysLog;
 import net.geedge.common.exception.CNException;
+import net.geedge.common.utils.OperationEnum;
 import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool;
+import net.geedge.common.utils.TypeEnum;
 import net.geedge.modules.galaxy.entity.GalaxyProxy;
 import net.geedge.modules.galaxy.service.GalaxyProxyService;
 import net.geedge.modules.sys.controller.AbstractController;
@@ -71,6 +74,7 @@ public class InterfaceController extends AbstractController {
 	
 	@RequestMapping("/interface/**")
 	@SuppressWarnings("all")
+	@SysLog(operation =OperationEnum.QUERY,type = TypeEnum.INTERFACE)
 	public void index(HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateException {
 		/* 请求路径 */
 		String servletPath = request.getServletPath().substring("/interface".length());

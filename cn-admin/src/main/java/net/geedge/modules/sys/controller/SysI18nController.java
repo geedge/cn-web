@@ -1,17 +1,32 @@
 package net.geedge.modules.sys.controller;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import net.geedge.common.annotation.SysLog;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
-import net.geedge.common.smartvalidate.utils.CommonUtil;
-import net.geedge.common.utils.*;
+import net.geedge.common.utils.OperationEnum;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.TypeEnum;
 import net.geedge.modules.sys.entity.SysI18nEntity;
 import net.geedge.modules.sys.service.SysDictService;
 import net.geedge.modules.sys.service.SysI18nService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 
 /**
@@ -48,6 +63,7 @@ public class SysI18nController {
      * 保存
      */
     @PostMapping
+    @SysLog(operation =OperationEnum.ADD,type = TypeEnum.I18N)
     public R save(@RequestBody SysI18nEntity sysI18n){
     	ValidateUtils.is(sysI18n.getCode()).notNull(RCode.SYS_I18N_CODE_ISNULL)
     				 .and(sysI18n.getLang()).notNull(RCode.SYS_I18N_LANG_ISNULL)
@@ -67,6 +83,7 @@ public class SysI18nController {
      * 修改
      */
     @PutMapping
+    @SysLog(operation =OperationEnum.UPDATE,type = TypeEnum.I18N)
     public R update(@RequestBody SysI18nEntity sysI18n){
     	ValidateUtils.is(sysI18n.getCode()).notNull(RCode.SYS_I18N_CODE_ISNULL)
 					 .and(sysI18n.getLang()).notNull(RCode.SYS_I18N_LANG_ISNULL)
@@ -87,6 +104,7 @@ public class SysI18nController {
      * 删除
      */
     @DeleteMapping
+    @SysLog(operation =OperationEnum.DELETE,type = TypeEnum.I18N)
     public R delete(@RequestParam String ids){
     	ValidateUtils.is(ids).notNull(RCode.SYS_I18N_ID_ISNULL);
     	sysI18nService.removeByIds(Arrays.asList(ids.split(",")));

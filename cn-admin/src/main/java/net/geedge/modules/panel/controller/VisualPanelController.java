@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.geedge.common.annotation.SysLog;
 import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.OperationEnum;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.TypeEnum;
 import net.geedge.modules.panel.entity.VisualPanel;
 import net.geedge.modules.panel.service.VisualPanelService;
 
@@ -32,6 +35,7 @@ public class VisualPanelController {
 	}
 	
 	@RequestMapping
+	@SysLog(operation =OperationEnum.QUERY,type = TypeEnum.VISUALPANEL)
 	public R queryList(@RequestParam Map<String,Object> params) {
 		ValidateUtils.is(params.get("type")).notNull(RCode.PANEL_TYPE_ISNULL);
 		PageUtils result = visualPanelService.queryPage(params);
@@ -39,12 +43,14 @@ public class VisualPanelController {
 	}
 	
 	@PostMapping
+	@SysLog(operation =OperationEnum.ADD,type = TypeEnum.VISUALPANEL)
 	public R savePanel(@RequestBody VisualPanel panel) {
 		Integer id = visualPanelService.saveOrUpdatePanel(panel);
 		return R.ok().putData("id", id);
 	}
 	
 	@PutMapping
+	@SysLog(operation =OperationEnum.UPDATE,type = TypeEnum.VISUALPANEL)
 	public R modifyPanel(@RequestBody VisualPanel panel) {
 		ValidateUtils.is(panel.getId()).notNull(RCode.PANEL_ID_ISNULL);
 		Integer id = visualPanelService.saveOrUpdatePanel(panel);
@@ -52,6 +58,7 @@ public class VisualPanelController {
 	}
 	
 	@DeleteMapping
+	@SysLog(operation =OperationEnum.DELETE,type = TypeEnum.VISUALPANEL)
 	public R removePane(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.PANEL_ID_ISNULL);
 		visualPanelService.removePanel(ids);
