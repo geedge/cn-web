@@ -1,8 +1,10 @@
 package net.geedge.common.config;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpRequest;
@@ -15,7 +17,6 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import cn.hutool.log.Log;
-import net.geedge.common.utils.Tool;
 
 @Configuration
 public class RestTemplateConfig {
@@ -26,10 +27,12 @@ public class RestTemplateConfig {
 	private int connectTimeout;
 	
     @Bean
-    public RestTemplate restTemplate(ClientHttpRequestFactory factory,ResponseErrorHandler errorHandler){
-    	RestTemplate restTemplate = new RestTemplate(factory);
+    public RestTemplate restTemplate(RestTemplateBuilder builder,ClientHttpRequestFactory factory,ResponseErrorHandler errorHandler){
+    	RestTemplate restTemplate = builder.build();
+    	restTemplate.setRequestFactory(factory);
     	restTemplate.setErrorHandler(errorHandler);
-    	restTemplate.setInterceptors(Tool.CollUtil.toList(new ClientHttpRequestInterceptor() {
+    	List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();
+    	interceptors.add(new ClientHttpRequestInterceptor() {
     		@Override
     	    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
     	        traceRequest(request, body);
@@ -54,7 +57,8 @@ public class RestTemplateConfig {
     	        log.debug("Headers      : {}", response.getHeaders());
     	        log.debug("=======================response end=================================================");
     	    }
-		}));
+		});
+    	restTemplate.setInterceptors(interceptors);
         return restTemplate;
     }
  
