@@ -99,9 +99,6 @@ management:
       base-path: /actuator  # http访问路径,默认：actuator
       path-mapping:
         prometheus: /prometheus
-  endpoint:
-    health:
-      show-details: always  # always允许访问详细数据
   metrics:
     tags:
       application: cn-web # prometheus application tag ，标志一个应用
