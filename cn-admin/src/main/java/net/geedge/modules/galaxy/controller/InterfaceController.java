@@ -57,24 +57,24 @@ public class InterfaceController extends AbstractController {
 	private SysConfigService sysConfigService;
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	private final static List<String> HEADER_LIST = Tool.ListUtil.toList("HOST","REFERER","ORIGIN");
 	/**
 	 * cors 响应头
 	 */
 	private final static Map<String,String> CORS_HEADER = new LinkedHashMap<String, String>();
-	
+
 	static {
 		CORS_HEADER.put("Access-Control-Allow-Origin", "*");
 		CORS_HEADER.put("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
 		CORS_HEADER.put("Access-Control-Allow-Headers", "*");
 		CORS_HEADER.put("Access-Control-Max-Age", "86400");
 	}
-	 
-	
+
+
 	@RequestMapping("/interface/**")
 	@SuppressWarnings("all")
-	@SysLog(operation =OperationEnum.QUERY,type = TypeEnum.INTERFACE)
+	/*@SysLog(operation =OperationEnum.QUERY,type = TypeEnum.INTERFACE)*/
 	public void index(HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateException {
 		/* 请求路径 */
 		String servletPath = request.getServletPath().substring("/interface".length());
@@ -84,7 +84,7 @@ public class InterfaceController extends AbstractController {
 		Enumeration<String> headerNames = request.getHeaderNames();
 		Map<String, String> headers = Tool.MapUtil.newHashMap();
 		for (; headerNames.hasMoreElements();) {
-			
+
 			String key = headerNames.nextElement();
 			//解决跨域问题
 			if(HEADER_LIST.contains(key.toUpperCase())) {
@@ -96,16 +96,16 @@ public class InterfaceController extends AbstractController {
 		logger.info("request path : {}", servletPath);
 		/* 请求参数 */
 		Map<String,String[]> param = request.getParameterMap();
-		
+
 		Map parameter = Tool.MapUtil.newHashMap();
 		for(String key :param.keySet()) {
 			parameter.put(key, (param.get(key))[0]);
 		}
-		
+
 		if(logger.isDebugEnabled()) {
 			logger.debug("request path : {},method : {},parameter : {}", servletPath,method,Tool.JSONUtil.toJsonStr(parameter));
 		}
-		
+
 		String galaxyUrl = sysConfigService.getValue("galaxy_url");
 		if(Tool.StrUtil.isBlank(galaxyUrl)) {
 			Tool.ExceptionUtil.wrapAndThrow(new CNException(RCode.GALAXY_PROXY_CONFIG_URL_ISNULL));
@@ -130,7 +130,7 @@ public class InterfaceController extends AbstractController {
 		String postHandle = proxy.getPostHandle();
 		String targetParam = proxy.getTargetParam();
 		String targetHeader = proxy.getTargetHeader();
-		
+
 		//获取单例 js 引擎
 		ScriptEngine jsEngine = Tool.ScriptUtil.getJsEngine();
 		//设置 js bindings
@@ -152,7 +152,7 @@ public class InterfaceController extends AbstractController {
 					this.responseError(response, code, bindings.get("msg").toString(), null);
 				}
 			}
-			
+
 			String targetUrl = proxy.getTargetUrl();
 			if(targetUrl.startsWith("/")) {
 				targetUrl = targetUrl.substring(1);
@@ -234,7 +234,7 @@ public class InterfaceController extends AbstractController {
 			response.setHeader(en.getKey(), en.getValue());
 		});
 	}
-	
+
 	/**
 	 * 响应错误信息
 	 * @param response
@@ -254,9 +254,9 @@ public class InterfaceController extends AbstractController {
 		}
 		response.flushBuffer();
 	}
-	
-	
-	
+
+
+
 	@SuppressWarnings("all")
 	private  RequestEntity buildRequestEntity(String url,String method,MultiValueMap httpHeaders,Map<String,String> params) {
 		boolean isGet = Tool.StrUtil.equalsIgnoreCase(method, "GET");
@@ -286,7 +286,7 @@ public class InterfaceController extends AbstractController {
 		requestEntity = new RequestEntity((isGet?null:params),httpHeaders, HttpMethod.valueOf(method), URI.create(url));
 		return requestEntity;
 	}
-	
 
-	
+
+
 }
