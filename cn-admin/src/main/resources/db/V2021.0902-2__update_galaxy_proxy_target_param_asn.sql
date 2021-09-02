@@ -1,0 +1,1 @@
+UPDATE `galaxy_proxy` SET `target_param`='{\r\n    \"query\": \"SELECT asn AS asn FROM ip WHERE <#if parameter.serverIP?default(\'\')?trim? length gt 0> ip_addr = \'${parameter.serverIP}\' <#else> ip_addr = \'${parameter.clientIP}\' </#if>\",\r\n    \"option\": \"real-time\",\r\n    \"format\": \"json\"\r\n}' WHERE `id`=117;
