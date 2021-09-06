@@ -23,7 +23,7 @@ public class RestTemplateConfig {
 	private static final Log log = Log.get();
 	@Value("${restTemplate.readTimeout:30000}")
 	private int readTimeout;
-	@Value("${restTemplate.connectTimeout:30000}")
+	@Value("${restTemplate.connectTimeout:300000}")
 	private int connectTimeout;
 	
     @Bean
