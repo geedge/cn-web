@@ -18,11 +18,10 @@ public class LicenseInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		return true;
 		//获取license
-		/*LicenseEntity licenseEntity = licenseService.getAndSetLicenseCache();
+		LicenseEntity licenseEntity = licenseService.getAndSetLicenseCache();
 		//验证并返回结果
-		return licenseService.verify(licenseEntity);*/
+		return licenseService.verify(licenseEntity);
 	}
 
 }

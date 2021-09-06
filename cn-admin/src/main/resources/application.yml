@@ -65,7 +65,7 @@ spring:
           config:
             multi-statement-allow: true
 logging:
-  config: classpath:config/logback-spring.xml
+  config: ./config/logback-spring.xml
 
 #mybatis
 mybatis-plus:
