@@ -143,8 +143,8 @@ public class SysLogAspect {
 		// 处理参数记录
 		String paramResult = this.handleArgs(syslog, args, ShiroUtils.getUserEntity());
 		paramResult = this.handleLogParam(request.getRequestURI(), paramResult);
-		if (paramResult.getBytes().length > Constant.MYSQL_TEXT_MAXLENGTH) {
-			paramResult = Tool.StrUtil.subWithLength(paramResult, 0, Constant.MYSQL_TEXT_MAXLENGTH);
+		if (paramResult.getBytes().length >= Constant.MYSQL_TEXT_MAXLENGTH) {
+			paramResult = Tool.StrUtil.subWithLength(paramResult, 0, Constant.MYSQL_TEXT_MAXLENGTH-1);
 		}
 		sysLog.setParams(paramResult);
 
@@ -232,8 +232,8 @@ public class SysLogAspect {
 
 		// 处理 参数信息
 		paramResult = this.handleLogParam(request.getRequestURI(), paramResult);
-		if (paramResult.getBytes().length > Constant.MYSQL_TEXT_MAXLENGTH) {
-			paramResult = Tool.StrUtil.subWithLength(paramResult, 0, Constant.MYSQL_TEXT_MAXLENGTH);
+		if (paramResult.getBytes().length >= Constant.MYSQL_TEXT_MAXLENGTH) {
+			paramResult = Tool.StrUtil.subWithLength(paramResult, 0, Constant.MYSQL_TEXT_MAXLENGTH-1);
 		}
 		sysLog.setParams(paramResult);
 
@@ -267,7 +267,7 @@ public class SysLogAspect {
 	/**
 	 * 处理保存参数信息 1. system ldap 不保存 ldap_password 2. system email 不保存
 	 * email_smtp_password 3. project topo 不保存 更新配置信息 topo
-	 * 
+	 *
 	 * @param requestURI
 	 * @param paramResult
 	 */
