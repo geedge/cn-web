@@ -11,7 +11,7 @@
         <result property="targetUrl" column="target_url"></result>
         <result property="targetParam" column="target_param"></result>
         <result property="targetHeader" column="target_header"></result>
-        <result property="preHandle" column="pre_handler"></result>
+        <result property="preHandle" column="pre_handle"></result>
         <result property="postHandle" column="post_handle"></result>
         <result property="ctime" column="ctime"></result>
         <result property="utime" column="utime"></result>
