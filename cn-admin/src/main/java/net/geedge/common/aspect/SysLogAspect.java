@@ -143,9 +143,7 @@ public class SysLogAspect {
 		// 处理参数记录
 		String paramResult = this.handleArgs(syslog, args, ShiroUtils.getUserEntity());
 		paramResult = this.handleLogParam(request.getRequestURI(), paramResult);
-		if (paramResult.getBytes().length >= Constant.MYSQL_TEXT_MAXLENGTH) {
-			paramResult = Tool.StrUtil.subWithLength(paramResult, 0, Constant.MYSQL_TEXT_MAXLENGTH-1);
-		}
+		paramResult = Tool.StrUtil.subPre(paramResult, Constant.MYSQL_TEXT_MAXLENGTH-100);
 		sysLog.setParams(paramResult);
 
 		// 登录出现异常时
@@ -155,9 +153,7 @@ public class SysLogAspect {
 			map.remove("pin");
 			String logParams = gson.toJson(map);
 			logParams = Tool.ObjectUtil.isEmpty(logParams) ? "" : logParams;
-			if (logParams.getBytes().length > Constant.MYSQL_TEXT_MAXLENGTH) {
-				logParams = Tool.StrUtil.subWithLength(logParams, 0, Constant.MYSQL_TEXT_MAXLENGTH);
-			}
+			logParams = Tool.StrUtil.subPre(logParams, Constant.MYSQL_TEXT_MAXLENGTH-100);
 			sysLog.setParams(logParams);
 		} else {
 			Object principal = SecurityUtils.getSubject().getPrincipal();
@@ -232,9 +228,7 @@ public class SysLogAspect {
 
 		// 处理 参数信息
 		paramResult = this.handleLogParam(request.getRequestURI(), paramResult);
-		if (paramResult.getBytes().length >= Constant.MYSQL_TEXT_MAXLENGTH) {
-			paramResult = Tool.StrUtil.subWithLength(paramResult, 0, Constant.MYSQL_TEXT_MAXLENGTH-1);
-		}
+		paramResult = Tool.StrUtil.subPre(paramResult, Constant.MYSQL_TEXT_MAXLENGTH-100);
 		sysLog.setParams(paramResult);
 
 		Long userId = null;
