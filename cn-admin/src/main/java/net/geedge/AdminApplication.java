@@ -17,6 +17,7 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -26,6 +27,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import net.geedge.AdminApplication.SetupAutoConfiguration;
 
 @SpringBootApplication(scanBasePackages = { "net.geedge.setup" })
+@EnableTransactionManagement
 @Import(SetupAutoConfiguration.class)
 @PropertySource(value = { "file:./config/cn.properties","classpath:./config/cn.properties" }, encoding = "utf-8", ignoreResourceNotFound = true)
 public class AdminApplication {

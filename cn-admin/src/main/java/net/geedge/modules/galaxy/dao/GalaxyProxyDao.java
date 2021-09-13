@@ -13,8 +13,13 @@ import net.geedge.modules.galaxy.entity.GalaxyProxy;
 
 @Mapper
 public interface GalaxyProxyDao extends BaseMapper<GalaxyProxy> {
-	
-	List<GalaxyProxy> queryPage(IPage<GalaxyProxy> page, @Param("params")Map<String, Object> params);
-	
-	GalaxyProxy selectInfo(@Param("id")Integer id);
+
+    List<GalaxyProxy> queryPage(IPage<GalaxyProxy> page, @Param("params") Map<String, Object> params);
+
+    GalaxyProxy selectInfo(@Param("id") Integer id);
+
+    void insertGalaxyProxyList(List<GalaxyProxy> galaxyProxyList);
+
+    void deleteTable();
+
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.geedge.modules.galaxy.dao.GalaxyProxyDao">
-    
+
     <resultMap id="galaxyProxyResult" type="net.geedge.modules.galaxy.entity.GalaxyProxy">
         <result property="id" column="id"></result>
         <result property="name" column="name"></result>
@@ -18,14 +18,30 @@
         <result property="remark" column="remark"></result>
         <result property="state" column="state"></result>
     </resultMap>
-    
+
+    <insert id="insertGalaxyProxyList" parameterType="java.util.List">
+        insert into galaxy_proxy values
+        <foreach item="item" collection="list" separator=",">
+            (
+            #{item.id},#{item.name},#{item.path},
+            #{item.method},#{item.version},#{item.targetUrl},
+            #{item.targetParam},#{item.targetHeader},#{item.preHandle},
+            #{item.postHandle},#{item.ctime},#{item.utime},
+            #{item.remark},#{item.state}
+            )
+        </foreach>
+
+    </insert>
+    <delete id="deleteTable">
+        delete from galaxy_proxy where 1=1
+    </delete>
     <select id="selectInfo" resultMap="galaxyProxyResult">
     	select * from galaxy_proxy where id = #{id}
     </select>
-    
+
 	<select id="queryPage" resultMap="galaxyProxyResult">
-		select * from 
-		galaxy_proxy 
+		select * from
+		galaxy_proxy
 		<where>
 			<if test="params.q !=null and params.q !=''">
 				and (path like CONCAT('%', #{params.q}, '%') or target_url like CONCAT('%', #{params.q}, '%') or target_param like CONCAT('%', #{params.q}, '%') or target_header like CONCAT('%', #{params.q}, '%') or remark like CONCAT('%', #{params.q}, '%') )
