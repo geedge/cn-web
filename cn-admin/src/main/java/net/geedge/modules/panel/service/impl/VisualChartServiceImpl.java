@@ -33,11 +33,11 @@ import net.geedge.modules.sys.shiro.ShiroUtils;
 
 @Service("visualChartService")
 public class VisualChartServiceImpl extends ServiceImpl<VisualChartDao, VisualChart> implements VisualChartService {
-	
+
 	private Log log = Log.get();
 	@Autowired
 	private VisualPanelService visualPanelService;
-	
+
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		ValidateUtils.is(params.get("panelId")).notNull(RCode.PANEL_ID_ISNULL);
@@ -70,7 +70,7 @@ public class VisualChartServiceImpl extends ServiceImpl<VisualChartDao, VisualCh
 	public void removeChart(String ids) {
 		// 内置panel不删除
 		validateBuildInCharts(Arrays.asList(ids.split(",")));
-		
+
 		// 删除panel
 		this.removeByIds(Arrays.asList(ids.split(",")));
 	}
@@ -79,8 +79,18 @@ public class VisualChartServiceImpl extends ServiceImpl<VisualChartDao, VisualCh
 	public void layout(List<VisualChart> charts) {
 		this.updateBatchById(charts);
 	}
-	
-	
+
+	@Override
+	public PageUtils queryPageByQ(Map<String, Object> params) {
+		IPage<VisualChart> page=this.page(new Query(VisualChart.class).getPage(params));
+		List<VisualChart> charts=this.baseMapper.queryPageByQ(page,params);
+		//组合树形结构
+		//charts = this.getChartTreeList(charts,0);
+		page.setRecords(charts);
+		return new PageUtils(page);
+	}
+
+
 	/**
      * 校验是否是内置chart
      *
@@ -94,7 +104,7 @@ public class VisualChartServiceImpl extends ServiceImpl<VisualChartDao, VisualCh
             throw new CNException("These chart is built-in and cannot be deleted, charts info: " + chartNames.toString(), RCode.CHART_BUILDIN_CAN_NOT_REMOVE.getCode());
         }
     }
-    
+
 	/**
 	 * 校验 chart 信息
 	 * @param chart
@@ -111,7 +121,7 @@ public class VisualChartServiceImpl extends ServiceImpl<VisualChartDao, VisualCh
 		// 校验panel是否存在
 		validatePanel(panelId);
 	}
-	
+
 	/**
      * 校验 panel 是否存在
      *
@@ -126,7 +136,7 @@ public class VisualChartServiceImpl extends ServiceImpl<VisualChartDao, VisualCh
             throw new CNException(RCode.CHART_PANEL_ISNULL);
         }
     }
-	
+
     /**
      * 递归获取树结构
      *

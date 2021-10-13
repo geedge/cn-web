@@ -4,14 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import cn.hutool.core.util.ObjectUtil;
 import net.geedge.common.annotation.SysLog;
@@ -29,41 +22,41 @@ import net.geedge.modules.panel.service.VisualChartService;
 public class VisualChartController {
 	@Autowired
 	private VisualChartService visualChartService;
-	
+
 	@RequestMapping("/{id}")
 	public R queryInfo(@PathVariable Integer id) {
 		VisualChart visualChart = visualChartService.queryInfo(id);
 		return R.ok(visualChart);
 	}
-	
+
 	@RequestMapping
 	@SysLog(operation =OperationEnum.QUERY,type = TypeEnum.VISUALCHART)
 	public R queryList(@RequestParam Map<String,Object> params) {
 		PageUtils result = visualChartService.queryPage(params);
 		return R.ok(result);
 	}
-	
+
 	@PostMapping
 	@SysLog(operation =OperationEnum.ADD,type = TypeEnum.VISUALCHART)
 	public R saveChart(@RequestBody VisualChart chart) {
 		Integer id = visualChartService.saveOrUpdateChart(chart);
 		return R.ok().putData("id", id);
 	}
-	
+
 	@PutMapping
 	@SysLog(operation =OperationEnum.UPDATE,type = TypeEnum.VISUALCHART)
 	public R modifyChart(@RequestBody VisualChart chart) {
 		Integer id = visualChartService.saveOrUpdateChart(chart);
 		return R.ok().putData("id", id);
 	}
-	
+
 	@DeleteMapping
 	@SysLog(operation =OperationEnum.DELETE,type = TypeEnum.VISUALCHART)
 	public R removeCharts(@RequestParam String ids) {
 		visualChartService.removeChart(ids);
 		return R.ok();
 	}
-	
+
 	@PutMapping("/layout")
 	public R layout(@RequestBody List<VisualChart> charts) {
 		ValidateUtils.is(charts).notNull(RCode.NOT_NULL_ERROR);
@@ -79,5 +72,11 @@ public class VisualChartController {
 		}
 		visualChartService.layout(charts);
 		return R.ok();
+	}
+
+	@GetMapping("list")
+	public R queryChartList(@RequestParam Map<String,Object> params) {
+		PageUtils chartListByPage = visualChartService.queryPageByQ(params);
+		return R.ok(chartListByPage);
 	}
 }

@@ -20,4 +20,6 @@ public interface VisualChartService extends IService<VisualChart> {
 	void removeChart(String ids);
 	
 	void layout(List<VisualChart> charts);
+
+	PageUtils queryPageByQ(Map<String, Object> params);
 }
