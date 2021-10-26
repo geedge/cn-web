@@ -8,6 +8,7 @@ import cn.hutool.json.JSONArray;
 import com.alibaba.fastjson.JSON;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.*;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -102,6 +103,7 @@ public class GalaxyProxyImpl extends ServiceImpl<GalaxyProxyDao, GalaxyProxy> im
         }
         //日期转换与json格式化
         String fileContent = JSON.toJSONStringWithDateFormat(list, "yyyy-MM-dd HH:mm:ss");
+        fileContent = StringEscapeUtils.unescapeJavaScript(fileContent);
         fileContent = JSONUtil.formatJsonStr(fileContent);
         response.setCharacterEncoding("utf-8");
         //设置响应的内容类型
