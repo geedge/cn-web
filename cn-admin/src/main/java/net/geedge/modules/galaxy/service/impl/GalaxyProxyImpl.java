@@ -81,6 +81,11 @@ public class GalaxyProxyImpl extends ServiceImpl<GalaxyProxyDao, GalaxyProxy> im
         }
         JSONArray jsonArray = Tool.JSONUtil.parseArray(stringBuffer.toString());
         List<GalaxyProxy> galaxyProxyList = Tool.JSONUtil.toList(jsonArray, GalaxyProxy.class);
+        galaxyProxyList.forEach(galaxyProxy -> {
+            galaxyProxy.setUtime(new Date());
+            galaxyProxy.setCtime(new Date());
+            galaxyProxy.setState(1);
+        });
         //清空数据表
         this.baseMapper.deleteTable();
         this.baseMapper.insertGalaxyProxyList(galaxyProxyList);

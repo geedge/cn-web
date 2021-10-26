@@ -20,14 +20,14 @@
     </resultMap>
 
     <insert id="insertGalaxyProxyList" parameterType="java.util.List">
-        insert into galaxy_proxy values
+        insert into galaxy_proxy  (name, path, version, method, target_url, target_param, target_header, pre_handle, post_handle, ctime, utime, state, remark) values
         <foreach item="item" collection="list" separator=",">
             (
-            #{item.id},#{item.name},#{item.path},
-            #{item.method},#{item.version},#{item.targetUrl},
+            #{item.name},#{item.path},
+            #{item.version},#{item.method},#{item.targetUrl},
             #{item.targetParam},#{item.targetHeader},#{item.preHandle},
             #{item.postHandle},#{item.ctime},#{item.utime},
-            #{item.remark},#{item.state}
+            #{item.state},#{item.remark}
             )
         </foreach>
 
