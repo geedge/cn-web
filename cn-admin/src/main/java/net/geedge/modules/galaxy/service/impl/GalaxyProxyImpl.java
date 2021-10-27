@@ -103,7 +103,7 @@ public class GalaxyProxyImpl extends ServiceImpl<GalaxyProxyDao, GalaxyProxy> im
         }
         //日期转换与json格式化
         String fileContent = JSON.toJSONStringWithDateFormat(list, "yyyy-MM-dd HH:mm:ss");
-        //fileContent = JSONUtil.formatJsonStr(fileContent);
+        fileContent = JSONUtil.formatJsonStr(fileContent);
         response.setCharacterEncoding("utf-8");
         //设置响应的内容类型
         response.setContentType("application/octet-stream");
