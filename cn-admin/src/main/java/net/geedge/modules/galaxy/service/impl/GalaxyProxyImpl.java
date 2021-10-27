@@ -101,9 +101,7 @@ public class GalaxyProxyImpl extends ServiceImpl<GalaxyProxyDao, GalaxyProxy> im
         if (ObjectUtil.isEmpty(list)) {
             throw new CNException("galaxy配置信息不存在");
         }
-        //日期转换与json格式化
-        String fileContent = JSON.toJSONStringWithDateFormat(list, "yyyy-MM-dd HH:mm:ss");
-        fileContent = JSONUtil.formatJsonStr(fileContent);
+        JSONArray jsonArray = Tool.JSONUtil.parseArray(list);
         response.setCharacterEncoding("utf-8");
         //设置响应的内容类型
         response.setContentType("application/octet-stream");
@@ -112,7 +110,7 @@ public class GalaxyProxyImpl extends ServiceImpl<GalaxyProxyDao, GalaxyProxy> im
         ServletOutputStream outStr = null;
         try {
             outStr = response.getOutputStream();
-            outStr.write(fileContent.getBytes("UTF-8"));
+            outStr.write(jsonArray.toString().getBytes(StandardCharsets.UTF_8));
             outStr.flush();
         } catch (IOException e) {
             throw new CNException("文件导出失败");
