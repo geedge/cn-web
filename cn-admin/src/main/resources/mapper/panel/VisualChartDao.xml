@@ -31,7 +31,7 @@
         select * from
         visual_chart
         <where>
-            panel_id = #{params.panelId}
+            panel_id = #{params.panelId} and state = 1
         </where>
     </select>
 
