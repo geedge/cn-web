@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.sys.dao.SysAppearanceDao">
+    <!-- 查询appearance -->
+    <select id="queryAppearance" resultType="string">
+        select cvalue from sys_config where ckey = 'appearance'
+    </select>
+    <!-- 更新appearance -->
+    <update id="updateAppearance" parameterType="string">
+        update sys_config set cvalue = #{paramValue} where ckey = 'appearance'
+    </update>
+</mapper>
