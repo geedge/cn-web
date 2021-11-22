@@ -2,6 +2,7 @@ package net.geedge.modules.sys.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import net.geedge.modules.sys.entity.SysConfigEntity;
+import org.apache.ibatis.annotations.Param;
 import org.mapstruct.Mapper;
 
 /**
@@ -16,10 +17,10 @@ public interface SysSecurityDao extends BaseMapper<SysConfigEntity> {
      * 系统安全设定查询
      *
      */
-    String querySecurity();
+    String querySecurity(String paramKey);
     /**
      * 系统安全设定修改
      *
      */
-    boolean updateSecurity(String security);
+    boolean updateSecurity(@Param("paramValue")String security, @Param("paramKey")String paramKey);
 }

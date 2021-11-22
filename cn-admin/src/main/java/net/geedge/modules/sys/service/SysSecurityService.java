@@ -1,5 +1,6 @@
 package net.geedge.modules.sys.service;
 
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.geedge.modules.sys.entity.SysConfigEntity;
 /**
@@ -13,10 +14,10 @@ public interface SysSecurityService extends IService<SysConfigEntity> {
      * 系统安全设定查询
      *
      */
-    String querySecurity();
+    JSONObject querySecurity();
     /**
      * 系统安全设定修改
      *
      */
-    boolean updateSecurity(String security);
+    boolean updateSecurity(JSONObject security);
 }

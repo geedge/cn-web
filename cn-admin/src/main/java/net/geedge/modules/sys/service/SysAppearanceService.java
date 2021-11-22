@@ -1,5 +1,6 @@
 package net.geedge.modules.sys.service;
 
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.geedge.modules.sys.entity.SysConfigEntity;
 
@@ -14,9 +15,9 @@ public interface SysAppearanceService extends IService<SysConfigEntity> {
     /**
      * 系统外观查询
      */
-    String queryAppearance();
+    JSONObject queryAppearance();
     /**
      * 系统外观更改
      */
-    boolean updateAppearance(String appearance);
+    boolean updateAppearance(JSONObject appearance);
 }

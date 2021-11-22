@@ -1,10 +1,14 @@
 package net.geedge.modules.sys.controller;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
-import net.geedge.common.utils.JSONUtil;
+import net.geedge.common.annotation.SysLog;
+import net.geedge.common.utils.OperationEnum;
 import net.geedge.common.utils.R;
+import net.geedge.common.utils.TypeEnum;
 import net.geedge.modules.sys.service.SysAppearanceService;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresGuest;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,18 +28,19 @@ public class SysAppearanceController extends AbstractController{
      * 系统外观查询
      */
     @GetMapping
+    //@RequiresGuest
     public R queryAppearance(){
-        String appearance = sysAppearanceService.queryAppearance();
-        JSON parse = JSONUtil.parse(appearance);
-        return R.ok().put("date",parse);
+        JSONObject appearance = sysAppearanceService.queryAppearance();
+        return R.ok(appearance);
     }
-    /**
+    /**a
      * 系统外观更改
      */
     @PutMapping
+    @RequiresPermissions({"sys:appearance:update"})
+    @SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
     public R updateAppearance(@RequestBody JSONObject appearance){
-        String jsonStr = JSONUtil.toJsonStr(appearance);
-        boolean isUpdate = sysAppearanceService.updateAppearance(jsonStr);
+        boolean isUpdate = sysAppearanceService.updateAppearance(appearance);
         if(isUpdate != true){
             return R.error();
         }

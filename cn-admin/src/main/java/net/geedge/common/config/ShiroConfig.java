@@ -93,6 +93,7 @@ public class ShiroConfig {
 		filterMap.put("/setup/**", "anon");// license 相关接口
 //        filterMap.put("/**", "authc");
 		filterMap.put("/**", "tokenCheckFilter");
+		filterMap.put("/sys/appearance", "anon");
 
 		Integer loginExpiration = getTimeOutData();
 		Map<String, Filter> cumstomFilterMap = new LinkedHashMap<String, Filter>();

@@ -1,6 +1,8 @@
 package net.geedge.modules.sys.service.impl;
 
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysSecurityDao;
 import net.geedge.modules.sys.entity.SysConfigEntity;
 import net.geedge.modules.sys.service.SysSecurityService;
@@ -21,9 +23,11 @@ public class SysSecurityServiceImpl extends ServiceImpl<SysSecurityDao, SysConfi
      *
      */
     @Override
-    public String querySecurity() {
-        String querySecurity = sysSecurityDao.querySecurity();
-        return querySecurity;
+    public JSONObject querySecurity() {
+        String paramKey = "security";
+        String security = sysSecurityDao.querySecurity(paramKey);
+        JSONObject jsonObject = Tool.JSONUtil.parseObj(security);
+        return jsonObject;
     }
 
     /**
@@ -31,8 +35,10 @@ public class SysSecurityServiceImpl extends ServiceImpl<SysSecurityDao, SysConfi
      *
      */
     @Override
-    public boolean updateSecurity(String security) {
-        boolean isUpdate = sysSecurityDao.updateSecurity(security);
+    public boolean updateSecurity(JSONObject security) {
+        String paramKey = "security";
+        String jsonStr = Tool.JSONUtil.toJsonStr(security);
+        boolean isUpdate = sysSecurityDao.updateSecurity(jsonStr, paramKey);
         return isUpdate;
     }
 }

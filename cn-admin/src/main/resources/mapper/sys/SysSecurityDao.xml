@@ -3,10 +3,10 @@
 <mapper namespace="net.geedge.modules.sys.dao.SysSecurityDao">
     <!-- 查询security -->
     <select id="querySecurity" resultType="string">
-        select cvalue from sys_config where ckey = 'security'
+        select cvalue from sys_config where ckey = #{paramKey}
     </select>
     <!-- 更新security -->
     <update id="updateSecurity" parameterType="string">
-        update sys_config set cvalue = #{paramValue} where ckey = 'security'
+        update sys_config set cvalue = #{paramValue} where ckey = #{paramKey}
     </update>
 </mapper>
