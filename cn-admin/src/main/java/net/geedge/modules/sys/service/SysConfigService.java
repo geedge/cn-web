@@ -8,10 +8,12 @@
 
 package net.geedge.modules.sys.service;
 
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
 import net.geedge.modules.sys.entity.SysConfigEntity;
+import org.apache.ibatis.annotations.Param;
 
 import java.io.IOException;
 import java.util.Map;
@@ -51,7 +53,17 @@ public interface SysConfigService extends IService<SysConfigEntity> {
 	 * @param key           key
 	 */
 	String getValue(String key);
-	
+
+	/**
+	 * 查询系统相关value
+	 */
+	JSONObject queryConfig(String paramKey);
+	/**
+	 * 更新系统相关
+	 */
+	int updateConfig(String paramKey, JSONObject paramValue);
+
+
 	/**
 	 * 根据key，获取value的Object对象
 	 * @param key    key

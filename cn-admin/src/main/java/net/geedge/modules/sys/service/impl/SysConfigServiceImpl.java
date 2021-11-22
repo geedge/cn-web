@@ -8,13 +8,11 @@
 
 package net.geedge.modules.sys.service.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
+import cn.hutool.json.JSONObject;
+import net.geedge.common.utils.Tool;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 
 import net.geedge.common.exception.CNException;
-import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.modules.sys.dao.SysConfigDao;
@@ -96,7 +93,34 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 
 		return config == null ? null : config.getCvalue();
 	}
-	
+
+	/**
+	 * 系统查询
+	 *
+	 * @param paramKey
+	 * @return
+	 */
+	@Override
+	public JSONObject queryConfig(String paramKey) {
+		SysConfigEntity config = baseMapper.queryByKey(paramKey);
+		String appearance = config.getCvalue();
+		JSONObject jsonObject = Tool.JSONUtil.parseObj(appearance);
+		return jsonObject;
+	}
+
+	/**
+	 * 系统更改
+	 *
+	 * @param paramKey
+	 * @return
+	 */
+	@Override
+	public int updateConfig(String paramKey, JSONObject paramValue) {
+		String jsonStr = Tool.JSONUtil.toJsonStr(paramValue);
+		int isUpdate = baseMapper.updateValueByKey(paramKey, jsonStr);
+		return isUpdate;
+	}
+
 	@Override
 	public <T> T getConfigObject(String key, Class<T> clazz) {
 		String value = getValue(key);

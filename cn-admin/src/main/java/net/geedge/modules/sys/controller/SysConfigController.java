@@ -11,6 +11,11 @@ package net.geedge.modules.sys.controller;
 
 import java.util.Map;
 
+import cn.hutool.json.JSONObject;
+import net.geedge.common.utils.OperationEnum;
+import net.geedge.common.utils.TypeEnum;
+import org.apache.shiro.authz.annotation.RequiresGuest;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +40,7 @@ import net.geedge.modules.sys.service.SysConfigService;
 
  */
 @RestController
-@RequestMapping("/sys/config")
+@RequestMapping("/sys")
 public class SysConfigController extends AbstractController {
 	@Autowired
 	private SysConfigService sysConfigService;
@@ -43,7 +48,7 @@ public class SysConfigController extends AbstractController {
 	/**
 	 * 所有配置列表
 	 */
-	@GetMapping
+	@GetMapping("/config")
 	public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = sysConfigService.queryPage(params);
 		return R.ok().put("page", page);
@@ -53,7 +58,7 @@ public class SysConfigController extends AbstractController {
 	/**
 	 * 配置信息
 	 */
-	@GetMapping("/{id}")
+	@GetMapping("/config/{id}")
 	public R info(@PathVariable("id") Long id){
 		SysConfigEntity config = sysConfigService.getById(id);
 		return R.ok().put("config", config);
@@ -63,7 +68,7 @@ public class SysConfigController extends AbstractController {
 	 * 保存配置
 	 */
 	@SysLog
-	@PostMapping()
+	@PostMapping("/config")
 	public R save(@RequestBody SysConfigEntity config){
 		ValidatorUtils.validateEntity(config);
 		sysConfigService.saveConfig(config);
@@ -74,7 +79,7 @@ public class SysConfigController extends AbstractController {
 	 * 修改配置
 	 */
 	@SysLog
-	@PutMapping()
+	@PutMapping("/config")
 	public R update(@RequestBody SysConfigEntity config){
 		ValidatorUtils.validateEntity(config);
 		sysConfigService.update(config);
@@ -85,10 +90,61 @@ public class SysConfigController extends AbstractController {
 	 * 删除配置
 	 */
 	@SysLog
-	@DeleteMapping()
+	@DeleteMapping("/config")
 	public R delete(@RequestBody Long[] ids){
 		sysConfigService.deleteBatch(ids);
 		return R.ok();
 	}
 
+	/**
+	 * 系统外观查询
+	 *
+	 */
+	@GetMapping("/appearance")
+	@RequiresPermissions({"anon"})
+	public R queryAppearance(){
+		String paramKey = "appearance";
+		JSONObject appearance = sysConfigService.queryConfig(paramKey);
+		return R.ok(appearance);
+	}
+	/**
+	 * 系统外观更改
+	 */
+	@PutMapping("/appearance")
+	@RequiresPermissions({"sys:appearance:update"})
+	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
+	public R updateAppearance(@RequestBody JSONObject appearance){
+		String paramKey = "appearance";
+		int isUpdate = sysConfigService.updateConfig(paramKey, appearance);
+		if(isUpdate == 0){
+			return R.error();
+		}
+		return R.ok();
+	}
+	/**
+	 * 系统安全设定查询
+	 *
+	 */
+	@GetMapping("/security")
+	@RequiresPermissions({"anon"})
+	public R querySecurity(){
+		String paramKey = "security";
+		JSONObject security = sysConfigService.queryConfig(paramKey);
+		return R.ok(security);
+	}
+	/**
+	 * 系统安全设定修改
+	 *
+	 */
+	@PutMapping("/security")
+	@RequiresPermissions({"sys:security:update"})
+	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
+	public R updateSecurity(@RequestBody JSONObject security){
+		String paramKey = "security";
+		int isUpdate = sysConfigService.updateConfig(paramKey, security);
+		if(isUpdate == 0){
+			return R.error();
+		}
+		return R.ok();
+	}
 }
