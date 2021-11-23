@@ -101,7 +101,6 @@ public class SysConfigController extends AbstractController {
 	 *
 	 */
 	@GetMapping("/appearance")
-	@RequiresPermissions({"anon"})
 	public R queryAppearance(){
 		String paramKey = "appearance";
 		JSONObject appearance = sysConfigService.queryConfig(paramKey);
@@ -126,7 +125,6 @@ public class SysConfigController extends AbstractController {
 	 *
 	 */
 	@GetMapping("/security")
-	@RequiresPermissions({"anon"})
 	public R querySecurity(){
 		String paramKey = "security";
 		JSONObject security = sysConfigService.queryConfig(paramKey);
@@ -137,7 +135,6 @@ public class SysConfigController extends AbstractController {
 	 *
 	 */
 	@PutMapping("/security")
-	@RequiresPermissions({"sys:security:update"})
 	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
 	public R updateSecurity(@RequestBody JSONObject security){
 		String paramKey = "security";

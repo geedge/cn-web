@@ -91,6 +91,7 @@ public class ShiroConfig {
 		filterMap.put("/terminal/monitor.ws", "anon");
 		filterMap.put("/sys/license/**", "anon");// license 相关接口
 		filterMap.put("/setup/**", "anon");// license 相关接口
+		filterMap.put("/sys/appearance", "anon");
 //        filterMap.put("/**", "authc");
 		filterMap.put("/**", "tokenCheckFilter");
 
