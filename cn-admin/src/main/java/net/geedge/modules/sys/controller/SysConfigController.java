@@ -10,10 +10,12 @@ package net.geedge.modules.sys.controller;
 
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
+import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.json.JSONObject;
-import net.geedge.common.utils.OperationEnum;
-import net.geedge.common.utils.TypeEnum;
+import net.geedge.common.utils.*;
 import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.geedge.common.annotation.SysLog;
-import net.geedge.common.utils.PageUtils;
-import net.geedge.common.utils.R;
 import net.geedge.common.validator.ValidatorUtils;
 import net.geedge.modules.sys.entity.SysConfigEntity;
 import net.geedge.modules.sys.service.SysConfigService;
@@ -144,4 +144,41 @@ public class SysConfigController extends AbstractController {
 		}
 		return R.ok();
 	}
+	/**
+	 * 系统邮箱配置查询
+	 *
+	 */
+	@GetMapping("/email")
+	public R queryEmail(){
+		String paramKey = "email";
+		JSONObject email = sysConfigService.queryConfig(paramKey);
+		return R.ok(email);
+	}
+	/**
+	 * 系统邮箱配置修改
+	 *
+	 */
+	@PutMapping("/email")
+	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
+	public R updateEmail(@RequestBody JSONObject email){
+		String paramKey = "email";
+		int isUpdate = sysConfigService.updateConfig(paramKey, email);
+		if(isUpdate == 0){
+			return R.error();
+		}
+		return R.ok();
+	}
+	/**
+	 * 系统邮箱配置测试
+	 *
+	 */
+	/*@PutMapping("/email/test")
+	@SysLog
+	public R testEmail(@RequestBody JSONObject email){
+		boolean isSuccess = sysConfigService.testEmail(email);
+		if(!isSuccess){
+			return R.error();
+		}
+		return R.ok();
+	}*/
 }
