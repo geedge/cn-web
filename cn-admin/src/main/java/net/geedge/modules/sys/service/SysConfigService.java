@@ -62,8 +62,10 @@ public interface SysConfigService extends IService<SysConfigEntity> {
 	 * 更新系统相关
 	 */
 	int updateConfig(String paramKey, JSONObject paramValue);
-
-
+	/**
+	 * 测试邮箱
+	 */
+	boolean testEmail(JSONObject email);
 	/**
 	 * 根据key，获取value的Object对象
 	 * @param key    key

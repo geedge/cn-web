@@ -172,7 +172,7 @@ public class SysConfigController extends AbstractController {
 	 * 系统邮箱配置测试
 	 *
 	 */
-	/*@PutMapping("/email/test")
+	@PutMapping("/email/test")
 	@SysLog
 	public R testEmail(@RequestBody JSONObject email){
 		boolean isSuccess = sysConfigService.testEmail(email);
@@ -180,5 +180,5 @@ public class SysConfigController extends AbstractController {
 			return R.error();
 		}
 		return R.ok();
-	}*/
+	}
 }
