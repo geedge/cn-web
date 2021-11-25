@@ -152,6 +152,7 @@ public class SysConfigController extends AbstractController {
 	public R queryEmail(){
 		String paramKey = "email";
 		JSONObject email = sysConfigService.queryConfig(paramKey);
+		email.remove("authPin");
 		return R.ok(email);
 	}
 	/**
