@@ -8,6 +8,7 @@
 
 package net.geedge.modules.sys.service.impl;
 
+import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Properties;
 
 import cn.hutool.core.lang.Validator;
 import cn.hutool.json.JSONObject;
+import com.sun.mail.util.MailSSLSocketFactory;
 import net.geedge.common.utils.Tool;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,14 +147,22 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 		prop.setProperty("mail.smtp.auth", "true");
 		//设置超时时间
 		prop.setProperty("mail.smtp.timeout", email.getStr("timeout"));
-		//获取邮箱服务器 例如：smtp.163.com
-		StringBuffer start = new StringBuffer("smtp.");
-		//发送邮件的邮箱
-		String authAccount = email.getStr("authAccount");
-		//截取主机名和域名 例如：163.com
-		String end = authAccount.substring(authAccount.indexOf("@")+1);
-		//拼装成邮箱服务器
-		String smtpHost = start.append(end).toString();
+		//判断SSL端口
+		if("SSL".equals(email.getStr("securityType"))){
+			MailSSLSocketFactory sf = null;
+			try {
+				sf = new MailSSLSocketFactory();
+			} catch (GeneralSecurityException e) {
+				e.printStackTrace();
+			}
+			sf.setTrustAllHosts(true);
+			prop.put("mail.smtp.ssl.enable", "true");
+			prop.put("mail.smtp.ssl.socketFactory", sf);
+		}
+		//判断TLS端口
+		if("TLS".equals(email.getStr("securityType"))){
+			prop.put("mail.smtp.starttls.enable","true");
+		}
 		//返回值声明
 		boolean result = false;
 		//1、创建session
@@ -172,12 +182,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 			//6、设置邮件主题
 			msg.setSubject("测试");
 			//7、设置邮件正文
-			msg.setContent("本邮件用于测试", "text/html;charset=UTF-8");
+			msg.setContent("系统邮箱测试通过！", "text/html;charset=UTF-8");
 			//8、设置邮件的发送时间,默认立即发送
 			msg.setSentDate(new Date());
 			//9、使用邮箱的用户名和密码连上邮件服务器，发送邮件时，发件人需要提交邮箱的用户名和密码给smtp服务器，用户名和密码都通过验证之后才能够正常发送邮件给收件人。
 			//密码一般为邮箱授权码
-			ts.connect(smtpHost, email.getStr("authAccount"), email.getStr("authPin"));
+			ts.connect(email.getStr("host"), email.getStr("authAccount"), email.getStr("authPin"));
 			//10、发送邮件，并发送到所有收件人地址，message.getAllRecipients() 获取到的是在创建邮件对象时添加的所有收件人, 抄送人, 密送人
 			ts.sendMessage(msg,msg.getAllRecipients());
 			//关闭资源
