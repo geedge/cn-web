@@ -110,6 +110,12 @@ public enum RCode {
     CHART_Y_ISNULL(121016, "Chart y can not be empty"),
     CHART_W_ISNULL(121016, "Chart weight can not be empty"),
     CHART_H_ISNULL(121016, "Chart height can not be empty"),
+    DATASOURCE_TYPE_ISNULL(121069, "Datasource type can not be empty"),
+    DATASOURCE_ID_ISNULL(1210070, "Datasource ID can not be empty"),
+    DATASOURCE_NAME_ISNULL(121071, "Datasource name can not be empty"),
+    DATASOURCE_TYPE_INVALIDE(123072, "Datasource type is invalide"),
+    DATASOURCE_NAME_DUPLICATE(122073, "Datasource name is duplicate"),
+    DATASOURCE_BUILDIN_CAN_NOT_REMOVE(127074, "This datasource is built-in and cannot be deleted"),
 
     GALAXY_PROXY_ID_ISNULL(210001,"galaxy proxy id can not be empty"),
     GALAXY_PROXY_NAME_ISNULL(210002,"galaxy proxy name can not be empty"),

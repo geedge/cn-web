@@ -405,5 +405,29 @@ INSERT INTO `visual_chart` VALUES (658, 'tt', '11234', 1, 11, 1, 9, 7, 8, 8, '{\
 
 SET FOREIGN_KEY_CHECKS = 1;
 
+-- ----------------------------
+-- Table structure for visual_datasource
+-- ----------------------------
+DROP TABLE IF EXISTS `visual_datasource`;
+CREATE TABLE `visual_datasource`  (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
+  `i18n` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '国际化code 默认使用 i18n 翻译显示名称，为空时 直接显示name',
+  `type` int NOT NULL COMMENT '类型 可选值：1：galaxy 2：rdb',
+  `params` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '参数 默认：{}',
+  `cby` int NOT NULL COMMENT '创建人  sys_user.id',
+  `ctime` datetime NOT NULL COMMENT '创建时间',
+  `uby` int NOT NULL COMMENT '更新人 sys_user.id',
+  `utime` datetime NOT NULL COMMENT '更新时间',
+  `remark` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注',
+  `state` int NOT NULL DEFAULT 1 COMMENT '状态 可选值：0：隐藏 1：显示',
+  `build_in` int NOT NULL DEFAULT 0 COMMENT '是否内置 可选值：0：非内置 1：内置',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of visual_chart
+-- ----------------------------
+
 
 
