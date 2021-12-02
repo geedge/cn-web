@@ -15,7 +15,6 @@ import net.geedge.modules.panel.entity.VisualDatasource;
 import net.geedge.modules.panel.service.VisualDatasourceService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -30,9 +29,6 @@ import java.util.stream.Collectors;
  */
 @Service("visualDatasourceService")
 public class VisualDatasourceServiceImpl extends ServiceImpl<VisualDatasourceDao, VisualDatasource> implements VisualDatasourceService {
-
-    @Autowired
-    private VisualDatasourceService visualDatasourceService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -104,7 +100,7 @@ public class VisualDatasourceServiceImpl extends ServiceImpl<VisualDatasourceDao
         List<VisualDatasource> list = this.list(new QueryWrapper<VisualDatasource>().lambda().in(VisualDatasource::getId, removeIdList).eq(VisualDatasource::getBuildIn, 1));
         if (CollectionUtils.isNotEmpty(list)) {
             List<String> datasourceNames = list.stream().map(VisualDatasource::getName).collect(Collectors.toList());
-            throw new CNException("These panel is built-in and cannot be deleted, panels info: " + datasourceNames.toString(), RCode.DATASOURCE_BUILDIN_CAN_NOT_REMOVE.getCode());
+            throw new CNException("These datasource is built-in and cannot be deleted, datasources info: " + datasourceNames.toString(), RCode.DATASOURCE_BUILDIN_CAN_NOT_REMOVE.getCode());
         }
     }
 }

@@ -40,7 +40,7 @@ public class VisualDatasourceController {
     //新增VisualDatasource
     @PostMapping
     @SysLog(operation =OperationEnum.ADD,type = TypeEnum.VISUALDATASOURCE)
-    public R savePanel(@RequestBody VisualDatasource datasource) {
+    public R saveDatasource(@RequestBody VisualDatasource datasource) {
         Integer id = visualDatasourceService.saveOrUpdateDatasource(datasource);
         return R.ok().putData("id", id);
     }
@@ -48,7 +48,7 @@ public class VisualDatasourceController {
     //更改VisualDatasource
     @PutMapping
     @SysLog(operation =OperationEnum.UPDATE,type = TypeEnum.VISUALDATASOURCE)
-    public R modifyPanel(@RequestBody VisualDatasource datasource) {
+    public R modifyDatasource(@RequestBody VisualDatasource datasource) {
         ValidateUtils.is(datasource.getId()).notNull(RCode.DATASOURCE_ID_ISNULL);
         Integer id = visualDatasourceService.saveOrUpdateDatasource(datasource);
         return R.ok().putData("id", id);
@@ -57,7 +57,7 @@ public class VisualDatasourceController {
     //删除VisualDatasource
     @DeleteMapping
     @SysLog(operation =OperationEnum.DELETE,type = TypeEnum.VISUALDATASOURCE)
-    public R removePane(@RequestParam String ids) {
+    public R removeDatasource(@RequestParam String ids) {
         ValidateUtils.is(ids).notNull(RCode.DATASOURCE_ID_ISNULL);
         visualDatasourceService.removeDatasource(ids);
         return R.ok();

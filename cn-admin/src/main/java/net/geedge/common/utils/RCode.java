@@ -116,6 +116,12 @@ public enum RCode {
     DATASOURCE_TYPE_INVALIDE(123072, "Datasource type is invalide"),
     DATASOURCE_NAME_DUPLICATE(122073, "Datasource name is duplicate"),
     DATASOURCE_BUILDIN_CAN_NOT_REMOVE(127074, "This datasource is built-in and cannot be deleted"),
+    DATASET_ID_ISNULL(1210075, "Dataset ID can not be empty"),
+    DATASET_NAME_ISNULL(121076, "Dataset name can not be empty"),
+    DATASET_TYPE_ISNULL(121077, "Dataset type can not be empty"),
+    DATASET_TYPE_INVALIDE(123078, "Dataset type is invalide"),
+    DATASET_NAME_DUPLICATE(122079, "Dataset name is duplicate"),
+    DATASET_BUILDIN_CAN_NOT_REMOVE(127080, "This dataset is built-in and cannot be deleted"),
 
     GALAXY_PROXY_ID_ISNULL(210001,"galaxy proxy id can not be empty"),
     GALAXY_PROXY_NAME_ISNULL(210002,"galaxy proxy name can not be empty"),
