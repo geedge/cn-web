@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.panel.dao.VisualDatasetFieldDao">
+
+    <resultMap id="visualDatasetFieldResult" type="net.geedge.modules.panel.entity.VisualDatasetField">
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="i18n" column="i18n"></result>
+        <result property="dsetid" column="dsetid"></result>
+        <result property="type" column="type"></result>
+        <result property="stype" column="stype"></result>
+        <result property="expr" column="expr"></result>
+        <result property="params" column="params"></result>
+        <result property="idx" column="idx"></result>
+        <result property="cby" column="cby"></result>
+        <result property="ctime" column="ctime"></result>
+        <result property="uby" column="uby"></result>
+        <result property="utime" column="utime"></result>
+        <result property="remark" column="remark"></result>
+        <result property="state" column="state"></result>
+        <result property="buildIn" column="build_in"></result>
+        <association property="uuser" column="uby" select="queryUserById"></association>
+        <association property="cuser" column="cby" select="queryUserById"></association>
+        <association property="dataset" column="dsetid" select="queryDatasetById"></association>
+        <association property="datasource" column="dsetid" select="queryDatasourceById"></association>
+    </resultMap>
+
+    <select id="selectInfo" resultMap="visualDatasetFieldResult">
+        select * from visual_dataset_field where id = #{id}
+    </select>
+
+
+    <select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
+        select id,username from sys_user where id=#{id} and status=1
+    </select>
+
+    <select id="queryDatasetById" resultType="net.geedge.modules.panel.entity.VisualDataset">
+        select id,name from visual_dataset_field where id=#{id} and state=1
+    </select>
+
+    <select id="queryDatasourceById" resultType="net.geedge.modules.panel.entity.VisualDatasource">
+        select a.id,a.name from visual_datasource as a left join visual_dataset as b on a.id=b.dsid where b.id=#{id} and a.state=1
+    </select>
+
+    <select id="queryPage" resultMap="visualDatasetFieldResult">
+        select * from
+        visual_dataset_field
+        <where>
+            <if test="params.ids != null and params.ids.size > 0 ">
+                and id in
+                <foreach item="id" collection="params.ids" separator="," open="(" close=")" index="">
+                    #{id}
+                </foreach>
+            </if>
+            <if test=" params.q !=null and params.q !='' ">
+                and name like concat ( '%', #{params.q}, '%')
+                or params like concat ( '%', #{params.q}, '%')
+                or remark like concat ( '%', #{params.q}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>

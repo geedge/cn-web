@@ -39,7 +39,7 @@
                 </foreach>
             </if>
             <if test=" params.q !=null and params.q !='' ">
-                name like concat ( '%', #{params.q}, '%')
+                and name like concat ( '%', #{params.q}, '%')
                 or params like concat ( '%', #{params.q}, '%')
                 or remark like concat ( '%', #{params.q}, '%')
             </if>

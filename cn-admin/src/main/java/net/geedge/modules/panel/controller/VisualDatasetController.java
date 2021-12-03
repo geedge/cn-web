@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
- * VisualDatasource接口
+ * VisualDataset接口
  *
  * @Auther: lijinyang
  * @Date: 2021/12/02/13:54

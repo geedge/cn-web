@@ -9,7 +9,7 @@ public enum TypeEnum {
 	ASSETFIELDGROUP("asset field group"), ASSETFIELDMETA("asset field meta"), ENDPOINT("endpoint"), PROJECT("project"),
 	TOPO("project topo"), MODULE("module"), ALERTRULE("alert rule"), ALERTMESSAGE("alert message"), PANEL("panel"),
 	CHART("chart"), VISUALPANEL("visual panel"), VISUALCHART("visual chart"), VISUALDATASOURCE("visual datasource"),
-	VISUALDATASET("visual dataset"),VISUALDATASETFIEID("visual dataset field"),
+	VISUALDATASET("visual dataset"),VISUALDATASETFIELD("visual dataset field"),
 	DATACENTER("datacenter"), CABINET("cabinet"), UNKNOWN("unknown"), MODEL("model"), PROMSERVER("promServer"),
 	ACCOUNT("account"), MIB("mib"),SYSTEM("system"), LINK("link"), SCRIPT("notification script"), ALERTSILENCE("alert silence"),
 	ALERTSEVERITY("alert severity"), ALERTNOTIFYMETHOD("alert notify method"), ASSETSTATECONF("asset state conf"),

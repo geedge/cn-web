@@ -31,9 +31,9 @@ public class VisualDatasetServiceImpl extends ServiceImpl<VisualDatasetDao, Visu
         if (ObjectUtil.isNotEmpty(params.get("ids"))) {
             params.put("ids", Arrays.asList(String.valueOf(params.get("ids")).split(StringPool.COMMA)));
         }
-        IPage<VisualDataset> page=this.page(new Query(VisualDataset.class).getPage(params));
+        IPage<VisualDataset> page = this.page(new Query(VisualDataset.class).getPage(params));
 
-        List<VisualDataset> list=this.baseMapper.queryPage(page,params);
+        List<VisualDataset> list = this.baseMapper.queryPage(page,params);
         page.setRecords(list);
         return new PageUtils(page);
     }
