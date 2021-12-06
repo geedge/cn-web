@@ -3,8 +3,9 @@ package net.geedge.modules.panel.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import net.geedge.modules.panel.entity.VisualDatasetField;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.mapstruct.Mapper;
 
 import java.util.List;
 import java.util.Map;
