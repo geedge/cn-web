@@ -31,7 +31,6 @@ public class VisualDatasetController {
 
     //查询VisualDataset
     @RequestMapping
-    @SysLog(operation = OperationEnum.QUERY,type = TypeEnum.VISUALDATASET)
     public R queryList(@RequestParam Map<String,Object> params) {
         PageUtils result = visualDatasetService.queryPage(params);
         return R.ok(result);

@@ -30,7 +30,6 @@ public class VisualDatasetFieldController {
 
     //查询VisualDatasetField
     @RequestMapping
-    @SysLog(operation = OperationEnum.QUERY,type = TypeEnum.VISUALDATASETFIELD)
     public R queryList(@RequestParam Map<String,Object> params) {
         PageUtils result = visualDatasetFieldService.queryPage(params);
         return R.ok(result);

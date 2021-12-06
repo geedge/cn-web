@@ -31,7 +31,6 @@ public class VisualDatasourceController {
 
     //查询VisualDatasource
     @RequestMapping
-    @SysLog(operation = OperationEnum.QUERY,type = TypeEnum.VISUALDATASOURCE)
     public R queryList(@RequestParam Map<String,Object> params) {
         PageUtils result = visualDatasourceService.queryPage(params);
         return R.ok(result);
