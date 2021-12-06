@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @Auther: lijinyang
  * @Date: 2021/12/02/11:23
  */
-@Service("VisualDatasetService")
+@Service("visualDatasetService")
 public class VisualDatasetServiceImpl extends ServiceImpl<VisualDatasetDao, VisualDataset> implements VisualDatasetService {
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
