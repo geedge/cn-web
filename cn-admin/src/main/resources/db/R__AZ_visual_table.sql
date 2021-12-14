@@ -1,4 +1,9 @@
+
 /*
+	！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+ 	重点注意  每次更新本表格时  需要在界面 sys_log中查询用户新增、修改或删除了的数据内容补充到本文件中，防止更新后将用户操作内容给覆盖丢失
+ 	！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+ 	
 * visual_panel & visual_chart 表及记录
 */
 
@@ -33,6 +38,7 @@ INSERT INTO `visual_panel` VALUES (2, 'Network & App', '', 2, '{\'isEditable\':f
 INSERT INTO `visual_panel` VALUES (4, 'IP entity detail', '', 4, '{\'isEditable\':false}', 1, '2021-07-30 11:16:52', 1, '2021-07-30 11:16:54', '', 1, 0);
 INSERT INTO `visual_panel` VALUES (5, 'Domain entity detail', '', 5, '{\'isEditable\':false}', 1, '2021-06-03 08:27:32', 1, '2021-06-03 08:28:10', '', 1, 0);
 INSERT INTO `visual_panel` VALUES (6, 'APP entity detail', '', 6, '{\'isEditable\':false}', 1, '2021-06-03 08:27:32', 1, '2021-06-03 08:28:10', '', 1, 0);
+INSERT INTO `visual_panel` VALUES (7, '挖矿', '', 7, '', 1, '2021-12-14 17:10:26', 1, '2021-12-14 17:10:28', '', 1, 0);
 
 
 -- ----------------------------
@@ -401,6 +407,16 @@ INSERT INTO `visual_chart` VALUES (647, 'SSL响应延迟', 'networkAppPerformanc
 INSERT INTO `visual_chart` VALUES (648, '丢包率', 'networkAppPerformance.packetLossRate', 6, 644, 12, 1, 14, 10, 13, '{\"url\":\"/interface/entity/app/detail/clientIpPacketLoss?app={{app}}&startTime={{startTime}}&endTime={{endTime}}\",\"unitType\":\"percent\"}', 1, '2021-09-22 21:47:47', 1, '2021-09-22 21:47:47', '', 1, 0);
 INSERT INTO `visual_chart` VALUES (649, '重传率', 'networkAppPerformance.server.retransmissionRate', 6, 644, 12, 11, 14, 10, 13, '{\"url\":\"/interface/entity/app/detail/clientIpPacketRetrans?app={{app}}&startTime={{startTime}}&endTime={{endTime}}\",\"unitType\":\"percent\"}', 1, '2021-09-22 21:47:47', 1, '2021-09-22 21:47:47', '', 1, 0);
 INSERT INTO `visual_chart` VALUES (650, '访问链路', 'entities.accessLink', 6, 605, 43, 1, 1, 30, 14, '{\"url\":\"/interface/entity/app/detail/linkVisual?app={{app}}&startTime={{startTime}}&endTime={{endTime}}\",\"unitType\":\"byte\"}', 1, '2021-09-22 21:47:47', 1, '2021-09-22 21:47:47', '', 1, 0);
-INSERT INTO `visual_chart` VALUES (658, 'tt', '11234', 1, 11, 1, 9, 7, 8, 8, '{\"url\":\"dd\",\n    \"a\":1,\n    \"b\":3\n}', 1, '2021-10-24 12:41:07', 1, '2021-10-24 12:41:07', 'remark', 1, 0);
+INSERT INTO `visual_chart` VALUES (659, '活跃IP', 'cryptocurrency.activeIp', 7, 0, 63, 27, 14, 10, 7, '{\"url\":\"/interface/cryptcy/activeIP?startTime={{startTime}}&endTime={{endTime}}&order={{order}}\",\"unitType\":\"byte\"}', 1, '2021-12-06 06:45:58', 1, '2021-12-06 06:45:58', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (660, '矿机所属单位', 'cryptocurrency.institutions', 7, 0, 24, 14, 14, 13, 7, '\r\n{\"url\":\"/interface/cryptcy/institutions?startTime={{startTime}}&endTime={{endTime}}\",\"unitType\":\"number\",\"direction\": \"horizontal\", \"itemColorAlternately\":true}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (661, '近期挖矿事件', 'cryptocurrency.eventList', 7, 0, 85, 1, 14, 13, 7, '\r\n{\"url\":\"/interface/cryptcy/eventList?startTime={{startTime}}&endTime={{endTime}}\"}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (662, '挖矿事件统计', 'cryptocurrency.eventStat', 7, 0, 23, 1, 5, 18, 5, '\r\n{\"url\":\"/interface/cryptcy/eventStat?startTime={{startTime}}&endTime={{endTime}}\",\"unitType\":\"number\",\"direction\": \"vertical\", \"itemColorAlternately\":false}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (663, '矿池数', 'cryptocurrency.poolcount', 7, 0, 54, 1, 2, 9, 3, '\r\n{\"url\":\"/interface/cryptcy/poolcount?startTime={{startTime}}&endTime={{endTime}}\",\"icon\":\"cn-icon\", \"color\": \"#f1f9f7\", \"unitType\":\"number\"}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (664, '总矿机数', 'cryptocurrency.machinecount', 7, 0, 54, 10, 2, 9, 3, '\r\n{\"url\":\"/interface/cryptcy/machinecount?startTime={{startTime}}&endTime={{endTime}}\",\"icon\":\"cn-icon\", \"color\": \"#f2f6fc\", \"unitType\":\"number\"}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (665, '挖矿流量', 'cryptocurrency.packets', 7, 0, 54, 19, 2, 9, 3, '\r\n{\"url\":\"/interface/cryptcy/packets?startTime={{startTime}}&endTime={{endTime}}\",\"icon\":\"cn-icon\", \"color\": \"#fffaf5\", \"unitType\":\"number\"}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (666, '挖矿流量占比', 'cryptocurrency.rate', 7, 0, 54, 28, 2, 9, 3, '\r\n{\"url\":\"/interface/cryptcy/rate?startTime={{startTime}}&endTime={{endTime}}\",\"icon\":\"cn-icon\", \"color\": \"#f7f6fb\", \"unitType\":\"number\"}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (667, '活跃币种', 'cryptocurrency.activeCy', 7, 0, 32, 1, 10, 9, 4, '\r\n{\"url\":\"/interface/cryptcy/activeCy?startTime={{startTime}}&endTime={{endTime}}\"}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (668, '活跃矿池', 'cryptocurrency.activePool', 7, 0, 32, 10, 10, 9, 4, '\r\n{\"url\":\"/interface/cryptcy/activePool?startTime={{startTime}}&endTime={{endTime}}\"}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
+INSERT INTO `visual_chart` VALUES (669, '挖矿事件分布', 'cryptocurrency.eventMap', 7, 0, 3, 19, 5, 18, 9, '\r\n{\"url\":\"/interface/cryptcy/eventMap?startTime={{startTime}}&endTime={{endTime}}\"}', 1, '2021-12-07 02:57:34', 1, '2021-12-07 03:30:36', '', 1, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
