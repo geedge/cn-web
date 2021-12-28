@@ -1,6 +1,44 @@
 version: '2'
 services:
-  nz-admin:
-    image: cn/admin
+  cn-admin:
+    image: 192.168.40.153:9080/cyber-narrator/cn-admin:latest
+    container_name: "cn-admin"
     ports:
-      - "8080:8080"
+      - "8090:8090"
+    #挂载
+    volumes:
+      #挂载cn.properties,logback-spring.xml
+      - /d/localcn/cn-web/cn-admin/src/main/resources/config:/opt/cn/cn-web/config
+      #- /opt/cn/cn-web/config:/opt/cn/cn-web/config
+      #挂载logs
+      - /d/localcn/cn-web/logs:/opt/cn/cn-web/logs
+      #- /opt/cn/cn-web/logs:/opt/cn/cn-web/logs
+    restart: always
+    depends_on:
+      - mariadb
+      - redis
+  cn-ui:
+    image: 192.168.40.153:9080/cyber-narrator/dev_cn-ui:20211227100529
+    container_name: "cn-ui"
+    ports:
+      - "80:80"
+    privileged: true
+    #restart: always
+    volumes:
+      #挂载config.json
+      - /d/localcn/cn-web/html/config:/usr/share/nginx/html/config
+    environment:
+      #后端项目IP:PORT
+      - BASE_URL=http://localhost:8090/
+    command:
+      /bin/bash
+      -c "envsubst '$${BASE_URL}' < /usr/share/nginx/html/config/config.template > /usr/share/nginx/html/config.template && nginx -g 'daemon off;'"
+  mariadb:
+    image: 192.168.40.153:9080/k8s-test/mariadb:latest
+    ports:
+    - "3306:3306"
+  redis:
+    image: 192.168.40.153:9080/k8s-test/redis:1.0
+    ports:
+    - "6379:6379"
+
