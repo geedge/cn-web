@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import net.geedge.common.utils.AESUtil;
+import net.geedge.common.utils.Constant;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
@@ -68,6 +70,8 @@ public class DataSourceConfig {
 		if (!Tool.StrUtil.isAllNotBlank(this.databaseHost, this.databaseUser, this.databaseName)) {
 			return null;
 		}
+		//数据库密码解密
+		databasePin = Tool.AesUtil.decrypt(this.databasePin,Constant.AES_SECRET_KEY);
 		//初始化时创建 数据库
 		this.createDatabase();
 		log.info("datasource config,user:{}, url: {}", this.databaseUser, this.getDbUrl());

@@ -1102,7 +1102,12 @@ public class Tool {
 	 *
 	 */
 	public static class LicenseUtil extends net.geedge.common.utils.LicenseUtil{};
-	
+	/**
+	 * AES 加密工具类
+	 * @author lijinyang
+	 *
+	 */
+	public static class AesUtil extends net.geedge.common.utils.AESUtil{};
 	/**
 	 * 获取项目中各种路径
 	 * @author ThinkPad

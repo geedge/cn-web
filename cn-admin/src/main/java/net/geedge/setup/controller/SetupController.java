@@ -90,13 +90,18 @@ public class SetupController  {
                 boolean newFile = configFile.createNewFile();
                 log.info("set up config new file {}", newFile);
             }
-    		prop = new Props(configFile, Constant.DEFAULT_CHARTSET_NAME);
+            /*
+             * 数据库密码加密
+             */
+            String dbPinHex = Tool.AesUtil.encrypt(setup.getDatabase().getPin(), Constant.AES_SECRET_KEY);
+            
+            prop = new Props(configFile, Constant.DEFAULT_CHARTSET_NAME);
     		prop.put("cn.inited", "1");
     		prop.put("database.host",setup.getDatabase().getHost());
     		prop.put("database.port",Tool.StrUtil.utf8Str(setup.getDatabase().getPort()));
     		prop.put("database.name",setup.getDatabase().getName());
     		prop.put("database.user",setup.getDatabase().getUsername());
-    		prop.put("database.pin",setup.getDatabase().getPin());
+    		prop.put("database.pin",dbPinHex);
     		prop.put("redis.host",setup.getRedis().getHost());
     		prop.put("redis.port",Tool.StrUtil.utf8Str(setup.getRedis().getPort()));
     		prop.put("redis.pin",setup.getRedis().getPin());

@@ -102,7 +102,7 @@ public class Constant {
 	/**
 	 * 当前数据库类型
 	 */
-	public static final String DB_TYPE;
+	//public static final String DB_TYPE;
 
 	public static final String ORACLE = "oracle";
 	public static final String MYSQL = "mysql";
@@ -121,7 +121,7 @@ public class Constant {
 	public static final List<String> CHART_SINGLESTAT_STATISTICS;
 
 	static {
-		DatabaseIdProvider databaseIdProvider = SpringContextUtils.getBean("getDatabaseIdProvider",
+		/*DatabaseIdProvider databaseIdProvider = SpringContextUtils.getBean("getDatabaseIdProvider",
 				DatabaseIdProvider.class);
 		DataSource dataSource = SpringContextUtils.getBean("dataSource", DataSource.class);
 		String databaseId = null;
@@ -130,7 +130,7 @@ public class Constant {
 		} catch (SQLException e) {
 			logger.error(e);
 		}
-		DB_TYPE = databaseId;
+		DB_TYPE = databaseId;*/
 
 		File tempPath = FileUtil.file(TEMP_PATH);
 		if (!tempPath.isDirectory()) {
@@ -196,4 +196,7 @@ public class Constant {
 	public static final String BIN_ROOT_PATH = CN_ROOT_PATH + "/cn-web/bin";// promtool,generator
 	public static final String SETUP_FILE_NAME = "setup.json";
 	public static final String SYSCONFIG_SESSION_TIMEOUT_KEY = "session_timeout";
+
+	//AES密钥
+	public static final byte[] AES_SECRET_KEY = Tool.HexUtil.decodeHex("bde5430614b21baf1c53bd6f616d1a39");
 }
