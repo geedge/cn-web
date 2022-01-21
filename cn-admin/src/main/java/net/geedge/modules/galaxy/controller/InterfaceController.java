@@ -18,6 +18,8 @@ import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.geedge.modules.sys.entity.SysDictEntity;
+import net.geedge.modules.sys.service.SysDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -57,6 +59,8 @@ public class InterfaceController extends AbstractController {
 	private SysConfigService sysConfigService;
 	@Autowired
 	private RestTemplate restTemplate;
+	@Autowired
+	private SysDictService sysDictService;
 
 	private final static List<String> HEADER_LIST = Tool.ListUtil.toList("HOST","REFERER","ORIGIN");
 	/**
@@ -130,7 +134,16 @@ public class InterfaceController extends AbstractController {
 		String postHandle = proxy.getPostHandle();
 		String targetParam = proxy.getTargetParam();
 		String targetHeader = proxy.getTargetHeader();
-
+		//map类型接口加区域映射
+		if("map".equals(servletPath.substring(servletPath.length()-3).toLowerCase())){
+			QueryWrapper<SysDictEntity> queryCountry = new QueryWrapper<SysDictEntity>()
+				.eq("name", "区域映射").eq("code",1).eq("state", 1);
+			String countryCode = sysDictService.getOne(queryCountry).getValue();
+			QueryWrapper<SysDictEntity> queryCity = new QueryWrapper<SysDictEntity>()
+					.eq("name", "区域映射").eq("code",2).eq("state", 1);
+			String cityCode = sysDictService.getOne(queryCity).getValue();
+			postHandle = countryCode + "\r\n" + cityCode + "\r\n" + postHandle;
+		}
 		//获取单例 js 引擎
 		ScriptEngine jsEngine = Tool.ScriptUtil.getJsEngine();
 		//设置 js bindings
