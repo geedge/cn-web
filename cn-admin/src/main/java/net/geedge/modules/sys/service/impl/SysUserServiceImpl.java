@@ -159,12 +159,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Integer update(SysUserEntity user) {
-
-		// 校验 user 相关信息
-		this.validateUserInfo(user);
-
+		
+		SysUserEntity byId = this.getById(user.getId());
 		if (StringUtils.isBlank(user.getPin())) {
-			user.setPin(null);
+			user.setPin(byId.getPin());
 		} else {
 			// 如果不是本人更改 自己密码的话，删除 redis 中用户session
 			Long loginUserId = ShiroUtils.getUserId();
@@ -172,8 +170,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 				// 通过 userId 删除 redis 中记录的 登录信息
 				this.removeUserInfoInRedis(user.getId());
 			}
-			SysUserEntity userEntity = this.getById(user.getId());
-			user.setPin(ShiroUtils.sha256(user.getPin(), userEntity.getSalt()));
+			user.setPin(ShiroUtils.sha256(user.getPin(), byId.getSalt()));
 		}
 
 		user.setCby(ShiroUtils.getUserId().intValue());
