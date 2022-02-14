@@ -118,13 +118,17 @@ public class InterfaceController extends AbstractController {
 			galaxyUrl = Tool.StrUtil.concat(true, galaxyUrl,"/");
 		}
 		QueryWrapper<GalaxyProxy> queryWrapper = new QueryWrapper<GalaxyProxy>()
-				.eq("path", servletPath).eq("method", method).eq("state", 1);
+				.eq("path", servletPath).eq("state", 1);
 		/* 查询匹配的 接口 */
 		GalaxyProxy proxy = galaxyProxyService.getOne(queryWrapper);
 		if (proxy == null) {
 			this.responseError(response, HttpServletResponse.SC_NOT_FOUND, "Not found", null);
 			logger.warn("path not found,url:{},method:{}", servletPath,method);
 			return;
+		}
+		//例：entityrelationship接口GET/POST请求方法都适用，但第三方请求只能用POST
+		if (!method.equals(proxy.getMethod()) || !method.toLowerCase().equals(proxy.getMethod())) {
+			method = proxy.getMethod();
 		}
 		if(logger.isDebugEnabled()) {
 			logger.debug("galaxy proxy : {} ",proxy);
