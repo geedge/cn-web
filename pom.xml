@@ -271,37 +271,4 @@
 			
 		</pluginRepository>
 	</pluginRepositories>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>generate-docs</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
-						<configuration>
-							<backend>html</backend>
-							<doctype>book</doctype>
-							<attributes>
-								<snippets>target/generated-snippets</snippets>
-							</attributes>
-							<sourceDirectory>src/test/resources/asciidoc</sourceDirectory>
-							<outputDirectory>src/test/resources/docs</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.springframework.restdocs</groupId>
-						<artifactId>spring-restdocs-asciidoctor</artifactId>
-						<version>RELEASE</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-	</build>
 </project>
