@@ -35,6 +35,8 @@ build_image:
   script:
     - echo '提交的分支是'
     - echo $CI_COMMIT_REF_NAME
+    - echo 'XJAR_PIN :' $XJAR_PIN
+    - echo 'CNWEB_TAG:' $CNWEB_TAG
     - echo 'exec build_image'
     - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN docker:build -DdockerImageTags=$CNWEB_TAG
   #when用于当前一阶段任务故障或者忽略故障的job任务，主要用于清理发生故障时的后续措施。
