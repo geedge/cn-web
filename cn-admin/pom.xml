@@ -22,6 +22,7 @@
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<apache.poi.version>3.14</apache.poi.version>
 		<jackson.version>2.10.1</jackson.version>
+		<jna.version>5.5.0</jna.version>
 
 
 		<!--先将镜像build到${docker.build}的docker中,然后再根据imageName向对应的docker.registry中推送,可以build完不push,这俩可以是一个机器-->
@@ -198,14 +199,31 @@
 			<artifactId>snmp4j</artifactId>
 			<version>2.5.11</version>
 		</dependency>
-
-		<!-- 添加 XJar 依赖 -->
-		<!--		<dependency>-->
-		<!--			<groupId>com.github.core-lib</groupId>-->
-		<!--			<artifactId>xjar</artifactId>-->
-		<!--			<version>4.0.1</version>-->
-		<!--			&lt;!&ndash; <scope>test</scope> &ndash;&gt;-->
-		<!--		</dependency>-->
+		<!-- jna依赖 -->
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>${jna.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>${jna.version}</version>
+		</dependency>
+		<!--添加 XJar 依赖-->
+		<dependency>
+			<groupId>com.github.core-lib</groupId>
+			<artifactId>xjar</artifactId>
+			<version>4.0.2</version>
+			<!-- <scope>test</scope> -->
+		</dependency>
+		<!--添加 XJar 依赖
+		<dependency>
+			<groupId>com.mesalab.xjar</groupId>
+			<artifactId>mesalab-xjar</artifactId>
+			<version>1.0.0</version>
+			&lt;!&ndash; <scope>test</scope> &ndash;&gt;
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -230,7 +248,7 @@
 					<exclude>**/application-*.yml</exclude>
 					<!-- <exclude>**/logback-spring.xml</exclude> -->
 					<exclude>**/swagger/**</exclude>
-					<exclude>**/cn.properties</exclude>
+					<!--					 <exclude>**/cn.properties</exclude>-->
 				</excludes>
 				<includes>
 					<!--包含文件夹以及子文件夹下所有资源 -->
@@ -271,23 +289,23 @@
 				<include>${project.build.finalName}.jar</include> </resource> </resources>
 				</configuration> 运行命令 mvn clean package docker:build 打包并生成docker镜像 </plugin> -->
 
-			<!--			<plugin>-->
-			<!--				<groupId>com.github.core-lib</groupId>-->
-			<!--				<artifactId>xjar-maven-plugin</artifactId>-->
-			<!--				<version>4.0.1</version>-->
-			<!--				<executions>-->
-			<!--					<execution>-->
-			<!--						<goals>-->
-			<!--							<goal>build</goal>-->
-			<!--						</goals>-->
-			<!--						<phase>install</phase>-->
-			<!--					</execution>-->
-			<!--				</executions>-->
-			<!--			</plugin>-->
-			<!-- 添加 XJar Maven 插件 -->
-			<plugin>
-				<groupId>com.mesalab.xjar-maven-plugin</groupId>
-				<artifactId>mesalab-xjar-maven-plugin</artifactId>
+			<!--<plugin>
+				<groupId>com.github.core-lib</groupId>
+				<artifactId>xjar-maven-plugin</artifactId>
+				<version>4.0.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<phase>install</phase>
+					</execution>
+				</executions>
+			</plugin>-->
+			<!--			 添加 XJar Maven 插件-->
+			<!--<plugin>
+				<groupId>com.mesalab.xjar</groupId>
+				<artifactId>mesalab-xjar</artifactId>
 				<version>1.0.0</version>
 				<executions>
 					<execution>
@@ -297,13 +315,13 @@
 						<phase>package</phase>
 						<configuration>
 							<excludes>
-								<exclude>/db/*</exclude>
-								<exclude>/static/**/*</exclude>
-							</excludes>
+                                <exclude>/db/*</exclude>
+                                <exclude>/static/**/*</exclude>
+                            </excludes>
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 
 			<!-- <plugin>
 				<groupId>pl.project13.maven</groupId>
@@ -358,7 +376,36 @@
 					<injectIntoSysProperties>false</injectIntoSysProperties>
 				</configuration>
 			</plugin> -->
-
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>2.2.2</version>
+				<executions>
+					<execution>
+						<id>generate-docs</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>html</backend>
+							<doctype>book</doctype>
+							<attributes>
+								<snippets>target/generated-snippets</snippets>
+							</attributes>
+							<sourceDirectory>src/test/resources/asciidoc</sourceDirectory>
+							<outputDirectory>src/test/resources/docs</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework.restdocs</groupId>
+						<artifactId>spring-restdocs-asciidoctor</artifactId>
+						<version>RELEASE</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 
 			<!--docker镜像构建及推送原理-->
 			<!--1:先将镜像根据下面的配置构建到<dockerHost>所在的docker服务器中(生成对应名称的镜像)-->
@@ -426,36 +473,6 @@
 					<!--指定构建docker镜像的机器-->
 					<dockerHost>http://${docker.build}:${docker.build.port}</dockerHost>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<version>2.2.2</version>
-				<executions>
-					<execution>
-						<id>generate-docs</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
-						<configuration>
-							<backend>html</backend>
-							<doctype>book</doctype>
-							<attributes>
-								<snippets>target/generated-snippets</snippets>
-							</attributes>
-							<sourceDirectory>src/test/resources/asciidoc</sourceDirectory>
-							<outputDirectory>src/test/resources/docs</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.springframework.restdocs</groupId>
-						<artifactId>spring-restdocs-asciidoctor</artifactId>
-						<version>RELEASE</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
