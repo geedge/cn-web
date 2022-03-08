@@ -1,0 +1,36 @@
+{
+  "------------------ GET  /visual/dataset/{id} data---------------------": "note",
+  "queryVisualDatasetInfo_exist": {
+    "id": 1
+  },
+  "queryVisualDatasetInfo_notexist": {
+    "id": 99999
+  },
+  "------------------ GET  /visual/dataset data---------------------": "note",
+  "queryVisualDatasetList_exist": {
+    "pageNo": null,
+    "pageSize": null
+  },
+  "queryVisualDatasetList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "SISJ049",
+    "ids": "7,8"
+  },
+  "queryVisualDatasetList_name": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "概况1"
+  },
+  "queryVisualDatasetList_ids": {
+    "pageNo": null,
+    "pageSize": null,
+    "ids": "1,2,3"
+  },
+  "queryVisualDatasetList_remark": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "test1"
+  }
+
+}
