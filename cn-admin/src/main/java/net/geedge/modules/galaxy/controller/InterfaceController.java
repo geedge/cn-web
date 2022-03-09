@@ -141,10 +141,10 @@ public class InterfaceController extends AbstractController {
 		//map类型接口加区域映射
 		if("map".equals(servletPath.substring(servletPath.length()-3).toLowerCase())){
 			QueryWrapper<SysDictEntity> queryCountry = new QueryWrapper<SysDictEntity>()
-				.eq("name", "区域映射").eq("code",1).eq("state", 1);
+				.eq("type", "areaMapping").eq("code",1).eq("state", 1);
 			String countryCode = sysDictService.getOne(queryCountry).getValue();
 			QueryWrapper<SysDictEntity> queryCity = new QueryWrapper<SysDictEntity>()
-					.eq("name", "区域映射").eq("code",2).eq("state", 1);
+					.eq("type", "areaMapping").eq("code",2).eq("state", 1);
 			String cityCode = sysDictService.getOne(queryCity).getValue();
 			postHandle = countryCode + "\r\n" + cityCode + "\r\n" + postHandle;
 		}
