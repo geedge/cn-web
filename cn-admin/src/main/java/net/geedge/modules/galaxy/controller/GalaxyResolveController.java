@@ -1,6 +1,8 @@
 package net.geedge.modules.galaxy.controller;
 
 import com.jcraft.jsch.*;
+import net.geedge.common.exception.CNException;
+import net.geedge.common.exception.CNExceptionHandler;
 import net.geedge.common.utils.R;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,7 +81,6 @@ public class GalaxyResolveController {
         String s ;
         StringBuilder sb = new StringBuilder();
         while((s=br.readLine())!=null){
-            System.out.println(s);
             sb.append(s);
         }
         br.close();
