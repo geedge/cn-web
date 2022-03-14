@@ -82,6 +82,7 @@ public class GalaxyResolveController {
         StringBuilder sb = new StringBuilder();
         while((s=br.readLine())!=null){
             sb.append(s);
+            sb.append("\r\n");
         }
         br.close();
         return sb.toString();

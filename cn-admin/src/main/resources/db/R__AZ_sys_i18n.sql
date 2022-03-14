@@ -767,7 +767,7 @@ INSERT INTO `sys_i18n` VALUES (814, '顶级域名服务器', 'en', 'dns.topLevel
 INSERT INTO `sys_i18n` VALUES (815, '权威域名服务器', 'zh', 'dns.authoritativeDomainServers', '权威域名服务器', '', '2022-03-14 11:10:23', 1);
 INSERT INTO `sys_i18n` VALUES (816, '权威域名服务器', 'en', 'dns.authoritativeDomainServers', 'Authoritative domain servers', '', '2022-03-14 11:10:23', 1);
 INSERT INTO `sys_i18n` VALUES (817, '公开递归域名服务器', 'zh', 'dns.publicRecursiveDomainServers', '公开递归域名服务器', '', '2022-03-14 11:10:23', 1);
-INSERT INTO `sys_i18n` VALUES (818, '公开递归域名服务器', 'en', 'dns.publicRecursiveDomainServers', 'Public recursive domain Servers', '', '2022-03-14 11:10:23', 1);
+INSERT INTO `sys_i18n` VALUES (818, '公开递归域名服务器', 'en', 'dns.publicRecursiveDomainServers', 'Public recursive domain servers', '', '2022-03-14 11:10:23', 1);
 INSERT INTO `sys_i18n` VALUES (819, '自建域名服务器', 'zh', 'dns.selfBuiltDomainServers', '自建域名服务器', '', '2022-03-14 11:10:23', 1);
 INSERT INTO `sys_i18n` VALUES (820, '自建域名服务器', 'en', 'dns.selfBuiltDomainServers', 'Self built domain servers', '', '2022-03-14 11:10:23', 1);
 INSERT INTO `sys_i18n` VALUES (821, '操作系统统计', 'zh', 'dns.osStatistics', '操作系统统计', '', '2022-03-14 11:10:23', 1);
