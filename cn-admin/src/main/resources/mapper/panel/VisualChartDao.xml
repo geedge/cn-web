@@ -20,6 +20,7 @@
         <result property="utime" column="utime"></result>
         <result property="remark" column="remark"></result>
         <result property="state" column="state"></result>
+        <result property="system" column="system"></result>
         <result property="buildIn" column="build_in"></result>
         <association property="panel" column="panel_id" select="queryPanelById"></association>
         <association property="uuser" column="uby" select="queryUserById"></association>

@@ -31,6 +31,7 @@ public class VisualChart {
 	private Date utime;
 	private String remark;
 	private Integer state;
+	private Integer system;
 	private Integer buildIn;
 	
 	@TableField(exist = false)
