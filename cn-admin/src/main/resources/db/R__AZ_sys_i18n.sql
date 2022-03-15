@@ -808,5 +808,27 @@ INSERT INTO `sys_i18n` VALUES (855, '开始时间', 'zh', 'dns.startTime', '开�
 INSERT INTO `sys_i18n` VALUES (856, '开始时间', 'en', 'dns.startTime', 'Start time', '', '2022-03-14 11:10:23', 1);
 INSERT INTO `sys_i18n` VALUES (857, '持续时间', 'zh', 'dns.duration', '持续时间', '', '2022-03-14 11:10:23', 1);
 INSERT INTO `sys_i18n` VALUES (858, '持续时间', 'en', 'dns.duration', 'Duration', '', '2022-03-14 11:10:23', 1);
+INSERT INTO `sys_i18n` VALUES (859, 'dns查询错误率', 'zh', 'detections.dnsQueryError', '的DNS查询错误率异常高。', '', '2022-03-14 08:49:34', 1);
+INSERT INTO `sys_i18n` VALUES (860, 'dns查询错误率', 'en', 'detections.dnsQueryError', '’s rate of DNS query errors is abnormally high.', '', '2022-03-14 08:49:53', 1);
+INSERT INTO `sys_i18n` VALUES (861, 'http查询错误率', 'en', 'detections.httpQueryError', '’s rate of HTTP query errors is abnormally high.', '', '2022-03-14 08:50:43', 1);
+INSERT INTO `sys_i18n` VALUES (862, 'http查询错误率', 'zh', 'detections.httpQueryError', '的HTTP查询错误率异常高。', '', '2022-03-14 08:51:01', 1);
+INSERT INTO `sys_i18n` VALUES (863, 'dns平均响应时间', 'en', 'detections.responseTime', '’s average of DNS response time is abnormally high.', '', '2022-03-14 08:51:39', 1);
+INSERT INTO `sys_i18n` VALUES (864, 'dns平均响应时间', 'zh', 'detections.responseTime', '的DNS平均响应时间异常高。', '', '2022-03-14 08:52:10', 1);
+INSERT INTO `sys_i18n` VALUES (865, '指挥与控制', 'en', 'detection.commandAndControl', 'attempted to access a command&control server (C&C) indicated by', '', '2022-03-14 08:53:25', 1);
+INSERT INTO `sys_i18n` VALUES (866, '指挥与控制', 'zh', 'detection.commandAndControl', '试图访问由指示的命令与控制服务器（C&C）', '', '2022-03-14 08:53:49', 1);
+INSERT INTO `sys_i18n` VALUES (867, '有效载荷和交付', 'en', 'detection.payloadAndDelivery', 'attempted to access a malware distribution server (payload deliv', '', '2022-03-14 08:54:30', 1);
+INSERT INTO `sys_i18n` VALUES (868, '有效载荷和交付', 'zh', 'detection.payloadAndDelivery', '试图访问由指示的恶意软件分发服务器（有效负载传递）', '', '2022-03-14 08:54:45', 1);
+INSERT INTO `sys_i18n` VALUES (869, '类型', 'zh', 'config.dataSource.type', '类型', '', '2022-03-15 01:01:47', 1);
+INSERT INTO `sys_i18n` VALUES (870, '类型', 'en', 'config.dataSource.type', 'Type', '', '2022-03-15 01:02:48', 1);
+INSERT INTO `sys_i18n` VALUES (871, '设置', 'zh', 'config.dataSource.configuration', '设置', '', '2022-03-15 01:05:16', 1);
+INSERT INTO `sys_i18n` VALUES (872, '设置', 'en', 'config.dataSource.configuration', 'Configuration', '', '2022-03-15 01:05:40', 1);
+INSERT INTO `sys_i18n` VALUES (873, '名称', 'zh', 'config.dataSource.name', '名称', '', '2022-03-15 01:06:15', 1);
+INSERT INTO `sys_i18n` VALUES (874, '名称', 'en', 'config.dataSource.name', 'Name', '', '2022-03-15 01:06:26', 1);
+INSERT INTO `sys_i18n` VALUES (875, '描述', 'zh', 'config.dataSource.description', '描述', '', '2022-03-15 01:07:04', 1);
+INSERT INTO `sys_i18n` VALUES (876, '描述', 'en', 'config.dataSource.description', 'Description', '', '2022-03-15 01:07:15', 1);
+INSERT INTO `sys_i18n` VALUES (877, '编辑数据源', 'zh', 'config.dataSource.editDataSource', '编辑数据源', '', '2022-03-15 01:12:32', 1);
+INSERT INTO `sys_i18n` VALUES (878, '编辑数据源', 'en', 'config.dataSource.editDataSource', 'editDataSource', '', '2022-03-15 01:46:41', 1);
+INSERT INTO `sys_i18n` VALUES (879, '新增数据源', 'zh', 'config.dataSource.createDataSource', '新增数据源', '', '2022-03-15 01:47:52', 1);
+INSERT INTO `sys_i18n` VALUES (880, '新增数据源', 'en', 'config.dataSource.createDataSource', 'createDataSource', '', '2022-03-15 01:48:24', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
