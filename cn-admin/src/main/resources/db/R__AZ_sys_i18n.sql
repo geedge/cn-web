@@ -759,7 +759,7 @@ INSERT INTO `sys_i18n` VALUES (806, 'DNS服务洞察', 'en', 'overall.dnsService
 INSERT INTO `sys_i18n` VALUES (807, '服务质量事件菜单', 'en', 'overall.performanceEvents', 'Performance events', '', '2022-03-12 08:14:32', 1);
 INSERT INTO `sys_i18n` VALUES (808, '服务质量事件菜单', 'zh', 'overall.performanceEvents', '服务质量事件', '', '2022-03-12 08:14:46', 1);
 INSERT INTO `sys_i18n` VALUES (809, '域名递归解析', 'zh', 'entities.domainRecursiveResolve', '域名递归解析', '', '2022-03-12 08:26:52', 1);
-INSERT INTO `sys_i18n` VALUES (810, '域名递归解析', 'en', 'entities.domainRecursiveResolve', 'Domain recursive resolve', '', '2022-03-12 08:28:18', 1);
+INSERT INTO `sys_i18n` VALUES (810, '域名递归解析', 'en', 'entities.domainRecursiveResolve', 'Domain recursive resolution', '', '2022-03-15 09:33:39', 1);
 INSERT INTO `sys_i18n` VALUES (811, '根域名服务器', 'zh', 'dns.rootDomainServers', '根域名服务器', '', '2022-03-14 11:10:23', 1);
 INSERT INTO `sys_i18n` VALUES (812, '根域名服务器', 'en', 'dns.rootDomainServers', 'Root domain servers', '', '2022-03-14 11:10:23', 1);
 INSERT INTO `sys_i18n` VALUES (813, '顶级域名服务器', 'zh', 'dns.topLevelDomainServers', '顶级域名服务器', '', '2022-03-14 11:10:23', 1);
@@ -830,5 +830,27 @@ INSERT INTO `sys_i18n` VALUES (877, '编辑数据源', 'zh', 'config.dataSource.
 INSERT INTO `sys_i18n` VALUES (878, '编辑数据源', 'en', 'config.dataSource.editDataSource', 'editDataSource', '', '2022-03-15 01:46:41', 1);
 INSERT INTO `sys_i18n` VALUES (879, '新增数据源', 'zh', 'config.dataSource.createDataSource', '新增数据源', '', '2022-03-15 01:47:52', 1);
 INSERT INTO `sys_i18n` VALUES (880, '新增数据源', 'en', 'config.dataSource.createDataSource', 'createDataSource', '', '2022-03-15 01:48:24', 1);
+INSERT INTO `sys_i18n` VALUES (881, '用户名', 'zh', 'config.dataSource.username', '用户名', '', '2022-03-15 09:10:08', 1);
+INSERT INTO `sys_i18n` VALUES (882, '用户名', 'en', 'config.dataSource.username', 'Username', '', '2022-03-15 09:10:40', 1);
+INSERT INTO `sys_i18n` VALUES (883, '密码', 'zh', 'config.dataSource.password', '密码', '', '2022-03-15 09:11:05', 1);
+INSERT INTO `sys_i18n` VALUES (884, '密码', 'en', 'config.dataSource.password', 'Password', '', '2022-03-15 09:11:19', 1);
+INSERT INTO `sys_i18n` VALUES (885, '名称', 'zh', 'config.dataSet.name', '名称', '', '2022-03-15 09:18:35', 1);
+INSERT INTO `sys_i18n` VALUES (886, '名称', 'en', 'config.dataSet.name', 'Name', '', '2022-03-15 09:18:47', 1);
+INSERT INTO `sys_i18n` VALUES (887, '数据源', 'zh', 'config.dataSet.dataSource', '数据源', '', '2022-03-15 09:19:19', 1);
+INSERT INTO `sys_i18n` VALUES (888, '数据源', 'en', 'config.dataSet.dataSource', 'Datasource', '', '2022-03-15 09:19:47', 1);
+INSERT INTO `sys_i18n` VALUES (889, '设置', 'zh', 'config.dataSet.configuration', '设置', '', '2022-03-15 09:20:26', 1);
+INSERT INTO `sys_i18n` VALUES (890, '设置', 'en', 'config.dataSet.configuration', 'Configuration', '', '2022-03-15 09:20:41', 1);
+INSERT INTO `sys_i18n` VALUES (891, '描述', 'zh', 'config.dataSet.description', '描述', '', '2022-03-15 09:21:24', 1);
+INSERT INTO `sys_i18n` VALUES (892, '描述', 'en', 'config.dataSet.description', 'Description', '', '2022-03-15 09:21:35', 1);
+INSERT INTO `sys_i18n` VALUES (893, '新增数据集', 'zh', 'config.dataSet.createDataSet', '新增数据集', '', '2022-03-15 09:24:59', 1);
+INSERT INTO `sys_i18n` VALUES (894, '新增数据集', 'en', 'config.dataSet.createDataSet', 'createDataSet', '', '2022-03-15 09:25:53', 1);
+INSERT INTO `sys_i18n` VALUES (895, '编辑数据集', 'zh', 'config.dataSet.editDataSet', '编辑数据集', '', '2022-03-15 09:26:24', 1);
+INSERT INTO `sys_i18n` VALUES (896, '编辑数据集', 'en', 'config.dataSet.editDataSet', 'editDataSet', '', '2022-03-15 09:26:38', 1);
+INSERT INTO `sys_i18n` VALUES (897, '类型', 'zh', 'config.dataSet.type', '类型', '', '2022-03-15 09:30:13', 1);
+INSERT INTO `sys_i18n` VALUES (898, '实体关系', 'zh', 'entities.entityRelationship', '实体关系', '', '2022-03-15 09:30:56', 1);
+INSERT INTO `sys_i18n` VALUES (899, '类型', 'en', 'config.dataSet.type', 'Type', '', '2022-03-15 09:30:31', 1);
+INSERT INTO `sys_i18n` VALUES (900, '实体关系', 'en', 'entities.entityRelationship', 'Entity relationship', '', '2022-03-15 09:30:48', 1);
+INSERT INTO `sys_i18n` VALUES (901, 'DNS解析依赖', 'en', 'entities.dnsResolutionDependency', 'DNS resolution dependency', '', '2022-03-15 09:45:43', 1);
+INSERT INTO `sys_i18n` VALUES (902, 'DNS解析依赖', 'zh', 'entities.dnsResolutionDependency', 'DNS解析依赖', '', '2022-03-15 09:45:53', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

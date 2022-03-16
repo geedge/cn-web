@@ -55,7 +55,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 			new Query(SysConfigEntity.class).getPage(params),
 			new QueryWrapper<SysConfigEntity>()
 				.like(StringUtils.isNotBlank(paramKey),"param_key", paramKey)
-				.eq("status", 1)
+				.eq("state", 1)
 		);
 
 		return new PageUtils(page);
