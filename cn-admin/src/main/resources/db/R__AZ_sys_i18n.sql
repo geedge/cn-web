@@ -443,7 +443,7 @@ INSERT INTO `sys_i18n` VALUES (486, '相关APP服务质量', 'zh', 'trafficSumma
 INSERT INTO `sys_i18n` VALUES (487, '相关APP服务质量', 'en', 'trafficSummary.relatedAppServiceQuality', 'Related APP Service Quality', '', '2021-09-22 11:53:52', 1);
 INSERT INTO `sys_i18n` VALUES (488, '相关域名', 'zh', 'entities.relatedDomain', '相关域名', '', '2021-09-22 14:25:48', 1);
 INSERT INTO `sys_i18n` VALUES (489, '相关域名', 'en', 'entities.relatedDomain', 'Related Domain', '', '2021-09-22 14:26:01', 1);
-INSERT INTO `sys_i18n` VALUES (490, 'APP全称', 'en', 'overall.appFullName', 'APP Full Name', '', '2021-09-23 01:13:08', 1);
+INSERT INTO `sys_i18n` VALUES (490, 'APP全称', 'en', 'overall.appFullName', 'APP full name', '', '2022-03-17 07:30:08', 1);
 INSERT INTO `sys_i18n` VALUES (491, 'APP全称', 'zh', 'overall.appFullName', 'APP全称', '', '2021-09-23 01:13:19', 1);
 INSERT INTO `sys_i18n` VALUES (492, '技术', 'zh', 'overall.technology', '技术', '', '2021-09-23 01:14:02', 1);
 INSERT INTO `sys_i18n` VALUES (493, '技术', 'en', 'overall.technology', 'Technology', '', '2021-09-23 01:14:14', 1);
@@ -736,7 +736,7 @@ INSERT INTO `sys_i18n` VALUES (783, '前往受害者实体', 'en', 'detections.g
 INSERT INTO `sys_i18n` VALUES (784, '前往受害者实体', 'zh', 'detections.goToVictim', '前往受害者实体', '', '2022-02-22 03:38:25', 1);
 INSERT INTO `sys_i18n` VALUES (785, '前往攻击者实体', 'zh', 'detections.goToOffender', '前往攻击者实体', '', '2022-02-22 03:38:57', 1);
 INSERT INTO `sys_i18n` VALUES (786, '前往攻击者实体', 'en', 'detections.goToOffender', 'Go to offender entity', '', '2022-02-22 03:39:14', 1);
-INSERT INTO `sys_i18n` VALUES (787, '查看xx的详情', 'zh', 'detections.viewDetailOf', '查看 {ip} 详情', '', '2022-02-22 03:42:37', 1);
+INSERT INTO `sys_i18n` VALUES (787, '查看xx的详情', 'zh', 'detections.viewDetailOf', '查看', '', '2022-03-17 08:30:35', 1);
 INSERT INTO `sys_i18n` VALUES (788, '查看xx的详情', 'en', 'detections.viewDetailOf', 'View detail of {ip}', '', '2022-02-22 03:42:53', 1);
 INSERT INTO `sys_i18n` VALUES (789, '查看所有相关记录', 'en', 'detections.viewAllRelated', 'View all related records', '', '2022-02-22 07:07:45', 1);
 INSERT INTO `sys_i18n` VALUES (790, '查看所有相关记录', 'zh', 'detections.viewAllRelated', '查看所有相关记录', '', '2022-02-22 07:08:11', 1);
