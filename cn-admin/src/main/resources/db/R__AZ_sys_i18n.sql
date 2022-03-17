@@ -852,5 +852,13 @@ INSERT INTO `sys_i18n` VALUES (899, '类型', 'en', 'config.dataSet.type', 'Type
 INSERT INTO `sys_i18n` VALUES (900, '实体关系', 'en', 'entities.entityRelationship', 'Entity relationship', '', '2022-03-15 09:30:48', 1);
 INSERT INTO `sys_i18n` VALUES (901, 'DNS解析依赖', 'en', 'entities.dnsResolutionDependency', 'DNS resolution dependency', '', '2022-03-15 09:45:43', 1);
 INSERT INTO `sys_i18n` VALUES (902, 'DNS解析依赖', 'zh', 'entities.dnsResolutionDependency', 'DNS解析依赖', '', '2022-03-15 09:45:53', 1);
+INSERT INTO `sys_i18n` VALUES (903, '指标', 'en', 'detections.metric', 'Metric', '', '2022-03-17 03:12:01', 1);
+INSERT INTO `sys_i18n` VALUES (904, '指标', 'zh', 'detections.metric', '指标', '', '2022-03-17 03:12:22', 1);
+INSERT INTO `sys_i18n` VALUES (905, '值', 'zh', 'detections.value', '值', '', '2022-03-17 03:37:00', 1);
+INSERT INTO `sys_i18n` VALUES (906, '值', 'en', 'detections.value', 'Value', '', '2022-03-17 03:37:12', 1);
+INSERT INTO `sys_i18n` VALUES (907, '开始时间', 'zh', 'detections.startTime', '开始时间', '', '2022-03-17 03:37:50', 1);
+INSERT INTO `sys_i18n` VALUES (908, '开始时间', 'en', 'detections.startTime', 'Start time', '', '2022-03-17 03:38:22', 1);
+INSERT INTO `sys_i18n` VALUES (909, '结束时间', 'zh', 'detections.endTime', '结束时间', '', '2022-03-17 03:38:48', 1);
+INSERT INTO `sys_i18n` VALUES (910, '结束时间', 'en', 'detections.endTime', 'End time', '', '2022-03-17 03:39:02', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

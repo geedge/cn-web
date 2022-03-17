@@ -451,6 +451,7 @@ INSERT INTO `visual_chart` VALUES (698, '响应失败率', 'dns.responseFailureR
 INSERT INTO `visual_chart` VALUES (699, '实时告警信息', 'dns.alarmInfo', 3, 0, 84, 20, 38, 10, 16, '{\"url\":\"/interface/dns/alarmInfo?startTime={{startTime}}&endTime={{endTime}}&eventSeverity={{eventSeverity}}&pageNo={{pageNo}}&pageSize={{pageSize}}\",\"countUrl\":\"/interface/dns/alarmInfoCount?startTime={{startTime}}&endTime={{endTime}}&eventSeverity={{eventSeverity}}\"}', 1, '2022-03-01 21:20:54', 1, '2022-03-01 21:20:54', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (700, '关系图TABS', '', 5, 503, 91, 0, 0, 30, 14, '', 1, '2022-03-15 17:28:18', 1, '2022-03-15 17:28:21', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (701, '关系图TAB实体关系', 'entities.entityRelationship', 5, 700, 92, 0, -1, 0, 1, '', 1, '2022-03-15 17:31:57', 1, '2022-03-15 17:31:55', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (702, '关系图TAB域名', 'entities.dnsResolutionDependency', 5, 700, 92, 1, -1, 0, 1, '', 1, '2022-03-15 17:40:42', 1, '2022-03-15 17:40:44', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (702, '关系图TAB域名解析', 'entities.dnsResolutionDependency', 5, 700, 92, 1, -1, 0, 1, '', 1, '2022-03-15 17:40:42', 1, '2022-03-15 17:40:44', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (703, 'DNS域名解析', ' ', 5, 702, 42, 0, 0, 30, 14, '{\"url\":\"/interface/entity/relationship?type=dns&limit={{limit}}&q={{domain}}&format=0\",\"unitType\":\"number\"}', 1, '2022-03-17 10:07:55', 1, '2022-03-17 10:07:56', '', 1, 0, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
