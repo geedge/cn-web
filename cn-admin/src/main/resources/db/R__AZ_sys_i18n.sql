@@ -860,5 +860,7 @@ INSERT INTO `sys_i18n` VALUES (907, '开始时间', 'zh', 'detections.startTime'
 INSERT INTO `sys_i18n` VALUES (908, '开始时间', 'en', 'detections.startTime', 'Start time', '', '2022-03-17 03:38:22', 1);
 INSERT INTO `sys_i18n` VALUES (909, '结束时间', 'zh', 'detections.endTime', '结束时间', '', '2022-03-17 03:38:48', 1);
 INSERT INTO `sys_i18n` VALUES (910, '结束时间', 'en', 'detections.endTime', 'End time', '', '2022-03-17 03:39:02', 1);
+INSERT INTO `sys_i18n` VALUES (911, '路径', 'zh', 'config.dataSet.url', '路径', '', '2022-03-17 09:44:26', 1);
+INSERT INTO `sys_i18n` VALUES (912, '路径', 'en', 'config.dataSet.url', 'URL', '', '2022-03-17 09:44:50', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
