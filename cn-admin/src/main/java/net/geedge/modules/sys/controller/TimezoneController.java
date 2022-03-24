@@ -12,15 +12,23 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("sys/timezone")
+@RequestMapping("sys")
 public class TimezoneController {
 
     @Autowired
     private TimezoneService timezoneService;
 
-    @GetMapping
+    @GetMapping("/timezone")
     public R timezone(@RequestParam(required = false) String name){
         List<Timezone> list = timezoneService.queryTimezone(name);
         return R.ok().putData("list",list);
+    }
+    /**
+     * 系统时区列表查询
+     */
+    @GetMapping("/timezones")
+    public R timezones(){
+        List<Timezone> list = timezoneService.list();
+        return R.ok(list);
     }
 }

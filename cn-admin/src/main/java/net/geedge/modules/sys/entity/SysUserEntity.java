@@ -46,6 +46,14 @@ public class SysUserEntity implements Serializable {
 	 * 盐
 	 */
 	private String salt;
+	/**
+	 * 语言
+	 */
+	private String lang;
+	/**
+	 * 主题
+	 */
+	private String theme;
 
 	private String lastLoginIp;
 	
