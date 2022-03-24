@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
+<mapper namespace="net.geedge.modules.report.dao.ReportJobDao">
+	
+	<resultMap type="net.geedge.modules.report.entity.ReportJob" id="reportJob">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="ctime" column="ctime"/>
+        <result property="uniq" column="uniq"/>
+        <result property="remark" column="remark"/>
+        <result property="htmlContent" column="html_content"/>
+        <result property="state" column="state"/>
+        <result property="upload" column="upload"/>
+        
+        <collection columnPrefix="rt_" property="reportTasks" ofType="net.geedge.modules.report.entity.ReportTask">
+	    	<result column="id" property="id"/>
+	    	<result column="type" property="type"/>
+	    	<result column="state" property="state"/>
+	    	<result column="percent" property="percent"/>
+	    </collection>
+    </resultMap>
+	
+	<select id="selectInfoById" resultMap="reportJob">
+		select 
+      	rj.*,
+      	rt.id as rt_id,
+      	rt.type as rt_type,
+      	rt.state as tr_state,
+      	rt.percent as rt_percent
+      	from  report_job rj left join report_task rt on rj.id = rt.job_id
+      	<where> 
+      		rj.id = #{id}
+      	</where>
+	</select>
+	
+	<select id="queryPage" resultMap="reportJob">
+      	select 
+      	*
+      	from  report_job rj
+      	<where>
+      		<if test="params.name !=null and params.name != ''">
+				and rj.name like CONCAT('%', #{params.name}, '%')
+			</if>
+      	</where>
+      	
+    </select>
+</mapper>

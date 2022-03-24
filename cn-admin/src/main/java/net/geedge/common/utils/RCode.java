@@ -332,6 +332,13 @@ public enum RCode {
 	LICENSE_VERSION_INVALID(715004, "The version is not valid"),
 	LICENSE_FILE_TYPE_ERROR(715005,"license upload file only suppose xml"),
 
+	REPORT_JOB_ID_ISNULL(311001,"Report job id can not be null"),
+	REPORT_TEMP_ID_ISNULL(311002,"Report temp id can not be null"),
+	REPORT_TEMP_NAME_ISNULL(311003,"Report temp id can not be null"),
+	REPORT_TEMP_HTML_CONTENT_ISNULL(311004,"Report temp id can not be null"),
+	REPORT_TEMP_CONFIG_ISNULL(311005,"Report temp id can not be null"),
+	REPORT_NOT_FINSHED(311006,"Report not finshed yet please try again later"),
+	
     ERROR(999, "error"); //通用错误/未知错误
 
 	

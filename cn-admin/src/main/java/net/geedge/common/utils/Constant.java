@@ -116,6 +116,11 @@ public class Constant {
 	 * 工具目录
 	 */
 	public static final String TOOL_PATH = System.getProperty("user.dir") + File.separator + "tools";
+	
+	/**
+	 * 工具目录
+	 */
+	public static final String CONFIG_PATH = System.getProperty("user.dir") + File.separator + "config";
 
 	// 图表 singleStat statistics可选值列表
 	public static final List<String> CHART_SINGLESTAT_STATISTICS;
