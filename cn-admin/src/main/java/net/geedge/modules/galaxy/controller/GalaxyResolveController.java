@@ -72,8 +72,12 @@ public class GalaxyResolveController {
             e.printStackTrace();
         } finally {
             //关闭资源
-            exec.disconnect();
-            session.disconnect();
+            if (exec != null){
+                exec.disconnect();
+            }
+            if (session != null){
+                session.disconnect();
+            }
         }
         return R.error();
     }
