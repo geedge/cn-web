@@ -3,9 +3,11 @@ package net.geedge.modules.galaxy.controller;
 import com.jcraft.jsch.*;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.exception.CNExceptionHandler;
+import net.geedge.common.utils.AccOauthUtils;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.Tool;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +40,7 @@ public class GalaxyResolveController {
     @RequestMapping("/domainRecursiveResolve")
     public R domainRecursiveResolve(String domain){
         //解密
-        password = Tool.AesUtil.decrypt(password, Constant.AES_SECRET_KEY);
+        String pin = Tool.AesUtil.decrypt(password, Constant.AES_SECRET_KEY);
         ChannelExec exec = null;
         Session session = null;
         try {
@@ -46,7 +48,7 @@ public class GalaxyResolveController {
             JSch jSch = new JSch();
             // 获取session
             session = jSch.getSession(username,host,port);
-            session.setPassword(password);
+            session.setPassword(pin);
             Properties prop = new Properties();
             //主机密钥确认
             prop.put("StrictHostKeyChecking", "no");
