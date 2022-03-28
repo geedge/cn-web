@@ -1,13 +1,9 @@
 package net.geedge.modules.galaxy.controller;
 
 import com.jcraft.jsch.*;
-import net.geedge.common.exception.CNException;
-import net.geedge.common.exception.CNExceptionHandler;
-import net.geedge.common.utils.AccOauthUtils;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.Tool;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
