@@ -105,6 +105,8 @@ public class ReportHandlerTask extends QuartzJobBean {
 		
 		this.getResult(rpcHost,stateTasks);
 		
+		this.modifyJobState();
+		
 		this.s3Upload();
 
         sw.stop();
@@ -320,30 +322,38 @@ public class ReportHandlerTask extends QuartzJobBean {
 	}
 	
 	/**
-     * 
-     * 判断job任务是否正常完成 
-     * 判断是否上传到s3服务器
-     * 
-     */
-	public void s3Upload() {
-		String s3Enable = sysConfigService.getValue("s3_enable");
-        List<ReportJob> reportJobs = reportJobService.list(new QueryWrapper<ReportJob>().lambda().eq(ReportJob::getState, 0).or().eq(ReportJob::getUpload, 0));
+	 *  判断job任务是否正常完成 
+	 */
+	public void modifyJobState() {
+		List<ReportJob> reportJobs = reportJobService.list(new QueryWrapper<ReportJob>().lambda().eq(ReportJob::getState, 0));
         Map<Integer, ReportJob> idJobs = reportJobs.stream().collect(Collectors.toMap(ReportJob::getId, Function.identity()));
         List<Integer> jobIds = reportJobs.stream().map(ReportJob::getId).collect(Collectors.toList());
         List<ReportTask> unfinishTasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().in(ReportTask::getJobId, jobIds).lt(ReportTask::getState, 3));
         List<Integer> unfinshJobs = unfinishTasks.stream().map(ReportTask::getJobId).collect(Collectors.toList());
         List<Integer> finishJobs = jobIds.stream().filter(item -> !unfinshJobs.contains(item)).collect(Collectors.toList());
-        List<String> fileNames =new ArrayList<String>();
         for(Integer jobId : finishJobs) {
+        	ReportJob reportJob = idJobs.get(jobId);
+    		reportJob.setState(1);
+        }
+        // 批量修改任务状态信息
+        if(ObjectUtil.isNotEmpty(reportJobs)) {
+        	reportJobService.updateBatchById(reportJobs);
+        }        
+	}
+	/**
+     * 判断是否上传到s3服务器
+     */
+	public void s3Upload() {
+		String s3Enable = sysConfigService.getValue("s3_enable");
+        List<ReportJob> finishJobs = reportJobService.list(new QueryWrapper<ReportJob>().lambda().eq(ReportJob::getState, 1).eq(ReportJob::getUpload, 0));
+        for(ReportJob reportJob : finishJobs) {
         	try {
-	        	ReportJob reportJob = idJobs.get(jobId);
 	        	BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH + File.separator + reportJob.getName()+".pdf");
-	    		String html = reportJobService.queryView(jobId);
+	    		String html = reportJobService.queryView(reportJob.getId());
 	    		if(StrUtil.isEmpty(html)) {
 	    			log.error("s3Upload get html content error");
 	    			return;
 	    		}
-	    		reportJob.setState(1);
 	    		ConverterProperties converterProperties = new ConverterProperties();
 	    		FontProvider fontProvider = new DefaultFontProvider();
 	    		FontProgram fontProgram = FontProgramFactory
@@ -351,7 +361,6 @@ public class ReportHandlerTask extends QuartzJobBean {
 	    		fontProvider.addFont(fontProgram);
 	    		converterProperties.setFontProvider(fontProvider);
 	    		HtmlConverter.convertToPdf(html, outputStream, converterProperties);
-	    		fileNames.add(reportJob.getName()+".pdf");
 	    		if(Integer.valueOf(s3Enable)==1) {
 	            	reportJobService.upload(reportJob.getName()+".pdf");
 	            	reportJob.setUpload(1);
@@ -362,8 +371,8 @@ public class ReportHandlerTask extends QuartzJobBean {
         }
         
         // 批量修改任务状态信息
-        if(ObjectUtil.isNotEmpty(reportJobs)) {
-        	reportJobService.updateBatchById(reportJobs);
+        if(ObjectUtil.isNotEmpty(finishJobs)) {
+        	reportJobService.updateBatchById(finishJobs);
         }        
 	}
 }
