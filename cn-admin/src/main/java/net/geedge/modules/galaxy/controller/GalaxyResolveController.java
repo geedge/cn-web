@@ -4,6 +4,7 @@ import com.jcraft.jsch.*;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.Tool;
+import net.geedge.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ import java.util.Properties;
  */
 @RestController
 @RequestMapping("/galaxy")
-public class GalaxyResolveController {
+public class GalaxyResolveController extends AbstractController {
     @Value("${ssh.host}")
     private String host;
 
@@ -65,9 +66,9 @@ public class GalaxyResolveController {
             data.put("result",inStr);
             return R.ok().put("data",data);
         } catch (JSchException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             //关闭资源
             if (exec != null){

@@ -862,5 +862,9 @@ INSERT INTO `sys_i18n` VALUES (909, '结束时间', 'zh', 'detections.endTime', 
 INSERT INTO `sys_i18n` VALUES (910, '结束时间', 'en', 'detections.endTime', 'End time', '', '2022-03-17 03:39:02', 1);
 INSERT INTO `sys_i18n` VALUES (911, '路径', 'zh', 'config.dataSet.url', '路径', '', '2022-03-17 09:44:26', 1);
 INSERT INTO `sys_i18n` VALUES (912, '路径', 'en', 'config.dataSet.url', 'URL', '', '2022-03-17 09:44:50', 1);
+INSERT INTO `sys_i18n` VALUES (913, '请求量', 'en', 'protocol.requestVolume', 'Request volume', '', '2022-03-30 08:05:57', 5);
+INSERT INTO `sys_i18n` VALUES (914, '请求量', 'zh', 'protocol.requestVolume', '请求量', '', '2022-03-30 08:06:43', 5);
+INSERT INTO `sys_i18n` VALUES (915, '总流量', 'en', 'protocol.totalFlow', 'Total flow', '', '2022-03-30 08:07:12', 5);
+INSERT INTO `sys_i18n` VALUES (916, '总流量', 'zh', 'protocol.totalFlow', '总流量', '', '2022-03-30 08:07:36', 5);
 
 SET FOREIGN_KEY_CHECKS = 1;
