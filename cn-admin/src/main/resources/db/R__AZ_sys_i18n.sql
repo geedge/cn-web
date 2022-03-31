@@ -866,5 +866,21 @@ INSERT INTO `sys_i18n` VALUES (913, '请求量', 'en', 'protocol.requestVolume',
 INSERT INTO `sys_i18n` VALUES (914, '请求量', 'zh', 'protocol.requestVolume', '请求量', '', '2022-03-30 08:06:43', 5);
 INSERT INTO `sys_i18n` VALUES (915, '总流量', 'en', 'protocol.totalFlow', 'Total flow', '', '2022-03-30 08:07:12', 5);
 INSERT INTO `sys_i18n` VALUES (916, '总流量', 'zh', 'protocol.totalFlow', '总流量', '', '2022-03-30 08:07:36', 5);
+INSERT INTO `sys_i18n` VALUES (917, '数量', 'zh', 'overall.count', '数量', '', '2022-03-31 05:56:47', 1);
+INSERT INTO `sys_i18n` VALUES (918, '数量', 'en', 'overall.count', 'Count', '', '2022-03-31 05:56:56', 1);
+INSERT INTO `sys_i18n` VALUES (919, 'DNS服务器角色', 'zh', 'overall.detectionsIp.name', 'DNS服务器角色', '', '2022-03-31 08:47:48', 5);
+INSERT INTO `sys_i18n` VALUES (920, 'DNS服务器角色', 'en', 'overall.detectionsIp.name', 'DNS server role', '', '2022-03-31 08:48:54', 5);
+INSERT INTO `sys_i18n` VALUES (921, '所属机构', 'zh', 'overall.detectionsIp.mechanism', '所属机构', '', '2022-03-31 08:50:13', 5);
+INSERT INTO `sys_i18n` VALUES (922, '所属机构', 'en', 'overall.detectionsIp.mechanism', 'Affiliation', '', '2022-03-31 08:50:35', 5);
+INSERT INTO `sys_i18n` VALUES (923, '解析软件', 'zh', 'overall.detectionsIp.software', '解析软件', '', '2022-03-31 08:51:03', 5);
+INSERT INTO `sys_i18n` VALUES (924, '解析软件', 'en', 'overall.detectionsIp.software', 'Analysis software', '', '2022-03-31 08:51:23', 5);
+INSERT INTO `sys_i18n` VALUES (925, '操作系统', 'zh', 'overall.detectionsIp.system', '操作系统', '', '2022-03-31 08:51:44', 5);
+INSERT INTO `sys_i18n` VALUES (926, '操作系统', 'en', 'overall.detectionsIp.system', 'Operating system', '', '2022-03-31 08:52:10', 5);
+INSERT INTO `sys_i18n` VALUES (927, '支持协议', 'zh', 'overall.detectionsIp.protocol', '支持协议', '', '2022-03-31 08:52:31', 5);
+INSERT INTO `sys_i18n` VALUES (928, '支持协议', 'en', 'overall.detectionsIp.protocol', 'Supporting agreement', '', '2022-03-31 08:53:03', 5);
+INSERT INTO `sys_i18n` VALUES (929, '每秒请求量', 'en', 'overall.detectionsIp.queryRate', 'Requests per second', '', '2022-03-31 08:54:51', 5);
+INSERT INTO `sys_i18n` VALUES (930, '每秒请求量', 'zh', 'overall.detectionsIp.queryRate', '每秒请求量', '', '2022-03-31 08:54:47', 5);
+INSERT INTO `sys_i18n` VALUES (931, 'DNS服务器信息', 'en', 'overall.detectionsIp', 'DNS server information', '', '2022-03-31 08:56:52', 5);
+INSERT INTO `sys_i18n` VALUES (932, 'DNS服务器信息', 'zh', 'overall.detectionsIp', 'DNS服务器信息', '', '2022-03-31 08:57:20', 5);
 
 SET FOREIGN_KEY_CHECKS = 1;

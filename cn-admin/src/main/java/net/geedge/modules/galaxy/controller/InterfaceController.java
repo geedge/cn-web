@@ -127,7 +127,7 @@ public class InterfaceController extends AbstractController {
 			return;
 		}
 		//例：entityrelationship接口GET/POST请求方法都适用，但第三方请求只能用POST
-		if (!method.equals(proxy.getMethod()) || !method.toLowerCase().equals(proxy.getMethod())) {
+		if (!method.equalsIgnoreCase(proxy.getMethod())) {
 			method = proxy.getMethod();
 		}
 		if(logger.isDebugEnabled()) {
