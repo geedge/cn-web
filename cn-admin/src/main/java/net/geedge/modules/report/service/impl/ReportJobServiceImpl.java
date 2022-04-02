@@ -60,6 +60,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import freemarker.template.Template;
 import net.geedge.common.exception.CNException;
+import net.geedge.common.utils.CommonUtils;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.FreeMarkerUtil;
 import net.geedge.common.utils.PageUtils;
@@ -152,7 +153,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			html = writer.toString();
 			// 判断是否开启引擎
 			if(StrUtil.isNotBlank(driverEnable) && StrUtil.equals(driverEnable, "1")) {
-				if(OS.IS_LINUX) {
+				if(CommonUtils.isLinux()) {
 					System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver");
 				}else {
 					System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver.exe");
