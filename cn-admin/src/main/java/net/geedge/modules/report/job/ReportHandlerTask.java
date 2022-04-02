@@ -348,20 +348,20 @@ public class ReportHandlerTask extends QuartzJobBean {
         List<ReportJob> finishJobs = reportJobService.list(new QueryWrapper<ReportJob>().lambda().eq(ReportJob::getState, 1).eq(ReportJob::getUpload, 0));
         for(ReportJob reportJob : finishJobs) {
         	try {
-	        	BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH + File.separator + reportJob.getName()+".pdf");
-	    		String html = reportJobService.queryView(reportJob.getId());
-	    		if(StrUtil.isEmpty(html)) {
-	    			log.error("s3Upload get html content error");
-	    			return;
-	    		}
-	    		ConverterProperties converterProperties = new ConverterProperties();
-	    		FontProvider fontProvider = new DefaultFontProvider();
-	    		FontProgram fontProgram = FontProgramFactory
-	    				.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
-	    		fontProvider.addFont(fontProgram);
-	    		converterProperties.setFontProvider(fontProvider);
-	    		HtmlConverter.convertToPdf(html, outputStream, converterProperties);
-	    		if(Integer.valueOf(s3Enable)==1) {
+        		if(Integer.valueOf(s3Enable)==1) {
+		        	BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH + File.separator + reportJob.getName()+".pdf");
+		    		String html = reportJobService.queryView(reportJob.getId());
+		    		if(StrUtil.isEmpty(html)) {
+		    			log.error("s3Upload get html content error");
+		    			return;
+		    		}
+		    		ConverterProperties converterProperties = new ConverterProperties();
+		    		FontProvider fontProvider = new DefaultFontProvider();
+		    		FontProgram fontProgram = FontProgramFactory
+		    				.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
+		    		fontProvider.addFont(fontProgram);
+		    		converterProperties.setFontProvider(fontProvider);
+		    		HtmlConverter.convertToPdf(html, outputStream, converterProperties);
 	            	reportJobService.upload(reportJob.getName()+".pdf");
 	            	reportJob.setUpload(1);
 	            }

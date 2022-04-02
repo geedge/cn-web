@@ -6,6 +6,7 @@ import java.util.Map;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import net.geedge.common.utils.PageUtils;
+import net.geedge.modules.report.entity.ReportTask;
 import net.geedge.modules.report.entity.ReportTemp;
 
 public interface ReportTempService extends IService<ReportTemp>{
@@ -15,4 +16,8 @@ public interface ReportTempService extends IService<ReportTemp>{
 	void removeReportTemps(String ids);
 	
 	void saveOrModify(ReportTemp reportTemp);
+	
+	void createJobTasks(ReportTemp reportTemp);
+	
+	void timeHandler(Map<String,Object> conf);
 }

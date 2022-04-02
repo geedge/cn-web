@@ -338,6 +338,7 @@ public enum RCode {
 	REPORT_TEMP_HTML_CONTENT_ISNULL(311004,"Report temp id can not be null"),
 	REPORT_TEMP_CONFIG_ISNULL(311005,"Report temp id can not be null"),
 	REPORT_NOT_FINSHED(311006,"Report not finshed yet please try again later"),
+	REPORT_TEMP_CREAT_JOB_FAILED(311007,"Report create job failed"),
 	
     ERROR(999, "error"); //通用错误/未知错误
 

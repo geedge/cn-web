@@ -11,14 +11,17 @@ import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import cn.hutool.log.Log;
 import net.geedge.modules.report.job.ReportHandlerJob;
 import net.geedge.modules.report.job.ReportHandlerTask;
+import net.geedge.modules.report.job.ReportRegisterJob;
 
 /**
  * JobConfig 统一管理 job config
@@ -32,26 +35,26 @@ public class JobConfig {
     @Value("${cn.haJobCron:0/5 * * * * ?}")
     private String haJobCron;
     
-    @Value("${cn.reportJobCron:0 0 0 * * ?}")
-    private String reportHandlerJobCron;
+    @Value("${cn.reportTaskCron:0/10 * * * * ? *}")
+	private String reportRegisterJobCron;
     
-    @Value("${cn.reportTaskCron:0 0/3 * * * ? *}")
+    @Value("${cn.reportTaskCron:0 0/1 * * * ? *}")
     private String reportHandlerTaskCron;
     
-    @Autowired
-    private Scheduler scheduler;
+	@Autowired
+	private Scheduler scheduler;
     
 	/*@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;*/
     private static final String JOB_NAME = "CNJOB";
     private String haJobName = "HA_JOB";
-    private String reportHandlerJobName = "REPORT_HANDLER_JOB";
     private String reportHandlerTaskName = "REPORT_HANDLER_TASK";
+    private String reportRegisterJobName = "REPORT_REGISTER_JOB";
     
     @Bean
-    public JobDetail reportHandlerJobDetail() {
-        return JobBuilder.newJob(ReportHandlerJob.class).withIdentity(JOB_NAME + reportHandlerJobName).storeDurably().build();
-    }
+	public JobDetail reportRegisterJobDetail() {
+	    return JobBuilder.newJob(ReportRegisterJob.class).withIdentity(JOB_NAME + reportRegisterJobName).storeDurably().build();
+	}
     
     @Bean
     public JobDetail reportHandlerTaskDetail() {
@@ -65,9 +68,10 @@ public class JobConfig {
     
     @PostConstruct
     public void init() throws SchedulerException {
-    	// 报表下发任务定时任务
-        createCronScheduleJob(reportHandlerJobName, reportHandlerJobDetail(), StringUtils.isEmpty(reportHandlerJobCron) ? "0 0/1 * * * ? *" : reportHandlerJobCron);
-
+    	
+    	// 动态创建定时任务
+    	createCronScheduleJob(reportRegisterJobName, reportRegisterJobDetail(), StringUtils.isEmpty(reportRegisterJobCron) ? "0/10 * * * * ? *" : reportRegisterJobCron);
+    	
         // HA Job 如果配置文件没有配置定时周期  默认为5s执行一次
         createCronScheduleJob(haJobName, haJobDetail(), StringUtils.isEmpty(haJobCron) ? "0/5 * * * * ?" : haJobCron);
         

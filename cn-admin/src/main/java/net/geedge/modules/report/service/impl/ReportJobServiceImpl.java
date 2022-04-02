@@ -149,10 +149,11 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			html = writer.toString();
 			// 判断是否开启引擎
 			if(StrUtil.isNotBlank(driverEnable) && StrUtil.equals(driverEnable, "1")) {
-				System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH+File.separator+"chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver.exe");
 				ChromeOptions options = new ChromeOptions();
 				// 后台运行，不弹出浏览器
 				options.addArguments("--headless");
+				options.addArguments("--window-size=1920x1080");
 				ChromeDriver driver = new ChromeDriver(options);
 				driver.navigate().to("data:text/html;charset=utf-8," + html);
 				html = (String) driver.executeScript("return document.documentElement.innerHTML;");
