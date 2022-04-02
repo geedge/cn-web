@@ -22,6 +22,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.tomcat.jni.OS;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +152,11 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			html = writer.toString();
 			// 判断是否开启引擎
 			if(StrUtil.isNotBlank(driverEnable) && StrUtil.equals(driverEnable, "1")) {
-				System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver.exe");
+				if(OS.IS_LINUX) {
+					System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver");
+				}else {
+					System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver.exe");
+				}
 				ChromeOptions options = new ChromeOptions();
 				// 后台运行，不弹出浏览器
 				options.addArguments("--headless");
