@@ -136,6 +136,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			html = reportJob.getHtmlContent();
 			Map<Integer, ReportResult> taskIdResult = reportResults.stream().collect(Collectors.toMap(ReportResult::getTaskId, Function.identity()));
 			Map<String,Object> data = new HashMap<String,Object>();
+			data.put("startTime", reportTasks.get(0).getStartTime().getTime()/1000);
+			data.put("endTime", reportTasks.get(0).getEndTime().getTime()/1000);
 			for(ReportTask reportTask : reportTasks) {
 				ReportResult reportResult = taskIdResult.get(reportTask.getId());
 				String result = reportResult.getResult();
