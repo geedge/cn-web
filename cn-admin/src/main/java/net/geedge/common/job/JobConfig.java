@@ -38,7 +38,7 @@ public class JobConfig {
     @Value("${cn.reportTaskCron:0/10 * * * * ? *}")
 	private String reportRegisterJobCron;
     
-    @Value("${cn.reportTaskCron:0 0/1 * * * ? *}")
+    @Value("${cn.reportTaskCron:0 0/5 * * * ? *}")
     private String reportHandlerTaskCron;
     
 	@Autowired

@@ -8,5 +8,5 @@ REPLACE INTO `sys_config` VALUES (null, 's3_enable', '0', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 's3_path', '', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 's3_accessKey', 'default', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 's3_secretKey', 'default', 1, NULL);
-REPLACE INTO `sys_config` VALUES (null, 's3_bucket_name', 'cn-report', 1, NULL);
+REPLACE INTO `sys_config` VALUES (null, 's3_bucket_name', 'report-hos-bucket', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'driver_enable', '0', 1, NULL);
