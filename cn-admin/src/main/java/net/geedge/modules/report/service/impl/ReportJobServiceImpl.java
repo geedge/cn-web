@@ -22,6 +22,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.tomcat.jni.OS;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import freemarker.template.Template;
 import net.geedge.common.exception.CNException;
+import net.geedge.common.utils.CommonUtils;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.FreeMarkerUtil;
 import net.geedge.common.utils.PageUtils;
@@ -136,6 +138,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			html = reportJob.getHtmlContent();
 			Map<Integer, ReportResult> taskIdResult = reportResults.stream().collect(Collectors.toMap(ReportResult::getTaskId, Function.identity()));
 			Map<String,Object> data = new HashMap<String,Object>();
+			data.put("startTime", reportTasks.get(0).getStartTime().getTime()/1000);
+			data.put("endTime", reportTasks.get(0).getEndTime().getTime()/1000);
 			for(ReportTask reportTask : reportTasks) {
 				ReportResult reportResult = taskIdResult.get(reportTask.getId());
 				String result = reportResult.getResult();
@@ -149,10 +153,16 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			html = writer.toString();
 			// 判断是否开启引擎
 			if(StrUtil.isNotBlank(driverEnable) && StrUtil.equals(driverEnable, "1")) {
-				System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver.exe");
+				if(CommonUtils.isLinux()) {
+					System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver");
+				}else {
+					System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver.exe");
+				}
 				ChromeOptions options = new ChromeOptions();
 				// 后台运行，不弹出浏览器
 				options.addArguments("--headless");
+				options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+				options.addArguments("--no-sandbox"); // Bypass OS security model
 				options.addArguments("--window-size=1920x1080");
 				ChromeDriver driver = new ChromeDriver(options);
 				driver.navigate().to("data:text/html;charset=utf-8," + html);
