@@ -161,6 +161,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				ChromeOptions options = new ChromeOptions();
 				// 后台运行，不弹出浏览器
 				options.addArguments("--headless");
+				options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+				options.addArguments("--no-sandbox"); // Bypass OS security model
 				options.addArguments("--window-size=1920x1080");
 				ChromeDriver driver = new ChromeDriver(options);
 				driver.navigate().to("data:text/html;charset=utf-8," + html);
