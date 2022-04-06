@@ -868,7 +868,7 @@ INSERT INTO `sys_i18n` VALUES (915, '总流量', 'en', 'protocol.totalFlow', 'To
 INSERT INTO `sys_i18n` VALUES (916, '总流量', 'zh', 'protocol.totalFlow', '总流量', '', '2022-03-30 08:07:36', 5);
 INSERT INTO `sys_i18n` VALUES (917, '数量', 'zh', 'overall.count', '数量', '', '2022-03-31 05:56:47', 1);
 INSERT INTO `sys_i18n` VALUES (918, '数量', 'en', 'overall.count', 'Count', '', '2022-03-31 05:56:56', 1);
-INSERT INTO `sys_i18n` VALUES (919, 'DNS服务器角色', 'zh', 'overall.dnsServerInfo.name', 'DNS服务器角色', '', '2022-04-01 03:15:25', 5);
+INSERT INTO `sys_i18n` VALUES (919, 'DNS服务器角色', 'zh', 'overall.dnsServerInfo.role', 'DNS服务器角色', '', '2022-04-02 08:18:42', 5);
 INSERT INTO `sys_i18n` VALUES (920, 'DNS服务器角色', 'en', 'overall.dnsServerInfo.role', 'DNS server role', '', '2022-04-01 03:15:39', 5);
 INSERT INTO `sys_i18n` VALUES (921, '所属机构', 'zh', 'overall.dnsServerInfo.mechanism', '所属机构', '', '2022-04-01 03:15:44', 5);
 INSERT INTO `sys_i18n` VALUES (922, '所属机构', 'en', 'overall.dnsServerInfo.mechanism', 'Affiliation', '', '2022-04-01 03:15:53', 5);
