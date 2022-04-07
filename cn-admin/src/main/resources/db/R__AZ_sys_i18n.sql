@@ -581,7 +581,7 @@ INSERT INTO `sys_i18n` VALUES (626, '近期挖矿事件', 'en', 'cryptocurrency.
 INSERT INTO `sys_i18n` VALUES (627, '挖矿事件统计', 'zh', 'cryptocurrency.eventStat', '挖矿事件统计', '', '2021-12-09 01:29:54', 1);
 INSERT INTO `sys_i18n` VALUES (628, '挖矿事件统计', 'en', 'cryptocurrency.eventStat', 'Cryptocurrency EventStat', '', '2021-12-09 01:30:20', 1);
 INSERT INTO `sys_i18n` VALUES (629, '搜索框标题', 'en', 'search.title', 'Explore Entities of Your Network', '', '2021-12-09 10:45:34', 1);
-INSERT INTO `sys_i18n` VALUES (630, '搜索框标题', 'zh', 'search.title', '在您的网络上浏览实体', '', '2021-12-09 10:46:21', 1);
+INSERT INTO `sys_i18n` VALUES (630, '搜索框标题', 'zh', 'search.title', '搜索您网络上的实体', '', '2022-04-06 10:12:00', 1);
 INSERT INTO `sys_i18n` VALUES (631, '搜搜历史', 'en', 'search.searchHistory', 'Search history', '', '2021-12-09 11:56:01', 1);
 INSERT INTO `sys_i18n` VALUES (632, '搜索历史', 'zh', 'search.searchHistory', '搜索历史', '', '2021-12-09 11:56:12', 1);
 INSERT INTO `sys_i18n` VALUES (633, '探索', 'en', 'overall.explore', 'Explore', '', '2021-12-09 12:52:52', 1);
@@ -815,7 +815,7 @@ INSERT INTO `sys_i18n` VALUES (862, 'http查询错误率', 'zh', 'detections.htt
 INSERT INTO `sys_i18n` VALUES (863, 'dns平均响应时间', 'en', 'detections.responseTime', '’s average of DNS response time is abnormally high.', '', '2022-03-14 08:51:39', 1);
 INSERT INTO `sys_i18n` VALUES (864, 'dns平均响应时间', 'zh', 'detections.responseTime', '的DNS平均响应时间异常高。', '', '2022-03-14 08:52:10', 1);
 INSERT INTO `sys_i18n` VALUES (865, '指挥与控制', 'en', 'detection.commandAndControl', 'attempted to access a command&control server (C&C) indicated by', '', '2022-03-14 08:53:25', 1);
-INSERT INTO `sys_i18n` VALUES (866, '指挥与控制', 'zh', 'detection.commandAndControl', '试图访问由指示的命令与控制服务器（C&C）', '', '2022-03-14 08:53:49', 1);
+INSERT INTO `sys_i18n` VALUES (866, '指挥与控制', 'zh', 'detection.commandAndControl', '试图访问命令与控制服务器(C&C)', '', '2022-04-06 10:13:59', 1);
 INSERT INTO `sys_i18n` VALUES (867, '有效载荷和交付', 'en', 'detection.payloadAndDelivery', 'attempted to access a malware distribution server (payload deliv', '', '2022-03-14 08:54:30', 1);
 INSERT INTO `sys_i18n` VALUES (868, '有效载荷和交付', 'zh', 'detection.payloadAndDelivery', '试图访问由指示的恶意软件分发服务器（有效负载传递）', '', '2022-03-14 08:54:45', 1);
 INSERT INTO `sys_i18n` VALUES (869, '类型', 'zh', 'config.dataSource.type', '类型', '', '2022-03-15 01:01:47', 1);
