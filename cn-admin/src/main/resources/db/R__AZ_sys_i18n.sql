@@ -882,5 +882,7 @@ INSERT INTO `sys_i18n` VALUES (929, '每秒请求量', 'en', 'overall.dnsServerI
 INSERT INTO `sys_i18n` VALUES (930, '每秒请求量', 'zh', 'overall.dnsServerInfo.queryRate', '每秒请求量', '', '2022-04-01 03:16:34', 5);
 INSERT INTO `sys_i18n` VALUES (931, 'DNS服务器信息', 'en', 'overall.dnsServerInfo', 'DNS server information', '', '2022-04-01 03:16:39', 5);
 INSERT INTO `sys_i18n` VALUES (932, 'DNS服务器信息', 'zh', 'overall.dnsServerInfo', 'DNS服务器信息', '', '2022-04-01 03:16:46', 5);
+INSERT INTO `sys_i18n` VALUES (933, '占比', 'zh', 'protocol.proportion', '占比', '', '2022-04-07 03:30:58', 5);
+INSERT INTO `sys_i18n` VALUES (934, '占比', 'en', 'protocol.proportion', 'Proportion', '', '2022-04-07 03:31:21', 5);
 
 SET FOREIGN_KEY_CHECKS = 1;
