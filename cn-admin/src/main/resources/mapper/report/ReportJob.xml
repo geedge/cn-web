@@ -38,10 +38,13 @@
 	<select id="queryPage" resultMap="reportJob">
       	select 
       	*
-      	from  report_job rj
+      	from  report_job rj left join report_temp rt on rj.uniq = rt.uniq
       	<where>
       		<if test="params.name !=null and params.name != ''">
 				and rj.name like CONCAT('%', #{params.name}, '%')
+			</if>
+			<if test="params.tempId !=null">
+				and rt.id = #{params.tempId}
 			</if>
       	</where>
       	
