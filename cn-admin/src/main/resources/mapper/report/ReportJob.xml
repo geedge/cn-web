@@ -11,6 +11,8 @@
         <result property="htmlContent" column="html_content"/>
         <result property="state" column="state"/>
         <result property="upload" column="upload"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
         
         <collection columnPrefix="rt_" property="reportTasks" ofType="net.geedge.modules.report.entity.ReportTask">
 	    	<result column="id" property="id"/>

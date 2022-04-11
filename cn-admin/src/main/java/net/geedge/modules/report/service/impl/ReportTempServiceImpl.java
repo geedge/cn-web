@@ -114,13 +114,14 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	    	reportJob.setCtime(new Date());
 	    	reportJob.setUniq(temp.getUniq());
 	    	reportJob.setHtmlContent(temp.getHtmlContent());
-	    	reportJobService.save(reportJob);
-	    	
 	    	String config = temp.getConfig();
 	    	Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
 	    	//根据temp计算查询开始以及结束时间
     		this.timeHandler(configObject);
     		List<Map<String,Object>> datasetConfig = (List<Map<String, Object>>) configObject.get("dataset");
+    		reportJob.setStartTime((DateTime)configObject.get("startTime"));
+    		reportJob.setEndTime((DateTime)configObject.get("endTime"));
+    		reportJobService.save(reportJob);
 	    	for(Map<String,Object> datasetConf : datasetConfig) {
 	    		ReportTask reportTask = new ReportTask();
 	    		reportTask.setJobId(reportJob.getId());

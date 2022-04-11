@@ -29,6 +29,10 @@ public class ReportJob {
 	
 	private Integer upload;
 	
+	private Date startTime;
+	
+	private Date endTime;
+	
 	@TableField(exist = false)
 	private List<ReportTask> reportTasks;
 }
