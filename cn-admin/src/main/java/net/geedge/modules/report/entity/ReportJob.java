@@ -35,4 +35,7 @@ public class ReportJob {
 	
 	@TableField(exist = false)
 	private List<ReportTask> reportTasks;
+	
+	@TableField(exist = false)
+	private ReportTemp reportTemp;
 }

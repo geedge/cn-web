@@ -1,5 +1,7 @@
 package net.geedge.modules.report.service;
 
+import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,5 +23,7 @@ public interface ReportJobService extends IService<ReportJob>{
 	
 	void downloadPdf(Integer jobId,HttpServletResponse response) throws Exception;
 	
-	void upload(String fileName);
+	void batchDownloadPdf(List<String> jobIds,HttpServletResponse response) throws Exception;
+	
+	void upload(String fileName) throws FileNotFoundException;
 }

@@ -1,17 +1,28 @@
 package net.geedge.modules.report.service.impl;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URLEncoder;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -220,9 +231,103 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			throw new CNException(RCode.REPORT_NOT_FINSHED);
 		}
 	}
+	
+	@Override
+	public void batchDownloadPdf(List<String> jobIds, HttpServletResponse response) throws Exception {
+		ZipOutputStream zipOut = null;
+		List<File> files =new ArrayList<File>();
+        try{
+			Collection<ReportJob> reportJobs = this.listByIds(jobIds);
+	        if(ObjectUtil.isEmpty(reportJobs)) {
+	        	throw new CNException(RCode.REPORT_NOT_FINSHED);
+	        }
+			String s3Enable = sysConfigService.getValue("s3_enable");
+			String s3Path = sysConfigService.getValue("s3_path");
+			String s3BucketName = sysConfigService.getValue("s3_bucket_name");
+			for(ReportJob job : reportJobs) {
+				String fileName = job.getName()+".pdf";
+				File file = FileUtil.file(Constant.TEMP_PATH+File.separator+fileName);
+				if(file.exists()) {
+					file.delete();
+				}
+				BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH+File.separator+fileName);
+				if(Integer.valueOf(s3Enable)==1 && job.getState()==1 && job.getUpload()==1) {
+					if(StrUtil.isEmpty(s3Path)) {
+						log.warn("s3 path can not be empty");
+						return;
+					}else {
+						if(!s3Path.endsWith(StrUtil.SLASH)) {
+							s3Path = StrUtil.str(s3Path+StrUtil.SLASH);
+						}
+					}
+					String path = StrUtil.str(s3Path+s3BucketName+StrUtil.C_SLASH+job.getName()+".pdf");
+					RequestConfig config = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000).build();
+					CloseableHttpClient createDefault = HttpClients.createDefault();
+					HttpGet request = new HttpGet(path);
+					request.setConfig(config);
+					HttpResponse execute = createDefault.execute(request);
+					int statusCode = execute.getStatusLine().getStatusCode();
+					HttpEntity entity = execute.getEntity();
+					if(statusCode == 200) {
+						InputStream content = entity.getContent();
+						FastByteArrayOutputStream read = IoUtil.read(content);
+						read.writeTo(outputStream);
+						files.add(FileUtil.file(Constant.TEMP_PATH+File.separator+fileName));
+					}else {
+						String errorMsg = EntityUtils.toString(entity);
+						throw new CNException(errorMsg,statusCode);
+					}
+				}else if(job.getState()==1){
+					String htmlContent = this.queryView(job.getId());
+					ConverterProperties converterProperties=new ConverterProperties();
+			        FontProvider fontProvider=new DefaultFontProvider();
+			        FontProgram fontProgram = FontProgramFactory.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
+			        fontProvider.addFont(fontProgram);
+			        converterProperties.setFontProvider(fontProvider);
+			        HtmlConverter.convertToPdf(htmlContent,outputStream,converterProperties);
+			        files.add(FileUtil.file(Constant.TEMP_PATH+File.separator+fileName));
+				}else {
+					log.warn(RCode.REPORT_NOT_FINSHED.getMsg());
+					throw new CNException(RCode.REPORT_NOT_FINSHED);
+				}
+			}
+			
+			if(ObjectUtil.isEmpty(files)) {
+				throw new CNException(RCode.REPORT_NOT_FINSHED);
+			}
+			
+			response.reset();
+			response.setHeader("Content-Disposition", "attachment;filename=report.zip");
+	        response.setContentType("APPLICATION/zip");
+	        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+	        OutputStream out = response.getOutputStream();
+	        zipOut =  new ZipOutputStream(out);
+	        byte[] data = new byte[1024];
+	        for(File file : files) {
+	        	int count;
+	        	BufferedInputStream inputStream = FileUtil.getInputStream(file);
+	        	BufferedInputStream bfs = new BufferedInputStream(inputStream);
+	        	ZipEntry entry =new ZipEntry(file.getName());
+	        	zipOut.putNextEntry(entry);
+	        	while ((count = bfs.read(data, 0, 1024)) != -1) {
+	        		zipOut.write(data, 0, count);
+	            }
+	            IoUtil.close(bfs);
+	            IoUtil.close(inputStream);
+	        }
+        }catch(Exception e) {
+        	log.error("batchDownloadPdf error : {}",e.getMessage());
+        	throw e;
+        }finally {
+        	IoUtil.close(zipOut);
+        	for (File file : files) {
+                file.delete();
+            }
+        }
+	}
 
 	@Override
-	public void upload(String fileName) {
+	public void upload(String fileName) throws FileNotFoundException {
 		String s3Path = sysConfigService.getValue("s3_path");
 		String accessKey = sysConfigService.getValue("s3_accessKey");
 		String secretKey = sysConfigService.getValue("s3_secretKey");
@@ -262,7 +367,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		// 上传文件元数据信息,指定元信息
 		metadata.setHeader("x-hos-meta-message", "message");
 		// 创建对应的流，以下示例为文件流
-		BufferedInputStream inputStream = FileUtil.getInputStream(file);
+		InputStream inputStream = new FileInputStream(file);
 		// 以流方式上传对象，指定桶名、对象名、输入流、ObjectMetadata
 		s3.putObject(bucketName, fileName, inputStream, metadata);
 		// 关闭流

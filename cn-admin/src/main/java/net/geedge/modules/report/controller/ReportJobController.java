@@ -3,6 +3,8 @@ package net.geedge.modules.report.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
@@ -77,10 +79,21 @@ public class ReportJobController extends AbstractController{
 		}
 	}
 	
-	@PostMapping("/downloadPdf")
-	public R downloadPdf(Integer id,HttpServletResponse response) {
+	@GetMapping("/downloadPdf")
+	public R downloadPdf(@RequestParam Integer id,HttpServletResponse response) {
 		try {
 			reportJobService.downloadPdf(id,response);
+			return null;
+		}catch(Exception e) {
+			return R.error(999,e.getMessage());
+		}
+	}
+	
+	@GetMapping("/batchDownloadPdf")
+	public R batchDownloadPdf(@RequestParam String ids,HttpServletResponse response) {
+		ValidateUtils.is(ids).notNull(RCode.REPORT_JOB_ID_ISNULL);
+		try {
+			reportJobService.batchDownloadPdf(Arrays.asList(ids.split(",")),response);
 			return null;
 		}catch(Exception e) {
 			return R.error(999,e.getMessage());
