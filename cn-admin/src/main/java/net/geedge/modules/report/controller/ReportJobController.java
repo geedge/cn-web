@@ -68,8 +68,8 @@ public class ReportJobController extends AbstractController{
 		return R.ok();
 	}
 	
-	@PostMapping("/view")
-	public void reportView(Integer id,HttpServletResponse response) {
+	@GetMapping("/view")
+	public void reportView(@RequestParam Integer id,HttpServletResponse response) {
 		String htmlContent = reportJobService.queryView(id);
 		try {
 			ServletOutputStream out = response.getOutputStream();
