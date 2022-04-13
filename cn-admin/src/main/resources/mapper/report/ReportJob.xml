@@ -56,6 +56,9 @@
 			<if test="params.tempId !=null">
 				and rt.id = #{params.tempId}
 			</if>
+			<if test="params.q !=null and params.q != ''">
+				and rj.name like CONCAT('%', #{params.q}, '%')
+			</if>
       	</where>
       	
     </select>
