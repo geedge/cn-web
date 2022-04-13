@@ -471,7 +471,7 @@ INSERT INTO `sys_i18n` VALUES (514, '重传率', 'zh', 'overall.packetRetrans', 
 INSERT INTO `sys_i18n` VALUES (515, '名称', 'zh', 'config.chart.name', '名称', '', '2021-10-12 03:49:28', 1);
 INSERT INTO `sys_i18n` VALUES (516, 'Name', 'en', 'config.chart.name', 'Name', '', '2021-10-12 03:49:41', 1);
 INSERT INTO `sys_i18n` VALUES (517, '图表', 'zh', 'overall.chart', '图表', '', '2021-10-12 03:50:08', 1);
-INSERT INTO `sys_i18n` VALUES (518, 'Chart', 'en', 'overall.chart', 'Chart', '', '2021-10-12 03:50:22', 1);
+INSERT INTO `sys_i18n` VALUES (518, '图表', 'en', 'overall.chart', 'Chart', '', '2022-04-08 03:03:17', 5);
 INSERT INTO `sys_i18n` VALUES (519, '参数', 'zh', 'config.chart.params', '参数', '', '2021-10-12 03:51:47', 1);
 INSERT INTO `sys_i18n` VALUES (520, 'Params', 'en', 'config.chart.params', 'Params', '', '2021-10-12 03:52:03', 1);
 INSERT INTO `sys_i18n` VALUES (521, 'I18n', 'en', 'config.chart.i18n', 'I18n', '', '2021-10-12 06:13:32', 1);
@@ -884,5 +884,15 @@ INSERT INTO `sys_i18n` VALUES (931, 'DNS服务器信息', 'en', 'overall.dnsServ
 INSERT INTO `sys_i18n` VALUES (932, 'DNS服务器信息', 'zh', 'overall.dnsServerInfo', 'DNS服务器信息', '', '2022-04-01 03:16:46', 5);
 INSERT INTO `sys_i18n` VALUES (933, '占比', 'zh', 'protocol.proportion', '占比', '', '2022-04-07 03:30:58', 5);
 INSERT INTO `sys_i18n` VALUES (934, '占比', 'en', 'protocol.proportion', 'Proportion', '', '2022-04-07 03:31:21', 5);
+INSERT INTO `sys_i18n` VALUES (935, '主题', 'zh', 'config.user.theme', '主题', '', '2022-04-08 01:39:40', 5);
+INSERT INTO `sys_i18n` VALUES (936, '主题', 'en', 'config.user.theme', 'Theme', '', '2022-04-08 01:39:54', 5);
+INSERT INTO `sys_i18n` VALUES (937, '报告', 'zh', 'overall.report', '报告', '', '2022-04-11 06:50:17', 1);
+INSERT INTO `sys_i18n` VALUES (938, '报告', 'en', 'overall.report', 'Report', '', '2022-04-11 06:50:27', 1);
+INSERT INTO `sys_i18n` VALUES (939, '内置报告', 'en', 'report.builtInReport', 'Built-in report', '', '2022-04-11 06:50:48', 1);
+INSERT INTO `sys_i18n` VALUES (940, '内置报告', 'zh', 'report.builtInReport', '内置报告', '', '2022-04-11 06:50:53', 1);
+INSERT INTO `sys_i18n` VALUES (941, '报告类别', 'zh', 'report.category', '报告类别', '', '2022-04-11 06:53:38', 5);
+INSERT INTO `sys_i18n` VALUES (942, '报告类别', 'en', 'report.category', 'Report category', '', '2022-04-11 06:54:04', 5);
+INSERT INTO `sys_i18n` VALUES (943, '批量下载', 'zh', 'report.batchDow', '批量下载', '', '2022-04-12 05:47:14', 5);
+INSERT INTO `sys_i18n` VALUES (944, '批量下载', 'en', 'report.batchDow', 'Batch download', '', '2022-04-12 05:47:44', 5);
 
 SET FOREIGN_KEY_CHECKS = 1;
