@@ -296,9 +296,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				throw new CNException(RCode.REPORT_NOT_FINSHED);
 			}
 			
-			response.reset();
 			response.setHeader("Content-Disposition", "attachment;filename=report.zip");
-	        response.setContentType("APPLICATION/zip");
+	        response.setContentType("application/zip");
 	        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 	        OutputStream out = response.getOutputStream();
 	        zipOut =  new ZipOutputStream(out);
