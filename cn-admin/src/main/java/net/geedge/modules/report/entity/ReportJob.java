@@ -6,6 +6,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -23,6 +24,7 @@ public class ReportJob {
 	
 	private String uniq;
 	
+	@JsonIgnore
 	private String htmlContent;
 	
 	private Integer state;
