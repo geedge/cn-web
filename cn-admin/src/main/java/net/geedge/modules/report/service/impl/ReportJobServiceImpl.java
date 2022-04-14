@@ -61,6 +61,9 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.font.FontProvider;
 
 import cn.hutool.core.io.FastByteArrayOutputStream;
@@ -189,6 +192,10 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	@Override
 	public void downloadPdf(Integer jobId, HttpServletResponse response) throws Exception{
 		ReportJob job = this.getBaseMapper().selectById(jobId);
+		Integer pdfWidth = 1250;
+		Integer pdfHeight = 1700;
+		pdfWidth = StrUtil.isEmpty(sysConfigService.getValue("pdf_width"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_width"));
+		pdfHeight = StrUtil.isEmpty(sysConfigService.getValue("pdf_height"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_height"));
 		String s3Enable = sysConfigService.getValue("s3_enable");
 		String s3Path = sysConfigService.getValue("s3_path");
 		String s3BucketName = sysConfigService.getValue("s3_bucket_name");
@@ -225,7 +232,10 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	        FontProgram fontProgram = FontProgramFactory.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
 	        fontProvider.addFont(fontProgram);
 	        converterProperties.setFontProvider(fontProvider);
-	        HtmlConverter.convertToPdf(htmlContent,response.getOutputStream(),converterProperties);
+//	        HtmlConverter.convertToPdf(htmlContent,response.getOutputStream(),converterProperties);
+	        PdfDocument pdfDoc = new PdfDocument(new PdfWriter(response.getOutputStream()));
+	        pdfDoc.setDefaultPageSize(new PageSize(pdfWidth,pdfHeight));
+	        HtmlConverter.convertToPdf(htmlContent,pdfDoc,converterProperties);
 		}else {
 			log.warn(RCode.REPORT_NOT_FINSHED.getMsg());
 			throw new CNException(RCode.REPORT_NOT_FINSHED);
