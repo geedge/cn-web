@@ -45,7 +45,7 @@
 	
 	<select id="queryPage" resultMap="reportJob">
       	select 
-      	*,
+      	rj.*,
       	rt.id as temp_id,
       	rt.name as temp_name
       	from  report_job rj left join report_temp rt on rj.uniq = rt.uniq

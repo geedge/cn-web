@@ -124,6 +124,11 @@ public class Constant {
 
 	// 图表 singleStat statistics可选值列表
 	public static final List<String> CHART_SINGLESTAT_STATISTICS;
+	
+	/**
+	 * 表名 和 排序字段对应关系 KEY: tablename
+	 */
+	public static final Map<String, Map<String, String>> TABLE_NAME_ORDER_FIELD_MAPPING = Tool.MapUtil.newHashMap();
 
 	static {
 		/*DatabaseIdProvider databaseIdProvider = SpringContextUtils.getBean("getDatabaseIdProvider",
@@ -159,6 +164,11 @@ public class Constant {
 		CHART_SINGLESTAT_STATISTICS.add("last");
 		CHART_SINGLESTAT_STATISTICS.add("range");
 		CHART_SINGLESTAT_STATISTICS.add("different");
+		
+		Map<String, String> reportOrderFieldMap = new HashMap<>();
+		reportOrderFieldMap.put("name", "rj.name");
+		reportOrderFieldMap.put("type", "rt.id");
+		TABLE_NAME_ORDER_FIELD_MAPPING.put("report_job", reportOrderFieldMap);
 	}
 
 	/**

@@ -73,8 +73,7 @@ public class Query {
                 tableName = table.value();
             }
             // 通过表名获取排序字段映射
- //           Map<String, String> columnAliasMap = Constant.TABLE_NAME_ORDER_FIELD_MAPPING.get(tableName);
-            Map<String, String> columnAliasMap = null;
+            Map<String, String> columnAliasMap = Constant.TABLE_NAME_ORDER_FIELD_MAPPING.get(tableName);
             columnAliasMap = Tool.ObjectUtil.isEmpty(columnAliasMap) ? new HashMap<>():columnAliasMap;
             if (orderField.startsWith("-")) {
                 orderField = orderField.substring(1, orderField.length());
