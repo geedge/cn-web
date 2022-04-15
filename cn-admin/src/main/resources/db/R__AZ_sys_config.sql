@@ -10,7 +10,7 @@ REPLACE INTO `sys_config` VALUES (null, 's3_accessKey', 'default', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 's3_secretKey', 'default', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 's3_bucket_name', 'report-hos-bucket', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'driver_enable', '1', 1, NULL);
-REPLACE INTO `sys_config` VALUES (null, 'pdf_width', '1250', 1, NULL);
+REPLACE INTO `sys_config` VALUES (null, 'pdf_width', '1200', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'pdf_height', '1700', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'lang', 'zh', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'date_format', 'YYYY-MM-DD HH:mm:ss', 1, NULL);
