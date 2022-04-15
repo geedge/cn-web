@@ -102,8 +102,7 @@ public class SysConfigController extends AbstractController {
 	 */
 	@GetMapping("/appearance")
 	public R queryAppearance(){
-		String paramKey = "appearance";
-		JSONObject appearance = sysConfigService.queryConfig(paramKey);
+		Map<String, String> appearance = sysConfigService.queryAppearance();
 		return R.ok(appearance);
 	}
 	/**

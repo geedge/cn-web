@@ -11,6 +11,8 @@ package net.geedge.modules.sys.service.impl;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -43,7 +46,8 @@ import javax.mail.internet.MimeMessage;
 @Service("sysConfigService")
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEntity> implements SysConfigService {
 
-
+    public static final String[] BASIC_KEYS = {"system_name","language","date_format","system_logo", "timezone","system_bgImg","system_favicon"};
+	
     @Autowired
     private SysConfigRedis sysConfigRedis;
 
@@ -95,10 +99,10 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 	@Override
 	public String getValue(String key) {
 		SysConfigEntity config = sysConfigRedis.get(key);
-		if(config == null){
+//		if(config == null){
 			config = baseMapper.queryByKey(key);
 			sysConfigRedis.saveOrUpdate(config);
-		}
+//		}
 
 		return config == null ? null : config.getCvalue();
 	}
@@ -217,6 +221,20 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
             throw new CNException("获取参数失败");
         }
     }
+
+	@Override
+	public Map<String, String> queryAppearance() {
+		List<SysConfigEntity> list = this.baseMapper.selectList(new LambdaQueryWrapper<SysConfigEntity>().in(SysConfigEntity::getCkey, BASIC_KEYS));
+        Map<String,String> map = new HashMap<>();
+        for (SysConfigEntity entity : list){
+            if (entity.getCkey().equals("date_format")){
+                map.put("dateFormat",entity.getCvalue());
+            }else {
+                map.put(entity.getCkey(),entity.getCvalue());
+            }
+        }
+        return map;
+	}
     
 	/*@Override
 	public Map getConfigListByTypes(String[] types, String[] paramKey) {
