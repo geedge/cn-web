@@ -1,0 +1,20 @@
+{
+  "------------------ POST  /sys/license/gen data---------------------": "note",
+  "sysLicenseGen_success": {
+    "licenseId": 10009,
+    "customer": "abcd",
+    "contract": "10010",
+    "by": "abc@zdjz.com",
+    "comment": "test license",
+    "tokens": {
+      "token": ["dRqrWja/PzI8FrWVJeGqLw=="]
+    },
+    "genDate": "2021-03-03T14:52:43Z",
+    "startDate": "2021-03-03T14:52:43Z",
+    "endDate": "2022-03-03T14:52:43Z",
+    "product": {
+      "name": "cyber narrtor",
+      "version": "21.07"
+    }
+  }
+}

@@ -6,10 +6,12 @@ import com.alibaba.fastjson.JSONObject;
 import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool;
 import org.junit.Assert;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.io.File;
@@ -97,22 +99,26 @@ public class UTUtil extends BaseTest {
     }
 
 
-    public static MvcResult performDelete(String url,  Map<String,Object> queryParam) {
+    public static MvcResult performDelete(String url,  Object queryParam) {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete(url)
                 .header(Authorization, TEST_TOKEN)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON);
-
-        if (Tool.ObjectUtil.isNotEmpty(queryParam)) {
-            for (Map.Entry<String, Object> entry : queryParam.entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                if (value != null && value instanceof Map) {
-                    requestBuilder.param(key, JSONObject.toJSONString(value));
+        if (queryParam != null && queryParam instanceof Map) {
+            if (Tool.ObjectUtil.isNotEmpty(queryParam)) {
+                for (Map.Entry<String, Object> entry : ((Map<String, Object>) queryParam).entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if (value != null && value instanceof Map) {
+                        requestBuilder.param(key, JSONObject.toJSONString(value));
+                    }
+                    requestBuilder.param(key, value == null ? null : value.toString());
                 }
-                requestBuilder.param(key, value == null ? null : value.toString());
             }
+        }else {
+            requestBuilder.content(JSONObject.toJSONString(queryParam));
         }
+
 
         MvcResult result = null;
         try {

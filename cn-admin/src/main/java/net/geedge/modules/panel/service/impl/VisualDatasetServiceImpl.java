@@ -1,6 +1,7 @@
 package net.geedge.modules.panel.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -11,11 +12,13 @@ import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.panel.dao.VisualDatasetDao;
 import net.geedge.modules.panel.entity.VisualDataset;
 import net.geedge.modules.panel.service.VisualDatasetService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,6 +47,7 @@ public class VisualDatasetServiceImpl extends ServiceImpl<VisualDatasetDao, Visu
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Integer saveOrUpdateDataset(VisualDataset dataset) {
         validateDataset(dataset);
         if(ObjectUtil.isEmpty(dataset.getId())) {
@@ -57,6 +61,7 @@ public class VisualDatasetServiceImpl extends ServiceImpl<VisualDatasetDao, Visu
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void removeDataset(String ids) {
         // 内置dataset不删除
         validateBuildInDatasets(Arrays.asList(ids.split(",")));
@@ -72,16 +77,17 @@ public class VisualDatasetServiceImpl extends ServiceImpl<VisualDatasetDao, Visu
     public void validateDataset(VisualDataset dataset) {
         String name = dataset.getName();
         ValidateUtils.is(name).notNull(RCode.DATASET_NAME_ISNULL)
-                .and(dataset.getType()).notNull(RCode.DATASET_TYPE_ISNULL).max(2, RCode.DATASET_TYPE_INVALIDE).min(1, RCode.DATASET_TYPE_INVALIDE);
+                .and(dataset.getType()).notNull(RCode.DATASET_TYPE_ISNULL).max(2, RCode.DATASET_TYPE_INVALIDE).min(1, RCode.DATASET_TYPE_INVALIDE)
+                .and(dataset.getDsid()).notNull(RCode.DATASET_DSID_ISNULL);
 
         //校验name是否重复
-        List<VisualDataset> list = this.list(new QueryWrapper<VisualDataset>().lambda().eq(VisualDataset::getName, dataset.getName()).ne(ObjectUtil.isNotEmpty(dataset.getId()),VisualDataset::getId,dataset.getId()));
-        boolean flag = false;
-        //当只有一个结果并且这个结果是自身时，或没有结果时，说明名称不重复
-        if (ObjectUtil.isNotEmpty(list)) {
-            flag = true;
+        VisualDataset visualDataset = this.getOne(new LambdaQueryWrapper<VisualDataset>().eq(VisualDataset::getName,dataset.getName()));
+        //id为null 新增
+        if (Tool.ObjectUtil.isEmpty(dataset.getId()) && Tool.ObjectUtil.isNotEmpty(visualDataset)){
+            throw new CNException(RCode.DATASET_NAME_DUPLICATE);
         }
-        if (flag) {
+        //id not null 修改
+        if (Tool.ObjectUtil.isNotEmpty(dataset.getId()) && Tool.ObjectUtil.isNotEmpty(visualDataset) && !visualDataset.getId().equals(dataset.getId())){
             throw new CNException(RCode.DATASET_NAME_DUPLICATE);
         }
     }

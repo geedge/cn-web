@@ -1,0 +1,101 @@
+{
+  "------------------ GET  /visual/datasource/{id} data---------------------": "note",
+  "queryVisualDatasourceInfo_exist": {
+    "id": 1
+  },
+  "queryVisualDatasourceInfo_notexist": {
+    "id": 99999
+  },
+  "------------------ GET  /visual/datasource data---------------------": "note",
+  "queryVisualDatasourceList_exist": {
+    "pageNo": 1,
+    "pageSize": 10
+  },
+  "queryVisualDatasourceList_notexist": {
+    "pageNo": 1,
+    "pageSize": 5,
+    "q": "SISJ049",
+    "ids": "7,8"
+  },
+  "queryVisualDatasourceList_name": {
+    "pageNo": 1,
+    "pageSize": 5,
+    "q": "示例1"
+  },
+  "queryVisualDatasourceList_params": {
+    "pageNo": 1,
+    "pageSize": 5,
+    "q": "aaa"
+  },
+  "queryVisualDatasourceList_remark": {
+    "pageNo": 1,
+    "pageSize": 5,
+    "q": "test1"
+  },
+  "queryVisualDatasourceList_ids": {
+    "pageNo": 1,
+    "pageSize": 5,
+    "ids": "1,2"
+  },
+  "------------------ POST  /visual/datasource data---------------------": "note",
+  "saveVisualDatasource_success": {
+    "name": "新增1",
+    "type": 1,
+    "params": {}
+  },
+  "saveVisualDatasource_checkName": {
+    "name": "",
+    "type": 1,
+    "params": {}
+  },
+  "saveVisualDatasource_checkNameDuplicate": {
+    "name": "示例1",
+    "type": 1,
+    "params": {}
+  },
+  "saveVisualDatasource_checkType": {
+    "name": "新增2",
+    "params": {}
+  },
+  "saveVisualDatasource_checkTypeCorrect": {
+    "name": "新增3",
+    "type": 0,
+    "params": {}
+  },
+  "------------------ PUT  /visual/datasource data---------------------": "note",
+  "updateVisualDatasource_success": {
+    "id": 2,
+    "name": "修改1",
+    "type": 1
+  },
+  "updateVisualDatasource_checkId": {
+    "name": "修改2",
+    "type": 1
+  },
+  "updateVisualDatasource_checkName": {
+    "id": 2,
+    "name": "",
+    "type": 1
+  },
+  "updateVisualDatasource_checkNameDuplicate": {
+    "id": 2,
+    "name": "示例1",
+    "type": 1
+  },
+  "updateVisualDatasource_checkType": {
+    "id": 2,
+    "name": "修改3"
+  },
+  "updateVisualDatasource_checkTypeCorrect": {
+    "id": 2,
+    "name": "修改3",
+    "type": 0
+  },
+  "------------------ DELETE  /visual/datasource data---------------------": "note",
+  "deleteVisualDatasource_success": {
+    "ids": "3,4"
+  },
+  "deleteVisualDatasource_buildIn": {
+    "ids": "1"
+  }
+}

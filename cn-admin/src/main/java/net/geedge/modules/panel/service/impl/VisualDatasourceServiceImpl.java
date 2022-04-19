@@ -1,6 +1,7 @@
 package net.geedge.modules.panel.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -10,12 +11,14 @@ import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.panel.dao.VisualDatasourceDao;
 import net.geedge.modules.panel.entity.VisualDatasource;
 import net.geedge.modules.panel.service.VisualDatasourceService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -48,6 +51,7 @@ public class VisualDatasourceServiceImpl extends ServiceImpl<VisualDatasourceDao
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Integer saveOrUpdateDatasource(VisualDatasource datasource) {
         validateDatasource(datasource);
         if(ObjectUtil.isEmpty(datasource.getId())) {
@@ -61,6 +65,7 @@ public class VisualDatasourceServiceImpl extends ServiceImpl<VisualDatasourceDao
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void removeDatasource(String ids) {
         // 内置datasource不删除
         validateBuildInDatasources(Arrays.asList(ids.split(",")));
@@ -78,14 +83,14 @@ public class VisualDatasourceServiceImpl extends ServiceImpl<VisualDatasourceDao
         ValidateUtils.is(name).notNull(RCode.DATASOURCE_NAME_ISNULL)
                 .and(datasource.getType()).notNull(RCode.DATASOURCE_TYPE_ISNULL).max(2, RCode.DATASOURCE_TYPE_INVALIDE).min(1, RCode.DATASOURCE_TYPE_INVALIDE);
 
-        // 校验name是否重复
-        List<VisualDatasource> list = this.list(new QueryWrapper<VisualDatasource>().lambda().eq(VisualDatasource::getName, datasource.getName()).ne(ObjectUtil.isNotEmpty(datasource.getId()),VisualDatasource::getId,datasource.getId()));
-        boolean flag = false;
-        //当只有一个结果并且这个结果是自身时，或没有结果时，说明名称不重复
-        if (ObjectUtil.isNotEmpty(list)) {
-            flag = true;
+        //校验name是否重复
+        VisualDatasource visualDatasource = this.getOne(new LambdaQueryWrapper<VisualDatasource>().eq(VisualDatasource::getName,datasource.getName()));
+        //id为null 新增
+        if (Tool.ObjectUtil.isEmpty(datasource.getId()) && Tool.ObjectUtil.isNotEmpty(visualDatasource)){
+            throw new CNException(RCode.DATASOURCE_NAME_DUPLICATE);
         }
-        if (flag) {
+        //id not null 修改
+        if (Tool.ObjectUtil.isNotEmpty(datasource.getId()) && Tool.ObjectUtil.isNotEmpty(visualDatasource) && !visualDatasource.getId().equals(datasource.getId())){
             throw new CNException(RCode.DATASOURCE_NAME_DUPLICATE);
         }
     }

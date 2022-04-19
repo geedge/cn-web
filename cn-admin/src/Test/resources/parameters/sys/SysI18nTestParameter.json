@@ -1,0 +1,119 @@
+{
+  "------------------ GET  /sys/i18n/lang data---------------------": "note",
+  "querySysI18nLang_exist": {
+    "l": "en"
+  },
+  "querySysI18nLang_notexist": {
+    "l": ""
+  },
+  "------------------ GET  /sys/i18n/{id} data---------------------": "note",
+  "querySysI18nId_exist": {
+    "id": 1
+  },
+  "querySysI18nId_notexist": {
+    "id": 99999
+  },
+  "------------------ GET  /sys/i18n/list data---------------------": "note",
+  "querySysI18nList_exist": {
+    "pageNo": null,
+    "pageSize": null
+  },
+  "querySysI18nList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "SISJ049",
+    "ids": "7,8"
+  },
+  "querySysI18nList_name": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "en"
+  },
+  "querySysApiKeyList_code": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "overall.name"
+  },
+  "querySysApiKeyList_value": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "Name"
+  },
+  "querySysApiKeyList_remark": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "name"
+  },
+  "querySysApiKeyList_ids": {
+    "pageNo": null,
+    "pageSize": null,
+    "ids": "1,2"
+  },
+  "------------------ POST  /sys/i18n data---------------------": "note",
+  "saveSysI18n_success": {
+    "name": "流量统计",
+    "lang": "zh",
+    "code": "trafficSummary.trafficSummary",
+    "value": "流量统计"
+  },
+  "saveSysI18n_checkLang": {
+    "name": "流量统计",
+    "lang": "",
+    "code": "trafficSummary.trafficSummary",
+    "value": "流量统计"
+  },
+  "saveSysI18n_checkCode": {
+    "name": "流量统计",
+    "lang": "zh",
+    "code": "",
+    "value": "流量统计"
+  },
+  "saveSysI18n_checkValue": {
+    "name": "流量统计",
+    "lang": "zh",
+    "code": "trafficSummary.trafficSummary",
+    "value": ""
+  },
+  "------------------ PUT  /sys/i18n data---------------------": "note",
+  "updateSysI18n_success": {
+    "id": 2,
+    "name": "流量流向",
+    "lang": "en",
+    "code": "trafficSummary.trafficMap",
+    "value": "流量流向"
+  },
+  "updateSysI18n_checkId": {
+    "name": "流量流向",
+    "lang": "en",
+    "code": "trafficSummary.trafficMap",
+    "value": "流量流向"
+  },
+  "updateSysI18n_checkLang": {
+    "id": 2,
+    "name": "流量流向",
+    "lang": "",
+    "code": "trafficSummary.trafficMap",
+    "value": "流量流向"
+  },
+  "updateSysI18n_checkCode": {
+    "id": 2,
+    "name": "流量流向",
+    "lang": "en",
+    "code": "",
+    "value": "流量流向"
+  },
+  "updateSysI18n_checkValue": {
+    "id": 2,
+    "name": "流量流向",
+    "lang": "en",
+    "code": "trafficSummary.trafficMap",
+    "value": ""
+  },
+  "------------------ DELETE  /sys/i18n data---------------------": "note",
+  "deleteSysI18n_success": {
+    "ids": "3,4"
+  },
+  "deleteSysI18n_ids": {
+    "ids": ""
+  }
+}

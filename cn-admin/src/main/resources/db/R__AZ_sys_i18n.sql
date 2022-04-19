@@ -894,5 +894,15 @@ INSERT INTO `sys_i18n` VALUES (941, '报告类别', 'zh', 'report.category', '�
 INSERT INTO `sys_i18n` VALUES (942, '报告类别', 'en', 'report.category', 'Report category', '', '2022-04-11 06:54:04', 5);
 INSERT INTO `sys_i18n` VALUES (943, '批量下载', 'zh', 'report.batchDow', '批量下载', '', '2022-04-12 05:47:14', 5);
 INSERT INTO `sys_i18n` VALUES (944, '批量下载', 'en', 'report.batchDow', 'Batch download', '', '2022-04-12 05:47:44', 5);
+INSERT INTO `sys_i18n` VALUES (945, '数据范围', 'zh', 'report.dataRange', '数据范围', '', '2022-04-14 02:15:18', 5);
+INSERT INTO `sys_i18n` VALUES (946, '数据范围', 'en', 'report.dataRange', 'Data range', '', '2022-04-14 02:15:48', 5);
+INSERT INTO `sys_i18n` VALUES (947, '个性化', 'zh', 'appearance.appearance', '个性化', '', '2022-04-14 07:15:52', 1);
+INSERT INTO `sys_i18n` VALUES (948, '个性化', 'en', 'appearance.appearance', 'Appearance', '', '2022-04-14 07:16:05', 1);
+INSERT INTO `sys_i18n` VALUES (949, '状态', 'zh', 'overall.status', '状态', '', '2022-04-19 03:49:58', 1);
+INSERT INTO `sys_i18n` VALUES (950, '状态', 'en', 'overall.status', 'Status', '', '2022-04-19 03:50:01', 1);
+INSERT INTO `sys_i18n` VALUES (951, '进行中', 'zh', 'overall.inProgress', '进行中', '', '2022-04-18 12:11:26', 1);
+INSERT INTO `sys_i18n` VALUES (952, '进行中', 'en', 'overall.inProgress', 'In progress', '', '2022-04-18 12:11:41', 1);
+INSERT INTO `sys_i18n` VALUES (953, '已完成', 'zh', 'overall.completed', '已完成', '', '2022-04-18 12:11:59', 1);
+INSERT INTO `sys_i18n` VALUES (954, '已完成', 'en', 'overall.completed', 'Completed', '', '2022-04-18 12:12:20', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

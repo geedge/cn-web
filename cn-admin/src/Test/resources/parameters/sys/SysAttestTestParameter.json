@@ -1,0 +1,21 @@
+{
+  "------------------ GET  /sys/role data---------------------": "note",
+  "querySysLogList_exist": {
+    "pageNo": null,
+    "pageSize": null
+  },
+  "querySysLogList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "SJSISODK73829"
+  },
+  "------------------ POST  /sys/login data---------------------": "note",
+  "SysLogin_success": {
+    "username":"admin",
+    "pin":"admin"
+  },
+  "SysLogin_error": {
+    "username":"",
+    "pin":""
+  }
+}

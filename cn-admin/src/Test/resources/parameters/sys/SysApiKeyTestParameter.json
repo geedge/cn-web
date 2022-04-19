@@ -1,0 +1,52 @@
+{
+  "------------------ GET  /sys/apiKey data---------------------": "note",
+  "querySysApiKeyList_exist": {
+    "pageNo": null,
+    "pageSize": null,
+    "orderBy": "name"
+  },
+  "querySysApiKeyList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "SISJ049",
+    "ids": "7,8"
+  },
+  "querySysApiKeyList_name": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "thtest1",
+    "orderBy": "name"
+  },
+  "querySysApiKeyList_token": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "tokentest1",
+    "orderBy": "name"
+  },
+  "querySysApiKeyList_ids": {
+    "pageNo": null,
+    "pageSize": null,
+    "ids": "1,2",
+    "orderBy": "name"
+  },
+  "------------------ POST  /sys/apiKey data---------------------": "note",
+  "saveSysApiKey_success": {
+    "name": "新增1",
+    "roleId": 1
+  },
+  "saveSysApiKey_checkName": {
+    "name": "",
+    "roleId": 1
+  },
+  "saveSysApiKey_checkNameDuplicate": {
+    "name": "thtest1",
+    "roleId": 1
+  },
+  "saveSysApiKey_checkRoleId": {
+    "name": "新增2"
+  },
+  "------------------ DELETE  /sys/apiKey data---------------------": "note",
+  "deleteSysApiKey_success": {
+    "ids": "3,4"
+  }
+}

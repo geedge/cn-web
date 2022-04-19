@@ -1,0 +1,126 @@
+{
+  "------------------ GET  /visual/panel/{id} data---------------------": "note",
+  "queryVisualPanelInfo_exist": {
+    "id": 1
+  },
+  "queryVisualPanelInfo_notexist": {
+    "id": 999
+  },
+  "------------------ GET  /visual/dataset data---------------------": "note",
+  "queryVisualPanelList_exist": {
+    "pageNo": null,
+    "pageSize": null,
+    "type": 1
+  },
+  "queryVisualPanelList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "type": 1,
+    "q": "SISJ049"
+  },
+  "queryVisualPanelList_q": {
+    "pageNo": null,
+    "pageSize": null,
+    "type": 3,
+    "q": "DNS"
+  },
+  "queryVisualPanelList_name": {
+    "pageNo": null,
+    "pageSize": null,
+    "type": 6,
+    "name": "entity"
+  },
+  "queryVisualPanelList_ids": {
+    "pageNo": null,
+    "pageSize": null,
+    "type": 3,
+    "ids": "1,2,3"
+  },
+  "queryVisualPanelList_checkType": {
+    "pageNo": null,
+    "pageSize": null
+  },
+  "------------------ POST  /visual/panel data---------------------": "note",
+  "saveVisualPanel_success": {
+    "name": "新增1",
+    "type": 8,
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "saveVisualPanel_checkName": {
+    "name": "",
+    "type": 8,
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "saveVisualPanel_checkNameDuplicate": {
+    "name": "DNS",
+    "type": 8,
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "saveVisualPanel_checkType": {
+    "name": "新增1",
+    "type": "",
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "saveVisualPanel_checkTypeCorrect": {
+    "name": "新增1",
+    "type": 0,
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "------------------ PUT  /visual/panel data---------------------": "note",
+  "updateVisualPanel_success": {
+    "id": 2,
+    "name": "修改1",
+    "type": 2,
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "updateVisualPanel_checkId": {
+    "name": "修改1",
+    "type": 2,
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "updateVisualPanel_checkName": {
+    "id": 2,
+    "name": "",
+    "type": 2,
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "updateVisualPanel_checkNameDuplicate": {
+    "id": 2,
+    "name": "DNS",
+    "type": 2,
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "updateVisualPanel_checkType": {
+    "id": 2,
+    "name": "修改1",
+    "type": "",
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "updateVisualPanel_checkTypeCorrect": {
+    "id": 2,
+    "name": "修改1",
+    "type": 0,
+    "params": "{'isEditable':false}",
+    "remark": ""
+  },
+  "------------------ DELETE  /visual/panel data---------------------": "note",
+  "deleteVisualPanel_success": {
+    "ids": "4,5"
+  },
+  "deleteVisualPanel_checkId": {
+    "ids": ""
+  },
+  "deleteVisualPanel_buildIn": {
+    "ids": "1"
+  }
+}

@@ -8,12 +8,12 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@TableName("link")
+@TableName("sys_link")
 public class Link  implements Serializable{
 	@TableId
 	private Integer id;
 	private String name;
-	private Long createBy;
+	private Long cby;
 	private String url;
 	private Integer buildIn;
 	private Integer weight;

@@ -1,0 +1,109 @@
+{
+  "------------------ GET  /sys/role data---------------------": "note",
+  "querySysRoleList_exist": {
+    "pageNo": null,
+    "pageSize": null,
+    "orderBy": "name"
+  },
+  "querySysRoleList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "SISJ049",
+    "ids": "7,8"
+  },
+  "querySysRoleList_name": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "admin"
+  },
+  "querySysRoleList_ids": {
+    "pageNo": null,
+    "pageSize": null,
+    "ids": "1,2"
+  },
+  "querySysRoleList_checkName": {
+    "pageNo": null,
+    "pageSize": null,
+    "name": "admin"
+  },
+  "------------------ GET  /sys/role/{id} data---------------------": "note",
+  "querySysRoleInfo_exist": {
+    "id": 1
+  },
+  "querySysRoleInfo_notexist": {
+    "id": 99999
+  },
+  "------------------ POST  /sys/role data---------------------": "note",
+  "saveSysRole_success": {
+    "name": "xinzeng1",
+    "remark": "xinzeng1",
+    "menuIds": [1,2]
+  },
+  "saveSysRole_checkName": {
+    "name": "",
+    "remark": "xinzeng2",
+    "menuIds": [1,2]
+  },
+  "saveSysRole_checkNameDuplicate": {
+    "name": "admin",
+    "remark": "xinzeng3",
+    "menuIds": [1,2]
+  },
+  "saveSysRole_checkRemark": {
+    "name": "xinzeng4",
+    "remark": "",
+    "menuIds": [1,2]
+  },
+  "saveSysRole_checkMenuIds": {
+    "name": "xinzeng5",
+    "remark": "xinzeng5"
+  },
+  "------------------ PUT  /sys/role data---------------------": "note",
+  "updateSysRole_success": {
+    "id": 2,
+    "name": "xiugai1",
+    "remark": "xiugai1",
+    "menuIds": "2"
+  },
+  "updateSysRole_checkId": {
+    "name": "xiugai2",
+    "remark": "xiugai2",
+    "menuIds": "3,4"
+  },
+  "updateSysRole_checkName": {
+    "id": 2,
+    "name": "",
+    "remark": "xiugai3",
+    "menuIds": "3,4"
+  },
+  "updateSysRole_checkNameDuplicate": {
+    "id": 2,
+    "name": "admin",
+    "remark": "xiugai4",
+    "menuIds": "3,4"
+  },
+  "updateSysRole_checkRemark": {
+    "id": 2,
+    "name": "xiugai5",
+    "remark": "",
+    "menuIds": "3,4"
+  },
+  "updateSysRole_checkMenuIds": {
+    "id": 2,
+    "name": "xiugai6",
+    "remark": "xiugai6"
+  },
+  "updateSysRole_menuIds": {
+    "id": 2,
+    "name": "xiugai7",
+    "remark": "xiugai7",
+    "menuIds": "3,4,5,6"
+  },
+  "------------------ DELETE  /sys/role data---------------------": "note",
+  "deleteSysRole_success": {
+    "ids": "3,4"
+  },
+  "deleteSysRole_ids": {
+    "ids": ""
+  }
+}

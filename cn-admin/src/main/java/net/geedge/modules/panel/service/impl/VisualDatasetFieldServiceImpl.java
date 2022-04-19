@@ -1,6 +1,7 @@
 package net.geedge.modules.panel.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -10,12 +11,14 @@ import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.panel.dao.VisualDatasetFieldDao;
 import net.geedge.modules.panel.entity.VisualDatasetField;
 import net.geedge.modules.panel.service.VisualDatasetFieldService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -47,6 +50,7 @@ public class VisualDatasetFieldServiceImpl extends ServiceImpl<VisualDatasetFiel
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Integer saveOrUpdateDatasetField(VisualDatasetField datasetField) {
         validateDatasetField(datasetField);
         if (ObjectUtil.isEmpty(datasetField.getId())) {
@@ -60,6 +64,7 @@ public class VisualDatasetFieldServiceImpl extends ServiceImpl<VisualDatasetFiel
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void removeDatasetField(String ids) {
         // 内置datasetField不删除
         validateBuildInDatasetFields(Arrays.asList(ids.split(",")));
@@ -76,16 +81,20 @@ public class VisualDatasetFieldServiceImpl extends ServiceImpl<VisualDatasetFiel
         String name = datasetField.getName();
         ValidateUtils.is(name).notNull(RCode.DATASET_FIELD_NAME_ISNULL)
                 .and(datasetField.getType()).notNull(RCode.DATASET_FIELD_TYPE_ISNULL).max(4, RCode.DATASET_FIELD_TYPE_INVALIDE).min(1,RCode.DATASET_FIELD_TYPE_INVALIDE)
-                .and(datasetField.getStype()).notNull(RCode.DATASET_FIELD_STYPE_ISNULL).max(2, RCode.DATASET_FIELD_STYPE_INVALIDE).min(1, RCode.DATASET_FIELD_STYPE_INVALIDE);
+                .and(datasetField.getStype()).notNull(RCode.DATASET_FIELD_STYPE_ISNULL).max(2, RCode.DATASET_FIELD_STYPE_INVALIDE).min(1, RCode.DATASET_FIELD_STYPE_INVALIDE)
+                .and(datasetField.getDsetid()).notNull(RCode.DATASET_FIELD_DSETID_ISNULL)
+                .and(datasetField.getIdx()).notNull(RCode.DATASET_FIELD_IDX_ISNULL)
+                .and(datasetField.getExpr()).notNull(RCode.DATASET_FIELD_EXPR_ISNULL)
+                ;
 
         //校验name是否重复
-        List<VisualDatasetField> list = this.list(new QueryWrapper<VisualDatasetField>().lambda().eq(VisualDatasetField::getName, datasetField.getName()).ne(ObjectUtil.isNotEmpty(datasetField.getId()),VisualDatasetField::getId,datasetField.getId()));
-        boolean flag = false;
-        //当只有一个结果并且这个结果是自身时，或没有结果时，说明名称不重复
-        if (ObjectUtil.isNotEmpty(list)) {
-            flag = true;
+        VisualDatasetField visualDatasetField = this.getOne(new LambdaQueryWrapper<VisualDatasetField>().eq(VisualDatasetField::getName,datasetField.getName()));
+        //id为null 新增
+        if (Tool.ObjectUtil.isEmpty(datasetField.getId()) && Tool.ObjectUtil.isNotEmpty(visualDatasetField)){
+            throw new CNException(RCode.DATASET_FIELD_NAME_DUPLICATE);
         }
-        if (flag) {
+        //id not null 修改
+        if (Tool.ObjectUtil.isNotEmpty(datasetField.getId()) && Tool.ObjectUtil.isNotEmpty(visualDatasetField) && !visualDatasetField.getId().equals(datasetField.getId())){
             throw new CNException(RCode.DATASET_FIELD_NAME_DUPLICATE);
         }
     }

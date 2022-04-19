@@ -1,0 +1,229 @@
+{
+  "------------------ GET  /visual/dataset/field/{id} data---------------------": "note",
+  "queryVisualDatasetFieldInfo_exist": {
+    "id": 1
+  },
+  "queryVisualDatasetFieldInfo_notexist": {
+    "id": 99999
+  },
+  "------------------ GET  /visual/dataset/field data---------------------": "note",
+  "queryVisualDatasetFieldList_exist": {
+    "pageNo": null,
+    "pageSize": null
+  },
+  "queryVisualDatasetFieldList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "SISJ049",
+    "ids": "7,8"
+  },
+  "queryVisualDatasetFieldList_name": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "示例1"
+  },
+  "queryVisualDatasetFieldList_params": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "abc"
+  },
+  "queryVisualDatasetFieldList_remark": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "test1"
+  },
+  "queryVisualDatasetFieldList_ids": {
+    "pageNo": null,
+    "pageSize": null,
+    "ids": "1,2"
+  },
+  "------------------ POST  /visual/dataset/field data---------------------": "note",
+  "saveVisualDatasetField_success": {
+    "name": "新增1",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "saveVisualDatasetField_name": {
+    "name": "",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "saveVisualDatasetField_nameDuplicate": {
+    "name": "示例1",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "saveVisualDatasetField_type": {
+    "name": "新增1",
+    "type": "",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "saveVisualDatasetField_typeCorrect": {
+    "name": "新增1",
+    "type": "0",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "saveVisualDatasetField_stype": {
+    "name": "新增1",
+    "type": "1",
+    "stype": "",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "saveVisualDatasetField_stypeCorrect": {
+    "name": "新增1",
+    "type": "1",
+    "stype": "0",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "saveVisualDatasetField_dsetid": {
+    "name": "新增1",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "saveVisualDatasetField_idx": {
+    "name": "新增1",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "saveVisualDatasetField_expr": {
+    "name": "新增1",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "",
+    "params": "{}"
+  },
+  "------------------ PUT  /visual/dataset/field data---------------------": "note",
+  "updateVisualDatasetField_success": {
+    "id": 2,
+    "name": "修改1",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "updateVisualDatasetField_name": {
+    "id": 2,
+    "name": "",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "updateVisualDatasetField_type": {
+    "id": 2,
+    "name": "修改1",
+    "type": "",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "updateVisualDatasetField_typeCorrect": {
+    "id": 2,
+    "name": "修改1",
+    "type": "0",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "updateVisualDatasetField_stype": {
+    "id": 2,
+    "name": "修改1",
+    "type": "1",
+    "stype": "",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "updateVisualDatasetField_stypeCorrect": {
+    "id": 2,
+    "name": "修改1",
+    "type": "1",
+    "stype": "0",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "updateVisualDatasetField_dsetid": {
+    "id": 2,
+    "name": "修改1",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "",
+    "idx": "1",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "updateVisualDatasetField_idx": {
+    "id": 2,
+    "name": "修改1",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "",
+    "expr": "aaa",
+    "params": "{}"
+  },
+  "updateVisualDatasetField_expr": {
+    "id": 2,
+    "name": "修改1",
+    "type": "1",
+    "stype": "1",
+    "dsetid": "1",
+    "idx": "1",
+    "expr": "",
+    "params": "{}"
+  },
+  "------------------ DELETE  /visual/dataset/field data---------------------": "note",
+  "deleteVisualDatasetField_success": {
+    "ids": "3,4"
+  },
+  "deleteVisualDatasetField_buildIn": {
+    "ids": "1"
+  }
+}

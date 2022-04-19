@@ -5,7 +5,7 @@
 	<resultMap type="net.geedge.modules.sys.entity.Link" id="link">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
-        <result property="createBy" column="create_by"/>
+        <result property="cby" column="cby"/>
         <result property="url" column="url"/>
         <result property="weight" column="weight"/>
         <result property="buildIn" column="build_in"/>
@@ -27,7 +27,7 @@
        l.build_in AS build_in,
        u.id AS u_id,
        u.name AS u_name
-       from link l left join sys_user u on l.create_by=u.id
+       from sys_link l left join sys_user u on l.cby=u.id
        where 1=1
        <if test="params.id != null and params.id != ''">
            AND l.id = #{params.id}
@@ -38,7 +38,7 @@
        </if>
        
        <if test="params.createBy != null and params.createBy != ''">
-           AND l.create_by = #{params.createBy}
+           AND l.cby = #{params.cby}
        </if>
         order by l.weight
     </select>

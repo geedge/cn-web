@@ -48,6 +48,7 @@ public class VisualDatasetTest extends BaseTest<VisualDataset> {
         // isExist
         Assert.assertNotNull(visualDatasetInfo);
     }
+
     /**
      * GET /visual/dataset/{id} not exist
      */
@@ -120,4 +121,159 @@ public class VisualDatasetTest extends BaseTest<VisualDataset> {
 
         UTUtil.assertToSizeByFlag(result, true);
     }
+
+    /**
+     * POST /visual/dataset success
+     */
+    @Test
+    public void saveVisualDataset_success() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPost("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+
+    /**
+     * POST  /visual/dataset  name can not be empty
+     */
+    @Test
+    public void saveVisualDataset_checkName() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPost("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_NAME_ISNULL);
+    }
+
+    /**
+     * POST  /visual/dataset  name can not duplicate
+     */
+    @Test
+    public void saveVisualDataset_checkNameDuplicate() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPost("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_NAME_DUPLICATE);
+    }
+
+    /**
+     * POST  /visual/dataset  type can not be empty
+     */
+    @Test
+    public void saveVisualDataset_checkType() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPost("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_TYPE_ISNULL);
+    }
+
+    /**
+     * POST  /visual/dataset  type error must 1 or 2
+     */
+    @Test
+    public void saveVisualDataset_checkTypeCorrect() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPost("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_TYPE_INVALIDE);
+    }
+
+    /**
+     * PUT  /visual/dataset  success
+     */
+    @Test
+    public void updateVisualDataset_success() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPut("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+
+    /**
+     * PUT  /visual/dataset  id can not be empty
+     */
+    @Test
+    public void updateVisualDataset_checkId() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPut("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_ID_ISNULL);
+    }
+
+    /**
+     * PUT  /visual/dataset  name can not be empty
+     */
+    @Test
+    public void updateVisualDataset_checkName() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPost("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_NAME_ISNULL);
+    }
+
+    /**
+     * PUT  /visual/dataset  name can not be duplicate
+     */
+    @Test
+    public void updateVisualDataset_checkNameDuplicate() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPost("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_NAME_DUPLICATE);
+    }
+
+    /**
+     * PUT  /visual/dataset  type can not be empty
+     */
+    @Test
+    public void updateVisualDataset_checkType() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPost("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_TYPE_ISNULL);
+    }
+
+    /**
+     * PUT  /visual/dataset  type error must 1 or 2
+     */
+    @Test
+    public void updateVisualDataset_checkTypeCorrect() {
+        VisualDataset visualDataset = jsonToInParameter(testName.getMethodName(), VisualDataset.class);
+        MvcResult result = UTUtil.performPost("/visual/dataset",visualDataset);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_TYPE_INVALIDE);
+    }
+
+    /**
+     * DELETE  /visual/dataset  success
+     */
+    @Test
+    public void deleteVisualDataset_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performDelete("/visual/dataset",queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+
+    /**
+     * DELETE  /visual/dataset  id can not be empty
+     */
+    @Test
+    public void deleteVisualDataset_checkIds() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performDelete("/visual/dataset",queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_ID_ISNULL);
+    }
+
+    /**
+     * DELETE  /visual/dataset  build in can not delete
+     */
+    @Test
+    public void deleteVisualDataset_buildIn() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performDelete("/visual/dataset",queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.DATASET_BUILDIN_CAN_NOT_REMOVE);
+    }
+
 }

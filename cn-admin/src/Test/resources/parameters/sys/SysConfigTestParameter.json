@@ -1,0 +1,74 @@
+{
+  "------------------ POST  /sys/config data---------------------": "note",
+  "saveSysConfig_success": {
+    "ckey": "xinzeng1",
+    "cvalue": "xinzeng1"
+  },
+  "saveSysConfig_error": {
+    "ckey": "",
+    "cvalue": "xinzeng2"
+  },
+  "------------------ PUT  /sys/config data---------------------": "note",
+  "updateSysConfig_success": {
+    "id": 2,
+    "ckey": "system_logo",
+    "cvalue": "xiugai1"
+  },
+  "updateSysConfig_error": {
+    "ckey": "",
+    "cvalue": "xiugai2"
+  },
+  "------------------ DELETE  /sys/config data---------------------": "note",
+  "deleteSysConfig_success": {
+    "ids": [23,24]
+  },
+  "------------------ GET  /sys/appearance data---------------------": "note",
+  "querySysAppearance_exist": {
+  },
+  "------------------ PUT  /sys/appearance data---------------------": "note",
+  "updateSysAppearance_success": {
+    "name": "网络叙事者",
+    "logo": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA",
+    "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA",
+    "lang": "zh",
+    "timezone": "Asia/Shanghai",
+    "theme": "light",
+    "bgImage": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA",
+    "dateFormat": "yyyy-MM-dd HH:mm:ss"
+  },
+  "------------------ GET  /sys/timezones data---------------------": "note",
+  "querySysTimezones_success": {
+  },
+  "------------------ GET  /sys/security data---------------------": "note",
+  "querySysSecurity_success": {
+  },
+  "------------------ PUT  /sys/security data---------------------": "note",
+  "updateSysSecurity_success": {
+    "mfaEnable": 1,
+    "pinPolicy": {
+      "enable": 1,
+      "length": 6,
+      "num": 1,
+      "lower": 1,
+      "upper": 1,
+      "spec": 1,
+      "valid": 30,
+      "retry": 1,
+      "lockTime": 30
+    }
+  },
+  "------------------ GET  /sys/email data---------------------": "note",
+  "querySysEmail_success": {
+  },
+  "------------------ PUT  /sys/email data---------------------": "note",
+  "updateSysEmail_success": {
+    "enable": 1,
+    "host": "192.168.1.1",
+    "port": 25,
+    "timeout": 10,
+    "authAccount": "zs@126.com",
+    "authPin": "111",
+    "sendAccount": "zs@126.com",
+    "securityType": "NONE"
+  }
+}

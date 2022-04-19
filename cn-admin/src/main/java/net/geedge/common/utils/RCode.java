@@ -130,6 +130,10 @@ public enum RCode {
     DATASET_FIELD_STYPE_INVALIDE(123086, "Dataset field stype is invalide"),
     DATASET_FIELD_NAME_DUPLICATE(122087, "Dataset field name is duplicate"),
     DATASET_FIELD_BUILDIN_CAN_NOT_REMOVE(127088, "This dataset field is built-in and cannot be deleted"),
+    DATASET_FIELD_DSETID_ISNULL(121089, "Dataset field dsetid can not be empty"),
+    DATASET_FIELD_IDX_ISNULL(121090, "Dataset field idx can not be empty"),
+    DATASET_FIELD_EXPR_ISNULL(121091, "Dataset field expr can not be empty"),
+    DATASET_DSID_ISNULL(121092, "Dataset dsid can not be empty"),
 
     GALAXY_PROXY_ID_ISNULL(210001,"galaxy proxy id can not be empty"),
     GALAXY_PROXY_NAME_ISNULL(210002,"galaxy proxy name can not be empty"),

@@ -1,0 +1,114 @@
+{
+  "------------------ GET  /sys/user/{id} data---------------------": "note",
+  "queryUserInfo_exist": {
+    "id": 1
+  },
+  "queryUserInfo_notexist": {
+    "id": 99999
+  },
+  "------------------ GET  /sys/user data---------------------": "note",
+  "querySysUserList_exist": {
+    "pageNo": null,
+    "pageSize": null,
+    "orderBy": "name"
+  },
+  "querySysUserList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "SISJ049",
+    "ids": "7,8"
+  },
+  "querySysUserList_name": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "admin1"
+  },
+  "querySysUserList_username": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "admin"
+  },
+  "querySysUserList_email": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "112112112"
+  },
+  "querySysUserList_mobile": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "3343343344"
+  },
+  "querySysUserList_checkIds": {
+    "pageNo": null,
+    "pageSize": null,
+    "ids": "1,2"
+  },
+  "querySysUserList_checkName": {
+    "pageNo": null,
+    "pageSize": null,
+    "name": "admin"
+  },
+  "------------------ POST  /sys/user data---------------------": "note",
+  "saveSysUser_success": {
+    "name": "xinzeng1",
+    "username": "xinzeng1",
+    "status": "1",
+    "pin": "xinzeng1",
+    "roleIds": "2"
+  },
+  "saveSysUser_checkName": {
+    "name": "",
+    "username": "xinzeng2",
+    "status": "1",
+    "pin": "xinzeng2",
+    "roleIds": "2"
+  },
+  "saveSysUser_checkUsername": {
+    "name": "xinzeng4",
+    "username": "",
+    "status": "1",
+    "pin": "xinzeng4",
+    "roleIds": "2"
+  },
+  "saveSysUser_checkPin": {
+    "name": "xinzeng5",
+    "username": "xinzeng5",
+    "status": "1",
+    "pin": "",
+    "roleIds": "2"
+  },
+  "saveSysUser_checkRoleIds": {
+    "name": "xinzeng6",
+    "username": "xinzeng6",
+    "status": "1",
+    "pin": "xinzeng6",
+    "roleIds": ""
+  },
+  "------------------ PUT  /sys/user data---------------------": "note",
+  "updateSysUser_success": {
+    "id": 2,
+    "name": "Galaxy",
+    "username": "Galaxy",
+    "email": "xiugai1@163.com",
+    "roleIds": "2"
+  },
+  "updateSysUser_checkId": {
+    "email": "xiugai1@163.com"
+  },
+  "------------------ DELETE  /sys/user data---------------------": "note",
+  "deleteSysUser_success": {
+    "ids": "3,4"
+  },
+  "deleteSysUser_ids": {
+    "ids": ""
+  },
+  "------------------ PUT  /sys/user/pin data---------------------": "note",
+  "updateSysUserPin_success": {
+    "oldPin": "admin",
+    "newPin": "admin"
+  },
+  "updateSysUserPin_checkOldpwd": {
+    "oldPin": "qwe",
+    "newPin": "qwe3"
+  }
+}

@@ -95,7 +95,7 @@ public class VisualPanelServiceImpl extends ServiceImpl<VisualPanelDao, VisualPa
     public void validatePanel(VisualPanel panel) {
         String name = panel.getName();
         ValidateUtils.is(name).notNull(RCode.PANEL_NAME_ISNULL)
-        .and(panel.getType()).notNull(RCode.PANEL_TYPE_ISNULL).max(6, RCode.PANEL_TYPE_INVALIDE).min(1, RCode.PANEL_TYPE_INVALIDE);
+        .and(panel.getType()).notNull(RCode.PANEL_TYPE_ISNULL).min(1, RCode.PANEL_TYPE_INVALIDE);
 
         // 校验name是否重复
         List<VisualPanel> list = this.list(new QueryWrapper<VisualPanel>().lambda().eq(VisualPanel::getName, panel.getName()).ne(ObjectUtil.isNotEmpty(panel.getId()),VisualPanel::getId,panel.getId()));

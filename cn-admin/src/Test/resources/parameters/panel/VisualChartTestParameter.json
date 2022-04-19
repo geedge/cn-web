@@ -1,0 +1,284 @@
+{
+  "------------------ GET  /visual/chart/{id} data---------------------": "note",
+  "queryVisualChartInfo_exist": {
+    "id": 1
+  },
+  "queryVisualChartInfo_notexist": {
+    "id": 99999
+  },
+  "------------------ GET  /visual/chart data---------------------": "note",
+  "queryVisualChartByPanelId_exist": {
+    "panelId": 1
+  },
+  "queryVisualChartByPanelId_notexist": {
+    "panelId": 99999
+  },
+  "queryVisualChartByPanelId_checkPanelId": {
+    "panelId": ""
+  },
+  "------------------ GET  /visual/chart/list data---------------------": "note",
+  "queryVisualChartList_exist": {
+    "pageNo": null,
+    "pageSize": null
+  },
+  "queryVisualChartList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "JID9ds"
+  },
+  "queryVisualChartList_name": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "会话数"
+  },
+  "queryVisualChartList_params": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "/interface/traffic/sessions"
+  },
+  "------------------ POST  /visual/chart data---------------------": "note",
+  "saveVisualChart_success": {
+    "name": "域名分类",
+    "type": 603,
+    "i18n": "trafficSummary.domainCategory",
+    "x": 0,
+    "y": 36,
+    "w": 15,
+    "h": 13,
+    "panelId": 1,
+    "system": 0
+  },
+  "saveVisualChart_checkName": {
+    "name": "",
+    "type": 603,
+    "i18n": "trafficSummary.domainCategory",
+    "x": 0,
+    "y": 36,
+    "w": 15,
+    "h": 13,
+    "panelId": 1,
+    "system": 0
+  },
+  "saveVisualChart_checkType": {
+    "name": "流量地图",
+    "i18n": "trafficSummary.domainCategory",
+    "x": 0,
+    "y": 36,
+    "w": 15,
+    "h": 13,
+    "panelId": 1,
+    "system": 0
+  },
+  "saveVisualChart_checkX": {
+    "name": "流量地图",
+    "type": 603,
+    "i18n": "trafficSummary.domainCategory",
+    "y": 36,
+    "w": 15,
+    "h": 13,
+    "panelId": 1,
+    "system": 0
+  },
+  "saveVisualChart_checkY": {
+    "name": "流量地图",
+    "type": 603,
+    "i18n": "trafficSummary.domainCategory",
+    "x": 0,
+    "w": 15,
+    "h": 13,
+    "panelId": 1,
+    "system": 0
+  },
+  "saveVisualChart_checkW": {
+    "name": "流量地图",
+    "type": 603,
+    "i18n": "trafficSummary.domainCategory",
+    "x": 0,
+    "y": 36,
+    "h": 13,
+    "panelId": 1,
+    "system": 0
+  },
+  "saveVisualChart_checkH": {
+    "name": "流量地图",
+    "type": 603,
+    "i18n": "trafficSummary.domainCategory",
+    "x": 0,
+    "y": 36,
+    "w": 15,
+    "panelId": 1,
+    "system": 0
+  },
+  "saveVisualChart_checkPanelId": {
+    "name": "流量地图",
+    "type": 603,
+    "i18n": "trafficSummary.domainCategory",
+    "x": 0,
+    "y": 36,
+    "w": 15,
+    "h": 13,
+    "system": 0
+  },
+  "------------------ PUT  /visual/chart data---------------------": "note",
+  "updateVisualChart_success": {
+    "id": 2,
+    "name": "活跃域名排名",
+    "type": 601,
+    "i18n": "trafficSummary.activeDomain",
+    "x": 20,
+    "y": 17,
+    "w": 10,
+    "h": 9,
+    "panelId": 1,
+    "system": 0
+  },
+  "updateVisualChart_checkId": {
+    "name": "活跃域名排名",
+    "type": 601,
+    "i18n": "trafficSummary.activeDomain",
+    "x": 20,
+    "y": 17,
+    "w": 10,
+    "h": 9,
+    "panelId": 1,
+    "system": 0
+  },
+  "updateVisualChart_checkName": {
+    "id": 2,
+    "name": "",
+    "type": 601,
+    "i18n": "trafficSummary.activeDomain",
+    "x": 20,
+    "y": 17,
+    "w": 10,
+    "h": 9,
+    "panelId": 1,
+    "system": 0
+  },
+  "updateVisualChart_checkType": {
+    "id": 2,
+    "name": "活跃域名排名",
+    "i18n": "trafficSummary.activeDomain",
+    "x": 20,
+    "y": 17,
+    "w": 10,
+    "h": 9,
+    "panelId": 1,
+    "system": 0
+  },
+  "updateVisualChart_checkX": {
+    "id": 2,
+    "name": "活跃域名排名",
+    "type": 601,
+    "i18n": "trafficSummary.activeDomain",
+    "y": 17,
+    "w": 10,
+    "h": 9,
+    "panelId": 1,
+    "system": 0
+  },
+  "updateVisualChart_checkY": {
+    "id": 2,
+    "name": "活跃域名排名",
+    "type": 601,
+    "i18n": "trafficSummary.activeDomain",
+    "x": 20,
+    "w": 10,
+    "h": 9,
+    "panelId": 1,
+    "system": 0
+  },
+  "updateVisualChart_checkW": {
+    "id": 2,
+    "name": "活跃域名排名",
+    "type": 601,
+    "i18n": "trafficSummary.activeDomain",
+    "x": 20,
+    "y": 17,
+    "h": 9,
+    "panelId": 1,
+    "system": 0
+  },
+  "updateVisualChart_checkH": {
+    "id": 2,
+    "name": "活跃域名排名",
+    "type": 601,
+    "i18n": "trafficSummary.activeDomain",
+    "x": 20,
+    "y": 17,
+    "w": 10,
+    "panelId": 1,
+    "system": 0
+  },
+  "updateVisualChart_checkPanelId": {
+    "id": 2,
+    "name": "活跃域名排名",
+    "type": 601,
+    "i18n": "trafficSummary.activeDomain",
+    "x": 20,
+    "y": 17,
+    "w": 10,
+    "h": 9,
+    "system": 0
+  },
+  "------------------ DELETE  /visual/chart data---------------------": "note",
+  "deleteVisualChart_success": {
+    "ids": "3,4"
+  },
+  "deleteVisualChart_buildIn": {
+    "ids": "1"
+  },
+  "------------------ PUT  /visual/chart/layout data---------------------": "note",
+  "updateVisualChartLayout_success": [{
+    "id": 1,
+    "pid": 1,
+    "x": 0,
+    "y": 0,
+    "w": 1,
+    "h": 1
+  }, {
+    "id": 2,
+    "pid": 1,
+    "x": 1,
+    "y": 1,
+    "w": 1,
+    "h": 1
+  }
+  ],
+  "updateVisualChartLayout_chsrts": [],
+  "updateVisualChartLayout_id": [{
+    "pid": 1,
+    "x": 0,
+    "y": 0,
+    "w": 1,
+    "h": 1
+  }],
+  "updateVisualChartLayout_x": [{
+    "id": 1,
+    "pid": 1,
+    "y": 0,
+    "w": 1,
+    "h": 1
+  }],
+  "updateVisualChartLayout_y": [{
+    "id": 1,
+    "pid": 1,
+    "x": 1,
+    "w": 1,
+    "h": 1
+  }],
+  "updateVisualChartLayout_w": [{
+    "id": 1,
+    "pid": 1,
+    "x": 1,
+    "y": 1,
+    "h": 1
+  }],
+  "updateVisualChartLayout_h": [{
+    "id": 1,
+    "pid": 1,
+    "x": 1,
+    "y": 1,
+    "w": 1
+  }]
+}

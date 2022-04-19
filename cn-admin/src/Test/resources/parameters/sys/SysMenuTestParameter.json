@@ -1,0 +1,129 @@
+{
+  "------------------ GET  /sys/dict data---------------------": "note",
+  "querySysMenuList_exist": {
+  },
+  "querySysMenuList_notexist": {
+    "id": 99999
+  },
+  "------------------ POST  /sys/dict data---------------------": "note",
+  "saveSysMenuList_success": {
+    "name": "新增1",
+    "code": "xinzeng1",
+    "i18n": "xinzeng1",
+    "type": "1",
+    "sort": "1"
+  },
+  "saveSysMenuList_name": {
+    "name": "",
+    "code": "xinzeng2",
+    "i18n": "xinzeng2",
+    "type": "1",
+    "sort": "1"
+  },
+  "saveSysMenuList_code": {
+    "name": "新增2",
+    "code": "",
+    "i18n": "xinzeng2",
+    "type": "1",
+    "sort": "1"
+  },
+  "saveSysMenuList_codeDuplicate": {
+    "name": "新增3",
+    "code": "dashboard",
+    "i18n": "xinzeng3",
+    "type": "1",
+    "sort": "1"
+  },
+  "saveSysMenuList_i18n": {
+    "name": "新增4",
+    "code": "xinzeng4",
+    "i18n": "",
+    "type": "1",
+    "sort": "1"
+  },
+  "saveSysMenuList_type": {
+    "name": "新增5",
+    "code": "xinzeng5",
+    "i18n": "xinzeng5",
+    "type": "",
+    "sort": "1"
+  },
+  "saveSysMenuList_typeCorrect": {
+    "name": "新增6",
+    "code": "xinzeng6",
+    "i18n": "xinzeng6",
+    "type": "-1",
+    "sort": "1"
+  },
+  "------------------ PUT  /sys/dict data---------------------": "note",
+  "updateSysMenuList_success": {
+    "id": 2,
+    "name": "修改1",
+    "code": "xiugai1",
+    "i18n": "xiugai1",
+    "type": "1",
+    "sort": "1"
+  },
+  "updateSysMenuList_id": {
+    "name": "修改2",
+    "code": "xiugai2",
+    "i18n": "xiugai2",
+    "type": "1",
+    "sort": "1"
+  },
+  "updateSysMenuList_name": {
+    "id": 2,
+    "name": "",
+    "code": "xiugai3",
+    "i18n": "xiugai3",
+    "type": "1",
+    "sort": "1"
+  },
+  "updateSysMenuList_code": {
+    "id": 2,
+    "name": "修改4",
+    "code": "",
+    "i18n": "xiugai4",
+    "type": "1",
+    "sort": "1"
+  },
+  "updateSysMenuList_codeDuplicate": {
+    "id": 2,
+    "name": "修改5",
+    "code": "dashboard",
+    "i18n": "xiugai1",
+    "type": "1",
+    "sort": "1"
+  },
+  "updateSysMenuList_i18n": {
+    "id": 2,
+    "name": "修改6",
+    "code": "xiugai6",
+    "i18n": "",
+    "type": "1",
+    "sort": "1"
+  },
+  "updateSysMenuList_type": {
+    "id": 2,
+    "name": "修改7",
+    "code": "xiugai7",
+    "i18n": "xiugai7",
+    "type": "",
+    "sort": "1"
+  },
+  "updateSysMenuList_typeCorrect": {
+    "id": 2,
+    "name": "修改8",
+    "code": "xiugai8",
+    "i18n": "xiugai8",
+    "type": "-1",
+    "sort": "1"
+  },
+  "------------------ DELETE  /sys/dict data---------------------": "note",
+  "deleteSysMenuList_success": {
+    "ids": "3,4"
+  },
+  "deleteSysMenuList_ids": {
+    "ids": ""
+  }
+}

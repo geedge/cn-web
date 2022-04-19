@@ -46,6 +46,7 @@ public class VisualChartController {
 	@PutMapping
 	@SysLog(operation =OperationEnum.UPDATE,type = TypeEnum.VISUALCHART)
 	public R modifyChart(@RequestBody VisualChart chart) {
+		ValidateUtils.is(chart.getId()).notNull(RCode.CHART_ID_ISNULL);
 		Integer id = visualChartService.saveOrUpdateChart(chart);
 		return R.ok().putData("id", id);
 	}

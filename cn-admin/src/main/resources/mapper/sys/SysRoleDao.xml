@@ -34,7 +34,7 @@
     			and name like CONCAT('%', #{params.q}, '%')
     		</if>
     		<if test="params.ids != null and params.ids.size > 0 ">
-				id in 
+				and id in
 					<foreach item="id" collection="params.ids" separator="," open="(" close=")" index="">
 			       		#{id}
 				     </foreach>

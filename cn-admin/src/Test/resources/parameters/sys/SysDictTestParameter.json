@@ -1,0 +1,130 @@
+{
+  "------------------ GET  /sys/dict/{id} data---------------------": "note",
+  "querySysDictInfo_exist": {
+    "id": 1
+  },
+  "querySysDictInfo_notexist": {
+    "id": 99999
+  },
+  "------------------ GET  /sys/dict data---------------------": "note",
+  "querySysDictList_exist": {
+    "pageNo": null,
+    "pageSize": null,
+    "orderBy": "name"
+  },
+  "querySysDictList_notexist": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "SISJ049",
+    "ids": "7,8"
+  },
+  "querySysDictList_name": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "国际化"
+  },
+  "querySysDictList_code": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "1"
+  },
+  "querySysDictList_value": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "zh"
+  },
+  "querySysDictList_remark": {
+    "pageNo": null,
+    "pageSize": null,
+    "q": "中文"
+  },
+  "querySysDictList_checkIds": {
+    "pageNo": null,
+    "pageSize": null,
+    "ids": "1,2"
+  },
+  "querySysDictList_checkValue": {
+    "pageNo": null,
+    "pageSize": null,
+    "value": "zh"
+  },
+  "querySysDictList_checkType": {
+    "pageNo": null,
+    "pageSize": null,
+    "type": "lang"
+  },
+  "------------------ POST  /sys/dict data---------------------": "note",
+  "saveSysDictList_success": {
+    "type": "xinzeng1",
+    "code": "1",
+    "value": "xin1",
+    "i18n": "0"
+  },
+  "saveSysDictList_checkType": {
+    "type": "",
+    "code": "1",
+    "value": "xin",
+    "i18n": "0"
+  },
+  "saveSysDictList_checkValue": {
+    "type": "xinzeng2",
+    "code": "2",
+    "value": "",
+    "i18n": "0"
+  },
+  "saveSysDictList_checkValueDuplicate": {
+    "type": "xinzeng3",
+    "code": "3",
+    "value": "zh",
+    "i18n": "0"
+  },
+  "saveSysDictList_checkCode": {
+    "type": "xinzeng4",
+    "code": "",
+    "value": "xin4",
+    "i18n": "0"
+  },
+  "------------------ PUT  /sys/dict data---------------------": "note",
+  "updateSysDictList_success": {
+    "id": 2,
+    "type": "xiugai1",
+    "code": "1",
+    "value": "xiu1",
+    "i18n": "0"
+  },
+  "updateSysDictList_checkType": {
+    "id": 2,
+    "type": "",
+    "code": "1",
+    "value": "xiu3",
+    "i18n": "0"
+  },
+  "updateSysDictList_checkValue": {
+    "id": 2,
+    "type": "xiugai3",
+    "code": "1",
+    "value": "",
+    "i18n": "0"
+  },
+  "updateSysDictList_checkValueDuplicate": {
+    "id": 2,
+    "type": "xiugai4",
+    "code": "1",
+    "value": "en",
+    "i18n": "0"
+  },
+  "updateSysDictList_checkCode": {
+    "id": 2,
+    "type": "xiugai5",
+    "code": "",
+    "value": "xiu4",
+    "i18n": "0"
+  },
+  "------------------ DELETE  /sys/dict data---------------------": "note",
+  "deleteSysDictList_success": {
+    "ids": "3,4"
+  },
+  "deleteSysDictList_checkId": {
+    "ids": ""
+  }
+}

@@ -8,3 +8,9 @@ VALUES (2, '概况2', 'dashboard.overview', 1, '1', '{}', 1, '2022-03-04 16:08:4
 
 INSERT INTO `visual_dataset` (`id`, `name`, `i18n`, `dsid`, `type`, `params`, `cby`, `ctime`, `uby`, `utime`, `remark`, `state`, `build_in`)
 VALUES (3, '概况3', 'dashboard.overview', 1, '1', '{}', 1, '2022-03-04 16:08:49', 1, '2022-03-04 16:08:54', 'test3', 1, 0);
+
+INSERT INTO `visual_dataset` (`id`, `name`, `i18n`, `dsid`, `type`, `params`, `cby`, `ctime`, `uby`, `utime`, `remark`, `state`, `build_in`)
+VALUES (4, '概况4', 'dashboard.overview', 1, '1', '{}', 1, '2022-03-04 16:08:49', 1, '2022-03-04 16:08:54', 'test4', 1, 0);
+
+INSERT INTO `visual_dataset` (`id`, `name`, `i18n`, `dsid`, `type`, `params`, `cby`, `ctime`, `uby`, `utime`, `remark`, `state`, `build_in`)
+VALUES (5, '概况5', 'dashboard.overview', 1, '1', '{}', 1, '2022-03-04 16:08:49', 1, '2022-03-04 16:08:54', 'test5', 1, 1);
