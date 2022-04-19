@@ -192,7 +192,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	@Override
 	public void downloadPdf(Integer jobId, HttpServletResponse response) throws Exception{
 		ReportJob job = this.getBaseMapper().selectById(jobId);
-		Integer pdfWidth = 1250;
+		Integer pdfWidth = 1000;
 		Integer pdfHeight = 1700;
 		pdfWidth = StrUtil.isEmpty(sysConfigService.getValue("pdf_width"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_width"));
 		pdfHeight = StrUtil.isEmpty(sysConfigService.getValue("pdf_height"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_height"));

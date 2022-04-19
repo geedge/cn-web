@@ -35,6 +35,9 @@ import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.font.FontProvider;
 
 import cn.hutool.core.io.FileUtil;
@@ -344,6 +347,10 @@ public class ReportHandlerTask extends QuartzJobBean {
      * 判断是否上传到s3服务器
      */
 	public void s3Upload() {
+		Integer pdfWidth = 1000;
+		Integer pdfHeight = 1700;
+		pdfWidth = StrUtil.isEmpty(sysConfigService.getValue("pdf_width"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_width"));
+		pdfHeight = StrUtil.isEmpty(sysConfigService.getValue("pdf_height"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_height"));
 		String s3Enable = sysConfigService.getValue("s3_enable");
         List<ReportJob> finishJobs = reportJobService.list(new QueryWrapper<ReportJob>().lambda().eq(ReportJob::getState, 1).eq(ReportJob::getUpload, 0));
         for(ReportJob reportJob : finishJobs) {
@@ -361,7 +368,9 @@ public class ReportHandlerTask extends QuartzJobBean {
 		    				.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
 		    		fontProvider.addFont(fontProgram);
 		    		converterProperties.setFontProvider(fontProvider);
-		    		HtmlConverter.convertToPdf(html, outputStream, converterProperties);
+		    		PdfDocument pdfDoc = new PdfDocument(new PdfWriter(outputStream));
+			        pdfDoc.setDefaultPageSize(new PageSize(pdfWidth,pdfHeight));
+			        HtmlConverter.convertToPdf(html,pdfDoc,converterProperties);
 	            	reportJobService.upload(reportJob.getName()+".pdf");
 	            	reportJob.setUpload(1);
 	            }
