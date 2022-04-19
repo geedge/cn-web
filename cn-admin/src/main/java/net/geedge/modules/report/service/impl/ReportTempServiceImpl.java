@@ -1,11 +1,14 @@
 package net.geedge.modules.report.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
@@ -19,6 +22,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -44,6 +48,9 @@ import net.geedge.modules.report.entity.ReportTemp;
 import net.geedge.modules.report.service.ReportJobService;
 import net.geedge.modules.report.service.ReportTaskService;
 import net.geedge.modules.report.service.ReportTempService;
+import net.geedge.modules.sys.entity.Timezone;
+import net.geedge.modules.sys.service.SysConfigService;
+import net.geedge.modules.sys.service.TimezoneService;
 
 @Service("reportTempService")
 public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp> implements ReportTempService {
@@ -58,6 +65,12 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	
 	@Autowired
     private DataSourceTransactionManager dataSourceTransactionManager;
+	
+	@Autowired
+	private TimezoneService timezoneService;
+	
+	@Autowired
+	private SysConfigService sysConfigService;
 	
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -153,10 +166,14 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		String timeUnit = (String) timeConfMap.get("unit");
 		DateTime startTime = null;
 		DateTime endTime = null;
+		// 获取今天日期为utc 需先转成当前时区数据 然后计算出开始结束时间
 		Date today = new Date();
+		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));
+		today = DateUtil.offset(today, DateField.MILLISECOND, sysTimezone.getOffset());
 		switch(timeType) {
 			case "yesterday":
 				DateTime yesterday = DateUtil.yesterday();
+				yesterday = DateUtil.offset(yesterday,DateField.MILLISECOND,sysTimezone.getOffset());
 				startTime = DateUtil.beginOfDay(yesterday);
 				endTime = DateUtil.endOfDay(yesterday);
 				break;
@@ -223,7 +240,13 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				break;
 			default:
 		}
-		conf.put("startTime", startTime);
-		conf.put("endTime",endTime);
+		if(!StrUtil.equals(timeType, "customize")){
+			// 将计算出来的时间 转成utc时间
+			startTime = DateUtil.offset(startTime, DateField.MILLISECOND, -sysTimezone.getOffset());
+			endTime = DateUtil.offset(endTime, DateField.MILLISECOND, -sysTimezone.getOffset());
+			conf.put("startTime", startTime);
+			conf.put("endTime",endTime);
+		}
 	}
+	
 }
