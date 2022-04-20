@@ -10,12 +10,22 @@
     "q": "SJSISODK73829"
   },
   "------------------ POST  /sys/login data---------------------": "note",
-  "SysLogin_success": {
+  "sysLogin_success": {
     "username":"admin",
     "pin":"admin"
   },
-  "SysLogin_error": {
+  "sysLogin_error": {
     "username":"",
     "pin":""
+  },
+  "------------------ POST  /sys/user/permissions data---------------------": "note",
+  "sysUserPermissions_success": {
+    "username":"admin",
+    "pin":"admin",
+    "token": "cn"
+  },
+  "------------------ GET  /logout data---------------------": "note",
+  "logout_success": {
+    "token": "cn"
   }
 }

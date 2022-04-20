@@ -60,7 +60,7 @@ public class SysAttestTest extends BaseTest<Map> {
      * POST /sys/login success
      */
     @Test
-    public void SysLogin_success() {
+    public void sysLogin_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performPost("/sys/login", queryParam);
 
@@ -71,11 +71,31 @@ public class SysAttestTest extends BaseTest<Map> {
      * POST /sys/login error
      */
     @Test
-    public void SysLogin_error() {
+    public void sysLogin_error() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performPost("/sys/login", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SYS_LOGIN_USERPWD);
     }
 
+    /**
+     * POST /sys/user/permissions success
+     */
+    /*@Test
+    public void sysUserPermissions_success() {
+        MvcResult result = UTUtil.performPost("/sys/user/permissions", null);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }*/
+
+    /**
+     * GET /logout success
+     */
+    @Test
+    public void logout_success() {
+        Map<String,Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/logout", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
 }
