@@ -16,5 +16,7 @@ REPLACE INTO `sys_config` VALUES (null, 'lang', 'zh', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'date_format', 'YYYY-MM-DD HH:mm:ss', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'system_bgImg', '', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'system_favicon', '', 1, NULL);
+REPLACE INTO `sys_config` VALUES (null, 'ui_static_url', NULL, 1, NULL);
+
 
 

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+
 import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
@@ -58,6 +60,18 @@ public class ReportTempController extends AbstractController{
 	public R remove(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.REPORT_TEMP_ID_ISNULL);
 		reportTempService.removeReportTemps(ids);
+		return R.ok();
+	}
+	
+	@PostMapping("/createJob")
+	public R createJob(@RequestParam Integer id) {
+		ValidateUtils.is(id).notNull(RCode.REPORT_TEMP_ID_ISNULL);
+		ReportTemp temp = reportTempService.getById(id);
+		if(ObjectUtils.isNotEmpty(temp)) {
+			reportTempService.createJobTasks(temp);
+		}else {
+			return R.error(RCode.REPORT_TEMP_NOT_EXISTS);
+		}
 		return R.ok();
 	}
 }

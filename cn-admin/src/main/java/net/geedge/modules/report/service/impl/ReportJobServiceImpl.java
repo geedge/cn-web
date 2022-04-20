@@ -51,6 +51,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.Owner;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
@@ -66,6 +67,8 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.font.FontProvider;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FastByteArrayOutputStream;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
@@ -88,7 +91,9 @@ import net.geedge.modules.report.service.ReportJobService;
 import net.geedge.modules.report.service.ReportResultService;
 import net.geedge.modules.report.service.ReportTaskService;
 import net.geedge.modules.report.service.ReportTempService;
+import net.geedge.modules.sys.entity.Timezone;
 import net.geedge.modules.sys.service.SysConfigService;
+import net.geedge.modules.sys.service.TimezoneService;
 
 @Service("reportJobService")
 public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> implements ReportJobService {
@@ -103,17 +108,29 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	@Autowired
 	private ReportResultService reportResultService;
 	
+	@Autowired
+	private TimezoneService timezoneService;
+	
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
+		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));
 		IPage page = new Query(ReportJob.class).getPage(params);
 		List<ReportJob> data = this.baseMapper.queryPage(page,params);
+		data.stream().forEach(o -> {
+			o.setStartTime(DateUtil.offset(o.getStartTime(), DateField.MILLISECOND, sysTimezone.getOffset()));
+			o.setEndTime(DateUtil.offset(o.getEndTime(), DateField.MILLISECOND, sysTimezone.getOffset()));
+		});
 		page.setRecords(data);
 		return new PageUtils(page);
 	}
 
 	@Override
 	public ReportJob queryInfo(Integer id) {
-		return this.baseMapper.selectInfoById(id);
+		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));
+		ReportJob reportJob = this.baseMapper.selectInfoById(id);
+		reportJob.setStartTime(DateUtil.offset(reportJob.getStartTime(), DateField.MILLISECOND, sysTimezone.getOffset()));
+		reportJob.setEndTime(DateUtil.offset(reportJob.getEndTime(), DateField.MILLISECOND, sysTimezone.getOffset()));
+		return reportJob;
 	}
 	
 	@Override
@@ -145,6 +162,10 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	
 	public String renderHtml(Integer jobId,List<ReportTask> reportTasks,List<ReportResult> reportResults) {
 		String driverEnable = sysConfigService.getValue("driver_enable");
+		String uiStaticUrl = sysConfigService.getValue("ui_static_url");
+		if(StrUtil.isEmpty(uiStaticUrl)) {
+			uiStaticUrl = "localhost";
+		}
 		String html = "";
 		try {
 			// 获取html模板信息
@@ -154,6 +175,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			Map<String,Object> data = new HashMap<String,Object>();
 			data.put("startTime", reportTasks.get(0).getStartTime().getTime()/1000);
 			data.put("endTime", reportTasks.get(0).getEndTime().getTime()/1000);
+			data.put("uiStaticUrl",uiStaticUrl);
 			for(ReportTask reportTask : reportTasks) {
 				ReportResult reportResult = taskIdResult.get(reportTask.getId());
 				String result = reportResult.getResult();
