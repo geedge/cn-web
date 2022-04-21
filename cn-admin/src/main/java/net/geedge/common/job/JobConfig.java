@@ -35,7 +35,7 @@ public class JobConfig {
     @Value("${cn.haJobCron:0/5 * * * * ?}")
     private String haJobCron;
     
-    @Value("${cn.reportTaskCron:0/10 * * * * ? *}")
+    @Value("${cn.reportRegisterCron:0/10 * * * * ? *}")
 	private String reportRegisterJobCron;
     
     @Value("${cn.reportTaskCron:0 0/5 * * * ? *}")
