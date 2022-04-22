@@ -68,21 +68,21 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 	@Override
 	public void saveConfig(SysConfigEntity config) {
 		this.save(config);
-		sysConfigRedis.saveOrUpdate(config);
+//		sysConfigRedis.saveOrUpdate(config);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void update(SysConfigEntity config) {
 		this.updateById(config);
-		sysConfigRedis.saveOrUpdate(config);
+//		sysConfigRedis.saveOrUpdate(config);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void updateValueByKey(String key, String value) {
 		baseMapper.updateValueByKey(key, value);
-		sysConfigRedis.delete(key);
+//		sysConfigRedis.delete(key);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 	public void deleteBatch(Long[] ids) {
 		for(Long id : ids){
 			SysConfigEntity config = this.getById(id);
-			sysConfigRedis.delete(config.getCkey());
+//			sysConfigRedis.delete(config.getCkey());
 		}
 
 		this.removeByIds(Arrays.asList(ids));
@@ -98,10 +98,10 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 
 	@Override
 	public String getValue(String key) {
-		SysConfigEntity config = sysConfigRedis.get(key);
+//		SysConfigEntity config = sysConfigRedis.get(key);
 //		if(config == null){
-			config = baseMapper.queryByKey(key);
-			sysConfigRedis.saveOrUpdate(config);
+		SysConfigEntity config = baseMapper.queryByKey(key);
+//			sysConfigRedis.saveOrUpdate(config);
 //		}
 
 		return config == null ? null : config.getCvalue();

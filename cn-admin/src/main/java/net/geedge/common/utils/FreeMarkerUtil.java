@@ -30,7 +30,7 @@ public class FreeMarkerUtil {
 	 */
 	public static Template stringToTemplate(String name, String templateContent) throws IOException {
 		Template template = (Template)templateCache.get(name);
-		if(template == null) {
+//		if(template == null) {
 			// 创建配置类
 			Configuration configuration = new Configuration(Configuration.getVersion());
 			//创建模板加载器
@@ -43,7 +43,7 @@ public class FreeMarkerUtil {
 	        //得到模板
 	        template = configuration.getTemplate(name, "utf-8");
 	        templateCache.put(name, template);
-		}
+//		}
 		// 得到模板
 		return template;
 	}
