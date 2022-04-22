@@ -167,6 +167,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			uiStaticUrl = "localhost";
 		}
 		String html = "";
+		ChromeDriver driver =null;
 		try {
 			// 获取html模板信息
 			ReportJob reportJob = this.getById(jobId);
@@ -200,13 +201,17 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
 				options.addArguments("--no-sandbox"); // Bypass OS security model
 				options.addArguments("--window-size=1920x1080");
-				ChromeDriver driver = new ChromeDriver(options);
+				driver = new ChromeDriver(options);
 				driver.navigate().to("data:text/html;charset=utf-8," + html);
 				html = (String) driver.executeScript("return document.documentElement.innerHTML;");
 			}
 		}catch(Exception e) {
 			html="";
 			log.error("render report html error : {}",e.getMessage());
+		}finally {
+			if(ObjectUtil.isNotEmpty(driver)) {
+				driver.close();
+			}
 		}
 		return html;
 	}
@@ -247,6 +252,9 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				String errorMsg = EntityUtils.toString(entity);
 				throw new CNException(errorMsg,statusCode);
 			}
+			// 关闭连接关闭流
+			request.releaseConnection();
+			createDefault.close();
 		}else if(job.getState()==1){
 			String htmlContent = this.queryView(jobId);
 			ConverterProperties converterProperties=new ConverterProperties();
@@ -309,6 +317,9 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 						String errorMsg = EntityUtils.toString(entity);
 						throw new CNException(errorMsg,statusCode);
 					}
+					// 关闭连接关闭流
+					request.releaseConnection();
+					createDefault.close();
 				}else if(job.getState()==1){
 					String htmlContent = this.queryView(job.getId());
 					ConverterProperties converterProperties=new ConverterProperties();
