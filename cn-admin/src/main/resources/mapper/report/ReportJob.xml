@@ -60,6 +60,6 @@
 				and rj.name like CONCAT('%', #{params.q}, '%')
 			</if>
       	</where>
-      	
+      	order by rj.id asc 
     </select>
 </mapper>
