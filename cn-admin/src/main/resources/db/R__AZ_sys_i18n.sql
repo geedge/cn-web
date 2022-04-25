@@ -904,5 +904,7 @@ INSERT INTO `sys_i18n` VALUES (951, '进行中', 'zh', 'overall.inProgress', '�
 INSERT INTO `sys_i18n` VALUES (952, '进行中', 'en', 'overall.inProgress', 'In progress', '', '2022-04-18 12:11:41', 1);
 INSERT INTO `sys_i18n` VALUES (953, '已完成', 'zh', 'overall.completed', '已完成', '', '2022-04-18 12:11:59', 1);
 INSERT INTO `sys_i18n` VALUES (954, '已完成', 'en', 'overall.completed', 'Completed', '', '2022-04-18 12:12:20', 1);
+INSERT INTO `sys_i18n` VALUES (955, '根镜像服务节点', 'zh', 'dns.rtMirrors', '根镜像服务节点', '', '2022-04-24 06:22:09', 1);
+INSERT INTO `sys_i18n` VALUES (956, '根镜像服务节点', 'en', 'dns.rtMirrors', 'Root mirrors', '', '2022-04-24 06:23:14', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
