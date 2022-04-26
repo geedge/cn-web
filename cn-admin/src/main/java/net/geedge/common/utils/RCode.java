@@ -344,6 +344,9 @@ public enum RCode {
 	REPORT_NOT_FINSHED(311006,"Report not finshed yet please try again later"),
 	REPORT_TEMP_CREAT_JOB_FAILED(311007,"Report create job failed"),
 	REPORT_TEMP_NOT_EXISTS(311008,"Report temp not exists"),
+	REPORT_ID_ISNULL(311009,"Param id can not be null"),
+	REPORT_TYPE_ISNULL(311010,"Param type can not be null"),
+	
 	
     ERROR(999, "error"); //通用错误/未知错误
 

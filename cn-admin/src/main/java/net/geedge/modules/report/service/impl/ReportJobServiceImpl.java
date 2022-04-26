@@ -40,10 +40,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.services.datasync.model.TaskSchedule;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.Bucket;
@@ -67,7 +69,10 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.font.FontProvider;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FastByteArrayOutputStream;
 import cn.hutool.core.io.FileUtil;
@@ -87,6 +92,7 @@ import net.geedge.modules.report.dao.ReportJobDao;
 import net.geedge.modules.report.entity.ReportJob;
 import net.geedge.modules.report.entity.ReportResult;
 import net.geedge.modules.report.entity.ReportTask;
+import net.geedge.modules.report.entity.ReportTemp;
 import net.geedge.modules.report.service.ReportJobService;
 import net.geedge.modules.report.service.ReportResultService;
 import net.geedge.modules.report.service.ReportTaskService;
@@ -110,6 +116,9 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	
 	@Autowired
 	private TimezoneService timezoneService;
+	
+	@Autowired
+	private ReportTempService reportTempService;
 	
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -417,5 +426,136 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			
 		// 关闭AmazonS3Client
 		s3.shutdown();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void restartJob(Map<String, Object> param) {
+		String ids = (String) param.get("ids");
+		Integer type = (Integer) param.get("type");
+		Integer overview = (Integer) param.get("overview");
+		if(StrUtil.isEmpty(ids)) {
+			throw new CNException(RCode.REPORT_ID_ISNULL);
+		}
+		if(ObjectUtil.isEmpty(type)) {
+			throw new CNException(RCode.REPORT_TYPE_ISNULL);
+		}
+		if(ObjectUtil.isEmpty(overview)) {
+			overview = 0;
+		}
+		
+		// 创建新的任务
+		switch (type){
+			case 0 : 
+				if(overview.equals(0)) {
+					List<ReportTask> reportTasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().in(ReportTask::getJobId, Arrays.asList(ids.split(","))));
+					if(ObjectUtil.isNotEmpty(reportTasks)) {
+						reportTasks.stream().forEach(task -> {
+							task.setState(0);
+							task.setPercent(0.0);
+							task.setCredential(null);
+						});
+						reportTaskService.updateBatchById(reportTasks);
+					}else {
+						throw new CNException(RCode.ERROR);
+					}
+					Collection<ReportJob> reportJobs = this.listByIds(Arrays.asList(ids.split(",")));
+					if(ObjectUtil.isNotEmpty(reportJobs)) {
+						reportJobs.stream().forEach(job -> {
+							job.setState(0);
+							job.setUpload(0);
+						});
+						this.updateBatchById(reportJobs);
+					}else {
+						throw new CNException(RCode.ERROR);
+					}
+				}
+				if(overview.equals(1)) {
+					Collection<ReportJob> reportJobs = this.listByIds(Arrays.asList(ids.split(",")));
+					if(ObjectUtil.isEmpty(reportJobs)) {
+						throw new CNException(RCode.ERROR);
+					}
+					List<String> uniqs = reportJobs.stream().map(ReportJob::getUniq).collect(Collectors.toList());
+					this.removeByIds(Arrays.asList(ids.split(",")));
+					List<ReportTemp> temps = reportTempService.list(new QueryWrapper<ReportTemp>().lambda().in(ReportTemp::getUniq,uniqs));
+					for(ReportTemp temp : temps) {
+						reportTempService.createJobTasks(temp);
+					}
+					this.removeByIds(Arrays.asList(ids.split(",")));
+				}
+				break;
+			case 1 :
+				Collection<ReportTask> reportTasks = reportTaskService.listByIds(Arrays.asList(ids.split(",")));
+				ArrayList<ReportTask> tasks = ListUtil.toList(reportTasks);
+				if(ObjectUtil.isEmpty(reportTasks)) {
+					throw new CNException(RCode.ERROR);
+				}
+				List<Integer> jobIds = reportTasks.stream().map(ReportTask::getJobId).collect(Collectors.toList());
+				Collection<ReportJob> jobs = this.listByIds(jobIds);
+				if(ObjectUtil.isNotEmpty(jobs)) {
+					jobs.stream().forEach(job -> {
+						job.setState(0);
+						job.setUpload(0);
+					});
+					this.updateBatchById(jobs);
+				}
+				if(overview.equals(0)) {
+					reportTasks.stream().forEach(task -> {
+						task.setState(0);
+						task.setPercent(0.0);
+						task.setCredential(null);
+					});
+					reportTaskService.updateBatchById(tasks);
+				}
+				if(overview.equals(1)) {
+					List<String> taskIds = Arrays.asList(ids.split(","));
+					Map<String,List<Integer>> map = new HashMap<String,List<Integer>>();
+					Map<String, Integer> uniqJobId = jobs.stream().collect(Collectors.toMap(ReportJob::getUniq, ReportJob::getId));
+					for(ReportJob job : jobs) {
+						List<ReportTask> tasksSort = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().eq(ReportTask::getJobId, job.getId()).orderByAsc(ReportTask::getId));
+						List<Integer> seq = new ArrayList<Integer>();
+						for(int i=0;i<tasksSort.size();i++) {
+							if(taskIds.contains(tasksSort.get(i).getId().toString())) {
+								seq.add(i);
+							}
+						}
+						map.put(job.getUniq(), seq);
+					}
+					List<ReportTemp> temps = reportTempService.list(new QueryWrapper<ReportTemp>().lambda().in(ReportTemp::getUniq,map.keySet()));
+					List<ReportTask> addTasks = new ArrayList<ReportTask>();
+					for(ReportTemp temp : temps) {
+						String config = temp.getConfig();
+						Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
+						reportTempService.timeHandler(configObject);
+			    		List<Map<String,Object>> datasetConfig = (List<Map<String, Object>>) configObject.get("dataset");
+			    		List<Integer> seqs = map.get(temp.getUniq());
+			    		for(int i=0;i<datasetConfig.size();i++) {
+			    			if(seqs.contains(i)) {
+			    				ReportTask reportTask = new ReportTask();
+			    	    		reportTask.setJobId(uniqJobId.get(temp.getUniq()));
+			    	    		reportTask.setType((String)datasetConfig.get(i).get("type"));
+			    	    		reportTask.setState(0);
+			    	    		reportTask.setPercent(0.0);
+			    	    		reportTask.setSource(temp.getSource());
+			    	    		reportTask.setTempId(temp.getId());
+			    	    		reportTask.setStartTime((DateTime)configObject.get("startTime"));
+			    	    		reportTask.setEndTime((DateTime)configObject.get("endTime"));
+			    	    		reportTask.setConfig(JSON.toJSONString(datasetConfig.get(i)));
+			    	    		reportTask.setCtime(new Date());
+			    	    		addTasks.add(reportTask);
+			    			}
+			    		}
+					}
+					reportTaskService.removeByIds(taskIds);
+					reportTaskService.saveBatch(addTasks);
+				}
+				break;
+		}
+		/**
+		 * 重新执行任务 需要将相关数据进行清理
+		**/ 
+		this.baseMapper.deleteResult(Arrays.asList(ids.split(",")), type, overview);
+		
 	}
 }

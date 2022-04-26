@@ -26,4 +26,6 @@ public interface ReportJobService extends IService<ReportJob>{
 	void batchDownloadPdf(List<String> jobIds,HttpServletResponse response) throws Exception;
 	
 	void upload(String fileName) throws FileNotFoundException;
+	
+	void restartJob(Map<String,Object> param);
 }
