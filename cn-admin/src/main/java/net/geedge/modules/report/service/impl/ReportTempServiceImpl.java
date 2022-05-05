@@ -233,8 +233,8 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				}
 				break;
 			case "customize":
-				String sTime = (String) timeConfMap.get("startTime");
-				String eTime = (String) timeConfMap.get("endTime");
+				String sTime = (String) conf.get("startTime");
+				String eTime = (String) conf.get("endTime");
 				startTime = DateUtil.parse(sTime);
 				endTime = DateUtil.parse(eTime);
 				break;
@@ -244,9 +244,9 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 			// 将计算出来的时间 转成utc时间
 			startTime = DateUtil.offset(startTime, DateField.MILLISECOND, -sysTimezone.getOffset());
 			endTime = DateUtil.offset(endTime, DateField.MILLISECOND, -sysTimezone.getOffset());
-			conf.put("startTime", startTime);
-			conf.put("endTime",endTime);
 		}
+		conf.put("startTime", startTime);
+		conf.put("endTime",endTime);
 	}
 	
 }

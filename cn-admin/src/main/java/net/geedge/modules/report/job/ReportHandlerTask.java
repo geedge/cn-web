@@ -132,6 +132,8 @@ public class ReportHandlerTask extends QuartzJobBean {
 	        		String config = task.getConfig();
 	        		data.put("startTime", task.getStartTime().getTime()/1000);
 	        		data.put("endTime", task.getEndTime().getTime()/1000);
+	        		long timeDiff = task.getEndTime().getTime()/1000 - task.getStartTime().getTime()/1000;
+	        		data.put("timeDiff",timeDiff);
 	        		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
 	        		String querySql = (String) configObject.get("querySql");
 	        		Template template = FreeMarkerUtil.stringToTemplate("createJob"+task.getId(), querySql);
