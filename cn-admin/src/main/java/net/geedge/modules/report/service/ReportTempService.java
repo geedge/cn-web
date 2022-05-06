@@ -1,5 +1,6 @@
 package net.geedge.modules.report.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public interface ReportTempService extends IService<ReportTemp>{
 	
 	void saveOrModify(ReportTemp reportTemp);
 	
-	void createJobTasks(ReportTemp reportTemp);
+	void createJobTasks(ReportTemp reportTemp,Date startTime,Date endTime);
 	
 	void timeHandler(Map<String,Object> conf);
 }

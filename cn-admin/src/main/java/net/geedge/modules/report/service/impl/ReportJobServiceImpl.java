@@ -446,7 +446,10 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		if(ObjectUtil.isEmpty(overview)) {
 			overview = 0;
 		}
-		
+		String startTime = (String) param.get("startTime");
+		String endTime = (String) param.get("endTime");
+		DateTime sTime = DateUtil.parse(startTime);
+		DateTime eTime = DateUtil.parse(endTime);
 		// 创建新的任务
 		switch (type){
 			case 0 : 
@@ -482,7 +485,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					this.removeByIds(Arrays.asList(ids.split(",")));
 					List<ReportTemp> temps = reportTempService.list(new QueryWrapper<ReportTemp>().lambda().in(ReportTemp::getUniq,uniqs));
 					for(ReportTemp temp : temps) {
-						reportTempService.createJobTasks(temp);
+						reportTempService.createJobTasks(temp,sTime,eTime);
 					}
 					this.removeByIds(Arrays.asList(ids.split(",")));
 				}
@@ -499,6 +502,12 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					jobs.stream().forEach(job -> {
 						job.setState(0);
 						job.setUpload(0);
+						if(ObjectUtil.isNotEmpty(sTime)) {
+			    			job.setStartTime(sTime);
+			    		}
+			    		if(ObjectUtil.isNotEmpty(eTime)) {
+			    			job.setEndTime(eTime);
+			    		}
 					});
 					this.updateBatchById(jobs);
 				}
@@ -532,6 +541,12 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 						reportTempService.timeHandler(configObject);
 			    		List<Map<String,Object>> datasetConfig = (List<Map<String, Object>>) configObject.get("dataset");
 			    		List<Integer> seqs = map.get(temp.getUniq());
+			    		if(ObjectUtil.isNotEmpty(sTime)) {
+			    			configObject.put("startTime", sTime);
+			    		}
+			    		if(ObjectUtil.isNotEmpty(eTime)) {
+			    			configObject.put("endTime", eTime);
+			    		}
 			    		for(int i=0;i<datasetConfig.size();i++) {
 			    			if(seqs.contains(i)) {
 			    				ReportTask reportTask = new ReportTask();
