@@ -246,7 +246,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					s3Path = StrUtil.str(s3Path+StrUtil.SLASH);
 				}
 			}
-			String path = StrUtil.str(s3Path+s3BucketName+StrUtil.C_SLASH+job.getName()+".pdf");
+			String path = StrUtil.str(s3Path+s3BucketName+StrUtil.C_SLASH+job.getName()+job.getCtime().getTime()+".pdf");
 			RequestConfig config = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000).build();
 			CloseableHttpClient createDefault = HttpClients.createDefault();
 			HttpGet request = new HttpGet(path);
@@ -257,7 +257,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			if(statusCode == 200) {
 				InputStream content = entity.getContent();
 				FastByteArrayOutputStream read = IoUtil.read(content);
-	            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + URLEncoder.encode(job.getName()+".pdf", "UTF-8"));
+	            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + URLEncoder.encode(job.getName()+job.getCtime().getTime()+".pdf", "UTF-8"));
 				read.writeTo(response.getOutputStream());
 			}else {
 				String errorMsg = EntityUtils.toString(entity);
@@ -296,7 +296,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			String s3Path = sysConfigService.getValue("s3_path");
 			String s3BucketName = sysConfigService.getValue("s3_bucket_name");
 			for(ReportJob job : reportJobs) {
-				String fileName = job.getName()+".pdf";
+				String fileName = job.getName()+job.getCtime().getTime()+".pdf";
 				File file = FileUtil.file(Constant.TEMP_PATH+File.separator+fileName);
 				if(file.exists()) {
 					file.delete();
@@ -311,7 +311,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 							s3Path = StrUtil.str(s3Path+StrUtil.SLASH);
 						}
 					}
-					String path = StrUtil.str(s3Path+s3BucketName+StrUtil.C_SLASH+job.getName()+".pdf");
+					String path = StrUtil.str(s3Path+s3BucketName+StrUtil.C_SLASH+job.getName()+job.getCtime().getTime()+".pdf");
 					RequestConfig config = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000).build();
 					CloseableHttpClient createDefault = HttpClients.createDefault();
 					HttpGet request = new HttpGet(path);

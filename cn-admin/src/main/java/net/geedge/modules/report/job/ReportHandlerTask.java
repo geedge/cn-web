@@ -363,7 +363,7 @@ public class ReportHandlerTask extends QuartzJobBean {
         for(ReportJob reportJob : finishJobs) {
         	try {
         		if(Integer.valueOf(s3Enable)==1) {
-		        	BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH + File.separator + reportJob.getName()+".pdf");
+		        	BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH + File.separator + reportJob.getName()+reportJob.getCtime().getTime()+".pdf");
 		    		String html = reportJobService.queryView(reportJob.getId());
 		    		if(StrUtil.isEmpty(html)) {
 		    			log.error("s3Upload get html content error");
@@ -378,7 +378,7 @@ public class ReportHandlerTask extends QuartzJobBean {
 		    		PdfDocument pdfDoc = new PdfDocument(new PdfWriter(outputStream));
 			        pdfDoc.setDefaultPageSize(new PageSize(pdfWidth,pdfHeight));
 			        HtmlConverter.convertToPdf(html,pdfDoc,converterProperties);
-	            	reportJobService.upload(reportJob.getName()+".pdf");
+	            	reportJobService.upload(reportJob.getName()+reportJob.getCtime().getTime()+".pdf");
 	            	reportJob.setUpload(1);
 	            	reportJob.setFtime(new Date());
 	            }
