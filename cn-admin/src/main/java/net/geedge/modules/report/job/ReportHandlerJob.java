@@ -72,7 +72,7 @@ public class ReportHandlerJob extends QuartzJobBean {
         Integer tempId = Integer.valueOf(split[1]);
         ReportTemp temp = reportTempService.getById(tempId);
         if(ObjectUtil.isNotEmpty(temp)) {
-        	reportTempService.createJobTasks(temp);
+        	reportTempService.createJobTasks(temp,null,null);
         }else {
         	log.warn("ReportHandlerJob temp not exists,please check DB data");
         }

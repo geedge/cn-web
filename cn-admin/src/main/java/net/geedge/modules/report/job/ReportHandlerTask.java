@@ -132,6 +132,8 @@ public class ReportHandlerTask extends QuartzJobBean {
 	        		String config = task.getConfig();
 	        		data.put("startTime", task.getStartTime().getTime()/1000);
 	        		data.put("endTime", task.getEndTime().getTime()/1000);
+	        		long timeDiff = task.getEndTime().getTime()/1000 - task.getStartTime().getTime()/1000;
+	        		data.put("timeDiff",timeDiff);
 	        		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
 	        		String querySql = (String) configObject.get("querySql");
 	        		Template template = FreeMarkerUtil.stringToTemplate("createJob"+task.getId(), querySql);
@@ -283,6 +285,7 @@ public class ReportHandlerTask extends QuartzJobBean {
 			List<ReportResult> results = new ArrayList<ReportResult>();
 			futureList.forEach(future -> {
 				Map<String, Object> result = future.getNow(null);
+				log.debug("getResult result info : {}",JSON.toJSON(result));
 				Integer status = (Integer) result.get("status");
     			if(status == 200) {
     				List<Map<String,Object>> resultData = (List<Map<String, Object>>) result.get("data");
@@ -294,7 +297,7 @@ public class ReportHandlerTask extends QuartzJobBean {
     					rr.setCtime(new Date());
     					rr.setResult(res);
     					rr.setTaskId(task.getId());
-    					results.add(rr);
+						results.add(rr);
     					task.setState(3);
     				}
     			}else {
@@ -334,9 +337,13 @@ public class ReportHandlerTask extends QuartzJobBean {
         List<ReportTask> unfinishTasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().in(ReportTask::getJobId, jobIds).lt(ReportTask::getState, 3));
         List<Integer> unfinshJobs = unfinishTasks.stream().map(ReportTask::getJobId).collect(Collectors.toList());
         List<Integer> finishJobs = jobIds.stream().filter(item -> !unfinshJobs.contains(item)).collect(Collectors.toList());
+        String s3Enable = sysConfigService.getValue("s3_enable");
         for(Integer jobId : finishJobs) {
         	ReportJob reportJob = idJobs.get(jobId);
     		reportJob.setState(1);
+    		if(Integer.valueOf(s3Enable)==0) {
+    			reportJob.setFtime(new Date());
+    		}
         }
         // 批量修改任务状态信息
         if(ObjectUtil.isNotEmpty(reportJobs)) {
@@ -356,7 +363,7 @@ public class ReportHandlerTask extends QuartzJobBean {
         for(ReportJob reportJob : finishJobs) {
         	try {
         		if(Integer.valueOf(s3Enable)==1) {
-		        	BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH + File.separator + reportJob.getName()+".pdf");
+		        	BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH + File.separator + reportJob.getName()+reportJob.getCtime().getTime()+".pdf");
 		    		String html = reportJobService.queryView(reportJob.getId());
 		    		if(StrUtil.isEmpty(html)) {
 		    			log.error("s3Upload get html content error");
@@ -371,8 +378,9 @@ public class ReportHandlerTask extends QuartzJobBean {
 		    		PdfDocument pdfDoc = new PdfDocument(new PdfWriter(outputStream));
 			        pdfDoc.setDefaultPageSize(new PageSize(pdfWidth,pdfHeight));
 			        HtmlConverter.convertToPdf(html,pdfDoc,converterProperties);
-	            	reportJobService.upload(reportJob.getName()+".pdf");
+	            	reportJobService.upload(reportJob.getName()+reportJob.getCtime().getTime()+".pdf");
 	            	reportJob.setUpload(1);
+	            	reportJob.setFtime(new Date());
 	            }
         	}catch(Exception e) {
         		log.error("s3Upload error  msg : {}",e.getMessage());

@@ -177,6 +177,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		}
 		String html = "";
 		ChromeDriver driver =null;
+		StringWriter writer =null;
 		try {
 			// 获取html模板信息
 			ReportJob reportJob = this.getById(jobId);
@@ -193,7 +194,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				data.putAll(r);
 			}
 			Template template = FreeMarkerUtil.stringToTemplate("Task"+reportJob.getName(), html);
-			StringWriter writer = new StringWriter();
+			writer = new StringWriter();
 			template.process(data, writer);
 			writer.flush();
 			html = writer.toString();
@@ -221,6 +222,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			if(ObjectUtil.isNotEmpty(driver)) {
 				driver.close();
 			}
+			IoUtil.close(writer);
 		}
 		return html;
 	}
@@ -244,7 +246,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					s3Path = StrUtil.str(s3Path+StrUtil.SLASH);
 				}
 			}
-			String path = StrUtil.str(s3Path+s3BucketName+StrUtil.C_SLASH+job.getName()+".pdf");
+			String path = StrUtil.str(s3Path+s3BucketName+StrUtil.C_SLASH+job.getName()+job.getCtime().getTime()+".pdf");
 			RequestConfig config = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000).build();
 			CloseableHttpClient createDefault = HttpClients.createDefault();
 			HttpGet request = new HttpGet(path);
@@ -255,7 +257,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			if(statusCode == 200) {
 				InputStream content = entity.getContent();
 				FastByteArrayOutputStream read = IoUtil.read(content);
-	            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + URLEncoder.encode(job.getName()+".pdf", "UTF-8"));
+	            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + URLEncoder.encode(job.getName()+job.getCtime().getTime()+".pdf", "UTF-8"));
 				read.writeTo(response.getOutputStream());
 			}else {
 				String errorMsg = EntityUtils.toString(entity);
@@ -294,7 +296,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			String s3Path = sysConfigService.getValue("s3_path");
 			String s3BucketName = sysConfigService.getValue("s3_bucket_name");
 			for(ReportJob job : reportJobs) {
-				String fileName = job.getName()+".pdf";
+				String fileName = job.getName()+job.getCtime().getTime()+".pdf";
 				File file = FileUtil.file(Constant.TEMP_PATH+File.separator+fileName);
 				if(file.exists()) {
 					file.delete();
@@ -309,7 +311,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 							s3Path = StrUtil.str(s3Path+StrUtil.SLASH);
 						}
 					}
-					String path = StrUtil.str(s3Path+s3BucketName+StrUtil.C_SLASH+job.getName()+".pdf");
+					String path = StrUtil.str(s3Path+s3BucketName+StrUtil.C_SLASH+job.getName()+job.getCtime().getTime()+".pdf");
 					RequestConfig config = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000).build();
 					CloseableHttpClient createDefault = HttpClients.createDefault();
 					HttpGet request = new HttpGet(path);
@@ -444,7 +446,10 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		if(ObjectUtil.isEmpty(overview)) {
 			overview = 0;
 		}
-		
+		String startTime = (String) param.get("startTime");
+		String endTime = (String) param.get("endTime");
+		DateTime sTime = DateUtil.parse(startTime);
+		DateTime eTime = DateUtil.parse(endTime);
 		// 创建新的任务
 		switch (type){
 			case 0 : 
@@ -480,7 +485,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					this.removeByIds(Arrays.asList(ids.split(",")));
 					List<ReportTemp> temps = reportTempService.list(new QueryWrapper<ReportTemp>().lambda().in(ReportTemp::getUniq,uniqs));
 					for(ReportTemp temp : temps) {
-						reportTempService.createJobTasks(temp);
+						reportTempService.createJobTasks(temp,sTime,eTime);
 					}
 					this.removeByIds(Arrays.asList(ids.split(",")));
 				}
@@ -497,6 +502,12 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					jobs.stream().forEach(job -> {
 						job.setState(0);
 						job.setUpload(0);
+						if(ObjectUtil.isNotEmpty(sTime)) {
+			    			job.setStartTime(sTime);
+			    		}
+			    		if(ObjectUtil.isNotEmpty(eTime)) {
+			    			job.setEndTime(eTime);
+			    		}
 					});
 					this.updateBatchById(jobs);
 				}
@@ -530,6 +541,12 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 						reportTempService.timeHandler(configObject);
 			    		List<Map<String,Object>> datasetConfig = (List<Map<String, Object>>) configObject.get("dataset");
 			    		List<Integer> seqs = map.get(temp.getUniq());
+			    		if(ObjectUtil.isNotEmpty(sTime)) {
+			    			configObject.put("startTime", sTime);
+			    		}
+			    		if(ObjectUtil.isNotEmpty(eTime)) {
+			    			configObject.put("endTime", eTime);
+			    		}
 			    		for(int i=0;i<datasetConfig.size();i++) {
 			    			if(seqs.contains(i)) {
 			    				ReportTask reportTask = new ReportTask();

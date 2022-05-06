@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 
+import cn.hutool.core.date.DateUtil;
 import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
@@ -64,11 +65,11 @@ public class ReportTempController extends AbstractController{
 	}
 	
 	@PostMapping("/createJob")
-	public R createJob(@RequestParam Integer id) {
+	public R createJob(@RequestParam Integer id,@RequestParam String startTime,@RequestParam String endTime) {
 		ValidateUtils.is(id).notNull(RCode.REPORT_TEMP_ID_ISNULL);
 		ReportTemp temp = reportTempService.getById(id);
 		if(ObjectUtils.isNotEmpty(temp)) {
-			reportTempService.createJobTasks(temp);
+			reportTempService.createJobTasks(temp,DateUtil.parse(startTime),DateUtil.parse(endTime));
 		}else {
 			return R.error(RCode.REPORT_TEMP_NOT_EXISTS);
 		}

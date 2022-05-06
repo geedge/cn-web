@@ -32,6 +32,7 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.log.Log;
@@ -110,12 +111,12 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		Integer isRepeat = (Integer) tempConfigMap.get("isRepeat");
 		//判断是新增定时任务还是立即执行以及定时任务的启停状态
 		if(isRepeat.equals(0) && reportTemp.getState().equals(1)) {
-			this.createJobTasks(reportTemp);
+			this.createJobTasks(reportTemp,null,null);
 		}
 	}
 
 	@Override
-	public void createJobTasks(ReportTemp temp) {
+	public void createJobTasks(ReportTemp temp,Date startTime,Date endTime) {
 		
 		List<ReportTask> reportTasks = new ArrayList<ReportTask>();
 	    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
@@ -123,7 +124,7 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	    try {
             // 根据uniq创建对应的job和task数据信息
 	    	ReportJob reportJob = new ReportJob();
-	    	reportJob.setName(StrUtil.concat(false, temp.getName(),new Date().getTime()+"","job"));
+	    	reportJob.setName(StrUtil.concat(false, temp.getName(),DateUtil.format(new Date(), "yyyyMMdd"),"job"));
 	    	reportJob.setCtime(new Date());
 	    	reportJob.setUniq(temp.getUniq());
 	    	reportJob.setHtmlContent(temp.getHtmlContent());
@@ -132,6 +133,12 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	    	//根据temp计算查询开始以及结束时间
     		this.timeHandler(configObject);
     		List<Map<String,Object>> datasetConfig = (List<Map<String, Object>>) configObject.get("dataset");
+    		if(ObjectUtil.isNotEmpty(startTime)) {
+    			configObject.put("startTime", startTime);
+    		}
+    		if(ObjectUtil.isNotEmpty(endTime)) {
+    			configObject.put("endTime", endTime);
+    		}
     		reportJob.setStartTime((DateTime)configObject.get("startTime"));
     		reportJob.setEndTime((DateTime)configObject.get("endTime"));
     		reportJobService.save(reportJob);
@@ -233,8 +240,8 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				}
 				break;
 			case "customize":
-				String sTime = (String) timeConfMap.get("startTime");
-				String eTime = (String) timeConfMap.get("endTime");
+				String sTime = (String) conf.get("startTime");
+				String eTime = (String) conf.get("endTime");
 				startTime = DateUtil.parse(sTime);
 				endTime = DateUtil.parse(eTime);
 				break;
@@ -244,9 +251,9 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 			// 将计算出来的时间 转成utc时间
 			startTime = DateUtil.offset(startTime, DateField.MILLISECOND, -sysTimezone.getOffset());
 			endTime = DateUtil.offset(endTime, DateField.MILLISECOND, -sysTimezone.getOffset());
-			conf.put("startTime", startTime);
-			conf.put("endTime",endTime);
 		}
+		conf.put("startTime", startTime);
+		conf.put("endTime",endTime);
 	}
 	
 }
