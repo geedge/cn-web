@@ -285,6 +285,7 @@ public class ReportHandlerTask extends QuartzJobBean {
 			List<ReportResult> results = new ArrayList<ReportResult>();
 			futureList.forEach(future -> {
 				Map<String, Object> result = future.getNow(null);
+				log.debug("getResult result info : {}",JSON.toJSON(result));
 				Integer status = (Integer) result.get("status");
     			if(status == 200) {
     				List<Map<String,Object>> resultData = (List<Map<String, Object>>) result.get("data");
@@ -296,8 +297,10 @@ public class ReportHandlerTask extends QuartzJobBean {
     					rr.setCtime(new Date());
     					rr.setResult(res);
     					rr.setTaskId(task.getId());
-    					results.add(rr);
-    					task.setState(3);
+    					if(task.getState()!=3) {
+    						results.add(rr);
+        					task.setState(3);
+    					}
     				}
     			}else {
     				log.debug("getResult error code : {}",status);
