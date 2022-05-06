@@ -297,10 +297,8 @@ public class ReportHandlerTask extends QuartzJobBean {
     					rr.setCtime(new Date());
     					rr.setResult(res);
     					rr.setTaskId(task.getId());
-    					if(task.getState()!=3) {
-    						results.add(rr);
-        					task.setState(3);
-    					}
+						results.add(rr);
+    					task.setState(3);
     				}
     			}else {
     				log.debug("getResult error code : {}",status);

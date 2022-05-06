@@ -177,6 +177,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		}
 		String html = "";
 		ChromeDriver driver =null;
+		StringWriter writer =null;
 		try {
 			// 获取html模板信息
 			ReportJob reportJob = this.getById(jobId);
@@ -193,7 +194,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				data.putAll(r);
 			}
 			Template template = FreeMarkerUtil.stringToTemplate("Task"+reportJob.getName(), html);
-			StringWriter writer = new StringWriter();
+			writer = new StringWriter();
 			template.process(data, writer);
 			writer.flush();
 			html = writer.toString();
@@ -221,6 +222,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			if(ObjectUtil.isNotEmpty(driver)) {
 				driver.close();
 			}
+			IoUtil.close(writer);
 		}
 		return html;
 	}
