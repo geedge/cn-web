@@ -20,6 +20,8 @@ public class ReportJob {
 	
 	private Date ctime;
 	
+	private Date ftime;
+	
 	private String remark;
 	
 	private String uniq;

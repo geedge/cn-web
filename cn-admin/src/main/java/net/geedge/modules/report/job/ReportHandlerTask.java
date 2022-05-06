@@ -337,9 +337,13 @@ public class ReportHandlerTask extends QuartzJobBean {
         List<ReportTask> unfinishTasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().in(ReportTask::getJobId, jobIds).lt(ReportTask::getState, 3));
         List<Integer> unfinshJobs = unfinishTasks.stream().map(ReportTask::getJobId).collect(Collectors.toList());
         List<Integer> finishJobs = jobIds.stream().filter(item -> !unfinshJobs.contains(item)).collect(Collectors.toList());
+        String s3Enable = sysConfigService.getValue("s3_enable");
         for(Integer jobId : finishJobs) {
         	ReportJob reportJob = idJobs.get(jobId);
     		reportJob.setState(1);
+    		if(Integer.valueOf(s3Enable)==0) {
+    			reportJob.setFtime(new Date());
+    		}
         }
         // 批量修改任务状态信息
         if(ObjectUtil.isNotEmpty(reportJobs)) {
@@ -376,6 +380,7 @@ public class ReportHandlerTask extends QuartzJobBean {
 			        HtmlConverter.convertToPdf(html,pdfDoc,converterProperties);
 	            	reportJobService.upload(reportJob.getName()+".pdf");
 	            	reportJob.setUpload(1);
+	            	reportJob.setFtime(new Date());
 	            }
         	}catch(Exception e) {
         		log.error("s3Upload error  msg : {}",e.getMessage());
