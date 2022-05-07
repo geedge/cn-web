@@ -1,6 +1,7 @@
 package net.geedge.modules.galaxy.controller;
 
 import net.geedge.common.utils.R;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.controller.AbstractController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,15 +26,13 @@ public class GalaxyResolveController extends AbstractController {
         if(index!=-1) {
             Process process = null;
             try {
-                String[] cmd = new String[]{"sh","-c","dig","+trace",domain};
-                process = Runtime.getRuntime().exec(cmd);
-                String result = printResults(process);
+                process = Tool.RuntimeUtil.exec("dig +trace "+domain);
+                String result = Tool.RuntimeUtil.getResult(process);
                 Map<String,Object> data = new HashMap();
                 data.put("resultType", "single");
                 data.put("result",result);
-                logger.info(result);
                 return R.ok().put("data",data);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.error(e.getMessage());
             } finally {
                 if(process!=null) {
@@ -47,7 +46,7 @@ public class GalaxyResolveController extends AbstractController {
     }
     /**
      *   消费inputstream，并返回
-     */
+     *//*
     public static String printResults(Process process) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String s ;
@@ -58,5 +57,5 @@ public class GalaxyResolveController extends AbstractController {
         }
         br.close();
         return sb.toString();
-    }
+    }*/
 }
