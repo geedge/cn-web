@@ -25,11 +25,13 @@ public class GalaxyResolveController extends AbstractController {
         if(index!=-1) {
             Process process = null;
             try {
-                process = Runtime.getRuntime().exec("/bin/sh dig +trace "+domain);
+                String[] cmd = new String[]{"sh","-c","dig","+trace",domain};
+                process = Runtime.getRuntime().exec(cmd);
                 String result = printResults(process);
                 Map<String,Object> data = new HashMap();
                 data.put("resultType", "single");
                 data.put("result",result);
+                logger.info(result);
                 return R.ok().put("data",data);
             } catch (IOException e) {
                 logger.error(e.getMessage());
