@@ -21,7 +21,7 @@ ADD  go.tar.gz ./
 
 #默认启动jar
 #ENTRYPOINT ["java","-jar","syncconfigtoredis.jar"]
-RUN chmod -R 755 /opt/cn/cn-web/go/ && go build xjar.go && chmod +x /opt/cn/cn-web/xjar
+RUN yum -y install bind-utils && chmod -R 755 /opt/cn/cn-web/go/ && go build xjar.go && chmod +x /opt/cn/cn-web/xjar
 #默认启动jar
 ENTRYPOINT ["./xjar","java","-jar","cn-admin.xjar"]
 
