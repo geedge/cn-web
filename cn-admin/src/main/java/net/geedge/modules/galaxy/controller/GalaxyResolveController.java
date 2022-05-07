@@ -21,7 +21,8 @@ public class GalaxyResolveController extends AbstractController {
     @RequestMapping("/domainRecursiveResolve")
     public R domainRecursiveResolve(String domain){
         String osName = System.getProperties().getProperty("os.name");
-        if(osName.equals("Linux")) {
+        int index = osName.toUpperCase().indexOf("LINUX");
+        if(index!=-1) {
             Process process = null;
             try {
                 process = Runtime.getRuntime().exec("dig +trace "+domain);
@@ -38,7 +39,7 @@ public class GalaxyResolveController extends AbstractController {
                 }
             }
         }
-        String error = "The current system is not linux and cannot be executed";
+        String error = "The current system is " + osName + " and cannot be executed";
         logger.debug(error);
         return R.error().put("msg",error);
     }
