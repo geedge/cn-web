@@ -25,7 +25,7 @@ public class GalaxyResolveController extends AbstractController {
         if(index!=-1) {
             Process process = null;
             try {
-                process = Runtime.getRuntime().exec("dig +trace "+domain);
+                process = Runtime.getRuntime().exec("/bin/sh dig +trace "+domain);
                 String result = printResults(process);
                 Map<String,Object> data = new HashMap();
                 data.put("resultType", "single");
