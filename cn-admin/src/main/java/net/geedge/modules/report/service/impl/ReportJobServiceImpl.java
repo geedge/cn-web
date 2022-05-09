@@ -172,6 +172,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	public String renderHtml(Integer jobId,List<ReportTask> reportTasks,List<ReportResult> reportResults) {
 		String driverEnable = sysConfigService.getValue("driver_enable");
 		String uiStaticUrl = sysConfigService.getValue("ui_static_url");
+		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));		
 		if(StrUtil.isEmpty(uiStaticUrl)) {
 			uiStaticUrl = "localhost";
 		}
@@ -184,9 +185,10 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			html = reportJob.getHtmlContent();
 			Map<Integer, ReportResult> taskIdResult = reportResults.stream().collect(Collectors.toMap(ReportResult::getTaskId, Function.identity()));
 			Map<String,Object> data = new HashMap<String,Object>();
-			data.put("startTime", reportTasks.get(0).getStartTime().getTime()/1000);
-			data.put("endTime", reportTasks.get(0).getEndTime().getTime()/1000);
+			data.put("startTime", reportJob.getStartTime().getTime()/1000);
+			data.put("endTime", reportJob.getEndTime().getTime()/1000);
 			data.put("uiStaticUrl",uiStaticUrl);
+			data.put("timeZoneOffset", sysTimezone.getOffset());
 			for(ReportTask reportTask : reportTasks) {
 				ReportResult reportResult = taskIdResult.get(reportTask.getId());
 				String result = reportResult.getResult();
@@ -446,10 +448,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		if(ObjectUtil.isEmpty(overview)) {
 			overview = 0;
 		}
-		String startTime = (String) param.get("startTime");
-		String endTime = (String) param.get("endTime");
-		DateTime sTime = DateUtil.parse(startTime);
-		DateTime eTime = DateUtil.parse(endTime);
+		DateTime sTime = null;
+		DateTime eTime = null;
 		// 创建新的任务
 		switch (type){
 			case 0 : 
@@ -482,9 +482,15 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 						throw new CNException(RCode.ERROR);
 					}
 					List<String> uniqs = reportJobs.stream().map(ReportJob::getUniq).collect(Collectors.toList());
+					Map<String, ReportJob> uniqJob = reportJobs.stream().collect(Collectors.toMap(ReportJob::getUniq, Function.identity()));
 					this.removeByIds(Arrays.asList(ids.split(",")));
 					List<ReportTemp> temps = reportTempService.list(new QueryWrapper<ReportTemp>().lambda().in(ReportTemp::getUniq,uniqs));
 					for(ReportTemp temp : temps) {
+						ReportJob reportJob = uniqJob.get(temp.getUniq());
+						if(ObjectUtil.isNotEmpty(reportJob)) {
+							sTime = DateUtil.date(reportJob.getStartTime());
+							eTime = DateUtil.date(reportJob.getEndTime());
+						}
 						reportTempService.createJobTasks(temp,sTime,eTime);
 					}
 					this.removeByIds(Arrays.asList(ids.split(",")));
@@ -499,16 +505,10 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				List<Integer> jobIds = reportTasks.stream().map(ReportTask::getJobId).collect(Collectors.toList());
 				Collection<ReportJob> jobs = this.listByIds(jobIds);
 				if(ObjectUtil.isNotEmpty(jobs)) {
-					jobs.stream().forEach(job -> {
+					for(ReportJob job : jobs) {
 						job.setState(0);
 						job.setUpload(0);
-						if(ObjectUtil.isNotEmpty(sTime)) {
-			    			job.setStartTime(sTime);
-			    		}
-			    		if(ObjectUtil.isNotEmpty(eTime)) {
-			    			job.setEndTime(eTime);
-			    		}
-					});
+					}
 					this.updateBatchById(jobs);
 				}
 				if(overview.equals(0)) {
@@ -522,7 +522,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				if(overview.equals(1)) {
 					List<String> taskIds = Arrays.asList(ids.split(","));
 					Map<String,List<Integer>> map = new HashMap<String,List<Integer>>();
-					Map<String, Integer> uniqJobId = jobs.stream().collect(Collectors.toMap(ReportJob::getUniq, ReportJob::getId));
+					Map<String, ReportJob> uniqJob = jobs.stream().collect(Collectors.toMap(ReportJob::getUniq, Function.identity()));
 					for(ReportJob job : jobs) {
 						List<ReportTask> tasksSort = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().eq(ReportTask::getJobId, job.getId()).orderByAsc(ReportTask::getId));
 						List<Integer> seq = new ArrayList<Integer>();
@@ -541,23 +541,22 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 						reportTempService.timeHandler(configObject);
 			    		List<Map<String,Object>> datasetConfig = (List<Map<String, Object>>) configObject.get("dataset");
 			    		List<Integer> seqs = map.get(temp.getUniq());
-			    		if(ObjectUtil.isNotEmpty(sTime)) {
-			    			configObject.put("startTime", sTime);
-			    		}
-			    		if(ObjectUtil.isNotEmpty(eTime)) {
-			    			configObject.put("endTime", eTime);
-			    		}
+			    		ReportJob reportJob = uniqJob.get(temp.getUniq());
+						if(ObjectUtil.isNotEmpty(reportJob)) {
+							sTime = DateUtil.date(reportJob.getStartTime());
+							eTime = DateUtil.date(reportJob.getEndTime());
+						}
 			    		for(int i=0;i<datasetConfig.size();i++) {
 			    			if(seqs.contains(i)) {
 			    				ReportTask reportTask = new ReportTask();
-			    	    		reportTask.setJobId(uniqJobId.get(temp.getUniq()));
+			    	    		reportTask.setJobId(uniqJob.get(temp.getUniq()).getId());
 			    	    		reportTask.setType((String)datasetConfig.get(i).get("type"));
 			    	    		reportTask.setState(0);
 			    	    		reportTask.setPercent(0.0);
 			    	    		reportTask.setSource(temp.getSource());
 			    	    		reportTask.setTempId(temp.getId());
-			    	    		reportTask.setStartTime((DateTime)configObject.get("startTime"));
-			    	    		reportTask.setEndTime((DateTime)configObject.get("endTime"));
+			    	    		reportTask.setStartTime(sTime);
+			    	    		reportTask.setEndTime(eTime);
 			    	    		reportTask.setConfig(JSON.toJSONString(datasetConfig.get(i)));
 			    	    		reportTask.setCtime(new Date());
 			    	    		addTasks.add(reportTask);
