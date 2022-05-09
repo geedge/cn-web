@@ -1,18 +1,14 @@
 package net.geedge.modules.galaxy.controller;
 
-import com.jcraft.jsch.*;
-import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.controller.AbstractController;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * galaxy 递归解析
@@ -22,69 +18,37 @@ import java.util.Properties;
 @RestController
 @RequestMapping("/galaxy")
 public class GalaxyResolveController extends AbstractController {
-    @Value("${ssh.host}")
-    private String host;
-
-    @Value("${ssh.port}")
-    private int port;
-
-    @Value("${ssh.user}")
-    private String username;
-
-    @Value("${ssh.pin}")
-    private String password;
 
     @RequestMapping("/domainRecursiveResolve")
     public R domainRecursiveResolve(String domain){
-        //解密
-        String pin = Tool.AesUtil.decrypt(password, Constant.AES_SECRET_KEY);
-        ChannelExec exec = null;
-        Session session = null;
-        try {
-            // 创建JSch
-            JSch jSch = new JSch();
-            // 获取session
-            session = jSch.getSession(username,host,port);
-            session.setPassword(pin);
-            Properties prop = new Properties();
-            //主机密钥确认
-            prop.put("StrictHostKeyChecking", "no");
-            session.setConfig(prop);
-
-            // 启动连接
-            session.connect();
-            exec = (ChannelExec)session.openChannel("exec");
-            exec.setCommand("dig +trace "+domain);
-            exec.setInputStream(null);
-            exec.setErrStream(System.err);
-            exec.connect();
-
-            // 消费所有输入流，必须在exec之后
-            String inStr = consumeInputStream(exec.getInputStream());
-            Map data = new HashMap();
-            data.put("resultType", "single");
-            data.put("result",inStr);
-            return R.ok().put("data",data);
-        } catch (JSchException e) {
-            logger.error(e.getMessage());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        } finally {
-            //关闭资源
-            if (exec != null){
-                exec.disconnect();
-            }
-            if (session != null){
-                session.disconnect();
+        String osName = System.getProperties().getProperty("os.name");
+        int index = osName.toUpperCase().indexOf("LINUX");
+        if(index!=-1) {
+            Process process = null;
+            try {
+                process = Tool.RuntimeUtil.exec("dig +trace "+domain);
+                String result = Tool.RuntimeUtil.getResult(process);
+                Map<String,Object> data = new HashMap();
+                data.put("resultType", "single");
+                data.put("result",result);
+                return R.ok().put("data",data);
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            } finally {
+                if(process!=null) {
+                    process.destroy();
+                }
             }
         }
-        return R.error();
+        String error = "The current system is " + osName + " and cannot be executed";
+        logger.debug(error);
+        return R.error().put("msg",error);
     }
     /**
      *   消费inputstream，并返回
-     */
-    public static String consumeInputStream(InputStream is) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+     *//*
+    public static String printResults(Process process) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String s ;
         StringBuilder sb = new StringBuilder();
         while((s=br.readLine())!=null){
@@ -93,5 +57,5 @@ public class GalaxyResolveController extends AbstractController {
         }
         br.close();
         return sb.toString();
-    }
+    }*/
 }
