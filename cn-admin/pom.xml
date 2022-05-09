@@ -433,7 +433,7 @@
                        ${project.version}表示镜像版本tag，如果不指定，docker有该镜像名，版本号自动更替，
                        没有版本号,使用默认的版本latest,也可以在下面的imageTags标签中指定-->
 					<imageName>
-						${docker.registry}:${docker.registry.port}/${docker.registry.project.name}/${project.build.finalName}
+						${docker.registry}:${docker.registry.port}/${docker.registry.project.name}/cn-web
 					</imageName>
 					<!--build 时强制覆盖 tag，配合 imageTags 使用-->
 					<!--
