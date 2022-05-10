@@ -9,4 +9,4 @@ ADD UNIQUE INDEX IF NOT EXISTS `uniq_task_id`(`task_id`);
 ALTER TABLE `report_job` 
 ADD COLUMN IF NOT EXISTS  `ftime` datetime COMMENT '完成时间';
 
-update report_job set ftime=now() where ftime = "0000-00-00 00:00:00";
+update report_job set ftime=now() where ftime = "0000-00-00 00:00:00" or ftime is null;
