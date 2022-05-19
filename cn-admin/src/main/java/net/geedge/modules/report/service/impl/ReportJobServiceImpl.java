@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -54,6 +55,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.base.Joiner;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
@@ -166,6 +168,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	public String renderHtml(Integer jobId,List<ReportTask> reportTasks,List<ReportResult> reportResults) {
 		String driverEnable = sysConfigService.getValue("driver_enable");
 		String uiStaticUrl = sysConfigService.getValue("ui_static_url");
+		String reportJsCommon = sysConfigService.getValue("report_js_common");
+		String reportFreemarkerCommon = sysConfigService.getValue("report_freemarker_common");
 		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));		
 		if(StrUtil.isEmpty(uiStaticUrl)) {
 			uiStaticUrl = "localhost";
@@ -177,12 +181,14 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			// 获取html模板信息
 			ReportJob reportJob = this.getById(jobId);
 			html = reportJob.getHtmlContent();
+			html += reportFreemarkerCommon;
 			Map<Integer, ReportResult> taskIdResult = reportResults.stream().collect(Collectors.toMap(ReportResult::getTaskId, Function.identity()));
 			Map<String,Object> data = new HashMap<String,Object>();
 			data.put("startTime", reportJob.getStartTime().getTime()/1000);
 			data.put("endTime", reportJob.getEndTime().getTime()/1000);
 			data.put("uiStaticUrl",uiStaticUrl);
 			data.put("timeZoneOffset", sysTimezone.getOffset());
+			data.put("reportJsCommon", reportJsCommon);
 			for(ReportTask reportTask : reportTasks) {
 				ReportResult reportResult = taskIdResult.get(reportTask.getId());
 				String result = reportResult.getResult();
@@ -217,7 +223,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		}finally {
 			if(ObjectUtil.isNotEmpty(driver)) {
 				driver.close();
-				driver.quit(); 
+				driver.quit();
 			}
 			IoUtil.close(writer);
 		}

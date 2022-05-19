@@ -110,7 +110,11 @@ public class ReportHandlerTask extends QuartzJobBean {
 		
 		this.modifyJobState();
 		
-		this.s3Upload();
+		try {
+			this.s3Upload();
+		} catch (Exception e) {
+			log.error("job s3upload error :{}",e.getMessage());
+		}
 
         sw.stop();
         log.info("ReportHandlerTask  end  excute time : {}",sw.toString());
