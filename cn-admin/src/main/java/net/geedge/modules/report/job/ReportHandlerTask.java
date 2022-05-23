@@ -109,13 +109,9 @@ public class ReportHandlerTask extends QuartzJobBean {
 		this.getResult(rpcHost,stateTasks);
 		
 		this.modifyJobState();
-		
-		try {
-			this.s3Upload();
-		} catch (Exception e) {
-			log.error("job s3upload error :{}",e.getMessage());
-		}
 
+		this.s3Upload();
+		
         sw.stop();
         log.info("ReportHandlerTask  end  excute time : {}",sw.toString());
 	}
@@ -371,7 +367,7 @@ public class ReportHandlerTask extends QuartzJobBean {
 		    		String html = reportJobService.queryView(reportJob.getId());
 		    		if(StrUtil.isEmpty(html)) {
 		    			log.error("s3Upload get html content error");
-		    			return;
+		    			continue;
 		    		}
 		    		ConverterProperties converterProperties = new ConverterProperties();
 		    		FontProvider fontProvider = new DefaultFontProvider();
