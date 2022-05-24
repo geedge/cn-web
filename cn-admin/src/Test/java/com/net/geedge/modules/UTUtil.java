@@ -74,7 +74,8 @@ public class UTUtil extends BaseTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(url)
                 .header(Authorization, TEST_TOKEN)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .servletPath(url);
 
         if (Tool.ObjectUtil.isNotEmpty(queryParam)) {
             for (Map.Entry<String, Object> entry : queryParam.entrySet()) {

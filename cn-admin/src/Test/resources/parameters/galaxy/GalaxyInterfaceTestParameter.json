@@ -1,0 +1,2283 @@
+{
+  "------------------ GET  /interface/traffic/map data---------------------": "note",
+  "trafficMap_success": {
+  },
+  "------------------ GET  /interface/traffic/sessions data---------------------": "note",
+  "trafficSessions_success": {
+  },
+  "------------------ GET  /interface/traffic/packets data---------------------": "note",
+  "trafficPackets_success": {
+  },
+  "------------------ GET  /interface/traffic/throughput data---------------------": "note",
+  "trafficThroughput_success": {
+  },
+  "------------------ GET  /interface/traffic/activeClientIP data---------------------": "note",
+  "trafficActiveClientIP_success": {
+    "order": "sessions",
+    "limit": 10
+  },
+  "trafficActiveClientIP_error": {
+  },
+  "------------------ GET  /interface/traffic/activeServerIP data---------------------": "note",
+  "trafficActiveServerIP_success": {
+    "order": "sessions",
+    "limit": 10
+  },
+  "trafficActiveServerIP_error": {
+  },
+  "------------------ GET  /interface/traffic/topDomains data---------------------": "note",
+  "trafficTopDomains_success": {
+    "order": "sessions",
+    "limit": 10
+  },
+  "trafficTopDomains_error": {
+  },
+  "------------------ GET  /interface/traffic/topApp data---------------------": "note",
+  "trafficTopApp_success": {
+    "order": "sessions",
+    "limit": 10
+  },
+  "trafficTopApp_error": {
+  },
+  "------------------ GET  /interface/traffic/topDomainCategories data---------------------": "note",
+  "trafficTopDomainCategories_success": {
+    "limit": 10
+  },
+  "trafficTopDomainCategories_error": {
+  },
+  "------------------ GET  /interface/traffic/activeDomainCategories data---------------------": "note",
+  "trafficActiveDomainCategories_success": {
+    "limit": 10
+  },
+  "trafficActiveDomainCategories_error": {
+  },
+  "------------------ GET  /interface/traffic/topDomainReputation data---------------------": "note",
+  "trafficTopDomainReputation_success": {
+    "limit": 10
+  },
+  "trafficTopDomainReputation_error": {
+  },
+  "------------------ GET  /interface/traffic/activeDomainReputation data---------------------": "note",
+  "trafficActiveDomainReputation_success": {
+    "limit": 10
+  },
+  "trafficActiveDomainReputation_error": {
+  },
+  "------------------ GET  /interface/npm/rtt data---------------------": "note",
+  "npmRtt_success": {
+  },
+  "------------------ GET  /interface/npm/httpResponseTime data---------------------": "note",
+  "npmHttpResponseTime_success": {
+  },
+  "------------------ GET  /interface/npm/sslHandshakeTime data---------------------": "note",
+  "npmSslHandshakeTime_success": {
+  },
+  "------------------ GET  /interface/npm/avgPacketLossRate data---------------------": "note",
+  "npmAvgPacketLossRate_success": {
+  },
+  "------------------ GET  /interface/npm/avgRetransmissionRate data---------------------": "note",
+  "npmAvgRetransmissionRate_success": {
+  },
+  "------------------ GET  /interface/npm/rttMap data---------------------": "note",
+  "npmRttMap_success": {
+  },
+  "------------------ GET  /interface/npm/httpResponseTimeMap data---------------------": "note",
+  "npmHttpResponseTimeMap_success": {
+  },
+  "------------------ GET  /interface/npm/sslHandshakeTimeMap data---------------------": "note",
+  "npmSslHandshakeTimeMap_success": {
+  },
+  "------------------ GET  /interface/npm/packetLossMap data---------------------": "note",
+  "npmPacketLossMap_success": {
+  },
+  "------------------ GET  /interface/npm/packetRetransMap data---------------------": "note",
+  "npmPacketRetransMap_success": {
+  },
+  "------------------ GET  /interface/entity/ip/filter data---------------------": "note",
+  "entityIpFilter_success": {
+  },
+  "------------------ GET  /interface/entity/ip/list data---------------------": "note",
+  "entityIpList_success": {
+  },
+  "------------------ GET  /interface/entity/domain/filter data---------------------": "note",
+  "entityDomainFilter_success": {
+  },
+  "------------------ GET  /interface/entity/domain/list data---------------------": "note",
+  "entityDomainList_success": {
+  },
+  "------------------ GET  /interface/entity/app/filter data---------------------": "note",
+  "entityAppFilter_success": {
+  },
+  "------------------ GET  /interface/entity/app/list data---------------------": "note",
+  "entityAppList_success": {
+  },
+  "------------------ GET  /interface/npm/appRrt data---------------------": "note",
+  "npmAppRrt_success": {
+  },
+  "------------------ GET  /interface/npm/appHttpResponseTime data---------------------": "note",
+  "npmAppHttpResponseTime_success": {
+  },
+  "------------------ GET  /interface/npm/appSSLHandshakeTime data---------------------": "note",
+  "npmAppSSLHandshakeTime_success": {
+  },
+  "------------------ GET  /interface/npm/appPacketLoss data---------------------": "note",
+  "npmAppPacketLoss_success": {
+  },
+  "------------------ GET  /interface/npm/appPacketRetrans data---------------------": "note",
+  "npmAppPacketRetrans_success": {
+  },
+  "------------------ GET  /interface/npm/domainRrt data---------------------": "note",
+  "npmDomainRrt_success": {
+  },
+  "------------------ GET  /interface/npm/domainHttpResponseTime data---------------------": "note",
+  "npmDomainHttpResponseTime_success": {
+  },
+  "------------------ GET  /interface/npm/domainSSLHandshakeTime data---------------------": "note",
+  "npmDomainSSLHandshakeTime_success": {
+  },
+  "------------------ GET  /interface/npm/domainPacketLoss data---------------------": "note",
+  "npmDomainPacketLoss_success": {
+  },
+  "------------------ GET  /interface/npm/domainPacketRetrans data---------------------": "note",
+  "npmDomainPacketRetrans_success": {
+  },
+  "------------------ GET  /interface/npm/serverIPRrt data---------------------": "note",
+  "npmServerIPRrt_success": {
+  },
+  "------------------ GET  /interface/npm/serverIPHttpResponseTime data---------------------": "note",
+  "npmServerIPHttpResponseTime_success": {
+  },
+  "------------------ GET  /interface/npm/serverIPSSLHandshakeTime data---------------------": "note",
+  "npmServerIPSSLHandshakeTime_success": {
+  },
+  "------------------ GET  /interface/npm/serverIPPacketLoss data---------------------": "note",
+  "npmServerIPPacketLoss_success": {
+  },
+  "------------------ GET  /interface/npm/serverIPPacketRetrans data---------------------": "note",
+  "npmServerIPPacketRetrans_success": {
+  },
+  "------------------ GET  /interface/npm/clientIPRrt data---------------------": "note",
+  "npmClientIPRrt_success": {
+  },
+  "------------------ GET  /interface/npm/clientIPHttpResponseTime data---------------------": "note",
+  "npmClientIPHttpResponseTime_success": {
+  },
+  "------------------ GET  /interface/npm/clientIPSSLHandshakeTime data---------------------": "note",
+  "npmClientIPSSLHandshakeTime_success": {
+  },
+  "------------------ GET  /interface/npm/clientIPPacketLoss data---------------------": "note",
+  "npmClientIPPacketLoss_success": {
+  },
+  "------------------ GET  /interface/npm/clientIPPacketRetrans data---------------------": "note",
+  "npmClientIPPacketRetrans_success": {
+  },
+  "------------------ GET  /interface/entity/app/detail/id data---------------------": "note",
+  "entityAppDetailId_success": {
+    "appId": "1"
+  },
+  "entityAppDetailId_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/category data---------------------": "note",
+  "entityAppDetailCategory_success": {
+    "appId": "1"
+  },
+  "entityAppDetailCategory_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/subcategory data---------------------": "note",
+  "entityAppDetailSubcategory_success": {
+    "appId": "1"
+  },
+  "entityAppDetailSubcategory_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/risk data---------------------": "note",
+  "entityAppDetailRisk_success": {
+    "appId": "1"
+  },
+  "entityAppDetailRisk_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/trafficMap data---------------------": "note",
+  "entityAppDetailTrafficMap_success": {
+    "app": "qq"
+  },
+  "entityAppDetailTrafficMap_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/sessions data---------------------": "note",
+  "entityAppDetailSessions_success": {
+    "app": "qq"
+  },
+  "entityAppDetailSessions_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/packets data---------------------": "note",
+  "entityAppDetailPackets_success": {
+    "app": "qq"
+  },
+  "entityAppDetailPackets_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/throughput data---------------------": "note",
+  "entityAppDetailThroughput_success": {
+    "app": "qq"
+  },
+  "entityAppDetailThroughput_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/activeClientIP data---------------------": "note",
+  "entityAppDetailActiveClientIP_success": {
+    "appId": "1",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityAppDetailActiveClientIP_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/activeServerIP data---------------------": "note",
+  "entityAppDetailActiveServerIP_success": {
+    "app": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityAppDetailActiveServerIP_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/topDomains data---------------------": "note",
+  "entityAppDetailTopDomains_success": {
+    "app": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityAppDetailTopDomains_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/appRtt data---------------------": "note",
+  "entityAppDetailAppRtt_success": {
+    "appId": "1"
+  },
+  "entityAppDetailAppRtt_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/appHttpResponseTime data---------------------": "note",
+  "entityAppDetailAppHttpResponseTime_success": {
+    "appId": "1"
+  },
+  "entityAppDetailAppHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/appSSLHandshakeTime data---------------------": "note",
+  "entityAppDetailAppSSLHandshakeTime_success": {
+    "appId": "1"
+  },
+  "entityAppDetailAppSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/appPacketLoss data---------------------": "note",
+  "entityAppDetailAppPacketLoss_success": {
+    "appId": "1"
+  },
+  "entityAppDetailAppPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/appPacketRetrans data---------------------": "note",
+  "entityAppDetailAppPacketRetrans_success": {
+    "appId": "1"
+  },
+  "entityAppDetailAppPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/domainRtt data---------------------": "note",
+  "entityAppDetailDomainRtt_success": {
+    "appId": "1"
+  },
+  "entityAppDetailDomainRtt_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/domainHttpResponseTime data---------------------": "note",
+  "entityAppDetailDomainHttpResponseTime_success": {
+    "appId": "1"
+  },
+  "entityAppDetailDomainHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/domainSSLHandshakeTime data---------------------": "note",
+  "entityAppDetailDomainSSLHandshakeTime_success": {
+    "appId": "1"
+  },
+  "entityAppDetailDomainSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/domainPacketLoss data---------------------": "note",
+  "entityAppDetailDomainPacketLoss_success": {
+    "app": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityAppDetailDomainPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/domainPacketRetrans data---------------------": "note",
+  "entityAppDetailDomainPacketRetrans_success": {
+    "app": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityAppDetailDomainPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/traffic/domainCategoryServerIpList data---------------------": "note",
+  "trafficDomainCategoryServerIpList_success": {
+    "domain": "baidu.com",
+    "limit": 1
+  },
+  "trafficDomainCategoryServerIpList_error": {
+  },
+  "------------------ GET  /interface/traffic/domainReputationServerIpList data---------------------": "note",
+  "trafficDomainReputationServerIpList_success": {
+    "domain": "baidu.com",
+    "limit": 1
+  },
+  "trafficDomainReputationServerIpList_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/serverIPRtt data---------------------": "note",
+  "entityAppDetailServerIPRtt_success": {
+    "appId": "1"
+  },
+  "entityAppDetailServerIPRtt_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/serverIPHttpResponseTime data---------------------": "note",
+  "entityAppDetailServerIPHttpResponseTime_success": {
+    "appId": "1"
+  },
+  "entityAppDetailServerIPHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/serverIPSSLHandshakeTime data---------------------": "note",
+  "entityAppDetailServerIPSSLHandshakeTime_success": {
+    "appId": "1"
+  },
+  "entityAppDetailServerIPSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/serverIPPacketLoss data---------------------": "note",
+  "entityAppDetailServerIPPacketLoss_success": {
+    "app": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityAppDetailServerIPPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/serverIPPacketRetrans data---------------------": "note",
+  "entityAppDetailServerIPPacketRetrans_success": {
+    "app": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityAppDetailServerIPPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/clientIPRtt data---------------------": "note",
+  "entityAppDetailClientIPRtt_success": {
+    "appId": "1"
+  },
+  "entityAppDetailClientIPRtt_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/clientIPHttpResponseTime data---------------------": "note",
+  "entityAppDetailClientIPHttpResponseTime_success": {
+    "appId": "1"
+  },
+  "entityAppDetailClientIPHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/clientIPSSLHandshakeTime data---------------------": "note",
+  "entityAppDetailClientIPSSLHandshakeTime_success": {
+    "appId": "1"
+  },
+  "entityAppDetailClientIPSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/clientIPPacketLoss data---------------------": "note",
+  "entityAppDetailClientIPPacketLoss_success": {
+    "app": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityAppDetailClientIPPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/clientIPPacketRetrans data---------------------": "note",
+  "entityAppDetailClientIPPacketRetrans_success": {
+    "app": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityAppDetailClientIPPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/category data---------------------": "note",
+  "entityDomainDetailCategory_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailCategory_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/categoryGroup data---------------------": "note",
+  "entityDomainDetailCategoryGroup_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailCategoryGroup_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/reputationLevel data---------------------": "note",
+  "entityDomainDetailReputationLevel_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailReputationLevel_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/risk data---------------------": "note",
+  "entityDomainDetailRisk_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailRisk_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/visits data---------------------": "note",
+  "entityDomainDetailVisits_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailVisits_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/trafficMap data---------------------": "note",
+  "entityDomainDetailTrafficMap_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailTrafficMap_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/sessions data---------------------": "note",
+  "entityDomainDetailSessions_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailSessions_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/packets data---------------------": "note",
+  "entityDomainDetailPackets_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailPackets_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/throughput data---------------------": "note",
+  "entityDomainDetailThroughput_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailThroughput_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/activeClientIP data---------------------": "note",
+  "entityDomainDetailActiveClientIP_success": {
+    "domain": "baidu.com",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDomainDetailActiveClientIP_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/activeServerIP data---------------------": "note",
+  "entityDomainDetailActiveServerIP_success": {
+    "domain": "baidu.com",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDomainDetailActiveServerIP_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/topAPP data---------------------": "note",
+  "entityDomainDetailTopAPP_success": {
+    "domain": "baidu.com",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDomainDetailTopAPP_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/domainRtt data---------------------": "note",
+  "entityDomainDetailDomainRtt_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailDomainRtt_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/domainHttpResponseTime data---------------------": "note",
+  "entityDomainDetailDomainHttpResponseTime_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailDomainHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/domainSSLHandshakeTime data---------------------": "note",
+  "entityDomainDetailDomainSSLHandshakeTime_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailDomainSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/domainPacketLoss data---------------------": "note",
+  "entityDomainDetailDomainPacketLoss_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailDomainPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/domainPacketRetrans data---------------------": "note",
+  "entityDomainDetailDomainPacketRetrans_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailDomainPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIPRtt data---------------------": "note",
+  "entityDomainDetailServerIPRtt_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPRtt_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIPHttpResponseTime data---------------------": "note",
+  "entityDomainDetailServerIPHttpResponseTime_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIPSSLHandshakeTime data---------------------": "note",
+  "entityDomainDetailServerIPSSLHandshakeTime_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIPPacketLoss data---------------------": "note",
+  "entityDomainDetailServerIPPacketLoss_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIPPacketRetrans data---------------------": "note",
+  "entityDomainDetailServerIPPacketRetrans_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIPRtt data---------------------": "note",
+  "entityDomainDetailClientIPRtt_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailClientIPRtt_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIPHttpResponseTime data---------------------": "note",
+  "entityDomainDetailServerIPClientIPHttpResponseTime_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPClientIPHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIPSSLHandshakeTime data---------------------": "note",
+  "entityDomainDetailServerIPClientIPSSLHandshakeTime_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPClientIPSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIPPacketLoss data---------------------": "note",
+  "entityDomainDetailServerIPClientIPPacketLoss_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPClientIPPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIPPacketRetrans data---------------------": "note",
+  "entityDomainDetailServerIPClientIPPacketRetrans_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPClientIPPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appCount data---------------------": "note",
+  "entityIpDetailAppCount_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailAppCount_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainCount data---------------------": "note",
+  "entityIpDetailDomainCount_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailDomainCount_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/clientIPCount data---------------------": "note",
+  "entityIpDetailClientIPCount_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailClientIPCount_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appCountLine data---------------------": "note",
+  "entityIpDetailAppCountLine_success": {
+    "serverIp": "119.29.29.29",
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailAppCountLine_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainCountLine data---------------------": "note",
+  "entityIpDetailDomainCountLine_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailDomainCountLine_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/clientIPCountLine data---------------------": "note",
+  "entityIpDetailClientIPCountLine_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailClientIPCountLine_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/region data---------------------": "note",
+  "entityIpDetailRegion_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailRegion_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/asn data---------------------": "note",
+  "entityIpDetailAsn_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailAsn_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/country data---------------------": "note",
+  "entityIpDetailCountry_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailCountry_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/trafficMap data---------------------": "note",
+  "entityIpDetailTrafficMap_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailTrafficMap_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/sessions data---------------------": "note",
+  "entityIpDetailSessions_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailSessions_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/packets data---------------------": "note",
+  "entityIpDetailPackets_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailPackets_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/throughput data---------------------": "note",
+  "entityIpDetailThroughput_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailThroughput_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/activeClientIP data---------------------": "note",
+  "entityIpDetailActiveClientIP_success": {
+    "ip": "119.29.29.29",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityIpDetailActiveClientIP_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/topDomains data---------------------": "note",
+  "entityIpDetailTopDomains_success": {
+    "ip": "119.29.29.29",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityIpDetailTopDomains_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/topAPP data---------------------": "note",
+  "entityIpDetailTopAPP_success": {
+    "ip": "119.29.29.29",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityIpDetailTopAPP_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appRtt data---------------------": "note",
+  "entityIpDetailAppRtt_success": {
+    "serverIp": "119.29.29.29",
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailAppRtt_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appHttpResponseTime data---------------------": "note",
+  "entityIpDetailAppHttpResponseTime_success": {
+    "serverIp": "119.29.29.29",
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailAppHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appSSLHandshakeTime data---------------------": "note",
+  "entityIpDetailAppSSLHandshakeTime_success": {
+    "serverIp": "119.29.29.29",
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailAppSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appPacketLoss data---------------------": "note",
+  "entityIpDetailAppPacketLoss_success": {
+    "ip": "119.29.29.29",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityIpDetailAppPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appPacketRetrans data---------------------": "note",
+  "entityIpDetailAppPacketRetrans_success": {
+    "ip": "119.29.29.29",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityIpDetailAppPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainRtt data---------------------": "note",
+  "entityIpDetailDomainRtt_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailDomainRtt_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainHttpResponseTime data---------------------": "note",
+  "entityIpDetailDomainHttpResponseTime_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailDomainHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainSSLHandshakeTime data---------------------": "note",
+  "entityIpDetailDomainSSLHandshakeTime_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailDomainSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainPacketLoss data---------------------": "note",
+  "entityIpDetailDomainPacketLoss_success": {
+    "ip": "119.29.29.29",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityIpDetailDomainPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainPacketRetrans data---------------------": "note",
+  "entityIpDetailDomainPacketRetrans_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailDomainPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/IPRtt data---------------------": "note",
+  "entityIpDetailIPRtt_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailIPRtt_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/IPHttpResponseTime data---------------------": "note",
+  "entityIpDetailIPHttpResponseTime_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailIPHttpResponseTime_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/IPSSLHandshakeTime data---------------------": "note",
+  "entityIpDetailIPSSLHandshakeTime_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailIPSSLHandshakeTime_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/IPPacketLoss data---------------------": "note",
+  "entityIpDetailIPPacketLoss_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailIPPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/IPPacketRetrans data---------------------": "note",
+  "entityIpDetailIPPacketRetrans_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailIPPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/filter data---------------------": "note",
+  "entityFilter_success": {
+    "from": "ip",
+    "column": "asn"
+  },
+  "entityFilter_error": {
+    "column": "asn"
+  },
+  "------------------ GET  /interface/entity/app/detail/count data---------------------": "note",
+  "entityAppDetailCount_success": {
+    "app": "qq"
+  },
+  "entityAppDetailCount_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/countLine data---------------------": "note",
+  "entityAppDetailCountLine_success": {
+    "appId": "1"
+  },
+  "entityAppDetailCountLine_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/count data---------------------": "note",
+  "entityDomainDetailCount_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailCount_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/countLine data---------------------": "note",
+  "entityDomainDetailCountLine_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailCountLine_error": {
+  },
+  "------------------ GET  /interface/entity/list data---------------------": "note",
+  "entityList_success": {
+    "from": "ip"
+  },
+  "------------------ GET  /interface/entity/total data---------------------": "note",
+  "entityTotal_success": {
+    "from": "ip"
+  },
+  "------------------ GET  /interface/entity/ip/detail/serverIPCountLine data---------------------": "note",
+  "entityIpDetailServerIPCountLine_success": {
+    "clientIP": "119.29.29.29"
+  },
+  "entityIpDetailServerIPCountLine_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/serverIPCount data---------------------": "note",
+  "entityIpDetailServerIPCount_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailServerIPCount_error": {
+  },
+  "------------------ GET  /interface/entity/relationship data---------------------": "note",
+  "entityRelationship_success": {
+    "type": "ip",
+    "q": "119.29.29.29"
+  },
+  "entityRelationship_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/basicInfo data---------------------": "note",
+  "entityIpDetailBasicInfo_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailBasicInfo_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/ports data---------------------": "note",
+  "entityIpDetailPorts_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailPorts_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domains data---------------------": "note",
+  "entityIpDetailDomains_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailDomains_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/serviceOverview data---------------------": "note",
+  "entityIpDetailServiceOverview_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailServiceOverview_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/overallEstablishlatency data---------------------": "note",
+  "entityIpDetailOverallEstablishlatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailOverallEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/overallHttpResponseLatency data---------------------": "note",
+  "entityIpDetailOverallHttpResponseLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailOverallHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/overallSslConLatency data---------------------": "note",
+  "entityIpDetailOverallSslConLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailOverallSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/overallPacketLoss data---------------------": "note",
+  "entityIpDetailOverallPacketLoss_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailOverallPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/overallPacketRetrans data---------------------": "note",
+  "entityIpDetailOverallPacketRetrans_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailOverallPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/sessions_bak data---------------------": "note",
+  "entityDomainDetailSessionsBak_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailSessionsBak_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/count_bak data---------------------": "note",
+  "entityDomainDetailCountBak_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailCountBak_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/basicInfo data---------------------": "note",
+  "entityDomainDetailBasicInfo_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailBasicInfo_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/whois data---------------------": "note",
+  "entityDomainDetailWhois_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailWhois_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/dnsRecord data---------------------": "note",
+  "entityDomainDetailDnsRecord_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailDnsRecord_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serviceOverview data---------------------": "note",
+  "entityDomainDetailServiceOverview_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServiceOverview_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainEstablishlatency data---------------------": "note",
+  "entityIpDetailDomainEstablishlatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailDomainEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainHttpResponseLatency data---------------------": "note",
+  "entityIpDetailDomainHttpResponseLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailDomainHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/domainSslConLatency data---------------------": "note",
+  "entityIpDetailDomainSslConLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailDomainSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appEstablishlatency data---------------------": "note",
+  "entityIpDetailAppEstablishlatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailAppEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appHttpResponseLatency data---------------------": "note",
+  "entityIpDetailAppHttpResponseLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailAppHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/appSslConLatency data---------------------": "note",
+  "entityIpDetailAppSslConLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityIpDetailAppSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/overallEstablishlatency data---------------------": "note",
+  "entityDomainDetailOverallEstablishlatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailOverallEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/overallHttpResponseLatency data---------------------": "note",
+  "entityDomainDetailOverallHttpResponseLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailOverallHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/overallSslConLatency data---------------------": "note",
+  "entityDomainDetailOverallSslConLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailOverallSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/overallPacketLoss data---------------------": "note",
+  "entityDomainDetailOverallPacketLoss_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailOverallPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/overallPacketRetrans data---------------------": "note",
+  "entityDomainDetailOverallPacketRetrans_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailOverallPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIpEstablishlatency data---------------------": "note",
+  "entityDomainDetailServerIpEstablishlatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIpEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIpHttpResponseLatency data---------------------": "note",
+  "entityDomainDetailServerIpHttpResponseLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIpHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIpSslConLatency data---------------------": "note",
+  "entityDomainDetailServerIpSslConLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIpSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIpEstablishlatency data---------------------": "note",
+  "entityDomainDetailClientIpEstablishlatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailClientIpEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIpHttpResponseLatency data---------------------": "note",
+  "entityDomainDetailClientIpHttpResponseLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailClientIpHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIpSslConLatency data---------------------": "note",
+  "entityDomainDetailClientIpSslConLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailClientIpSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIPPacketLoss_bak data---------------------": "note",
+  "entityDomainDetailServerIPPacketLossBak_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPPacketLossBak_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/serverIPPacketRetrans_bak data---------------------": "note",
+  "entityDomainDetailServerIPPacketRetransBak_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailServerIPPacketRetransBak_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIPPacketLoss_bak data---------------------": "note",
+  "entityDomainDetailClientIPPacketLossBak_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailClientIPPacketLossBak_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/clientIPPacketRetrans_bak data---------------------": "note",
+  "entityDomainDetailClientIPPacketRetransBak_success": {
+    "domain": "baidu.com"
+  },
+  "entityDomainDetailClientIPPacketRetransBak_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/overallEstablishlatency data---------------------": "note",
+  "entityAppDetailOverallEstablishlatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailOverallEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/overallHttpResponseLatency data---------------------": "note",
+  "entityAppDetailOverallHttpResponseLatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailOverallHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/overallSslConLatency data---------------------": "note",
+  "entityAppDetailOverallSslConLatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailOverallSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/overallPacketLoss data---------------------": "note",
+  "entityAppDetailOverallPacketLoss_success": {
+    "app": "qq"
+  },
+  "entityAppDetailOverallPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/overallPacketRetrans data---------------------": "note",
+  "entityAppDetailOverallPacketRetrans_success": {
+    "app": "qq"
+  },
+  "entityAppDetailOverallPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/domainEstablishlatency data---------------------": "note",
+  "entityAppDetailDomainEstablishlatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailDomainEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/domainHttpResponseLatency data---------------------": "note",
+  "entityAppDetailDomainHttpResponseLatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailDomainHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/domainSslConLatency data---------------------": "note",
+  "entityAppDetailDomainSslConLatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailDomainSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/serverIpEstablishlatency data---------------------": "note",
+  "entityAppDetailServerIpEstablishlatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailServerIpEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/serverIpHttpResponseLatency data---------------------": "note",
+  "entityAppDetailServerIpHttpResponseLatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailServerIpHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/serverIpSslConLatency data---------------------": "note",
+  "entityAppDetailServerIpSslConLatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailServerIpSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/clientIpEstablishlatency data---------------------": "note",
+  "entityAppDetailClientIpEstablishlatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailClientIpEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/clientIpHttpResponseLatency data---------------------": "note",
+  "entityAppDetailClientIpHttpResponseLatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailClientIpHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/clientIpSslConLatency data---------------------": "note",
+  "entityAppDetailClientIpSslConLatency_success": {
+    "app": "qq"
+  },
+  "entityAppDetailClientIpSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/basicInfo data---------------------": "note",
+  "entityAppDetailBasicInfo_success": {
+    "app": "qq"
+  },
+  "entityAppDetailBasicInfo_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/domains data---------------------": "note",
+  "entityAppDetailDomains_success": {
+    "app": "qq"
+  },
+  "entityAppDetailDomains_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/serviceOverview data---------------------": "note",
+  "entityAppDetailServiceOverview_success": {
+    "app": "qq"
+  },
+  "entityAppDetailServiceOverview_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/categorys data---------------------": "note",
+  "entityIpDetailCategorys_success": {
+    "domains": "baidu.com"
+  },
+  "entityIpDetailCategorys_error": {
+  },
+  "------------------ GET  /interface/entity/ip/detail/linkVisual data---------------------": "note",
+  "entityIpDetailLinkVisual_success": {
+    "ip": "103.3.137.1"
+  },
+  "entityIpDetailLinkVisual_error": {
+  },
+  "------------------ GET  /interface/entity/app/detail/linkVisual data---------------------": "note",
+  "entityAppDetailLinkVisual_success": {
+    "app": "qq"
+  },
+  "entityAppDetailLinkVisual_error": {
+  },
+  "------------------ GET  /interface/entity/domain/detail/linkVisual data---------------------": "note",
+  "entityDomainDetailLinkVisual_success": {
+    "domain": "qq.com"
+  },
+  "entityDomainDetailLinkVisual_error": {
+  },
+  "------------------ GET  /interface/cryptcy/poolcount data---------------------": "note",
+  "cryptcyPoolcount_success": {
+  },
+  "------------------ GET  /interface/cryptcy/machinecount data---------------------": "note",
+  "cryptcyMachinecount_success": {
+  },
+  "------------------ GET  /interface/cryptcy/traffic data---------------------": "note",
+  "cryptcyTraffic_success": {
+  },
+  "------------------ GET  /interface/cryptcy/totalTraffic data---------------------": "note",
+  "cryptcyTotalTraffic_success": {
+  },
+  "------------------ GET  /interface/cryptcy/eventStat data---------------------": "note",
+  "cryptcyEventStat_success": {
+  },
+  "------------------ GET  /interface/cryptcy/eventMap data---------------------": "note",
+  "cryptcyEventMap_success": {
+  },
+  "------------------ GET  /interface/cryptcy/activeCy data---------------------": "note",
+  "cryptcyActiveCy_success": {
+  },
+  "------------------ GET  /interface/cryptcy/activePool data---------------------": "note",
+  "cryptcyActivePool_success": {
+  },
+  "------------------ GET  /interface/cryptcy/eventList data---------------------": "note",
+  "cryptcyEventList_success": {
+  },
+  "------------------ GET  /interface/cryptcy/institutions data---------------------": "note",
+  "cryptcyInstitutions_success": {
+  },
+  "------------------ GET  /interface/cryptcy/activeIP data---------------------": "note",
+  "cryptcyActiveIP_success": {
+  },
+  "------------------ GET  /interface/entity/index/total data---------------------": "note",
+  "entityIndexTotal_success": {
+    "entityType": "ip"
+  },
+  "entityIndexTotal_error": {
+  },
+  "------------------ GET  /interface/entity/index/new data---------------------": "note",
+  "entityIndexNew_success": {
+    "entityType": "ip"
+  },
+  "entityIndexNew_error": {
+  },
+  "------------------ GET  /interface/entity/index/active data---------------------": "note",
+  "entityIndexActive_success": {
+    "entityType": "ip"
+  },
+  "------------------ GET  /interface/entity/filter/count data---------------------": "note",
+  "entityFilterCount_success": {
+    "entityType": "ip"
+  },
+  "entityFilterCount_error": {
+  },
+  "------------------ GET  /interface/entity/filter/top data---------------------": "note",
+  "entityFilterTop_success": {
+    "entityType": "ip",
+    "column": "ip_asn"
+  },
+  "entityFilterTop_error": {
+  },
+  "------------------ GET  /interface/entity/list/basic data---------------------": "note",
+  "entityListBasic_success": {
+  },
+  "------------------ GET  /interface/entity/list/traffic data---------------------": "note",
+  "entityListTraffic_success": {
+    "entityType": "app",
+    "name": "qq"
+  },
+  "------------------ GET  /interface/traffic/topAppCategories data---------------------": "note",
+  "trafficTopAppCategories_success": {
+    "limit": 10
+  },
+  "trafficTopAppCategories_error": {
+  },
+  "------------------ GET  /interface/traffic/appCategoriesList data---------------------": "note",
+  "trafficAppCategoriesList_success": {
+    "limit": 10
+  },
+  "trafficAppCategoriesList_error": {
+  },
+  "------------------ GET  /interface/traffic/appCategoryServerIpList data---------------------": "note",
+  "trafficAppCategoryServerIpList_success": {
+    "appName": "qq",
+    "limit": 10
+  },
+  "trafficAppCategoryServerIpList_error": {
+  },
+  "------------------ GET  /interface/traffic/topAppRisk data---------------------": "note",
+  "trafficTopAppRisk_success": {
+    "limit": 10
+  },
+  "trafficTopAppRisk_error": {
+  },
+  "------------------ GET  /interface/traffic/appRiskList data---------------------": "note",
+  "trafficAppRiskList_success": {
+    "limit": 10
+  },
+  "trafficAppRiskList_error": {
+  },
+  "------------------ GET  /interface/traffic/appRiskServerIpList data---------------------": "note",
+  "trafficAppRiskServerIpList_success": {
+    "appName": "qq",
+    "limit": 10
+  },
+  "trafficAppRiskServerIpList_error": {
+  },
+  "------------------ GET  /interface/cryptcy/trafficPercentage data---------------------": "note",
+  "cryptcyTrafficPercentage_success": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/basic data---------------------": "note",
+  "entityDetailDomainBasic_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainBasic_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/whois data---------------------": "note",
+  "entityDetailDomainWhois_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainWhois_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/basic data---------------------": "note",
+  "entityDetailIpBasic_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpBasic_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/basic data---------------------": "note",
+  "entityDetailAppBasic_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppBasic_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/clientIpCount data---------------------": "note",
+  "entityDetailIpClientIpCount_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpClientIpCount_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/serverIpCount data---------------------": "note",
+  "entityDetailIpServerIpCount_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpServerIpCount_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/appCount data---------------------": "note",
+  "entityDetailIpAppCount_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpAppCount_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domainCount data---------------------": "note",
+  "entityDetailIpDomainCount_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpDomainCount_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/sessions data---------------------": "note",
+  "entityDetailIpSessions_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpSessions_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/packets data---------------------": "note",
+  "entityDetailIpPackets_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpPackets_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/bytes data---------------------": "note",
+  "entityDetailIpBytes_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpBytes_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/activeClientIP data---------------------": "note",
+  "entityDetailIpActiveClientIP_success": {
+    "ip": "119.29.29.29",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDetailIpActiveClientIP_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/topDomains data---------------------": "note",
+  "entityDetailIpTopDomains_success": {
+    "ip": "119.29.29.29",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDetailIpTopDomains_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/topAPP data---------------------": "note",
+  "entityDetailIpTopAPP_success": {
+    "ip": "119.29.29.29",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDetailIpTopAPP_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/serviceOverview data---------------------": "note",
+  "entityDetailIpServiceOverview_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpServiceOverview_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/overallEstablishlatency data---------------------": "note",
+  "entityDetailIpOverallEstablishlatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpOverallEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/overallHttpResponseLatency data---------------------": "note",
+  "entityDetailIpOverallHttpResponseLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpOverallHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/overallSslConLatency data---------------------": "note",
+  "entityDetailIpOverallSslConLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpOverallSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/overallPacketLoss data---------------------": "note",
+  "entityDetailIpOverallPacketLoss_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpOverallPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/overallPacketRetrans data---------------------": "note",
+  "entityDetailIpOverallPacketRetrans_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpOverallPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domainEstablishlatency data---------------------": "note",
+  "entityDetailIpDomainEstablishlatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpDomainEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domainHttpResponseLatency data---------------------": "note",
+  "entityDetailIpDomainHttpResponseLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpDomainHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domainSslConLatency data---------------------": "note",
+  "entityDetailIpDomainSslConLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpDomainSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domainPacketLoss data---------------------": "note",
+  "entityDetailIpDomainPacketLoss_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpDomainPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domainPacketRetrans data---------------------": "note",
+  "entityDetailIpDomainPacketRetrans_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpDomainPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/appEstablishlatency data---------------------": "note",
+  "entityDetailIpAppEstablishlatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpAppEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/appHttpResponseLatency data---------------------": "note",
+  "entityDetailIpAppHttpResponseLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpAppHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/appSslConLatency data---------------------": "note",
+  "entityDetailIpAppSslConLatency_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpAppSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/appPacketLoss data---------------------": "note",
+  "entityDetailIpAppPacketLoss_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpAppPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/appPacketRetrans data---------------------": "note",
+  "entityDetailIpAppPacketRetrans_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpAppPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/linkVisual data---------------------": "note",
+  "entityDetailIpLinkVisual_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpLinkVisual_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/trafficMap data---------------------": "note",
+  "entityDetailIpTrafficMap_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpTrafficMap_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/count data---------------------": "note",
+  "entityDetailDomainCount_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainCount_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/sessions data---------------------": "note",
+  "entityDetailDomainSessions_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainSessions_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/packets data---------------------": "note",
+  "entityDetailDomainPackets_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainPackets_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/bytes data---------------------": "note",
+  "entityDetailDomainBytes_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainBytes_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/trafficMap data---------------------": "note",
+  "entityDetailDomainTrafficMap_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainTrafficMap_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/activeServerIP data---------------------": "note",
+  "entityDetailDomainActiveServerIP_success": {
+    "domain": "baidu.com",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDetailDomainActiveServerIP_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/topApp data---------------------": "note",
+  "entityDetailDomainTopApp_success": {
+    "domain": "baidu.com",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDetailDomainTopApp_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/serviceOverview data---------------------": "note",
+  "entityDetailDomainServiceOverview_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainServiceOverview_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/overallEstablishlatency data---------------------": "note",
+  "entityDetailDomainOverallEstablishlatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainOverallEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/overallHttpResponseLatency data---------------------": "note",
+  "entityDetailDomainOverallHttpResponseLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainOverallHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/overallSslConLatency data---------------------": "note",
+  "entityDetailDomainOverallSslConLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainOverallSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/overallPacketLoss data---------------------": "note",
+  "entityDetailDomainOverallPacketLoss_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainOverallPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/overallPacketRetrans data---------------------": "note",
+  "entityDetailDomainOverallPacketRetrans_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainOverallPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/serverIpEstablishlatency data---------------------": "note",
+  "entityDetailDomainServerIpEstablishlatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainServerIpEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/serverIpHttpResponseLatency data---------------------": "note",
+  "entityDetailDomainServerIpHttpResponseLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainServerIpHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/serverIpSslConLatency data---------------------": "note",
+  "entityDetailDomainServerIpSslConLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainServerIpSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/serverIpPacketLoss data---------------------": "note",
+  "entityDetailDomainServerIpPacketLoss_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainServerIpPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/clientIpEstablishlatency data---------------------": "note",
+  "entityDetailDomainClientIpEstablishlatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainClientIpEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/clientIpSslConLatency data---------------------": "note",
+  "entityDetailDomainClientIpSslConLatency_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainClientIpSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/clientIpPacketLoss data---------------------": "note",
+  "entityDetailDomainClientIpPacketLoss_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainClientIpPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/clientIpPacketRetrans data---------------------": "note",
+  "entityDetailDomainClientIpPacketRetrans_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainClientIpPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/linkVisual data---------------------": "note",
+  "entityDetailDomainLinkVisual_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainLinkVisual_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/dnsInfo  data---------------------": "note",
+  "entityDetailOverviewIpDnsInfo_success": {
+    "ip": "119.29.29.29"
+  },
+  "------------------ GET  /interface/entity/detail/app/count data---------------------": "note",
+  "entityDetailAppCount_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppCount_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/sessions data---------------------": "note",
+  "entityDetailAppSessions_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppSessions_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/packets data---------------------": "note",
+  "entityDetailAppPackets_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppPackets_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/bytes data---------------------": "note",
+  "entityDetailAppBytes_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppBytes_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/trafficMap data---------------------": "note",
+  "entityDetailAppTrafficMap_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppTrafficMap_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/activeServerIP data---------------------": "note",
+  "entityDetailAppActiveServerIP_success": {
+    "appName": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDetailAppActiveServerIP_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/topDomains data---------------------": "note",
+  "entityDetailAppTopDomains_success": {
+    "appName": "qq",
+    "order": "sessions",
+    "limit": 10
+  },
+  "entityDetailAppTopDomains_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/serviceOverview data---------------------": "note",
+  "entityDetailAppServiceOverview_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppServiceOverview_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/overallEstablishlatency data---------------------": "note",
+  "entityDetailAppOverallEstablishlatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppOverallEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/overallHttpResponseLatency data---------------------": "note",
+  "entityDetailAppOverallHttpResponseLatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppOverallHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/overallSslConLatency data---------------------": "note",
+  "entityDetailAppOverallSslConLatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppOverallSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/overallPacketLoss data---------------------": "note",
+  "entityDetailAppOverallPacketLoss_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppOverallPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/overallPacketRetrans data---------------------": "note",
+  "entityDetailAppOverallPacketRetrans_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppOverallPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/serverIpEstablishlatency data---------------------": "note",
+  "entityDetailAppServerIpEstablishlatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppServerIpEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/serverIpHttpResponseLatency data---------------------": "note",
+  "entityDetailAppServerIpHttpResponseLatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppServerIpHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/serverIpSslConLatency data---------------------": "note",
+  "entityDetailAppServerIpSslConLatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppServerIpSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/serverIpPacketLoss data---------------------": "note",
+  "entityDetailAppServerIpPacketLoss_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppServerIpPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/serverIpPacketRetrans data---------------------": "note",
+  "entityDetailAppServerIpPacketRetrans_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppServerIpPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/clientIpEstablishlatency data---------------------": "note",
+  "entityDetailAppClientIpEstablishlatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppClientIpEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/clientIpHttpResponseLatency data---------------------": "note",
+  "entityDetailAppClientIpHttpResponseLatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppClientIpHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/clientIpSslConLatency data---------------------": "note",
+  "entityDetailAppClientIpSslConLatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppClientIpSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/clientIpPacketLoss data---------------------": "note",
+  "entityDetailAppClientIpPacketLoss_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppClientIpPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/clientIpPacketRetrans data---------------------": "note",
+  "entityDetailAppClientIpPacketRetrans_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppClientIpPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/domainEstablishlatency data---------------------": "note",
+  "entityDetailAppDomainEstablishlatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppDomainEstablishlatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/domainHttpResponseLatency data---------------------": "note",
+  "entityDetailAppDomainHttpResponseLatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppDomainHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/domainSslConLatency data---------------------": "note",
+  "entityDetailAppDomainSslConLatency_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppDomainSslConLatency_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/domainPacketLoss data---------------------": "note",
+  "entityDetailAppDomainPacketLoss_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppDomainPacketLoss_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/domainPacketRetrans data---------------------": "note",
+  "entityDetailAppDomainPacketRetrans_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppDomainPacketRetrans_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/linkVisual data---------------------": "note",
+  "entityDetailAppLinkVisual_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppLinkVisual_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/app/traffic data---------------------": "note",
+  "entityDetailOverviewAppTraffic_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppTraffic_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/app/relatedServerIp data---------------------": "note",
+  "entityDetailOverviewAppRelatedServerIp_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppRelatedServerIp_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/app/performanceEvent data---------------------": "note",
+  "entityDetailOverviewAppPerformanceEvent_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppPerformanceEvent_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/app/securityEvent data---------------------": "note",
+  "entityDetailOverviewAppSecurityEvent_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppSecurityEvent_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/basic data---------------------": "note",
+  "entityDetailOverviewDomainBasic_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainBasic_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/traffic data---------------------": "note",
+  "entityDetailOverviewDomainTraffic_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainTraffic_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/relatedApp data---------------------": "note",
+  "entityDetailOverviewDomainRelatedApp_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainRelatedApp_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/networkQuantity data---------------------": "note",
+  "entityDetailOverviewDomainNetworkQuantity_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainNetworkQuantity_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/linkIn data---------------------": "note",
+  "entityDetailOverviewDomainLinkIn_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainLinkIn_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/linkOut data---------------------": "note",
+  "entityDetailOverviewDomainLinkOut_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainLinkOut_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/performanceEvent data---------------------": "note",
+  "entityDetailOverviewDomainPerformanceEvent_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainPerformanceEvent_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/securityEvent data---------------------": "note",
+  "entityDetailOverviewDomainSecurityEvent_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainSecurityEvent_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/traffic data---------------------": "note",
+  "entityDetailOverviewIpTraffic_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpTraffic_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/relatedDomain data---------------------": "note",
+  "entityDetailOverviewIpRelatedDomain_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpRelatedDomain_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/performanceEvent data---------------------": "note",
+  "entityDetailOverviewIpPerformanceEvent_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpPerformanceEvent_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/securityEvent data---------------------": "note",
+  "entityDetailOverviewIpSecurityEvent_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpSecurityEvent_error": {
+  },
+  "------------------ GET  /interface/entity/list/total data---------------------": "note",
+  "entityListTotal_success": {
+  },
+  "------------------ GET  /interface/entity/detail/app/countTrend data---------------------": "note",
+  "entityDetailAppCountTrend_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppCountTrend_error": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/countTrend data---------------------": "note",
+  "entityDetailDomainCountTrend_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailDomainCountTrend_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/clientIpCountTrend data---------------------": "note",
+  "entityDetailIpClientIpCountTrend_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpClientIpCountTrend_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/serverIpCountTrend data---------------------": "note",
+  "entityDetailIpServerIpCountTrend_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpServerIpCountTrend_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/appCountTrend data---------------------": "note",
+  "entityDetailIpAppCountTrend_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpAppCountTrend_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domainCountTrend data---------------------": "note",
+  "entityDetailIpDomainCountTrend_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpDomainCountTrend_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/linkIn data---------------------": "note",
+  "entityDetailOverviewAppLinkIn_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppLinkIn_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/linkIn data---------------------": "note",
+  "entityDetailOverviewIpLinkIn_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpLinkIn_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/linkOut data---------------------": "note",
+  "entityDetailOverviewAppLinkOut_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppLinkOut_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/linkOut data---------------------": "note",
+  "entityDetailOverviewIpLinkOut_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpLinkOut_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/networkQuantity/2 data---------------------": "note",
+  "entityDetailOverviewDomainNetworkQuantity2_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainNetworkQuantity2_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/networkQuantity/3 data---------------------": "note",
+  "entityDetailOverviewDomainNetworkQuantity3_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainNetworkQuantity3_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/networkQuantity/145 data---------------------": "note",
+  "entityDetailOverviewDomainNetworkQuantity145_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainNetworkQuantity145_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/app/networkQuantity/2 data---------------------": "note",
+  "entityDetailOverviewAppNetworkQuantity2_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppNetworkQuantity2_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/app/networkQuantity/3 data---------------------": "note",
+  "entityDetailOverviewAppNetworkQuantity3_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppNetworkQuantity3_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/app/networkQuantity/145 data---------------------": "note",
+  "entityDetailOverviewAppNetworkQuantity145_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppNetworkQuantity145_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/networkQuantity/2 data---------------------": "note",
+  "entityDetailOverviewIpNetworkQuantity2_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpNetworkQuantity2_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/networkQuantity/3 data---------------------": "note",
+  "entityDetailOverviewIpNetworkQuantity3_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpNetworkQuantity3_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/networkQuantity/145 data---------------------": "note",
+  "entityDetailOverviewIpNetworkQuantity145_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpNetworkQuantity145_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/relatedApp data---------------------": "note",
+  "entityDetailOverviewIpRelatedApp_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailOverviewIpRelatedApp_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/domain/relatedServerIp data---------------------": "note",
+  "entityDetailOverviewDomainRelatedServerIp_success": {
+    "domain": "baidu.com"
+  },
+  "entityDetailOverviewDomainRelatedServerIp_error": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/app/relatedDomain data---------------------": "note",
+  "entityDetailOverviewAppRelatedDomain_success": {
+    "appName": "qq"
+  },
+  "entityDetailOverviewAppRelatedDomain_error": {
+  },
+  "------------------ GET  /interface/detection/security/filter/severity data---------------------": "note",
+  "detectionSecurityFilterSeverity_success": {
+  },
+  "------------------ GET  /interface/detection/security/filter/securityType data---------------------": "note",
+  "detectionSecurityFilterSecurityType_success": {
+  },
+  "------------------ GET  /interface/detection/security/filter/victimIp data---------------------": "note",
+  "detectionSecurityFilterVictimIp_success": {
+  },
+  "------------------ GET  /interface/detection/security/filter/victimLocation data---------------------": "note",
+  "detectionSecurityFilterVictimLocation_success": {
+  },
+  "------------------ GET  /interface/detection/security/filter/offenderIp data---------------------": "note",
+  "detectionSecurityFilterOffenderIp_success": {
+  },
+  "------------------ GET  /interface/detection/security/filter/offenderLocation data---------------------": "note",
+  "detectionSecurityFilterOffenderLocation_success": {
+  },
+  "------------------ GET  /interface/detection/security/list/basic data---------------------": "note",
+  "detectionSecurityListBasic_success": {
+  },
+  "------------------ GET  /interface/detection/security/list/count data---------------------": "note",
+  "detectionSecurityListCount_success": {
+  },
+  "------------------ GET  /interface/detection/security/detail/overview/basic data---------------------": "note",
+  "detectionSecurityDetailOverviewBasic_success": {
+  },
+  "------------------ GET  /interface/detection/security/detail/overview/event data---------------------": "note",
+  "detectionSecurityDetailOverviewEvent_success": {
+    "offenderIp": "204.11.56.48",
+    "victimIp": "116.178.66.226"
+  },
+  "detectionSecurityDetailOverviewEvent_error": {
+  },
+  "------------------ GET  /interface/detection/security/filter/severityTrend data---------------------": "note",
+  "detectionSecurityFilterSeverityTrend_success": {
+  },
+  "------------------ GET  /interface/detection/performance/filter/severityTrend data---------------------": "note",
+  "detectionPerformanceFilterSeverityTrend_success": {
+  },
+  "------------------ GET  /interface/detection/performance/filter/severity data---------------------": "note",
+  "detectionPerformanceFilterSeverity_success": {
+  },
+  "------------------ GET  /interface/detection/performance/filter/eventType data---------------------": "note",
+  "detectionPerformanceFilterEventType_success": {
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/basic data---------------------": "note",
+  "detectionPerformanceDetailOverviewBasic_success": {
+  },
+  "------------------ GET  /interface/detection/performance/list/count data---------------------": "note",
+  "detectionPerformanceListCount_success": {
+  },
+  "------------------ GET  /interface/dns/rtdns data---------------------": "note",
+  "dnsRtdns_success": {
+  },
+  "------------------ GET  /interface/dns/tldns data---------------------": "note",
+  "dnsTldns_success": {
+  },
+  "------------------ GET  /interface/dns/adns data---------------------": "note",
+  "dnsAdns_success": {
+  },
+  "------------------ GET  /interface/dns/oprdns data---------------------": "note",
+  "dnsOprdns_success": {
+  },
+  "------------------ GET  /interface/dns/os data---------------------": "note",
+  "dnsOs_success": {
+  },
+  "------------------ GET  /interface/dns/software data---------------------": "note",
+  "dnsSoftware_success": {
+  },
+  "------------------ GET  /interface/dns/org data---------------------": "note",
+  "dnsOrg_success": {
+  },
+  "------------------ GET  /interface/dns/dnssecSupport data---------------------": "note",
+  "dnsDnssecSupport_success": {
+  },
+  "------------------ GET  /interface/dns/ipv6Support data---------------------": "note",
+  "dnsIpv6Support_success": {
+  },
+  "------------------ GET  /interface/dns/encryptedProtocolSupport data---------------------": "note",
+  "dnsEncryptedProtocolSupport_success": {
+  },
+  "------------------ GET  /interface/dns/dohCount data---------------------": "note",
+  "dnsDohCount_success": {
+  },
+  "------------------ GET  /interface/dns/dotCount data---------------------": "note",
+  "dnsDotCount_success": {
+  },
+  "------------------ GET  /interface/dns/map data---------------------": "note",
+  "dnsMap_success": {
+    "dnsServerRole": "RTDNSM"
+  },
+  "dnsMap_error": {
+  },
+  "------------------ GET  /interface/dns/queryRate data---------------------": "note",
+  "dnsQueryRate_success": {
+  },
+  "------------------ GET  /interface/dns/dohInquiries data---------------------": "note",
+  "dnsDohInquiries_success": {
+  },
+  "------------------ GET  /interface/dns/dotInquiries data---------------------": "note",
+  "dnsDotInquiries_success": {
+  },
+  "------------------ GET  /interface/dns/activeClientIp data---------------------": "note",
+  "dnsActiveClientIp_success": {
+    "order": "queryCount",
+    "limit": 10
+  },
+  "dnsActiveClientIp_error": {
+  },
+  "------------------ GET  /interface/dns/activeDomainServer data---------------------": "note",
+  "dnsActiveDomainServer_success": {
+    "order": "queryRate",
+    "limit": 10
+  },
+  "dnsActiveDomainServer_error": {
+  },
+  "------------------ GET  /interface/dns/resolveDomain data---------------------": "note",
+  "dnsResolveDomain_success": {
+    "order": "queryCount",
+    "limit": 10
+  },
+  "dnsResolveDomain_error": {
+  },
+  "------------------ GET  /interface/dns/averageResolveLatency data---------------------": "note",
+  "dnsAverageResolveLatency_success": {
+  },
+  "------------------ GET  /interface/dns/responseFailureRate data---------------------": "note",
+  "dnsResponseFailureRate_success": {
+  },
+  "------------------ GET  /interface/dns/alarmInfo data---------------------": "note",
+  "dnsAlarmInfo_success": {
+  },
+  "------------------ GET  /interface/dns/alarmInfoCount data---------------------": "note",
+  "dnsAlarmInfoCount_success": {
+  },
+  "------------------ GET  /interface/dns/Count data---------------------": "note",
+  "dnsCount_success": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/port data---------------------": "note",
+  "entityDetailIpPort_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpPort_error": {
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/metric data---------------------": "note",
+  "detectionPerformanceDetailOverviewMetric_success": {
+  },
+  "------------------ GET  /interface/detection/performance/filter/activeEntity data---------------------": "note",
+  "detectionPerformanceFilterActiveEntity_success": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domains data---------------------": "note",
+  "entityDetailIpDomains_success": {
+    "ip": "119.29.29.29"
+  },
+  "entityDetailIpDomains_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domainByCategory data---------------------": "note",
+  "entityDetailIpDomainByCategory_success": {
+    "domains": "baidu.com"
+  },
+  "entityDetailIpDomainByCategory_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/domainByReputation data---------------------": "note",
+  "entityDetailIpDomainByReputation_success": {
+    "domains": "baidu.com"
+  },
+  "entityDetailIpDomainByReputation_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/domains data---------------------": "note",
+  "entityDetailAppDomains_success": {
+    "appName": "qq"
+  },
+  "entityDetailAppDomains_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/domainByCategory data---------------------": "note",
+  "entityDetailAppDomainByCategory_success": {
+    "domains": "baidu.com"
+  },
+  "entityDetailAppDomainByCategory_error": {
+  },
+  "------------------ GET  /interface/entity/detail/app/domainByReputation data---------------------": "note",
+  "entityDetailAppDomainByReputation_success": {
+    "domains": "baidu.com"
+  },
+  "entityDetailAppDomainByReputation_error": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/securityEvent data---------------------": "note",
+  "entityDetailIpSecurityEvent_success": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/securityEventCount data---------------------": "note",
+  "entityDetailIpSecurityEventCount_success": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/performanceEvent data---------------------": "note",
+  "entityDetailIpPerformanceEvent_success": {
+  },
+  "------------------ GET  /interface/entity/detail/ip/performanceEventCount data---------------------": "note",
+  "entityDetailIpPerformanceEventCount_success": {
+  },
+  "------------------ GET  /interface/entity/detail/app/securityEvent data---------------------": "note",
+  "entityDetailAppSecurityEvent_success": {
+  },
+  "------------------ GET  /interface/entity/detail/app/securityEventCount data---------------------": "note",
+  "entityDetailAppSecurityEventCount_success": {
+  },
+  "------------------ GET  /interface/entity/detail/app/performanceEvent data---------------------": "note",
+  "entityDetailAppPerformanceEvent_success": {
+  },
+  "------------------ GET  /interface/entity/detail/app/performanceEventCount data---------------------": "note",
+  "entityDetailAppPerformanceEventCount_success": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/securityEvent data---------------------": "note",
+  "entityDetailDomainSecurityEvent_success": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/securityEventCount data---------------------": "note",
+  "entityDetailDomainSecurityEventCount_success": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/performanceEvent data---------------------": "note",
+  "entityDetailDomainPerformanceEvent_success": {
+  },
+  "------------------ GET  /interface/entity/detail/domain/performanceEventCount data---------------------": "note",
+  "entityDetailDomainPerformanceEventCount_success": {
+  },
+  "------------------ GET  /interface/dns/overallDnsTraffic data---------------------": "note",
+  "dnsOverallDnsTraffic_success": {
+  },
+  "------------------ GET  /interface/dns/dnsTraffic data---------------------": "note",
+  "dnsDnsTraffic_success": {
+  },
+  "------------------ GET  /interface/entity/detail/overview/ip/dnsQueryRate data---------------------": "note",
+  "entityDetailOverviewIpDnsQueryRate_success": {
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/metric/dnsError data---------------------": "note",
+  "detectionPerformanceDetailOverviewMetricDnsError_success": {
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/metric/httpError data---------------------": "note",
+  "detectionPerformanceDetailOverviewMetricHttpError_success": {
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/metric/highDnsResponseTime data---------------------": "note",
+  "detectionPerformanceDetailOverviewMetricHighDnsResponseTime_success": {
+  },
+  "------------------ GET  /interface/dns/rtMirrors data---------------------": "note",
+  "dnsRtMirrors_success": {
+  },
+  "------------------ GET  /interface/dns/rtMirrorsCount data---------------------": "note",
+  "dnsRtMirrorsCount_success": {
+  },
+  "------------------ GET  /interface/dns/fwdns data---------------------": "note",
+  "dnsFwdns_success": {
+  },
+  "------------------ GET  /interface/entity/filter/count/dns/role data---------------------": "note",
+  "entityFilterCountDnsRole_success": {
+    "column": "FWDNS"
+  },
+  "entityFilterCountDnsRole_error": {
+  },
+  "------------------ GET  /interface/entity/filter/count/dns/others data---------------------": "note",
+  "entityFilterCountDnsOthers_success": {
+    "column": "dns_server_org"
+  },
+  "entityFilterCountDnsOthers_error": {
+  }
+}
