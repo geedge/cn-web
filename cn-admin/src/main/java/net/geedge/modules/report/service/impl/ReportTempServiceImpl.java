@@ -124,7 +124,7 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	    try {
             // 根据uniq创建对应的job和task数据信息
 	    	ReportJob reportJob = new ReportJob();
-	    	reportJob.setName(StrUtil.concat(false, temp.getName(),DateUtil.format(new Date(), "yyyyMMdd"),"job"));
+	    	reportJob.setName(StrUtil.concat(false, temp.getName(),DateUtil.format(new Date(), "yyyyMMdd")));
 	    	reportJob.setCtime(new Date());
 	    	reportJob.setUniq(temp.getUniq());
 	    	reportJob.setHtmlContent(temp.getHtmlContent());
