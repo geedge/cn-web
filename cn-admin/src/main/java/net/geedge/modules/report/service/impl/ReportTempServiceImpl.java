@@ -77,10 +77,26 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	public PageUtils queryPage(Map<String, Object> params) {
 		IPage page = new Query(ReportTemp.class).getPage(params);
 		List<ReportTemp> data = this.baseMapper.queryPage(page,params);
-		data.stream().forEach(o -> o.setConfig(""));
+		for(ReportTemp reportTemp : data) {
+			String config = reportTemp.getConfig();
+			Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
+			configObject.put("dataset", null);
+			reportTemp.setConfig(JSON.toJSONString(configObject));
+		}
 		page.setRecords(data);
 		return new PageUtils(page);
 	}
+	
+	@Override
+	public ReportTemp queryInfo(Integer id) {
+		ReportTemp reportTemp = this.baseMapper.selectById(id);
+		String config = reportTemp.getConfig();
+		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
+		configObject.put("dataset", null);
+		reportTemp.setConfig(JSON.toJSONString(configObject));
+		return reportTemp;
+	}
+	
 
 	@Override
 	public void removeReportTemps(String ids) {
@@ -423,5 +439,5 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		conf.put("startTime", startTime);
 		conf.put("endTime",endTime);
 	}
-	
+
 }

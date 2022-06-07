@@ -21,4 +21,6 @@ public interface ReportTempService extends IService<ReportTemp>{
 	void createJobTasks(ReportTemp reportTemp,Date startTime,Date endTime);
 	
 	void timeHandler(Map<String,Object> conf);
+	
+	ReportTemp queryInfo(Integer id);
 }
