@@ -14,6 +14,7 @@
         <result property="remark" column="remark"/>
         <result property="state" column="state"/>
         <result property="uid" column="uid"/>
+        <result property="categoryId" column="category_id"/>
         <result property="buildIn" column="build_in"/>
         <result property="schedulerStart" column="shceduler_start"/>
         <result property="schedulerEnd" column="shceduler_end"/>
