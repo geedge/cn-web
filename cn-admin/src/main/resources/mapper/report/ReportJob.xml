@@ -14,9 +14,16 @@
         <result property="upload" column="upload"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
+        <result property="uid" column="uid"/>
+        <result property="tempId" column="temp_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="percent" column="rj_percent"/>
         
-        
-        <association property="reportTemp" columnPrefix="temp_" javaType="net.geedge.modules.report.entity.ReportTemp">
+        <association property="reportTemp" columnPrefix="tp_" javaType="net.geedge.modules.report.entity.ReportTemp">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <association property="sysUser" columnPrefix="u_" javaType="net.geedge.modules.sys.entity.SysUserEntity">
             <id property="id" column="id"/>
             <result property="name" column="name"/>
         </association>
@@ -35,10 +42,13 @@
       	rt.type as rt_type,
       	rt.state as tr_state,
       	rt.percent as rt_percent,
-      	temp.id as temp_id,
-      	temp.name as temp_name
+      	temp.id as tp_id,
+      	temp.name as tp_name,
+      	su.id as u_id,
+      	su.name as u_name
       	from  report_job rj left join report_task rt on rj.id = rt.job_id
       	left join report_temp temp on rj.uniq = temp.uniq
+      	left join sys_user su on rj.uid = su.id
       	<where> 
       		rj.id = #{id}
       	</where>
@@ -47,9 +57,14 @@
 	<select id="queryPage" resultMap="reportJob">
       	select 
       	rj.*,
-      	rt.id as temp_id,
-      	rt.name as temp_name
-      	from  report_job rj left join report_temp rt on rj.uniq = rt.uniq
+      	rt.id as tp_id,
+      	rt.name as tp_name,
+      	su.id as u_id,
+      	su.name as u_name,
+      	sum(rta.percent)/count(rta.id) as rj_percent
+      	from  report_job rj left join report_temp rt on rj.temp_id = rt.id
+      	left join sys_user su on rj.uid = su.id 
+      	left join report_task rta on rj.id = rta.job_id
       	<where>
       		<if test="params.name !=null and params.name != ''">
 				and rj.name like CONCAT('%', #{params.name}, '%')
@@ -60,19 +75,26 @@
 			<if test="params.q !=null and params.q != ''">
 				and rj.name like CONCAT('%', #{params.q}, '%')
 			</if>
+			<if test="params.startTime != null">
+			    and rj.ctime &gt;= #{params.startTime}
+			</if>
+			<if test="params.endTime != null">
+			    and rj.ctime &lt;= #{params.endTime}
+			</if>
       	</where>
+      	group by rj.id
       	order by rj.id asc 
     </select>
     
     <delete id="deleteResult">
     	delete 
-    	<if test="overview==1 and type==0">
+    	<if test="overview==1 and type!=1">
     	rt.*,
     	</if>
     	rr.* 
     	from report_job rj left join report_task rt on rj.id= rt.job_id left join report_result rr on rt.id =rr.task_id
     	<where>
-    		<if test="type==0">
+    		<if test="type!=1">
     			rj.id in 
     			<foreach item="id" collection="ids" separator="," open="(" close=")" index="">
                     #{id}

@@ -1,18 +1,12 @@
 package net.geedge.modules.report.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
 
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
@@ -34,11 +28,9 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
-import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
@@ -52,6 +44,7 @@ import net.geedge.modules.report.service.ReportTempService;
 import net.geedge.modules.sys.entity.Timezone;
 import net.geedge.modules.sys.service.SysConfigService;
 import net.geedge.modules.sys.service.TimezoneService;
+import net.geedge.modules.sys.shiro.ShiroUtils;
 
 @Service("reportTempService")
 public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp> implements ReportTempService {
@@ -84,6 +77,13 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	@Override
 	public void removeReportTemps(String ids) {
 		List<String> idList = Arrays.asList(ids.split(StringPool.COMMA));
+		// 判断是否为内置
+		Collection<ReportTemp> temps = this.listByIds(idList);
+		for(ReportTemp temp : temps) {
+			if(temp.getBuildIn().equals(1)) {
+				throw new CNException(RCode.REPORT_BUILD_IN_ERROR);
+			}
+		}
 		this.remove(new QueryWrapper<ReportTemp>().lambda().in(ReportTemp::getId, idList));
 	}
 
@@ -103,7 +103,9 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		}
 		reportTemp.setUtime(new Date());
 		reportTemp.setState(1);
-		
+		reportTemp.setUid(ObjectUtil.isEmpty(ShiroUtils.getUserId()) ? -1 : ShiroUtils.getUserId());
+		// 处理cron表达式
+		this.cronHandler(reportTemp);
 		this.saveOrUpdate(reportTemp);
 		
 		String config = reportTemp.getConfig();
@@ -115,6 +117,107 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		}
 	}
 
+	public void cronHandler(ReportTemp reportTemp) {
+		List<String> cronList = new ArrayList<String>();
+		String config = reportTemp.getConfig();
+		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
+		JSONObject schedulerConfig = (JSONObject) configObject.get("schedulerConfig");
+		String schedulerType = (String) schedulerConfig.get("type");
+		if(StrUtil.isEmpty(schedulerType)) {
+			throw new CNException(RCode.REPORT_SCHEDULER_TYPE_IS_NULL);
+		}
+		Date schedulerStart = reportTemp.getSchedulerStart();
+		int hour = DateUtil.date(schedulerStart).hour(true);
+		int minute = DateUtil.date(schedulerStart).minute();
+		int second = DateUtil.date(schedulerStart).second();
+		String basicScheduler = StrUtil.str(second+" "+minute+" "+hour+" ");
+		Integer interval = (Integer) schedulerConfig.get("interval");
+		if(ObjectUtil.isEmpty(interval)) {
+			interval = 1;
+		}
+		switch(schedulerType) {
+			case "day":
+				String day ="*";
+				if(interval != 1) {
+					day = StrUtil.str(day+"/"+interval);
+				}
+				String dayCron = StrUtil.str(basicScheduler+day+" "+"* "+"?");
+				cronList.add(dayCron);
+				break;
+			case "week":
+				String week = "*";
+				String weekCron = StrUtil.str(basicScheduler+"? "+"* "+"");
+				Integer[] weeks = (Integer[]) schedulerConfig.get("week_dates");
+				if(ObjectUtil.isNotEmpty(weeks)) {
+					for(int i = 0; i < weeks.length; i++){
+	                    if(i == 0){
+	                    	weekCron = StrUtil.str(weekCron+weeks[i]);
+	                    } else{
+	                    	weekCron = StrUtil.str(weekCron+","+weeks[i]);
+	                    }
+	                }
+				}else {
+					weekCron = StrUtil.str(basicScheduler+"? "+"* "+week);
+				}
+				cronList.add(weekCron);
+				break;
+			case "month":
+				String month = "*";
+				String monthWeek = "*";
+				String monthDay = "*";
+				Integer[] monthWeekDates = (Integer[]) schedulerConfig.get("month_week_dates");
+				Integer[] months = (Integer[]) schedulerConfig.get("months");
+				Integer[] monthDates = (Integer[]) schedulerConfig.get("month_dates");
+				Integer[] weekDates = (Integer[]) schedulerConfig.get("week_dates");
+				if(ObjectUtil.isNotEmpty(months)) {
+					month = StrUtil.join(",", months);
+				}
+				if(ObjectUtil.isEmpty(monthWeekDates)) {
+					if(ObjectUtil.isNotEmpty(monthDates)) {
+						monthWeek = "? ";
+						monthDay = StrUtil.join(",", monthDates);
+					}
+					if(interval != 1) {
+						month = StrUtil.str(month+"/");
+					}
+					if(monthWeek.equals("*") && monthDay.equals("*")) {
+						monthDay = "?";
+					}
+					String monthCron = StrUtil.str(basicScheduler+monthDay+" "+month+" "+monthWeek);
+					cronList.add(monthCron);
+				}else {
+					monthDay = "?";
+					if(ObjectUtil.isEmpty(weekDates)) {
+						weekDates = new Integer[] {1,2,3,4,5,6,7};
+					}
+					for(Integer weekDate : weekDates) {
+						for(Integer monthWeekDate : monthWeekDates) {
+							if(monthWeekDate <=0 || monthWeekDate > 5 ) {
+								throw new CNException(RCode.REPORT_CRON_MONTH_WEEK_DATE_ERROR);
+							}
+							if(monthWeekDate == 5) {
+								monthWeek = StrUtil.str(weekDate+"L");
+							}else {
+								monthWeek = StrUtil.str(weekDate+"#"+monthWeekDate);
+							}
+							String monthCron = StrUtil.str(basicScheduler+monthDay+" "+month+" "+monthWeek);
+							cronList.add(monthCron);
+						}
+					}
+				}
+				break;
+			default:
+				String onceTimeCron = StrUtil.str(basicScheduler+"? * *");
+				cronList.add(onceTimeCron);
+		}
+		if(ObjectUtil.isEmpty(cronList)) {
+			throw new CNException(RCode.REPORT_SCHEDULER_CRON_IS_NULL);
+		}else {
+			configObject.put("cronExpression", JSON.toJSONString(cronList));
+		}
+		reportTemp.setConfig(JSON.toJSONString(configObject));
+	}
+	
 	@Override
 	public void createJobTasks(ReportTemp temp,Date startTime,Date endTime) {
 		
@@ -128,6 +231,9 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	    	reportJob.setCtime(new Date());
 	    	reportJob.setUniq(temp.getUniq());
 	    	reportJob.setHtmlContent(temp.getHtmlContent());
+	    	reportJob.setUid(ObjectUtil.isEmpty(ShiroUtils.getUserId()) ? -1 : ShiroUtils.getUserId());
+	    	reportJob.setTempId(temp.getId());
+	    	reportJob.setCategoryId(temp.getCategoryId());
 	    	String config = temp.getConfig();
 	    	Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
 	    	//根据temp计算查询开始以及结束时间
@@ -237,6 +343,42 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 					endTime = DateUtil.truncate(today, DateField.MONTH);
 					endTime = DateUtil.truncate(today, DateField.YEAR);
 					startTime = DateUtil.offset(endTime, DateField.YEAR, -offset);
+				}
+				break;
+			case "this":
+				if(timeUnit.equals("minute")) {
+					startTime = DateUtil.truncate(today, DateField.MINUTE);
+					endTime = DateUtil.offset(startTime, DateField.MINUTE, 1);
+				}else if(timeUnit.equals("hour")) {
+					startTime = DateUtil.truncate(today, DateField.MINUTE);
+					startTime = DateUtil.truncate(today, DateField.HOUR);
+					endTime = DateUtil.offset(startTime, DateField.HOUR, 1);
+				}else if(timeUnit.equals("day")) {
+					startTime = DateUtil.truncate(today, DateField.MINUTE);
+					startTime = DateUtil.truncate(today, DateField.HOUR);
+					startTime = DateUtil.truncate(today, DateField.DAY_OF_YEAR);
+					endTime = DateUtil.offset(startTime, DateField.DAY_OF_YEAR, 1);
+				}else if(timeUnit.equals("week")) {
+					startTime = DateUtil.truncate(today, DateField.MINUTE);
+					startTime = DateUtil.truncate(today, DateField.HOUR);
+					startTime = DateUtil.truncate(today, DateField.DAY_OF_YEAR);
+					startTime = DateUtil.truncate(today, DateField.WEEK_OF_YEAR);
+					startTime = DateUtil.offset(startTime, DateField.DAY_OF_YEAR, 1);
+					endTime = DateUtil.offset(startTime, DateField.WEEK_OF_YEAR, 1);
+				}else if(timeUnit.equals("month")) {
+					startTime = DateUtil.truncate(today, DateField.MINUTE);
+					startTime = DateUtil.truncate(today, DateField.HOUR);
+					startTime = DateUtil.truncate(today, DateField.DAY_OF_YEAR);
+					startTime = DateUtil.truncate(today, DateField.WEEK_OF_YEAR);
+					startTime = DateUtil.truncate(today, DateField.MONTH);
+					endTime = DateUtil.offset(startTime, DateField.MONTH, 1);
+				}else {
+					startTime = DateUtil.truncate(today, DateField.MINUTE);
+					startTime = DateUtil.truncate(today, DateField.HOUR);
+					startTime = DateUtil.truncate(today, DateField.DAY_OF_YEAR);
+					startTime = DateUtil.truncate(today, DateField.MONTH);
+					startTime = DateUtil.truncate(today, DateField.YEAR);
+					endTime = DateUtil.offset(startTime, DateField.YEAR, 1);
 				}
 				break;
 			case "customize":

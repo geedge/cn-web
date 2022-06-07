@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import net.geedge.modules.sys.entity.SysUserEntity;
 
 @Data
 @TableName("report_job")
@@ -37,9 +38,21 @@ public class ReportJob {
 	
 	private Date endTime;
 	
+	private Long uid;
+	
+	private Integer tempId;
+	
+	private Integer categoryId;
+	
 	@TableField(exist = false)
 	private List<ReportTask> reportTasks;
 	
 	@TableField(exist = false)
 	private ReportTemp reportTemp;
+	
+	@TableField(exist = false)
+	private SysUserEntity sysUser;
+	
+	@TableField(exist = false)
+	private Double percent;
 }

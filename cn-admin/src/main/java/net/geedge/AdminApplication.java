@@ -6,7 +6,7 @@ import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
+//import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.EnvironmentAware;
@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import cn.hutool.core.util.StrUtil;
-import io.micrometer.core.instrument.MeterRegistry;
+//import io.micrometer.core.instrument.MeterRegistry;
 import net.geedge.AdminApplication.SetupAutoConfiguration;
 
 @SpringBootApplication(scanBasePackages = { "net.geedge.setup" })
@@ -38,10 +38,10 @@ public class AdminApplication {
 		SpringApplication.run(AdminApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	MeterRegistryCustomizer<MeterRegistry> configurer(@Value("cn") String applicationName) {
 		return (registry) -> registry.config().commonTags("application", applicationName);
-	}
+	}*/
 
 	static class SetupAutoConfiguration implements ImportBeanDefinitionRegistrar, EnvironmentAware {
 		private Environment environment;

@@ -1,0 +1,18 @@
+package net.geedge.modules.report.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
+import net.geedge.modules.report.entity.ReportCategory;
+
+@Mapper
+public interface ReportCategoryDao extends BaseMapper<ReportCategory>{
+
+	List<ReportCategory> queryPage(IPage page, Map<String,Object> params);
+	
+}

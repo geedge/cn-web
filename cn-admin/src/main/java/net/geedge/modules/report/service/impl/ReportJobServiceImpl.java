@@ -222,7 +222,11 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			log.error("render report html error : {}",e.getMessage());
 		}finally {
 			if(ObjectUtil.isNotEmpty(driver)) {
-				driver.close();
+				try {
+					driver.close();
+				} catch (Exception e) {
+					log.error(e.getMessage());
+				}
 				driver.quit();
 			}
 			IoUtil.close(writer);
@@ -453,7 +457,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		DateTime eTime = null;
 		// 创建新的任务
 		switch (type){
-			case 0 : 
+			case 1 : 
 				if(overview.equals(0)) {
 					List<ReportTask> reportTasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().in(ReportTask::getJobId, Arrays.asList(ids.split(","))));
 					if(ObjectUtil.isNotEmpty(reportTasks)) {
@@ -497,7 +501,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					this.removeByIds(Arrays.asList(ids.split(",")));
 				}
 				break;
-			case 1 :
+			case 2 :
 				Collection<ReportTask> reportTasks = reportTaskService.listByIds(Arrays.asList(ids.split(",")));
 				ArrayList<ReportTask> tasks = ListUtil.toList(reportTasks);
 				if(ObjectUtil.isEmpty(reportTasks)) {
@@ -536,6 +540,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					}
 					List<ReportTemp> temps = reportTempService.list(new QueryWrapper<ReportTemp>().lambda().in(ReportTemp::getUniq,map.keySet()));
 					List<ReportTask> addTasks = new ArrayList<ReportTask>();
+					List<ReportJob> modifyJobs = new ArrayList<ReportJob>();
 					for(ReportTemp temp : temps) {
 						String config = temp.getConfig();
 						Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
@@ -543,6 +548,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			    		List<Map<String,Object>> datasetConfig = (List<Map<String, Object>>) configObject.get("dataset");
 			    		List<Integer> seqs = map.get(temp.getUniq());
 			    		ReportJob reportJob = uniqJob.get(temp.getUniq());
+			    		reportJob.setHtmlContent(temp.getHtmlContent());
+			    		modifyJobs.add(reportJob);
 						if(ObjectUtil.isNotEmpty(reportJob)) {
 							sTime = DateUtil.date(reportJob.getStartTime());
 							eTime = DateUtil.date(reportJob.getEndTime());
@@ -566,6 +573,48 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					}
 					reportTaskService.removeByIds(taskIds);
 					reportTaskService.saveBatch(addTasks);
+					this.updateBatchById(modifyJobs);
+				}
+				break;
+			case 3 :
+				if(overview.equals(0)) {
+					List<ReportTask> tempTasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().in(ReportTask::getTempId, Arrays.asList(ids.split(","))));
+					if(ObjectUtil.isNotEmpty(tempTasks)) {
+						tempTasks.stream().forEach(task -> {
+							task.setState(0);
+							task.setPercent(0.0);
+							task.setCredential(null);
+						});
+						reportTaskService.updateBatchById(tempTasks);
+					}else {
+						throw new CNException(RCode.ERROR);
+					}
+					Set<Integer> jIds = tempTasks.stream().map(ReportTask::getJobId).collect(Collectors.toSet());
+					Collection<ReportJob> reportJobs = this.listByIds(jIds);
+					if(ObjectUtil.isNotEmpty(reportJobs)) {
+						reportJobs.stream().forEach(job -> {
+							job.setState(0);
+							job.setUpload(0);
+						});
+						this.updateBatchById(reportJobs);
+					}else {
+						throw new CNException(RCode.ERROR);
+					}
+				}
+				if(overview.equals(1)) {
+					Collection<ReportTemp> temps = reportTempService.listByIds(Arrays.asList(ids.split(",")));
+					List<String> uniqs = temps.stream().map(ReportTemp::getUniq).collect(Collectors.toList());
+					Map<String, ReportTemp> uniqTemp = temps.stream().collect(Collectors.toMap(ReportTemp::getUniq, Function.identity()));
+					List<ReportJob> tempJobs = this.list(new QueryWrapper<ReportJob>().lambda().in(ReportJob::getUniq, uniqs));
+					for(ReportJob job : tempJobs) {
+						ReportTemp reportTemp = uniqTemp.get(job.getUniq());
+						if(ObjectUtil.isNotEmpty(reportTemp)) {
+							reportTempService.createJobTasks(reportTemp,job.getStartTime(),job.getEndTime());
+						}
+					}
+					List<Integer> tempJobIds = tempJobs.stream().map(ReportJob::getId).collect(Collectors.toList());
+					ids = Joiner.on(",").join(tempJobIds);
+					this.removeByIds(tempJobIds);
 				}
 				break;
 		}
@@ -573,6 +622,5 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		 * 重新执行任务 需要将相关数据进行清理
 		**/ 
 		this.baseMapper.deleteResult(Arrays.asList(ids.split(",")), type, overview);
-		
 	}
 }

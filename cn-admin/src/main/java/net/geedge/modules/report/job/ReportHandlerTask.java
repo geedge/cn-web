@@ -91,7 +91,7 @@ public class ReportHandlerTask extends QuartzJobBean {
         StopWatch sw = new StopWatch();
         sw.start();   
         
-        List<ReportTask> tasks = reportTaskService.list(new QueryWrapper<ReportTask>().orderByAsc("state"));
+        List<ReportTask> tasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().lt(ReportTask::getState, 3).orderByAsc(ReportTask::getState));
         
         Map<Integer, List<ReportTask>> stateTasks = tasks.stream().collect(Collectors.groupingBy(ReportTask::getState));
         

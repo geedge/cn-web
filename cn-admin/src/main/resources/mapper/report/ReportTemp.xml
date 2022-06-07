@@ -13,12 +13,24 @@
         <result property="config" column="config"/>
         <result property="remark" column="remark"/>
         <result property="state" column="state"/>
+        <result property="uid" column="uid"/>
+        <result property="buildIn" column="build_in"/>
+        <result property="schedulerStart" column="shceduler_start"/>
+        <result property="schedulerEnd" column="shceduler_end"/>
+        
+        <association property="sysUser" columnPrefix="u_" javaType="net.geedge.modules.sys.entity.SysUserEntity">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
     </resultMap>
 	
 	<select id="queryPage" resultMap="reportTemp">
       	select 
-      	*
-      	from  report_temp rt
+      	rt.*,
+      	su.id as u_id,
+      	su.name as u_name
+      	from  report_temp rt 
+      	left join sys_user su on rt.uid = su.id
       	<where>
       		<if test="params.name !=null and params.name != ''">
 				and rt.name like CONCAT('%', #{params.name}, '%')

@@ -2,11 +2,13 @@ package net.geedge.modules.report.entity;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import cn.hutool.core.lang.UUID;
 import lombok.Data;
+import net.geedge.modules.sys.entity.SysUserEntity;
 
 @Data
 @TableName("report_temp")
@@ -31,4 +33,17 @@ public class ReportTemp {
 	private Date utime;
 	
 	private Integer state;
+	
+	private Integer categoryId;
+	
+	private Long uid;
+	
+	private Integer buildIn;
+	
+	private Date schedulerStart;
+	
+	private Date schedulerEnd;
+	
+	@TableField(exist = false)
+	private SysUserEntity sysUser;
 }

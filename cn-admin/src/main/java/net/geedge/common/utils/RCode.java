@@ -346,7 +346,11 @@ public enum RCode {
 	REPORT_TEMP_NOT_EXISTS(311008,"Report temp not exists"),
 	REPORT_ID_ISNULL(311009,"Param id can not be null"),
 	REPORT_TYPE_ISNULL(311010,"Param type can not be null"),
-	
+	REPORT_CATEGORY_ID_ISNULL(311011,"Report category id can not be null"),
+	REPORT_SCHEDULER_TYPE_IS_NULL(311012,"Report scheduler type can not be null"),
+	REPORT_SCHEDULER_CRON_IS_NULL(311013,"Report scheduler cron can not be null"),
+	REPORT_BUILD_IN_ERROR(311014,"Report build_in data can not remove"),
+	REPORT_CRON_MONTH_WEEK_DATE_ERROR(311015,"Report cron month week date error must in (1-5)"),
 	
     ERROR(999, "error"); //通用错误/未知错误
 

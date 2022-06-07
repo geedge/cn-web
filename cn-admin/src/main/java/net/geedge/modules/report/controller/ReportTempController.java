@@ -1,6 +1,5 @@
 package net.geedge.modules.report.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +28,6 @@ import net.geedge.modules.sys.controller.AbstractController;
 @RestController
 @RequestMapping("/report/temp")
 public class ReportTempController extends AbstractController{
-	@Autowired
-	private ReportJobService reportJobService;
-	
-	@Autowired
-	private ReportTaskService reportTaskService;
 	
 	@Autowired
 	private ReportTempService reportTempService;
