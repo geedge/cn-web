@@ -19,6 +19,8 @@ import net.geedge.common.utils.RCode;
 import net.geedge.modules.report.entity.ReportCategory;
 import net.geedge.modules.report.service.ReportCategoryService;
 import net.geedge.modules.sys.controller.AbstractController;
+import net.geedge.modules.sys.entity.SysUserEntity;
+import net.geedge.modules.sys.service.SysUserService;
 
 @RestController
 @RequestMapping("/report/category")
@@ -26,6 +28,9 @@ public class ReportCategoryController extends AbstractController{
 	
 	@Autowired
 	private ReportCategoryService reportCategoryService;
+	
+	@Autowired
+	private SysUserService sysUserService;
 	
 	@GetMapping
 	public R list(@RequestParam Map<String, Object> params){
@@ -36,6 +41,8 @@ public class ReportCategoryController extends AbstractController{
 	@GetMapping("/{id}")
 	public R info(@PathVariable("id") Integer id) {
 		ReportCategory reportCategory = reportCategoryService.queryInfo(id);
+		SysUserEntity user = sysUserService.getById(reportCategory.getUid());
+		reportCategory.setSysUser(user);
 		return R.ok(reportCategory);
 	}
 	

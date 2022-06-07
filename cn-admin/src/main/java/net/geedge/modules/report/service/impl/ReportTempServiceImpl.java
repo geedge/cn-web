@@ -45,8 +45,10 @@ import net.geedge.modules.report.service.ReportCategoryService;
 import net.geedge.modules.report.service.ReportJobService;
 import net.geedge.modules.report.service.ReportTaskService;
 import net.geedge.modules.report.service.ReportTempService;
+import net.geedge.modules.sys.entity.SysUserEntity;
 import net.geedge.modules.sys.entity.Timezone;
 import net.geedge.modules.sys.service.SysConfigService;
+import net.geedge.modules.sys.service.SysUserService;
 import net.geedge.modules.sys.service.TimezoneService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 
@@ -73,6 +75,9 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	@Autowired
 	private ReportCategoryService reportCategoryService;
 	
+	@Autowired
+	private SysUserService sysUserService;
+	
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		IPage page = new Query(ReportTemp.class).getPage(params);
@@ -94,6 +99,8 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
 		configObject.put("dataset", null);
 		reportTemp.setConfig(JSON.toJSONString(configObject));
+		SysUserEntity user = sysUserService.getById(reportTemp.getUid());
+		reportTemp.setSysUser(user);
 		return reportTemp;
 	}
 	

@@ -16,8 +16,8 @@
         <result property="uid" column="uid"/>
         <result property="categoryId" column="category_id"/>
         <result property="buildIn" column="build_in"/>
-        <result property="schedulerStart" column="shceduler_start"/>
-        <result property="schedulerEnd" column="shceduler_end"/>
+        <result property="schedulerStart" column="scheduler_start"/>
+        <result property="schedulerEnd" column="scheduler_end"/>
         
         <association property="sysUser" columnPrefix="u_" javaType="net.geedge.modules.sys.entity.SysUserEntity">
             <id property="id" column="id"/>
