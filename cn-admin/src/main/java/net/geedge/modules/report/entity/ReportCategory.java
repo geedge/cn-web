@@ -5,6 +5,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import cn.hutool.core.lang.UUID;
 import lombok.Data;
@@ -21,7 +22,8 @@ public class ReportCategory {
 	private Date ctime;
 			
 	private String remark;
-		
+	
+	@JsonIgnore
 	private String htmlContent;
 	
 	private String config;

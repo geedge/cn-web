@@ -7,11 +7,14 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import cn.hutool.json.JSONString;
 import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.PageUtils;
@@ -32,6 +35,7 @@ public class ReportCategoryServiceImpl extends ServiceImpl<ReportCategoryDao, Re
 	public PageUtils queryPage(Map<String, Object> params) {
 		IPage page = new Query(ReportTemp.class).getPage(params);
 		List<ReportCategory> data = this.baseMapper.queryPage(page,params);
+		data.stream().forEach(o -> o.setConfig(""));
 		page.setRecords(data);
 		return new PageUtils(page);
 	}
@@ -39,6 +43,10 @@ public class ReportCategoryServiceImpl extends ServiceImpl<ReportCategoryDao, Re
 	@Override
 	public ReportCategory queryInfo(Integer id) {
 		ReportCategory reportCategory = this.baseMapper.selectById(id);
+		String config = reportCategory.getConfig();
+		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
+		configObject.put("dataset", null);
+		reportCategory.setConfig(JSON.toJSONString(configObject));
 		return reportCategory;
 	}
 	

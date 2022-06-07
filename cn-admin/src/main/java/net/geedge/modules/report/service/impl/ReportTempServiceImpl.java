@@ -37,9 +37,11 @@ import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
 import net.geedge.modules.report.dao.ReportTempDao;
+import net.geedge.modules.report.entity.ReportCategory;
 import net.geedge.modules.report.entity.ReportJob;
 import net.geedge.modules.report.entity.ReportTask;
 import net.geedge.modules.report.entity.ReportTemp;
+import net.geedge.modules.report.service.ReportCategoryService;
 import net.geedge.modules.report.service.ReportJobService;
 import net.geedge.modules.report.service.ReportTaskService;
 import net.geedge.modules.report.service.ReportTempService;
@@ -68,10 +70,14 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	@Autowired
 	private SysConfigService sysConfigService;
 	
+	@Autowired
+	private ReportCategoryService reportCategoryService;
+	
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		IPage page = new Query(ReportTemp.class).getPage(params);
 		List<ReportTemp> data = this.baseMapper.queryPage(page,params);
+		data.stream().forEach(o -> o.setConfig(""));
 		page.setRecords(data);
 		return new PageUtils(page);
 	}
@@ -91,9 +97,7 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 
 	@Override
 	public void saveOrModify(ReportTemp reportTemp){
-		ValidateUtils.is(reportTemp.getName()).notNull(RCode.REPORT_TEMP_NAME_ISNULL)
-				.and(reportTemp.getHtmlContent()).notNull(RCode.REPORT_TEMP_HTML_CONTENT_ISNULL)
-				.and(reportTemp.getConfig()).notNull(RCode.REPORT_TEMP_CONFIG_ISNULL);
+		ValidateUtils.is(reportTemp.getName()).notNull(RCode.REPORT_TEMP_NAME_ISNULL);
 		
 		// 生成唯一uuid标识
 		String uuid = UUID.randomUUID().toString();
@@ -108,15 +112,15 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		reportTemp.setUid(ObjectUtil.isEmpty(ShiroUtils.getUserId()) ? -1 : ShiroUtils.getUserId());
 		// 处理cron表达式
 		this.cronHandler(reportTemp);
-		this.saveOrUpdate(reportTemp);
-		
+		// 处理dataset
+		ReportCategory category = reportCategoryService.getById(reportTemp.getCategoryId());
 		String config = reportTemp.getConfig();
 		Map<String,Object> tempConfigMap = (Map<String, Object>) JSON.parse(config);
-		Integer isRepeat = (Integer) tempConfigMap.get("isRepeat");
-		//判断是新增定时任务还是立即执行以及定时任务的启停状态
-		if(isRepeat.equals(0) && reportTemp.getState().equals(1)) {
-			this.createJobTasks(reportTemp,null,null);
-		}
+		Map<String,Object> categoryConfig = (Map<String, Object>)JSON.parse(category.getConfig());
+		tempConfigMap.put("dataset",categoryConfig.get("dataset"));
+		reportTemp.setConfig(JSON.toJSONString(tempConfigMap));
+		reportTemp.setHtmlContent(category.getHtmlContent());
+		this.saveOrUpdate(reportTemp);
 	}
 
 	public void cronHandler(ReportTemp reportTemp) {
@@ -230,12 +234,11 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				}
 				break;
 			default:
-				String onceTimeCron = StrUtil.str(basicScheduler+"? * *");
-				cronList.add(onceTimeCron);
+				Date startTime = reportTemp.getSchedulerStart();
+				DateTime endtime = DateUtil.offset(startTime, DateField.SECOND, 10);
+				reportTemp.setSchedulerEnd(endtime);
 		}
-		if(ObjectUtil.isEmpty(cronList)) {
-			throw new CNException(RCode.REPORT_SCHEDULER_CRON_IS_NULL);
-		}else {
+		if(ObjectUtil.isNotEmpty(cronList)) {
 			configObject.put("cronExpression", JSON.toJSONString(cronList));
 		}
 		reportTemp.setConfig(JSON.toJSONString(configObject));

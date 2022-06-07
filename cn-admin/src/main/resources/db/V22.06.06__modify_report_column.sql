@@ -22,7 +22,7 @@ CREATE TABLE `report_category`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '名称',
   `html_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'html模板内容',
-  `config` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '公用配置项',
+  `config` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '公用配置项',
   `build_in` int(2) NOT NULL DEFAULT 0 COMMENT '是否内置 0-否 1-是 默认 0',
   `ctime` datetime(0) NOT NULL COMMENT '创建时间',
   `uid` int(11) NULL DEFAULT NULL COMMENT '创建人',
