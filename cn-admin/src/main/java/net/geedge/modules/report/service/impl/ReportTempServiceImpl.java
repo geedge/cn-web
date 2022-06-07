@@ -3,6 +3,7 @@ package net.geedge.modules.report.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.ObjectUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -147,13 +149,17 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 			case "week":
 				String week = "*";
 				String weekCron = StrUtil.str(basicScheduler+"? "+"* "+"");
-				Integer[] weeks = (Integer[]) schedulerConfig.get("week_dates");
+				JSONArray jsonWeeks = (JSONArray) schedulerConfig.get("weekDates");
+				List<Integer> weeks = new ArrayList<Integer>();
+				if(ObjectUtil.isNotEmpty(jsonWeeks)) {
+					weeks = JSONArray.parseArray(jsonWeeks.toString(),Integer.class);
+				}
 				if(ObjectUtil.isNotEmpty(weeks)) {
-					for(int i = 0; i < weeks.length; i++){
+					for(int i = 0; i < weeks.size(); i++){
 	                    if(i == 0){
-	                    	weekCron = StrUtil.str(weekCron+weeks[i]);
+	                    	weekCron = StrUtil.str(weekCron+weeks.get(i));
 	                    } else{
-	                    	weekCron = StrUtil.str(weekCron+","+weeks[i]);
+	                    	weekCron = StrUtil.str(weekCron+","+weeks.get(i));
 	                    }
 	                }
 				}else {
@@ -165,14 +171,31 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				String month = "*";
 				String monthWeek = "*";
 				String monthDay = "*";
-				Integer[] monthWeekDates = (Integer[]) schedulerConfig.get("month_week_dates");
-				Integer[] months = (Integer[]) schedulerConfig.get("months");
-				Integer[] monthDates = (Integer[]) schedulerConfig.get("month_dates");
-				Integer[] weekDates = (Integer[]) schedulerConfig.get("week_dates");
+				JSONArray jsonMonthWeekDates = (JSONArray) schedulerConfig.get("monthWeekDates");
+				JSONArray jsonMonths = (JSONArray) schedulerConfig.get("months");
+				JSONArray jsonMonthDates = (JSONArray) schedulerConfig.get("monthDates");
+				JSONArray jsonWeekDates = (JSONArray) schedulerConfig.get("weekDates");
+				List<Integer> monthWeekDates = new ArrayList<Integer>();
+				List<Integer> months = new ArrayList<Integer>();
+				List<Integer> monthDates = new ArrayList<Integer>();
+				List<Integer> weekDates = new ArrayList<Integer>();
+				if(ObjectUtil.isNotEmpty(jsonMonthWeekDates)) {
+					monthWeekDates = JSONArray.parseArray(jsonMonthWeekDates.toString(),Integer.class);
+				}
+				if(ObjectUtil.isNotEmpty(jsonMonths)) {
+					months = JSONArray.parseArray(jsonMonths.toString(),Integer.class);
+				}
+				if(ObjectUtil.isNotEmpty(jsonMonthDates)) {
+					monthDates = JSONArray.parseArray(jsonMonthDates.toString(),Integer.class);
+				}
+				if(ObjectUtil.isNotEmpty(jsonWeekDates)) {
+					weekDates = JSONArray.parseArray(jsonWeekDates.toString(),Integer.class);
+				}
 				if(ObjectUtil.isNotEmpty(months)) {
 					month = StrUtil.join(",", months);
 				}
 				if(ObjectUtil.isEmpty(monthWeekDates)) {
+					
 					if(ObjectUtil.isNotEmpty(monthDates)) {
 						monthWeek = "? ";
 						monthDay = StrUtil.join(",", monthDates);
@@ -188,7 +211,7 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				}else {
 					monthDay = "?";
 					if(ObjectUtil.isEmpty(weekDates)) {
-						weekDates = new Integer[] {1,2,3,4,5,6,7};
+						Collections.addAll(weekDates, 1,2,3,4,5,6,7);
 					}
 					for(Integer weekDate : weekDates) {
 						for(Integer monthWeekDate : monthWeekDates) {
