@@ -51,4 +51,7 @@ public class ReportTemp {
 	
 	@TableField(exist = false)
 	private Integer total;
+	
+	@TableField(exist = false)
+	private Date lastTime;
 }
