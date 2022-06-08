@@ -144,6 +144,11 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		reportTemp.setConfig(JSON.toJSONString(tempConfigMap));
 		reportTemp.setHtmlContent(category.getHtmlContent());
 		this.saveOrUpdate(reportTemp);
+		Integer isScheduler = (Integer) tempConfigMap.get("isScheduler");
+		//判断是新增定时任务还是立即执行以及定时任务的启停状态
+		if(isScheduler.equals(0) && reportTemp.getState().equals(1)) {
+			this.createJobTasks(reportTemp,null,null);
+		}
 	}
 
 	public void cronHandler(ReportTemp reportTemp) {

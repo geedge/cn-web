@@ -121,20 +121,13 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));
 		IPage page = new Query(ReportJob.class).getPage(params);
 		List<ReportJob> data = this.baseMapper.queryPage(page,params);
-		data.stream().forEach(o -> {
-			o.setStartTime(DateUtil.offset(o.getStartTime(), DateField.MILLISECOND, sysTimezone.getOffset()));
-			o.setEndTime(DateUtil.offset(o.getEndTime(), DateField.MILLISECOND, sysTimezone.getOffset()));
-		});
 		page.setRecords(data);
 		return new PageUtils(page);
 	}
 
 	@Override
 	public ReportJob queryInfo(Integer id) {
-		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));
 		ReportJob reportJob = this.baseMapper.selectInfoById(id);
-		reportJob.setStartTime(DateUtil.offset(reportJob.getStartTime(), DateField.MILLISECOND, sysTimezone.getOffset()));
-		reportJob.setEndTime(DateUtil.offset(reportJob.getEndTime(), DateField.MILLISECOND, sysTimezone.getOffset()));
 		return reportJob;
 	}
 	

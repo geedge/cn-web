@@ -48,4 +48,7 @@ public class ReportTemp {
 	
 	@TableField(exist = false)
 	private SysUserEntity sysUser;
+	
+	@TableField(exist = false)
+	private Integer total;
 }
