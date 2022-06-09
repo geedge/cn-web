@@ -173,6 +173,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		try {
 			// 获取html模板信息
 			ReportJob reportJob = this.getById(jobId);
+			ReportTemp temp = reportTempService.getById(reportJob.getTempId());
 			html = reportJob.getHtmlContent();
 			html += reportFreemarkerCommon;
 			Map<Integer, ReportResult> taskIdResult = reportResults.stream().collect(Collectors.toMap(ReportResult::getTaskId, Function.identity()));
@@ -182,6 +183,11 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			data.put("uiStaticUrl",uiStaticUrl);
 			data.put("timeZoneOffset", sysTimezone.getOffset());
 			data.put("reportJsCommon", reportJsCommon);
+			Map<String,Object> tempConfigObject = (Map<String, Object>) JSONObject.parse(temp.getConfig());
+    		Map<String,Object> queryParam = (Map<String,Object>) tempConfigObject.get("queryParam");
+    		if(ObjectUtil.isNotEmpty(queryParam)) {
+    			data.putAll(queryParam);
+    		}
 			for(ReportTask reportTask : reportTasks) {
 				ReportResult reportResult = taskIdResult.get(reportTask.getId());
 				String result = reportResult.getResult();
