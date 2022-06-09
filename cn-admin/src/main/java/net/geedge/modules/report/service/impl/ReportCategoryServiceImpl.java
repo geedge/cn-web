@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -24,18 +25,27 @@ import net.geedge.modules.report.dao.ReportCategoryDao;
 import net.geedge.modules.report.entity.ReportCategory;
 import net.geedge.modules.report.entity.ReportTemp;
 import net.geedge.modules.report.service.ReportCategoryService;
+import net.geedge.modules.sys.entity.SysUserEntity;
+import net.geedge.modules.sys.service.SysUserService;
 
 @Service("reportCategoryService")
 public class ReportCategoryServiceImpl extends ServiceImpl<ReportCategoryDao, ReportCategory> implements ReportCategoryService {
 	
 	private Log log = Log.get();
 	
+	@Autowired
+	private SysUserService sysUserService;
 	
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		IPage page = new Query(ReportTemp.class).getPage(params);
 		List<ReportCategory> data = this.baseMapper.queryPage(page,params);
-		data.stream().forEach(o -> o.setConfig(""));
+		for(ReportCategory reportCategory : data) {
+			String config = reportCategory.getConfig();
+			Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
+			configObject.put("dataset", null);
+			reportCategory.setConfig(JSON.toJSONString(configObject));
+		}
 		page.setRecords(data);
 		return new PageUtils(page);
 	}
@@ -47,6 +57,8 @@ public class ReportCategoryServiceImpl extends ServiceImpl<ReportCategoryDao, Re
 		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
 		configObject.put("dataset", null);
 		reportCategory.setConfig(JSON.toJSONString(configObject));
+		SysUserEntity user = sysUserService.getById(reportCategory.getUid());
+		reportCategory.setSysUser(user);
 		return reportCategory;
 	}
 	

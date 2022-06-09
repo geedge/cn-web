@@ -1,5 +1,6 @@
 package net.geedge.modules.report.job;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.SimpleTrigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,10 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jcraft.jsch.Logger;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.log.Log;
@@ -44,12 +50,6 @@ public class ReportRegisterJob extends QuartzJobBean {
 	@Autowired
 	private ReportTempService reportTempService;
 	
-	@Autowired
-	private ReportJobService reportJobService;
-	
-	@Autowired
-	private ReportTaskService reportTaskService;
-	
 	private Scheduler scheduler;
 			
 	/**
@@ -68,16 +68,40 @@ public class ReportRegisterJob extends QuartzJobBean {
         sw.start();        
 
         List<ReportTemp> temps = reportTempService.list(new QueryWrapper<ReportTemp>().lambda().eq(ReportTemp::getState, 1));
-        Map<String,String> jobKeyMaps = new HashMap<String,String>();
+        Map<String,Map<String,Object>> cronJobKeyMaps = new HashMap<String,Map<String,Object>>();
+        Map<String,ReportTemp> singleJobKeyMaps = new HashMap<String,ReportTemp>();
+        Date now = new Date();
         for(ReportTemp reportTemp : temps) {
         	String config = reportTemp.getConfig();
         	Map<String,Object> tempConfigMap = (Map<String, Object>) JSONObject.parse(config);
         	String cronExpr = (String) tempConfigMap.get("cronExpression");
+        	Integer isScheduler = (Integer) tempConfigMap.get("isScheduler");
         	Integer isRepeat = (Integer) tempConfigMap.get("isRepeat");
-        	if(isRepeat.equals(1) && reportTemp.getState().equals(1)) {
-        		String hash = DigestUtil.sha1Hex(cronExpr);
-            	String jobKeyName = String.format("%s-%s",hash,reportTemp.getId());
-            	jobKeyMaps.put(jobKeyName,cronExpr);
+        	if(isScheduler.equals(1)) {
+	        	if(isRepeat.equals(1) && reportTemp.getState().equals(1) && (DateUtil.compare(reportTemp.getSchedulerEnd(), now) > 0 || ObjectUtil.isEmpty(reportTemp.getSchedulerEnd()))) {
+	        		if(StrUtil.isEmpty(cronExpr)) {
+	        			continue;
+	        		}else {
+	        			List<String> crons = JSONObject.parseArray(cronExpr,String.class);
+	        			for(String cron : crons) {
+	        				Map<String,Object> map = new HashMap<String,Object>();
+	        				String hash = DigestUtil.sha1Hex(cron);
+	                    	String jobKeyName = String.format("%s-%s",hash,reportTemp.getId());
+	                    	map.put("cron", cron);
+	                    	map.put("schedulerStart", reportTemp.getSchedulerStart());
+	                    	map.put("schedulerEnd", reportTemp.getSchedulerEnd());
+	                    	cronJobKeyMaps.put(jobKeyName,map);
+	        			}
+	        		}
+	        	}else if(isRepeat.equals(0) && reportTemp.getState().equals(1)){
+	        		if(!(DateUtil.compare(reportTemp.getSchedulerStart(), now) > 0)) {
+	        			continue;
+	        		}
+	        		String jobKeyName = String.format("%s-%s",reportTemp.getSchedulerStart().getTime(),reportTemp.getId());
+	        		singleJobKeyMaps.put(jobKeyName,reportTemp);
+	        	}
+        	}else {
+        		continue;
         	}
         }
         
@@ -86,25 +110,54 @@ public class ReportRegisterJob extends QuartzJobBean {
 	        GroupMatcher<JobKey> groupMatcher = GroupMatcher.groupEquals(Constant.CN_REPORT_CRON_GROUP);
 	        Set<JobKey> jobKeys = scheduler.getJobKeys(groupMatcher);
 			for (JobKey key : jobKeys) {
-				if(jobKeyMaps.keySet().contains(key.getName())) {
+				if(cronJobKeyMaps.keySet().contains(key.getName())) {
 					continue;
 				}
 				scheduler.deleteJob(key);
 			}
-	        
-	        for(String jobKeyName : jobKeyMaps.keySet()) {
-	        	String cronExpr = jobKeyMaps.get(jobKeyName);
+
+	        for(String jobKeyName : cronJobKeyMaps.keySet()) {
+	        	Map<String,Object> map = cronJobKeyMaps.get(jobKeyName);
 	    		JobKey jobKey = new JobKey(jobKeyName,Constant.CN_REPORT_CRON_GROUP);
 				boolean exists = scheduler.checkExists(jobKey);
 				if(!exists) {
 					JobDetail jobDetail = JobBuilder.newJob(ReportHandlerJob.class).withIdentity(jobKey).storeDurably()
 							.build();
 					// 根据用户定时周期创建定时任务
-					CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpr);
+					CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule((String)map.get("cron")).withMisfireHandlingInstructionDoNothing();
 					CronTrigger cronTrigger = TriggerBuilder.newTrigger().forJob(jobDetail).withSchedule(cronScheduleBuilder)
-							.build();
+							.startAt((Date)map.get("schedulerStart")).endAt((Date)map.get("schedulerEnd")).build();
 					// 创建任务
-					scheduler.scheduleJob(jobDetail, cronTrigger);
+					try {
+						scheduler.scheduleJob(jobDetail, cronTrigger);
+					} catch (SchedulerException e) {
+						log.error("create cron scheduler failed msg:{}",e.getMessage());
+					}
+					log.debug("register cron job startAt : {} endAt :{} cron :{}",(Date)map.get("schedulerStart"),(Date)map.get("schedulerEnd"),(String)map.get("cron"));
+				}
+	        }
+	        
+	        GroupMatcher<JobKey> groupSingleMatcher = GroupMatcher.groupEquals(Constant.CN_REPORT_SINGLE_GROUP);
+	        Set<JobKey> jobSingleKeys = scheduler.getJobKeys(groupSingleMatcher);
+			for (JobKey key : jobSingleKeys) {
+				if(singleJobKeyMaps.keySet().contains(key.getName())) {
+					continue;
+				}
+				scheduler.deleteJob(key);
+			}
+			for(String jobKeyName : singleJobKeyMaps.keySet()) {
+	        	ReportTemp temp = singleJobKeyMaps.get(jobKeyName);
+	    		JobKey jobKey = new JobKey(jobKeyName,Constant.CN_REPORT_SINGLE_GROUP);
+				boolean exists = scheduler.checkExists(jobKey);
+				if(!exists) {
+					JobDetail jobDetail = JobBuilder.newJob(ReportHandlerJob.class).withIdentity(jobKey).storeDurably()
+							.build();
+					// 根据用户定时周期创建定时任务
+					SimpleTrigger simpleTrigger = (SimpleTrigger) TriggerBuilder.newTrigger().forJob(jobDetail)
+					.startAt(temp.getSchedulerStart()).endAt(temp.getSchedulerEnd()).build();
+					// 创建任务
+					scheduler.scheduleJob(jobDetail, simpleTrigger);
+					log.debug("register simple job id : {}  startAt : {} endAt :{}",temp.getId(),temp.getSchedulerStart(),temp.getSchedulerEnd());
 				}
 	        }
         } catch (SchedulerException e) {

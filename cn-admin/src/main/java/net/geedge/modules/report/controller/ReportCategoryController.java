@@ -29,9 +29,6 @@ public class ReportCategoryController extends AbstractController{
 	@Autowired
 	private ReportCategoryService reportCategoryService;
 	
-	@Autowired
-	private SysUserService sysUserService;
-	
 	@GetMapping
 	public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = reportCategoryService.queryPage(params);
@@ -41,8 +38,6 @@ public class ReportCategoryController extends AbstractController{
 	@GetMapping("/{id}")
 	public R info(@PathVariable("id") Integer id) {
 		ReportCategory reportCategory = reportCategoryService.queryInfo(id);
-		SysUserEntity user = sysUserService.getById(reportCategory.getUid());
-		reportCategory.setSysUser(user);
 		return R.ok(reportCategory);
 	}
 	

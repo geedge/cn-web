@@ -6,6 +6,7 @@ import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,9 +53,11 @@ import net.geedge.common.utils.Tool.ListUtil;
 import net.geedge.modules.report.entity.ReportJob;
 import net.geedge.modules.report.entity.ReportResult;
 import net.geedge.modules.report.entity.ReportTask;
+import net.geedge.modules.report.entity.ReportTemp;
 import net.geedge.modules.report.service.ReportJobService;
 import net.geedge.modules.report.service.ReportResultService;
 import net.geedge.modules.report.service.ReportTaskService;
+import net.geedge.modules.report.service.ReportTempService;
 import net.geedge.modules.sys.service.SysConfigService;
 
 @DisallowConcurrentExecution
@@ -75,6 +78,9 @@ public class ReportHandlerTask extends QuartzJobBean {
 	
 	@Autowired
 	private ReportJobService reportJobService;
+	
+	@Autowired
+	private ReportTempService reportTempService;
 	
 	@Value("${reportTaskTimeout:30000}")
 	private Integer reportTaskTimeout;
@@ -120,21 +126,30 @@ public class ReportHandlerTask extends QuartzJobBean {
      * 将状态为0的报表任务进行创建
      */
 	public void createRpcJob(String rpcHost,Map<Integer, List<ReportTask>> stateTasks) {
-		if(ObjectUtil.isNotEmpty(stateTasks.get(0))) {
+		if(ObjectUtil.isNotEmpty(stateTasks.get(0))) {			
         	//http://ip:port/admin/query/jobs
         	String createJobPath = StrUtil.str(rpcHost+"admin/query/jobs");
         	List<ReportTask> initTasks = stateTasks.get(0);
+        	List<Integer> tempIds = initTasks.stream().map(ReportTask::getTempId).collect(Collectors.toList());
+        	Collection<ReportTemp> temps = reportTempService.listByIds(tempIds);
+        	Map<Integer, ReportTemp> idTemp = temps.stream().collect(Collectors.toMap(ReportTemp::getId, Function.identity()));
         	List<CompletableFuture<Map<String, Object>>> futureList = ListUtil.list(false);
         	try {
 	        	for(ReportTask task : initTasks) {
 	        		Map<String,Object> data = new HashMap<String,Object>();
 	        		String source = task.getSource();
 	        		String config = task.getConfig();
+	        		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
 	        		data.put("startTime", task.getStartTime().getTime()/1000);
 	        		data.put("endTime", task.getEndTime().getTime()/1000);
 	        		long timeDiff = task.getEndTime().getTime()/1000 - task.getStartTime().getTime()/1000;
 	        		data.put("timeDiff",timeDiff);
-	        		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
+	        		ReportTemp temp = idTemp.get(task.getTempId());
+	        		Map<String,Object> tempConfigObject = (Map<String, Object>) JSONObject.parse(temp.getConfig());
+	        		Map<String,Object> queryParam = (Map<String,Object>) tempConfigObject.get("queryParam");
+	        		if(ObjectUtil.isNotEmpty(queryParam)) {
+	        			data.putAll(queryParam);
+	        		}
 	        		String querySql = (String) configObject.get("querySql");
 	        		Template template = FreeMarkerUtil.stringToTemplate("createJob"+task.getId(), querySql);
 	        		StringWriter writer = new StringWriter();

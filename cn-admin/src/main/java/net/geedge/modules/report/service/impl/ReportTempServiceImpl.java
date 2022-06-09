@@ -1,5 +1,6 @@
 package net.geedge.modules.report.service.impl;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,8 +32,10 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
+import freemarker.template.Template;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.FreeMarkerUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
@@ -133,8 +136,6 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		reportTemp.setUtime(new Date());
 		reportTemp.setState(1);
 		reportTemp.setUid(ObjectUtil.isEmpty(ShiroUtils.getUserId()) ? -1 : ShiroUtils.getUserId());
-		// 处理cron表达式
-		this.cronHandler(reportTemp);
 		// 处理dataset
 		ReportCategory category = reportCategoryService.getById(reportTemp.getCategoryId());
 		String config = reportTemp.getConfig();
@@ -143,8 +144,12 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		tempConfigMap.put("dataset",categoryConfig.get("dataset"));
 		reportTemp.setConfig(JSON.toJSONString(tempConfigMap));
 		reportTemp.setHtmlContent(category.getHtmlContent());
-		this.saveOrUpdate(reportTemp);
 		Integer isScheduler = (Integer) tempConfigMap.get("isScheduler");
+		if(isScheduler.equals(1)) {
+			// 处理cron表达式
+			this.cronHandler(reportTemp);
+		}
+		this.saveOrUpdate(reportTemp);
 		//判断是新增定时任务还是立即执行以及定时任务的启停状态
 		if(isScheduler.equals(0) && reportTemp.getState().equals(1)) {
 			this.createJobTasks(reportTemp,null,null);
@@ -157,9 +162,6 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 		Map<String,Object> configObject = (Map<String, Object>) JSONObject.parse(config);
 		JSONObject schedulerConfig = (JSONObject) configObject.get("schedulerConfig");
 		String schedulerType = (String) schedulerConfig.get("type");
-		if(StrUtil.isEmpty(schedulerType)) {
-			throw new CNException(RCode.REPORT_SCHEDULER_TYPE_IS_NULL);
-		}
 		Date schedulerStart = reportTemp.getSchedulerStart();
 		int hour = DateUtil.date(schedulerStart).hour(true);
 		int minute = DateUtil.date(schedulerStart).minute();
@@ -285,7 +287,7 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	    	reportJob.setCtime(new Date());
 	    	reportJob.setUniq(temp.getUniq());
 	    	reportJob.setHtmlContent(temp.getHtmlContent());
-	    	reportJob.setUid(ObjectUtil.isEmpty(ShiroUtils.getUserId()) ? -1 : ShiroUtils.getUserId());
+	    	reportJob.setUid(1L);
 	    	reportJob.setTempId(temp.getId());
 	    	reportJob.setCategoryId(temp.getCategoryId());
 	    	String config = temp.getConfig();

@@ -83,7 +83,7 @@
 			</if>
       	</where>
       	group by rj.id
-      	order by rj.id asc 
+      	order by rj.ctime desc
     </select>
     
     <delete id="deleteResult">

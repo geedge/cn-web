@@ -45,6 +45,6 @@
 				and rt.category_id = #{params.categoryId}
 			</if>
       	</where>
-      	group by rt.id
+      	group by rt.id desc
     </select>
 </mapper>
