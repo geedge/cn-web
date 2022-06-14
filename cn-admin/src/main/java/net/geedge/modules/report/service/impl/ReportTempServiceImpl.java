@@ -228,14 +228,14 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				if(ObjectUtil.isNotEmpty(months)) {
 					month = StrUtil.join(",", months);
 				}
+				if(interval != 1) {
+					month = StrUtil.str(month+"/"+interval);
+				}
 				if(ObjectUtil.isEmpty(monthWeekDates)) {
 					
 					if(ObjectUtil.isNotEmpty(monthDates)) {
 						monthWeek = "? ";
 						monthDay = StrUtil.join(",", monthDates);
-					}
-					if(interval != 1) {
-						month = StrUtil.str(month+"/"+interval);
 					}
 					if(monthWeek.equals("*") && monthDay.equals("*")) {
 						monthDay = "?";
