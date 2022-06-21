@@ -44,6 +44,9 @@
 			<if test="params.categoryId !=null">
 				and rt.category_id = #{params.categoryId}
 			</if>
+			<if test="params.q !=null and params.q != ''">
+				and rt.name like CONCAT('%', #{params.q}, '%')
+			</if>
       	</where>
       	group by rt.id desc
     </select>
