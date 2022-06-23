@@ -8,11 +8,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.ObjectUtils;
 
@@ -109,6 +111,7 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 	
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void removeReportTemps(String ids) {
 		List<String> idList = Arrays.asList(ids.split(StringPool.COMMA));
 		// 判断是否为内置
@@ -118,6 +121,10 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				throw new CNException(RCode.REPORT_BUILD_IN_ERROR);
 			}
 		}
+		List<ReportJob> jobs = reportJobService.list(new QueryWrapper<ReportJob>().lambda().in(ReportJob::getTempId, idList));
+		List<Integer> jobIds = jobs.stream().map(ReportJob::getId).collect(Collectors.toList());
+		String jobStrIds = StrUtil.join(StrUtil.COMMA, jobIds);
+		reportJobService.removeReportJobs(jobStrIds);
 		this.remove(new QueryWrapper<ReportTemp>().lambda().in(ReportTemp::getId, idList));
 	}
 
