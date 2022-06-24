@@ -176,7 +176,7 @@ public class Constant {
 	 */
 	public static final String DICT_NAME_LANG = "lang";
 
-	public static final String AUTH_TOKEN_CODE = "Authorization";
+	public static final String AUTH_TOKEN_CODE = "Cn-Authorization";
 
 	// cn-web 新增常量
 
