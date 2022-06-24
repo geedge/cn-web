@@ -25,7 +25,7 @@ import java.util.Map;
 @SuppressWarnings("all")
 public class UTUtil extends BaseTest {
 
-    static final String Authorization = "Authorization";
+    static final String Authorization = "Cn-Authorization";
     static final String TEST_TOKEN = "cn";
 
     @Override
