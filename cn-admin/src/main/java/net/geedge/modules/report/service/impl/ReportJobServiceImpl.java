@@ -163,7 +163,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		String uiStaticUrl = sysConfigService.getValue("ui_static_url");
 		String reportJsCommon = sysConfigService.getValue("report_js_common");
 		String reportFreemarkerCommon = sysConfigService.getValue("report_freemarker_common");
-		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));		
+		String reportStyleCommon = sysConfigService.getValue("report_style_common");
+		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));
 		if(StrUtil.isEmpty(uiStaticUrl)) {
 			uiStaticUrl = "localhost";
 		}
@@ -183,6 +184,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			data.put("uiStaticUrl",uiStaticUrl);
 			data.put("timeZoneOffset", sysTimezone.getOffset());
 			data.put("reportJsCommon", reportJsCommon);
+			data.put("reportStyleCommon", reportStyleCommon);
 			Map<String,Object> tempConfigObject = (Map<String, Object>) JSONObject.parse(temp.getConfig());
     		Map<String,Object> queryParam = (Map<String,Object>) tempConfigObject.get("queryParam");
     		if(ObjectUtil.isNotEmpty(queryParam)) {
