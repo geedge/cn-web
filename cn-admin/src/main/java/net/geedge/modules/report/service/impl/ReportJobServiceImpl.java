@@ -32,6 +32,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,7 @@ import cn.hutool.core.io.FastByteArrayOutputStream;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import freemarker.template.Template;
@@ -84,6 +86,7 @@ import net.geedge.common.utils.FreeMarkerUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool.ResponseUtil;
 import net.geedge.modules.report.dao.ReportJobDao;
 import net.geedge.modules.report.entity.ReportJob;
 import net.geedge.modules.report.entity.ReportResult;
@@ -164,7 +167,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		String reportJsCommon = sysConfigService.getValue("report_js_common");
 		String reportFreemarkerCommon = sysConfigService.getValue("report_freemarker_common");
 		String reportStyleCommon = sysConfigService.getValue("report_style_common");
-		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));
+		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));		
 		if(StrUtil.isEmpty(uiStaticUrl)) {
 			uiStaticUrl = "localhost";
 		}
@@ -202,7 +205,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			writer.flush();
 			html = writer.toString();
 			// 判断是否开启引擎
-			if(StrUtil.isNotBlank(driverEnable) && StrUtil.equals(driverEnable, "1")) {
+			/*if(StrUtil.isNotBlank(driverEnable) && StrUtil.equals(driverEnable, "1")) {
 				if(CommonUtils.isLinux()) {
 					System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver");
 				}else {
@@ -217,19 +220,27 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				driver = new ChromeDriver(options);
 				driver.navigate().to("data:text/html;charset=utf-8," + html);
 				html = (String) driver.executeScript("return document.documentElement.innerHTML;");
+			}*/
+			String htmlName = reportJob.getName()+reportJob.getCtime().getTime()+".html ";
+			String fileName = reportJob.getName()+reportJob.getCtime().getTime()+".pdf ";
+			File file = FileUtil.file(Constant.TEMP_PATH + File.separator +htmlName);
+			if(file.exists()) {
+				file.delete();
 			}
+			FileUtil.writeBytes(html.getBytes(), file);
+			RuntimeUtil.exec("node "+Constant.CONFIG_PATH+File.separator+"report.js "+Constant.TEMP_PATH+File.separator+htmlName+Constant.TEMP_PATH+File.separator+fileName);
 		}catch(Exception e) {
 			html="";
 			log.error("render report html error : {}",e.getMessage());
 		}finally {
-			if(ObjectUtil.isNotEmpty(driver)) {
+			/*if(ObjectUtil.isNotEmpty(driver)) {
 				try {
 					driver.close();
 				} catch (Exception e) {
 					log.error(e.getMessage());
 				}
 				driver.quit();
-			}
+			}*/
 			IoUtil.close(writer);
 		}
 		return html;
@@ -275,16 +286,24 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			request.releaseConnection();
 			createDefault.close();
 		}else if(job.getState()==1){
-			String htmlContent = this.queryView(jobId);
+			/*String htmlContent = this.queryView(jobId);
 			ConverterProperties converterProperties=new ConverterProperties();
-	        FontProvider fontProvider=new DefaultFontProvider();
-	        FontProgram fontProgram = FontProgramFactory.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
-	        fontProvider.addFont(fontProgram);
-	        converterProperties.setFontProvider(fontProvider);
-//	        HtmlConverter.convertToPdf(htmlContent,response.getOutputStream(),converterProperties);
-	        PdfDocument pdfDoc = new PdfDocument(new PdfWriter(response.getOutputStream()));
-	        pdfDoc.setDefaultPageSize(new PageSize(pdfWidth,pdfHeight));
-	        HtmlConverter.convertToPdf(htmlContent,pdfDoc,converterProperties);
+			FontProvider fontProvider=new DefaultFontProvider();
+			FontProgram fontProgram = FontProgramFactory.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
+			fontProvider.addFont(fontProgram);
+			converterProperties.setFontProvider(fontProvider);
+			//	        HtmlConverter.convertToPdf(htmlContent,response.getOutputStream(),converterProperties);
+			PdfDocument pdfDoc = new PdfDocument(new PdfWriter(response.getOutputStream()));
+			pdfDoc.setDefaultPageSize(new PageSize(pdfWidth,pdfHeight));
+			HtmlConverter.convertToPdf(htmlContent,pdfDoc,converterProperties);*/
+			this.queryView(jobId);
+			String fileName = job.getName()+job.getCtime().getTime()+".pdf";
+			File file = FileUtil.file(Constant.TEMP_PATH + File.separator+fileName);
+			boolean exist = FileUtil.exist(file);
+			if(!exist) {
+				throw new CNException("s3upload file not existsm file name :"+fileName);
+			}
+			ResponseUtil.downloadFile(response, file);
 		}else {
 			log.warn(RCode.REPORT_NOT_FINSHED.getMsg());
 			throw new CNException(RCode.REPORT_NOT_FINSHED);
@@ -340,14 +359,21 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					request.releaseConnection();
 					createDefault.close();
 				}else if(job.getState()==1){
-					String htmlContent = this.queryView(job.getId());
+					/*String htmlContent = this.queryView(job.getId());
 					ConverterProperties converterProperties=new ConverterProperties();
-			        FontProvider fontProvider=new DefaultFontProvider();
-			        FontProgram fontProgram = FontProgramFactory.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
-			        fontProvider.addFont(fontProgram);
-			        converterProperties.setFontProvider(fontProvider);
-			        HtmlConverter.convertToPdf(htmlContent,outputStream,converterProperties);
-			        files.add(FileUtil.file(Constant.TEMP_PATH+File.separator+fileName));
+					FontProvider fontProvider=new DefaultFontProvider();
+					FontProgram fontProgram = FontProgramFactory.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
+					fontProvider.addFont(fontProgram);
+					converterProperties.setFontProvider(fontProvider);
+					HtmlConverter.convertToPdf(htmlContent,outputStream,converterProperties);
+					files.add(FileUtil.file(Constant.TEMP_PATH+File.separator+fileName));*/
+					this.queryView(job.getId());
+					File f = FileUtil.file(Constant.TEMP_PATH + File.separator+fileName);
+					boolean exist = FileUtil.exist(f);
+					if(!exist) {
+						throw new CNException("s3upload file not existsm file name :"+fileName);
+					}
+					files.add(f);
 				}else {
 					log.warn(RCode.REPORT_NOT_FINSHED.getMsg());
 					throw new CNException(RCode.REPORT_NOT_FINSHED);

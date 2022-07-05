@@ -43,6 +43,7 @@ import com.itextpdf.layout.font.FontProvider;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import freemarker.template.Template;
@@ -352,10 +353,16 @@ public class ReportHandlerTask extends QuartzJobBean {
         List<ReportTask> unfinishTasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().in(ReportTask::getJobId, jobIds).lt(ReportTask::getState, 3));
         List<Integer> unfinshJobs = unfinishTasks.stream().map(ReportTask::getJobId).collect(Collectors.toList());
         List<Integer> finishJobs = jobIds.stream().filter(item -> !unfinshJobs.contains(item)).collect(Collectors.toList());
+        List<ReportTask> failTasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().in(ReportTask::getJobId, jobIds).eq(ReportTask::getState, 4));
+        List<Integer> failJobs = failTasks.stream().map(ReportTask::getJobId).collect(Collectors.toList());
         String s3Enable = sysConfigService.getValue("s3_enable");
         for(Integer jobId : finishJobs) {
         	ReportJob reportJob = idJobs.get(jobId);
-    		reportJob.setState(1);
+        	if(failJobs.contains(jobId)) {
+        		reportJob.setState(2);
+        	}else {
+        		reportJob.setState(1);
+        	}
     		if(Integer.valueOf(s3Enable)==0) {
     			reportJob.setFtime(new Date());
     		}
@@ -369,31 +376,42 @@ public class ReportHandlerTask extends QuartzJobBean {
      * 判断是否上传到s3服务器
      */
 	public void s3Upload() {
-		Integer pdfWidth = 1000;
+		/*Integer pdfWidth = 1000;
 		Integer pdfHeight = 1700;
 		pdfWidth = StrUtil.isEmpty(sysConfigService.getValue("pdf_width"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_width"));
-		pdfHeight = StrUtil.isEmpty(sysConfigService.getValue("pdf_height"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_height"));
+		pdfHeight = StrUtil.isEmpty(sysConfigService.getValue("pdf_height"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_height"));*/
 		String s3Enable = sysConfigService.getValue("s3_enable");
         List<ReportJob> finishJobs = reportJobService.list(new QueryWrapper<ReportJob>().lambda().eq(ReportJob::getState, 1).eq(ReportJob::getUpload, 0));
         for(ReportJob reportJob : finishJobs) {
         	try {
         		if(Integer.valueOf(s3Enable)==1) {
-		        	BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH + File.separator + reportJob.getName()+reportJob.getCtime().getTime()+".pdf");
-		    		String html = reportJobService.queryView(reportJob.getId());
-		    		if(StrUtil.isEmpty(html)) {
-		    			log.error("s3Upload get html content error");
-		    			continue;
-		    		}
-		    		ConverterProperties converterProperties = new ConverterProperties();
-		    		FontProvider fontProvider = new DefaultFontProvider();
-		    		FontProgram fontProgram = FontProgramFactory
-		    				.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
-		    		fontProvider.addFont(fontProgram);
-		    		converterProperties.setFontProvider(fontProvider);
-		    		PdfDocument pdfDoc = new PdfDocument(new PdfWriter(outputStream));
-			        pdfDoc.setDefaultPageSize(new PageSize(pdfWidth,pdfHeight));
-			        HtmlConverter.convertToPdf(html,pdfDoc,converterProperties);
-	            	reportJobService.upload(reportJob.getName()+reportJob.getCtime().getTime()+".pdf");
+					/*BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH + File.separator + reportJob.getName()+reportJob.getCtime().getTime()+".pdf");
+					String html = reportJobService.queryView(reportJob.getId());
+					if(StrUtil.isEmpty(html)) {
+						log.error("s3Upload get html content error");
+						continue;
+					}
+					ConverterProperties converterProperties = new ConverterProperties();
+					FontProvider fontProvider = new DefaultFontProvider();
+					FontProgram fontProgram = FontProgramFactory
+							.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
+					fontProvider.addFont(fontProgram);
+					converterProperties.setFontProvider(fontProvider);
+					PdfDocument pdfDoc = new PdfDocument(new PdfWriter(outputStream));
+					pdfDoc.setDefaultPageSize(new PageSize(pdfWidth,pdfHeight));
+					HtmlConverter.convertToPdf(html,pdfDoc,converterProperties);*/
+        			String html = reportJobService.queryView(reportJob.getId());
+					if(StrUtil.isEmpty(html)) {
+						log.error("s3Upload get html content error");
+						continue;
+					}
+					String fileName = reportJob.getName()+reportJob.getCtime().getTime()+".pdf";
+	            	boolean exist = FileUtil.exist(Constant.TEMP_PATH+File.separator+fileName);
+					if(!exist) {
+						log.error("s3upload file not existsm file name :{}",fileName);
+						continue;
+					}
+	            	reportJobService.upload(fileName);
 	            	reportJob.setUpload(1);
 	            	reportJob.setFtime(new Date());
 	            }
