@@ -46,7 +46,7 @@ import javax.mail.internet.MimeMessage;
 @Service("sysConfigService")
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEntity> implements SysConfigService {
 
-    public static final String[] BASIC_KEYS = {"system_name","lang","date_format","system_logo", "timezone","system_bgImg","system_favicon"};
+    public static final String[] BASIC_KEYS = {"system_name","lang","date_format","system_logo", "timezone","system_bgImg","system_favicon","s3_enable"};
 	
     @Autowired
     private SysConfigRedis sysConfigRedis;
