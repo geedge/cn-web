@@ -189,9 +189,13 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			data.put("reportJsCommon", reportJsCommon);
 			data.put("reportStyleCommon", reportStyleCommon);
 			Map<String,Object> tempConfigObject = (Map<String, Object>) JSONObject.parse(temp.getConfig());
-    		Map<String,Object> queryParam = (Map<String,Object>) tempConfigObject.get("queryParam");
-    		if(ObjectUtil.isNotEmpty(queryParam)) {
-    			data.putAll(queryParam);
+    		List<Map> queryParam = (List<Map>) tempConfigObject.get("queryParam");
+    		Map<String,Object> mapping = new HashMap<String,Object>();
+    		for(Map<String,Object> m : queryParam) {
+    			mapping.put((String)m.get("key"), m.get("value"));
+    		}
+    		if(ObjectUtil.isNotEmpty(mapping)) {
+    			data.putAll(mapping);       
     		}
 			for(ReportTask reportTask : reportTasks) {
 				ReportResult reportResult = taskIdResult.get(reportTask.getId());
