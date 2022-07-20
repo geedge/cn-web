@@ -7,6 +7,9 @@ import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import net.geedge.common.annotation.SysLog;
+import net.geedge.common.utils.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.geedge.common.smartvalidate.ValidateUtils;
-import net.geedge.common.utils.PageUtils;
-import net.geedge.common.utils.R;
-import net.geedge.common.utils.RCode;
 import net.geedge.modules.report.entity.ReportJob;
 import net.geedge.modules.report.service.ReportJobService;
 import net.geedge.modules.sys.controller.AbstractController;
@@ -44,6 +44,8 @@ public class ReportJobController extends AbstractController{
 	}
 	
 	@DeleteMapping
+	@SysLog(operation = OperationEnum.DELETE, type = TypeEnum.REPORTJOB)
+	@RequiresPermissions({"report:job:delete"})
 	public R remove(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.REPORT_JOB_ID_ISNULL);
 		reportJobService.removeReportJobs(ids);

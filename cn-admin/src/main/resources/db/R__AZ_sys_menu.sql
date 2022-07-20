@@ -43,7 +43,10 @@ INSERT INTO `sys_menu` VALUES (16, 'Crypto currency', 'cryptocurrency', 'overall
 INSERT INTO `sys_menu` VALUES (17, 'Temp', 'temp', 'temp', 0, NULL, 1, '/temp', '', NULL, 1, 0);
 INSERT INTO `sys_menu` VALUES (18, 'Chart', 'chart', 'overall.chart', 5, NULL, 1, '/chart', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (19, 'Report', 'report', 'overall.report', 0, NULL, 1, '', 'cn-icon cn-icon-report', NULL, 26, 1);
-INSERT INTO `sys_menu` VALUES (20, 'Built-in report', 'builtInReport', 'report.builtInReport', 19, NULL, 1, '/report/builtIn', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (20, 'Built-in report', 'builtInReport', 'report.builtInReport', 19, 'report:job:add,report:job:delete,report:temp:add,report:temp:update,report:temp:delete', 1, '/report/builtIn', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (21, 'Appearance', 'appearance', 'appearance.appearance', 5, 'sys:appearance:update', 1, '/appearance', '', NULL, 28, 1);
+INSERT INTO `sys_menu` VALUES (22, 'Log', 'log', 'overall.log', 0, NULL, 1, NULL, 'cn-icon el-icon-tickets', NULL, 28, 0);
+INSERT INTO `sys_menu` VALUES (23, 'Log viewer', 'logViewer', 'log.logViewer', 22, NULL, 1, '/businessLog/viewer', '', NULL, 28, 0);
+INSERT INTO `sys_menu` VALUES (25, 'Report test', 'newReport', '', 19, NULL, 1, '/report/test', '', NULL, 11, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

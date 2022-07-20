@@ -15,7 +15,7 @@ public enum TypeEnum {
 	ALERTSEVERITY("alert severity"), ALERTNOTIFYMETHOD("alert notify method"), ASSETSTATECONF("asset state conf"),
 	ASSETTYPECONF("asset type conf"), EXPRESSIONTMPL("expression tmpl"), ASSETBRAND("asset brand"),
 	SNMPCREDENTIAL("snmp credential"), LICENSE("license"), SYSTEMAPIKEY("sys api key"),SETTING("proxy setting"),
-	INTERFACE("proxy interface"),I18N("i18n setting"),CTL("ctl");
+	INTERFACE("proxy interface"),I18N("i18n setting"),CTL("ctl"),REPORTJOB("report job"),REPORTTEMP("report temp");
 
 	private String value;
 
