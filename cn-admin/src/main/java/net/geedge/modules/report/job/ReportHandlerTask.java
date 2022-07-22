@@ -148,12 +148,14 @@ public class ReportHandlerTask extends QuartzJobBean {
 	        		ReportTemp temp = idTemp.get(task.getTempId());
 	        		Map<String,Object> tempConfigObject = (Map<String, Object>) JSONObject.parse(temp.getConfig());
 	        		List<Map> queryParam = (List<Map>) tempConfigObject.get("queryParam");
-	        		Map<String,Object> mapping = new HashMap<String,Object>();
-	        		for(Map<String,Object> m : queryParam) {
-	        			mapping.put((String)m.get("key"), m.get("value"));
-	        		}
-	        		if(ObjectUtil.isNotEmpty(mapping)) {
-	        			data.putAll(mapping);       
+	        		if(ObjectUtil.isNotEmpty(queryParam)) {
+		        		Map<String,Object> mapping = new HashMap<String,Object>();
+		        		for(Map<String,Object> m : queryParam) {
+		        			mapping.put((String)m.get("key"), m.get("value"));
+		        		}
+		        		if(ObjectUtil.isNotEmpty(mapping)) {
+		        			data.putAll(mapping);       
+		        		}
 	        		}
 	        		String querySql = (String) configObject.get("querySql");
 	        		Template template = FreeMarkerUtil.stringToTemplate("createJob"+task.getId(), querySql);

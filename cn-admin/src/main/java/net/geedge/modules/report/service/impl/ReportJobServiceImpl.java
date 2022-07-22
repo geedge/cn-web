@@ -176,7 +176,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		StringWriter writer =null;
 		try {
 			// 获取html模板信息
-			ReportJob reportJob = this.getById(jobId);
+ 			ReportJob reportJob = this.getById(jobId);
 			ReportTemp temp = reportTempService.getById(reportJob.getTempId());
 			html = reportJob.getHtmlContent();
 			html += reportFreemarkerCommon;
@@ -190,12 +190,14 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			data.put("reportStyleCommon", reportStyleCommon);
 			Map<String,Object> tempConfigObject = (Map<String, Object>) JSONObject.parse(temp.getConfig());
     		List<Map> queryParam = (List<Map>) tempConfigObject.get("queryParam");
-    		Map<String,Object> mapping = new HashMap<String,Object>();
-    		for(Map<String,Object> m : queryParam) {
-    			mapping.put((String)m.get("key"), m.get("value"));
-    		}
-    		if(ObjectUtil.isNotEmpty(mapping)) {
-    			data.putAll(mapping);       
+    		if(ObjectUtil.isNotEmpty(queryParam)) {
+    			Map<String,Object> mapping = new HashMap<String,Object>();
+        		for(Map<String,Object> m : queryParam) {
+        			mapping.put((String)m.get("key"), m.get("value"));
+        		}
+        		if(ObjectUtil.isNotEmpty(mapping)) {
+        			data.putAll(mapping);       
+        		}
     		}
 			for(ReportTask reportTask : reportTasks) {
 				ReportResult reportResult = taskIdResult.get(reportTask.getId());

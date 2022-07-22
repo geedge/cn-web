@@ -1179,8 +1179,8 @@ INSERT INTO `sys_i18n` VALUES (1229, 'SSL响应延迟', 'zh', 'networkAppPerform
 INSERT INTO `sys_i18n` VALUES (1230, 'SSL 响应延迟', 'en', 'networkAppPerformance.sslResponseLatency', 'SSL response latency', '', '2022-07-19 01:41:38', 5);
 INSERT INTO `sys_i18n` VALUES (1231, '数据包丢失', 'en', 'networkAppPerformance.packetLoss', 'Packet loss', '', '2022-07-19 01:42:25', 5);
 INSERT INTO `sys_i18n` VALUES (1232, '数据包丢失', 'zh', 'networkAppPerformance.packetLoss', '数据包丢失', '', '2022-07-19 01:42:41', 5);
-INSERT INTO `sys_i18n` VALUES (1233, '确认删除', 'zh', 'tip.confirmCancel', '确认删除', '', '2022-07-19 05:53:22', 1);
-INSERT INTO `sys_i18n` VALUES (1234, '确认删除', 'en', 'tip.confirmCancel', 'Confirm Cancel', '', '2022-07-19 05:53:49', 1);
+INSERT INTO `sys_i18n` VALUES (1233, '确认取消', 'zh', 'tip.confirmCancel', '确认取消', '', '2022-07-19 05:53:22', 1);
+INSERT INTO `sys_i18n` VALUES (1234, '确认取消', 'en', 'tip.confirmCancel', 'Confirm Cancel', '', '2022-07-19 05:53:49', 1);
 INSERT INTO `sys_i18n` VALUES (1235, '删除成功', 'zh', 'tip.deleteSuccess', '删除成功', '', '2022-07-19 06:29:19', 1);
 INSERT INTO `sys_i18n` VALUES (1236, '删除成功', 'en', 'tip.deleteSuccess', 'Delete Success', '', '2022-07-19 06:29:37', 1);
 INSERT INTO `sys_i18n` VALUES (1237, '应用程序', 'zh', 'report.application', '应用程序', '', '2022-07-19 06:30:07', 1);
