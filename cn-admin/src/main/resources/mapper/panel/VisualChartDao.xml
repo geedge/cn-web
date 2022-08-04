@@ -76,6 +76,15 @@
                 or params like concat ( '%', #{params.q}, '%')
                 or remark like concat ( '%', #{params.q}, '%')
             </if>
+            <if test=" params.panelId !=null ">
+            	 and panel_id = #{params.panelId}
+            </if>
+            <if test=" params.uBy !=null ">
+            	 and uby = #{params.uBy}
+            </if>
+            <if test=" params.buildIn !=null ">
+            	 and build_in = #{params.buildIn}
+            </if>
         </where>
     </select>
 </mapper>
