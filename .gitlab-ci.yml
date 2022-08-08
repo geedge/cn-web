@@ -25,7 +25,7 @@ generate_git-log:
   only:
     - dev
   tags:
-    - GN-XXG-Server
+    - galaxy
 
 #job的名称,自定义
 build_image:
@@ -49,7 +49,7 @@ build_image:
   only:
     - dev
   tags:
-    - GN-XXG-Server
+    - galaxy
 
 build_release_image:
   stage: build_image
@@ -63,7 +63,7 @@ build_release_image:
   only:
     - tags
   tags:
-    - GN-XXG-Server
+    - galaxy
 
 package_clean:
   stage: package_clean
@@ -76,4 +76,4 @@ package_clean:
   only:
     - dev
   tags:
-    - GN-XXG-Server
+    - galaxy
