@@ -20,7 +20,7 @@ CREATE TABLE `sys_dict`  (
  `utime` datetime NOT NULL COMMENT '更新时间',
  `state` tinyint NOT NULL DEFAULT 1 COMMENT '默认：1   0：隐藏 1：显示',
  `build_in` tinyint NOT NULL DEFAULT 0 COMMENT '默认：0  0：非内置 1：内置',
- `remark` varchar(4096) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+ `remark` varchar(4096) CHARACTER SET utf8 COLLATE utf8_general_ci,
  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
