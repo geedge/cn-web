@@ -53,12 +53,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
-		String paramKey = (String)params.get("paramKey");
+		String paramKey = (String)params.get("ckey");
 
 		IPage<SysConfigEntity> page = this.page(
 			new Query(SysConfigEntity.class).getPage(params),
 			new QueryWrapper<SysConfigEntity>()
-				.like(StringUtils.isNotBlank(paramKey),"param_key", paramKey)
+				.like(StringUtils.isNotBlank(paramKey),"ckey", paramKey)
 				.eq("state", 1)
 		);
 
