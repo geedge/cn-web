@@ -49,4 +49,5 @@ INSERT INTO `sys_menu` VALUES (22, 'Log', 'log', 'overall.log', 0, NULL, 1, NULL
 INSERT INTO `sys_menu` VALUES (23, 'Log viewer', 'logViewer', 'log.logViewer', 22, NULL, 1, '/businessLog/viewer', '', NULL, 28, 0);
 INSERT INTO `sys_menu` VALUES (25, 'IP drill down test', 'newReport', '', 1, NULL, 1, '/panel/ipDrillDownTest', '', NULL, 41, 1);
 
+
 SET FOREIGN_KEY_CHECKS = 1;
