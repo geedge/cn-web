@@ -39,7 +39,7 @@ INSERT INTO `visual_panel` VALUES (3, 'DNS', '', 3, '{\"wholeScreenScroll\":true
 INSERT INTO `visual_panel` VALUES (4, 'IP entity detail', '', 4, '', 1, '2021-07-30 11:16:52', 1, '2021-07-30 11:16:54', '', 1, 1);
 INSERT INTO `visual_panel` VALUES (5, 'Domain entity detail', '', 5, '', 1, '2021-06-03 08:27:32', 1, '2021-06-03 08:28:10', '', 1, 1);
 INSERT INTO `visual_panel` VALUES (6, 'APP entity detail', '', 6, '', 1, '2021-06-03 08:27:32', 1, '2021-06-03 08:28:10', '', 1, 1);
-INSERT INTO `visual_panel` VALUES (7, '挖矿', '', 7, '', 1, '2021-12-14 17:10:26', 1, '2021-12-14 17:10:28', '', 1, 1);
+INSERT INTO `visual_panel` VALUES (7, '挖矿', '', 7, '', 1, '2021-12-14 17:10:26', 1, '2021-12-14 17:10:28', '', 0, 1);
 INSERT INTO `visual_panel` VALUES (8, 'npm-overview-ip', '', 8, '', 1, '2022-08-11 11:58:36', 1, '2022-08-11 11:58:38', '', 1, 1);
 INSERT INTO `visual_panel` VALUES (9, 'npm-overview-domain', '', 9, '', 1, '2022-08-11 19:30:25', 1, '2022-08-11 19:30:27', '', 1, 0);
 INSERT INTO `visual_panel` VALUES (10, 'npm-overview-app', '', 10, '', 1, '2022-08-11 19:41:35', 1, '2022-08-11 19:41:38', '', 1, 0);
@@ -48,6 +48,8 @@ INSERT INTO `visual_panel` VALUES (12, 'npm-thirdMenu', '', 12, '', 1, '2022-08-
 INSERT INTO `visual_panel` VALUES (13, 'network-overview', '', 13, '', 1, '2022-08-17 17:18:45', 1, '2022-08-17 17:18:49', '', 1, 0);
 INSERT INTO `visual_panel` VALUES (14, 'link-monitor', 'linkMonitor.linkMonitor', 14, '', 1, '2022-09-08 17:50:27', 1, '2022-09-08 17:50:29', '', 1, 0);
 INSERT INTO `visual_panel` VALUES (15, 'link-monitor-drilldown', '', 15, '', 1, '2022-09-13 14:39:20', 1, '2022-09-13 14:39:23', '', 1, 0);
+INSERT INTO `visual_panel` VALUES (16, 'DNS-fourthMenu', '', 16, '', 1, '2022-09-20 18:10:42', 1, '2022-09-20 18:10:44', '', 1, 0);
+INSERT INTO `visual_panel` VALUES (17, 'DNS-thirdMenu', '', 17, '', 1, '2022-10-07 17:19:47', 1, '2022-10-07 17:19:49', '', 1, 0);
 
 
 -- ----------------------------
@@ -84,7 +86,7 @@ INSERT INTO `visual_chart` VALUES (1, 'network overview line', '', 1, 0, 102, 0,
 INSERT INTO `visual_chart` VALUES (2, 'network performance event', 'networkOverview.networkPerformanceEvent', 1, 0, 302, 19, 0, 5, 7, NULL, 1, '2022-07-06 17:02:24', 1, '2022-07-06 17:02:24', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (3, 'network overview table', '', 1, 0, 601, 0, 6, 19, 9, '{\"drillDown\":true,\"name\":\"networkOverview\",\"columns\":[{\"label\":\"network.ips\",\"prop\":\"tab\",\"checked\": true,\"tabColumn\":true},{\"label\":\"network.total\",\"prop\":\"total\",\"checked\":true,\"tabColumn\":false},{\"label\":\"network.inbound\",\"prop\":\"inbound\",\"checked\":true,\"tabColumn\":false},{\"label\":\"network.outbound\",\"prop\":\"outbound\",\"checked\":true,\"tabColumn\":false},{\"label\":\"network.internal\",\"prop\":\"internal\",\"checked\":true,\"tabColumn\":false},{\"label\":\"network.through\",\"prop\":\"through\",\"checked\":true,\"tabColumn\":false}]}', 1, '2022-07-06 17:11:14', 1, '2022-07-06 17:11:14', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (4, 'ddos detection', '', 1, 0, 701, 19, 7, 5, 3, NULL, 1, '2022-07-06 17:11:14', 1, '2022-07-06 17:11:14', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (5, 'network overview apps', '', 1, 0, 103, 0, 15, 19, 8, '{\"app\":[{\"user\":\"default\",\"list\":[{\"type\":\"app\",\"name\":\"douyin\"},{\"type\":\"app\",\"name\":\"kuaishou\"},{\"type\":\"app\",\"name\":\"wechat\"},{\"type\":\"app\",\"name\":\"qq\"},{\"type\":\"provider\",\"name\":\"Bytedance\"},{\"type\":\"provider\",\"name\":\"Tencent\"}]}]}', 1, '2022-07-06 17:22:22', 5, '2022-09-02 01:39:43', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (5, 'network overview apps', '', 1, 0, 103, 0, 15, 19, 8, '{\"app\":[{\"user\":\"default\",\"list\":[{\"type\":\"app\",\"name\":\"douyin\"},{\"type\":\"app\",\"name\":\"kuaishou\"},{\"type\":\"app\",\"name\":\"wechat\"},{\"type\":\"app\",\"name\":\"qq\"},{\"type\":\"provider\",\"name\":\"Bytedance\"},{\"type\":\"provider\",\"name\":\"Tencent\"}]},{\"user\":5,\"list\":[{\"type\":\"app\",\"name\":\"douyin\"},{\"type\":\"app\",\"name\":\"kuaishou\"},{\"type\":\"app\",\"name\":\"wechat\"},{\"type\":\"app\",\"name\":\"qq\"},{\"type\":\"provider\",\"name\":\"Bytedance\"},{\"type\":\"provider\",\"name\":\"Tencent\"},{\"type\":\"provider\",\"name\":\"Alibaba\"}]},{\"user\":1,\"list\":[{\"type\":\"app\",\"name\":\"douyin\"},{\"type\":\"app\",\"name\":\"kuaishou\"},{\"type\":\"app\",\"name\":\"wechat\"},{\"type\":\"app\",\"name\":\"qq\"},{\"type\":\"provider\",\"name\":\"Tencent\"},{\"type\":\"provider\",\"name\":\"Jingdong\"},{\"type\":\"provider\",\"name\":\"Akamai\"},{\"type\":\"provider\",\"name\":\"Bytedance\"},{\"type\":\"provider\",\"name\":\"360cn\",\"provideShow\":true}]}]}', 1, '2022-07-06 17:22:22', 1, '2022-10-14 08:37:16', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (6, 'npm-tabs', '', 2, 0, 704, 0, 0, 24, 1, '{\"tabs\":[{\"icon\":\"cn-icon cn-icon-overview\",\"i18n\":\"overall.overview\"},{\"icon\":\"cn-icon cn-icon-location\",\"i18n\":\"overall.location\"},{\"icon\":\"cn-icon cn-icon-events\",\"i18n\":\"overall.events\"}]}', 1, '2022-07-18 10:52:02', 1, '2022-07-18 10:52:02', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (7, 'npm-网络质量概况', '', 2, 0, 703, 0, 1, 24, 3, '{\"tabIndex\":0}', 1, '2022-07-18 10:52:02', 1, '2022-07-18 10:52:02', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (8, 'npm-应用类别评分', '', 2, 0, 702, 0, 4, 24, 6, '{\"tabIndex\":0}', 1, '2022-07-26 15:31:16', 1, '2022-07-26 15:31:20', '', 1, 0, 0);
@@ -99,24 +101,24 @@ INSERT INTO `visual_chart` VALUES (16, 'npm-折线图重传率', 'networkAppPerf
 INSERT INTO `visual_chart` VALUES (17, 'npm-服务事件概况', '', 2, 0, 705, 0, 1, 24, 1, '{\"tabIndex\":2}', 1, '2022-07-26 18:16:55', 1, '2022-07-26 18:16:59', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (18, 'npm-事件类型分布', '', 2, 0, 301, 0, 2, 8, 6, '{\"tabIndex\":2}', 1, '2022-07-26 18:19:06', 1, '2022-07-26 18:19:08', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (19, 'npm-最近事件', '', 2, 0, 602, 8, 2, 16, 6, '{\"tabIndex\":2}', 1, '2022-07-26 18:19:45', 1, '2022-07-26 18:19:48', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (20, 'npm-app事件详情', '', 2, 0, 603, 0, 8, 24, 8, '{\"tabIndex\":2,\"url\":\"/interface/overview/event/dimensionEvents\"}', 1, '2022-07-26 18:21:01', 1, '2022-07-26 18:21:03', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (20, 'npm-app事件详情', '', 2, 0, 603, 0, 8, 24, 7, '{\"tabIndex\":2}', 1, '2022-07-26 18:21:01', 1, '2022-07-26 18:21:03', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (21, 'npm-ip下钻-关联session', '', 8, 0, 706, 0, 0, 24, 2, '{\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 12:54:31', 1, '2022-08-11 12:54:34', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (22, 'npm-ip下钻-tabs', '', 8, 0, 704, 0, 2, 24, 1, '{\"name\":\"networkAppPerformance\",\"tabs\":[{\"icon\":\"cn-icon cn-icon-detection1\",\"i18n\":\"npm.overview.asAClient\"},{\"icon\":\"cn-icon cn-icon-blocks\",\"i18n\":\"npm.overview.asAServer\"}]}', 1, '2022-08-11 12:55:49', 1, '2022-08-11 12:55:47', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (23, 'npm-ip下钻-client-多单值', '', 8, 0, 703, 0, 3, 24, 3, '{\"tabIndex\":0,\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 13:01:44', 1, '2022-08-11 13:01:47', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (24, 'npm-ip下钻-client-流量折线图', '', 8, 0, 104, 0, 6, 24, 6, '{\"tabIndex\":0,\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:06:30', 1, '2022-08-11 15:06:32', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (25, 'npm-ip下钻-client-具体应用评分', '', 8, 0, 601, 0, 12, 24, 9, '{\"tabIndex\":0,\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:09:14', 1, '2022-08-11 15:09:16', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (26, 'npm-ip下钻-server-多单值', '', 8, 0, 703, 0, 3, 24, 3, '{\"tabIndex\":1,\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:12:06', 1, '2022-08-11 15:12:08', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (27, 'npm-ip下钻-server-地图', '', 8, 0, 2, 0, 6, 14, 7, '{\"tabIndex\":1,\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:15:48', 1, '2022-08-11 15:15:51', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (27, 'npm-ip下钻-server-地图', 'npm.clientLocation', 8, 0, 2, 0, 6, 14, 7, '{\"tabIndex\":1,\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:15:48', 1, '2022-08-11 15:15:51', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (28, 'npm-ip下钻-server-最近事件', '', 8, 0, 602, 14, 6, 10, 7, '{\"tabIndex\":1,\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:16:35', 1, '2022-08-11 15:16:39', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (29, 'npm-ip下钻-server-流量折线图', '', 8, 0, 104, 0, 13, 24, 6, '{\"tabIndex\":1,\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:17:11', 1, '2022-08-11 15:17:16', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (30, 'npm-ip下钻-server-具体应用评分', '', 8, 0, 601, 0, 19, 24, 9, '{\"tabIndex\":1,\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:17:48', 1, '2022-08-11 15:17:46', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (31, 'npm-domain下钻-多单值', '', 9, 0, 703, 0, 0, 24, 3, '', 1, '2022-08-11 15:12:06', 1, '2022-08-11 15:12:08', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (32, 'npm-domain下钻-地图', '', 9, 0, 2, 0, 3, 14, 7, '', 1, '2022-08-11 15:15:48', 1, '2022-08-11 15:15:51', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (32, 'npm-domain下钻-地图', 'npm.clientLocation', 9, 0, 2, 0, 3, 14, 7, '', 1, '2022-08-11 15:15:48', 1, '2022-08-11 15:15:51', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (33, 'npm-domain下钻-最近事件', '', 9, 0, 602, 14, 3, 10, 7, '', 1, '2022-08-11 15:16:35', 1, '2022-08-11 15:16:39', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (34, 'npm-domain下钻-流量折线图', '', 9, 0, 104, 0, 10, 24, 6, '', 1, '2022-08-11 15:17:11', 1, '2022-08-11 15:17:16', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (35, 'npm-domain下钻-具体应用评分', '', 9, 0, 601, 0, 16, 24, 9, '{\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:17:48', 1, '2022-08-11 15:17:46', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (36, 'npm-app下钻-多单值', '', 10, 0, 703, 0, 0, 24, 3, '', 1, '2022-08-11 15:12:06', 1, '2022-08-11 15:12:08', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (37, 'npm-app下钻-地图', '', 10, 0, 2, 0, 3, 14, 7, '', 1, '2022-08-11 15:15:48', 1, '2022-08-11 15:15:51', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (37, 'npm-app下钻-地图', 'npm.clientLocation', 10, 0, 2, 0, 3, 14, 7, '', 1, '2022-08-11 15:15:48', 1, '2022-08-11 15:15:51', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (38, 'npm-app下钻-最近事件', '', 10, 0, 602, 14, 3, 10, 7, '', 1, '2022-08-11 15:16:35', 1, '2022-08-11 15:16:39', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (39, 'npm-app下钻-流量折线图', '', 10, 0, 104, 0, 10, 24, 6, '', 1, '2022-08-11 15:17:11', 1, '2022-08-11 15:17:16', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (40, 'npm-app下钻-具体应用评分', '', 10, 0, 601, 0, 16, 24, 9, '{\"name\":\"networkAppPerformance\"}', 1, '2022-08-11 15:17:48', 1, '2022-08-11 15:17:46', '', 1, 0, 0);
@@ -129,17 +131,21 @@ INSERT INTO `visual_chart` VALUES (46, 'network-overview-下钻-line', '', 13, 0
 INSERT INTO `visual_chart` VALUES (47, 'network-overview-下钻-table', '', 13, 0, 601, 0, 6, 24, 9, '{\"drillDown\":true,\"name\":\"networkOverview\",\"columns\":[{\"label\":\"network.ips\",\"prop\":\"tab\",\"checked\": true,\"tabColumn\":true},{\"label\":\"network.total\",\"prop\":\"total\",\"checked\":true,\"tabColumn\":false},{\"label\":\"network.inbound\",\"prop\":\"inbound\",\"checked\":true,\"tabColumn\":false},{\"label\":\"network.outbound\",\"prop\":\"outbound\",\"checked\":true,\"tabColumn\":false},{\"label\":\"network.internal\",\"prop\":\"internal\",\"checked\":true,\"tabColumn\":false},{\"label\":\"network.through\",\"prop\":\"through\",\"checked\":true,\"tabColumn\":false}]}', 1, '2022-07-06 17:11:14', 1, '2022-07-06 17:11:14', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (48, '链路色块图', '', 14, 0, 707, 0, 0, 24, 4, '', 1, '2021-07-30 19:22:16', 1, '2022-05-18 07:23:24', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (49, '链路桑基图', '', 14, 0, 708, 0, 4, 24, 10, '', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (50, '链路流向格', '', 14, 0, 709, 0, 14, 24, 11, '', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (50, '链路流向格', '', 14, 0, 709, 0, 14, 24, 13, '', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (51, '链路下钻折线图', '', 15, 0, 105, 0, 0, 24, 7, '', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (52, '链路下钻桑基图', '', 15, 0, 708, 0, 7, 24, 10, '', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (53, '链路下钻表格', '', 15, 0, 601, 0, 17, 24, 9, '', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (54, 'DNS-TAB', '', 3, 0, 704, 0, 0, 24, 1, '{\"tabs\":[{\"icon\":\"cn-icon cn-icon-traffic-overview\",\"i18n\":\"dns.trafficOverview\"},{\"icon\":\"cn-icon cn-icon-events\",\"i18n\":\"overall.events\"}]}', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (54, 'DNS-TAB', '', 3, 0, 704, 0, 0, 24, 1, '{\"tabs\":[{\"icon\":\"cn-icon cn-icon-traffic-overview\",\"i18n\":\"dns.trafficOverview\"}]}', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (55, 'DNS折线图', '', 3, 0, 106, 0, 1, 24, 6, '{\"tabIndex\":0}', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (56, 'DNS-table', '', 3, 0, 601, 0, 7, 24, 9, '{\"tabIndex\":0}', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (57, 'DNS事件分布图', '', 3, 0, 711, 0, 1, 24, 6, '{\"tabIndex\":1}', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (58, 'DNS近期事件', '', 3, 0, 605, 0, 7, 24, 7, '{\"tabIndex\":1}', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (59, 'DNS活跃恶意域名', '', 3, 0, 604, 0, 14, 24, 7, '{\"tabIndex\":1}', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (400, 'IP详情', '', 4, 0, 801, 0, 0, 30, 30, NULL, 1, '2021-09-12 16:30:15', 1, '2021-09-12 16:30:15', '', 0, 0, 0);
+INSERT INTO `visual_chart` VALUES (58, 'DNS近期事件', '', 3, 0, 605, 0, 7, 24, 6, '{\"tabIndex\":1}', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (59, 'DNS活跃恶意域名', '', 3, 0, 604, 0, 13, 24, 6, '{\"tabIndex\":1}', 1, '2021-07-30 19:22:16', 5, '2022-05-18 07:23:24', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (60, 'DNS下钻表格', '', 16, 0, 601, 0, 6, 24, 9, '', 1, '2022-10-08 20:50:34', 1, '2022-10-08 20:50:42', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (61, 'DNS下钻折线图', '', 16, 0, 106, 0, 0, 24, 6, '', 1, '2022-10-09 18:51:24', 1, '2022-10-09 18:51:26', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (62, 'DNS下钻三级折线图', '', 17, 0, 106, 0, 0, 24, 6, '', 1, '2022-10-09 18:54:05', 1, '2022-10-09 18:54:03', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (63, 'DNS下钻三级表格', '', 17, 0, 601, 0, 6, 24, 9, '', 1, '2022-10-09 18:54:53', 1, '2022-10-09 18:54:51', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (400, 'IP详情', '', 4, 0, 801, 0, 0, 30, 30, '', 1, '2021-09-12 16:30:15', 1, '2021-09-12 16:30:15', '', 0, 0, 0);
 INSERT INTO `visual_chart` VALUES (401, '总览', 'overall.overall', 4, 0, 805, 0, 0, 30, 17, '{\"showTimeTool\":false,\"anchorPoint\":\"overall\"}', 1, '2021-09-12 16:30:15', 1, '2021-09-12 16:30:15', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (402, '流量', 'overall.traffic', 4, 0, 805, 1, 17, 30, 27, '{\"showTimeTool\":true,\"anchorPoint\":\"traffic\"}', 1, '2021-09-12 16:30:15', 1, '2021-09-12 16:30:15', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (403, '关系', 'overall.relationship', 4, 0, 805, 3, 60, 30, 14, '{\"showTimeTool\":true,\"anchorPoint\":\"relationShip\"}', 1, '2021-09-12 16:30:15', 1, '2021-09-12 16:30:15', '', 1, 0, 0);
@@ -280,6 +286,5 @@ INSERT INTO `visual_chart` VALUES (647, 'SSL响应延迟', 'networkAppPerformanc
 INSERT INTO `visual_chart` VALUES (648, '丢包率', 'networkAppPerformance.packetLossRate', 6, 644, 102, 0, 13, 10, 13, '{\"url\":\"/interface/entity/detail/app/clientIpPacketLoss?appName={{appName}}&startTime={{startTime}}&endTime={{endTime}}\",\"unitType\":\"percent\"}', 1, '2021-09-22 21:47:47', 1, '2021-09-22 21:47:47', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (649, '重传率', 'networkAppPerformance.server.retransmissionRate', 6, 644, 102, 10, 13, 10, 13, '{\"url\":\"/interface/entity/detail/app/clientIpPacketRetrans?appName={{appName}}&startTime={{startTime}}&endTime={{endTime}}\",\"unitType\":\"percent\"}', 1, '2021-09-22 21:47:47', 1, '2021-09-22 21:47:47', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (650, '访问链路', 'entities.accessLink', 6, 605, 403, 0, 0, 30, 14, '{\"url\":\"/interface/entity/detail/app/linkVisual?appName={{appName}}&startTime={{startTime}}&endTime={{endTime}}\",\"unitType\":\"byte\"}', 1, '2021-09-22 21:47:47', 1, '2021-09-22 21:47:47', '', 1, 0, 0);
-
 
 SET FOREIGN_KEY_CHECKS = 1;

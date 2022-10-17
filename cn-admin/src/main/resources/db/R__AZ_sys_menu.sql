@@ -28,7 +28,7 @@ INSERT INTO `sys_menu` VALUES (1, 'Network Analytics', 'networkAnalytics', 'over
 INSERT INTO `sys_menu` VALUES (2, 'Network Overview', 'networkOverview', 'networkOverview.networkOverview', 1, 'sys:user:add,sys:user:list', 1, '/panel/networkOverview', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (3, 'Network and app performance', 'networkAppPerformance', 'networkAppPerformance.networkAppPerformance', 1, 'sys:user:add,sys:user:list', 1, '/panel/networkAppPerformance', '', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (4, 'DNS service insights', 'dnsServiceInsights', 'overall.dnsServiceInsights', 1, 'sys:user:add,sys:user:list', 1, '/panel/dnsServiceInsights', '', NULL, 21, 1);
-INSERT INTO `sys_menu` VALUES (5, 'Setting', 'setting', 'overall.setting', 0, NULL, 1, '', 'cn-icon cn-icon-setting', NULL, 31, 1);
+INSERT INTO `sys_menu` VALUES (5, 'Setting', 'setting', 'overall.setting', 0, NULL, 1, '', 'cn-icon cn-icon-setting2', NULL, 31, 1);
 INSERT INTO `sys_menu` VALUES (6, 'User', 'user', 'overall.user', 5, NULL, 1, '/user', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (7, 'Role', 'role', 'overall.role', 5, NULL, 1, '/role', '', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (8, 'Operation log', 'operationLog', 'overall.operationLog', 5, NULL, 1, '/operationLog', '', NULL, 21, 1);
@@ -47,7 +47,6 @@ INSERT INTO `sys_menu` VALUES (20, 'Built-in report', 'builtInReport', 'report.b
 INSERT INTO `sys_menu` VALUES (21, 'Appearance', 'appearance', 'appearance.appearance', 5, 'sys:appearance:update', 1, '/appearance', '', NULL, 28, 0);
 INSERT INTO `sys_menu` VALUES (22, 'Log', 'log', 'overall.log', 0, NULL, 1, NULL, 'cn-icon el-icon-tickets', NULL, 28, 0);
 INSERT INTO `sys_menu` VALUES (23, 'Log viewer', 'logViewer', 'log.logViewer', 22, NULL, 1, '/businessLog/viewer', '', NULL, 28, 0);
-INSERT INTO `sys_menu` VALUES (25, 'IP drill down test', 'newReport', '', 1, NULL, 1, '/panel/ipDrillDownTest', '', NULL, 41, 1);
-
+INSERT INTO `sys_menu` VALUES (25, 'Link monitor', 'linkMonitor', 'overall.linkMonitor', 1, NULL, 1, '/panel/linkMonitor', '', NULL, 41, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

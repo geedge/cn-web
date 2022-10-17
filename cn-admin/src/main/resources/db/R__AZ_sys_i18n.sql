@@ -1,6 +1,17 @@
 /*
-* sys_i18n 表及记录
-* Date: 09/10/2021 09:54:18
+ Navicat Premium Data Transfer
+
+ Source Server         : cn-53
+ Source Server Type    : MySQL
+ Source Server Version : 100510
+ Source Host           : 192.168.44.53:3306
+ Source Schema         : cn-api
+
+ Target Server Type    : MySQL
+ Target Server Version : 100510
+ File Encoding         : 65001
+
+ Date: 17/10/2022 17:47:34
 */
 
 SET NAMES utf8mb4;
@@ -11,16 +22,16 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_i18n`;
 CREATE TABLE `sys_i18n`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `lang` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '语言',
-  `code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'i18n code',
-  `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '翻译值',
-  `remark` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注信息',
-  `utime` datetime(0) NOT NULL COMMENT '更新时间',
-  `uby` int(10) NULL DEFAULT NULL COMMENT '更新人',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 515 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+                             `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+                             `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                             `lang` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '语言',
+                             `code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'i18n code',
+                             `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '翻译值',
+                             `remark` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注信息',
+                             `utime` datetime NOT NULL COMMENT '更新时间',
+                             `uby` int NULL DEFAULT NULL COMMENT '更新人',
+                             PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1406 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_i18n
@@ -1194,7 +1205,7 @@ INSERT INTO `sys_i18n` VALUES (1245, 'ASNs', 'zh', 'network.asns', 'ASNs', '', '
 INSERT INTO `sys_i18n` VALUES (1246, 'ASNs', 'en', 'network.asns', 'ASNs', '', '2022-07-20 07:08:45', 1);
 INSERT INTO `sys_i18n` VALUES (1247, '域名', 'zh', 'network.domains', '域名', '', '2022-07-20 07:09:20', 1);
 INSERT INTO `sys_i18n` VALUES (1248, '域名', 'en', 'network.domains', 'Domains', '', '2022-07-20 07:09:37', 1);
-INSERT INTO `sys_i18n` VALUES (1249, 'IDC  Tenants', 'zh', 'network.idcTenants', 'IDC  Tenants', '', '2022-07-20 07:10:34', 1);
+INSERT INTO `sys_i18n` VALUES (1249, 'IDC  Tenants', 'zh', 'network.idcTenants', 'IDC租户', '', '2022-09-21 03:28:42', 1);
 INSERT INTO `sys_i18n` VALUES (1250, 'IDC  Tenants', 'en', 'network.idcTenants', 'IDC  Tenants', '', '2022-07-20 07:10:48', 1);
 INSERT INTO `sys_i18n` VALUES (1251, '省', 'zh', 'network.provinces', '省', '', '2022-07-20 07:11:24', 1);
 INSERT INTO `sys_i18n` VALUES (1252, '省', 'en', 'network.provinces', 'Provinces', '', '2022-07-20 07:11:36', 1);
@@ -1306,5 +1317,47 @@ INSERT INTO `sys_i18n` VALUES (1357, '流量总览', 'en', 'dns.trafficOverview'
 INSERT INTO `sys_i18n` VALUES (1358, '流量总览', 'zh', 'dns.trafficOverview', '流量总览', '', '2022-09-13 11:57:53', 1);
 INSERT INTO `sys_i18n` VALUES (1359, 'DNS洞察', 'zh', 'dns.dnsInsights', 'DNS洞察', '', '2022-09-13 12:48:26', 1);
 INSERT INTO `sys_i18n` VALUES (1360, 'DNS洞察', 'en', 'dns.dnsInsights', 'DNS Insights', '', '2022-09-13 12:48:39', 1);
+INSERT INTO `sys_i18n` VALUES (1361, '出链路', 'en', 'linkMonitor.egressLink', 'Egress link', '', '2022-09-14 11:07:03', 1);
+INSERT INTO `sys_i18n` VALUES (1362, '出链路', 'zh', 'linkMonitor.egressLink', '出链路', '', '2022-09-14 11:07:13', 1);
+INSERT INTO `sys_i18n` VALUES (1363, '入链路', 'en', 'linkMonitor.ingressLink', 'Ingress link', '', '2022-09-14 11:07:32', 1);
+INSERT INTO `sys_i18n` VALUES (1364, '入链路', 'zh', 'linkMonitor.ingressLink', '入链路', '', '2022-09-14 11:07:41', 1);
+INSERT INTO `sys_i18n` VALUES (1365, '事件', 'en', 'dnsInsight.event', 'Event', '', '2022-09-15 09:03:23', 5);
+INSERT INTO `sys_i18n` VALUES (1366, '事件', 'zh', 'dnsInsight.event', '事件', '', '2022-09-15 09:03:35', 5);
+INSERT INTO `sys_i18n` VALUES (1367, 'IP个数', 'zh', 'dns.numberOfIPs', 'IP个数', '', '2022-09-15 10:06:11', 1);
+INSERT INTO `sys_i18n` VALUES (1368, 'IP个数', 'en', 'dns.numberOfIPs', 'Number Of IPs', '', '2022-09-15 10:07:12', 1);
+INSERT INTO `sys_i18n` VALUES (1369, '查询次数', 'zh', 'dns.queries', '查询次数', '', '2022-09-16 01:57:07', 1);
+INSERT INTO `sys_i18n` VALUES (1370, '查询次数', 'en', 'dns.queries', 'Queries', '', '2022-09-16 02:04:11', 1);
+INSERT INTO `sys_i18n` VALUES (1371, '首次发现时间', 'zh', 'dns.firstSeenTime', '首次发现时间', '', '2022-09-16 02:09:30', 1);
+INSERT INTO `sys_i18n` VALUES (1372, '首次发现时间', 'en', 'dns.firstSeenTime', 'First Seen Time', '', '2022-09-16 02:09:57', 1);
+INSERT INTO `sys_i18n` VALUES (1373, '最后发现时间', 'zh', 'dns.lastSeenTime', '最后发现时间', '', '2022-09-16 02:11:32', 1);
+INSERT INTO `sys_i18n` VALUES (1374, '最后发现时间', 'en', 'dns.lastSeenTime', 'Last Seen Time', '', '2022-09-16 02:11:59', 1);
+INSERT INTO `sys_i18n` VALUES (1375, '域名', 'zh', 'dns.domain', '域名', '', '2022-09-16 02:17:45', 1);
+INSERT INTO `sys_i18n` VALUES (1376, '域名', 'en', 'dns.domain', 'Domain', '', '2022-09-16 02:18:04', 1);
+INSERT INTO `sys_i18n` VALUES (1377, 'IPs', 'zh', 'dns.IPs', 'IPs', '', '2022-09-16 02:39:23', 1);
+INSERT INTO `sys_i18n` VALUES (1378, 'IPs', 'en', 'dns.IPs', 'IPs', '', '2022-09-16 02:39:43', 1);
+INSERT INTO `sys_i18n` VALUES (1379, '性能事件', 'zh', 'dnsInsight.PerEvent', '性能事件', '', '2022-09-16 07:16:26', 5);
+INSERT INTO `sys_i18n` VALUES (1380, '性能事件', 'en', 'dnsInsight.PerEvent', 'Performance Event', '', '2022-09-16 07:16:47', 5);
+INSERT INTO `sys_i18n` VALUES (1381, '活跃恶意域名', 'zh', 'dns.activeMaliciousDomains', '活跃恶意域名', '', '2022-09-16 09:13:55', 1);
+INSERT INTO `sys_i18n` VALUES (1382, '活跃恶意域名', 'en', 'dns.activeMaliciousDomains', 'Active malicious domains', '', '2022-09-16 09:14:14', 1);
+INSERT INTO `sys_i18n` VALUES (1383, '安全事件', 'zh', 'dnsInsight.securityEvent', '安全事件', '', '2022-09-19 03:39:30', 5);
+INSERT INTO `sys_i18n` VALUES (1384, '安全事件', 'en', 'dnsInsight.securityEvent', 'Security Event', '', '2022-09-19 03:39:51', 5);
+INSERT INTO `sys_i18n` VALUES (1385, 'DNS运营商', 'zh', 'dns.dnsServerIsps', 'DNS运营商', '', '2022-09-20 12:24:43', 1);
+INSERT INTO `sys_i18n` VALUES (1386, 'DNS运营商', 'en', 'dns.dnsServerIsps', 'DNS server ISPs', '', '2022-09-20 12:25:03', 1);
+INSERT INTO `sys_i18n` VALUES (1387, 'DNS机构', 'zh', 'dns.dnsServerOrganizations', 'DNS机构', '', '2022-09-20 12:27:55', 1);
+INSERT INTO `sys_i18n` VALUES (1388, 'DNS机构', 'en', 'dns.dnsServerOrganizations', 'DNS server organizations', '', '2022-09-20 12:28:08', 1);
+INSERT INTO `sys_i18n` VALUES (1389, 'DNS角色', 'zh', 'dns.dnsServerRoles', 'DNS角色', '', '2022-09-20 12:30:15', 1);
+INSERT INTO `sys_i18n` VALUES (1390, 'DNS角色', 'en', 'dns.dnsServerRoles', 'DNS server roles', '', '2022-09-20 12:30:32', 1);
+INSERT INTO `sys_i18n` VALUES (1393, 'npm分数', 'zh', 'linkMonitor.npmScore1', '评分', '', '2022-09-28 09:42:07', 1);
+INSERT INTO `sys_i18n` VALUES (1394, 'npm分数', 'en', 'linkMonitor.npmScore1', 'Score', '', '2022-09-28 09:41:59', 1);
+INSERT INTO `sys_i18n` VALUES (1395, '流量', 'zh', 'linkMonitor.traffic', '流量', '', '2022-09-28 09:47:45', 1);
+INSERT INTO `sys_i18n` VALUES (1396, '流量', 'en', 'linkMonitor.traffic', 'Traffic', '', '2022-09-28 09:48:15', 1);
+INSERT INTO `sys_i18n` VALUES (1397, '性能', 'zh', 'linkMonitor.performance', '性能', '', '2022-09-28 09:49:54', 1);
+INSERT INTO `sys_i18n` VALUES (1398, '性能', 'en', 'linkMonitor.performance', 'Performance', '', '2022-09-28 09:50:10', 1);
+INSERT INTO `sys_i18n` VALUES (1399, '流入/流出查询次数', 'en', 'dns.queriesFromIE', 'Queries from Internal / External', '', '2022-10-07 13:14:07', 1);
+INSERT INTO `sys_i18n` VALUES (1400, '流入/流出查询次数', 'zh', 'dns.queriesFromIE', '流入/流出查询次数', '', '2022-10-07 13:14:19', 1);
+INSERT INTO `sys_i18n` VALUES (1401, 'DNS响应时间', 'zh', 'dns.dnsResponseTime', 'DNS响应时间', '', '2022-10-07 13:14:47', 1);
+INSERT INTO `sys_i18n` VALUES (1402, 'DNS响应时间', 'en', 'dns.dnsResponseTime', 'DNS response time', '', '2022-10-07 13:15:02', 1);
+INSERT INTO `sys_i18n` VALUES (1403, '客户端位置', 'zh', 'npm.clientLocation', '客户端位置', '', '2022-10-10 08:34:06', 1);
+INSERT INTO `sys_i18n` VALUES (1404, '客户端位置', 'en', 'npm.clientLocation', 'Client locations', '', '2022-10-10 08:34:17', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
