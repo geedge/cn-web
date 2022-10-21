@@ -41,6 +41,9 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.font.FontProvider;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RuntimeUtil;
@@ -101,6 +104,17 @@ public class ReportHandlerTask extends QuartzJobBean {
         List<ReportTask> tasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().lt(ReportTask::getState, 3).orderByAsc(ReportTask::getState));
         
         Map<Integer, List<ReportTask>> stateTasks = tasks.stream().collect(Collectors.groupingBy(ReportTask::getState));
+        
+        /**
+         * 根据延迟时间过滤掉不符合条件的任务数据
+         */
+        String delayTime = sysConfigService.getValue("delay_time");
+        if(StrUtil.isNotBlank(delayTime) && Integer.valueOf(delayTime) > 0) {
+        	DateTime dateTime = DateUtil.offset(new Date(), DateField.MINUTE, Integer.valueOf(delayTime));
+            List<ReportTask> unsubmit = stateTasks.get(0);
+            List<ReportTask> collects = unsubmit.stream().filter(task -> task.getEndTime().getTime() > dateTime.getTime()).collect(Collectors.toList());
+            stateTasks.put(0, collects);
+        }
         
         // 获取远程服务接口地址信息
         String rpcHost = sysConfigService.getValue("galaxy_url");
