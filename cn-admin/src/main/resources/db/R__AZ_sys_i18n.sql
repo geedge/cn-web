@@ -1359,5 +1359,25 @@ INSERT INTO `sys_i18n` VALUES (1401, 'DNS响应时间', 'zh', 'dns.dnsResponseTi
 INSERT INTO `sys_i18n` VALUES (1402, 'DNS响应时间', 'en', 'dns.dnsResponseTime', 'DNS response time', '', '2022-10-07 13:15:02', 1);
 INSERT INTO `sys_i18n` VALUES (1403, '客户端位置', 'zh', 'npm.clientLocation', '客户端位置', '', '2022-10-10 08:34:06', 1);
 INSERT INTO `sys_i18n` VALUES (1404, '客户端位置', 'en', 'npm.clientLocation', 'Client locations', '', '2022-10-10 08:34:17', 1);
+INSERT INTO `sys_i18n` VALUES (1406, 'IDC租户', 'en', 'network.idcTenant', 'IDC Tenant', '', '2022-10-20 05:58:03', 1);
+INSERT INTO `sys_i18n` VALUES (1407, 'IDC租户', 'zh', 'network.idcTenant', 'IDC租户', '', '2022-10-20 05:58:12', 1);
+INSERT INTO `sys_i18n` VALUES (1408, '应用分类', 'en', 'network.applicationCategory', 'Application Category', '', '2022-10-20 06:00:17', 1);
+INSERT INTO `sys_i18n` VALUES (1409, '应用分类', 'zh', 'network.applicationCategory', '应用分类', '', '2022-10-20 06:00:27', 1);
+INSERT INTO `sys_i18n` VALUES (1410, '域名分类', 'zh', 'network.domainCategory', '域名分类', '', '2022-10-20 06:00:58', 1);
+INSERT INTO `sys_i18n` VALUES (1411, '域名分类', 'en', 'network.domainCategory', 'Domain Category', '', '2022-10-20 06:01:31', 1);
+INSERT INTO `sys_i18n` VALUES (1412, 'DNS机构', 'en', 'dns.dnsServerOrganization', 'DNS Server Organization', '', '2022-10-20 06:32:36', 1);
+INSERT INTO `sys_i18n` VALUES (1413, 'DNS机构', 'zh', 'dns.dnsServerOrganization', 'DNS机构', '', '2022-10-20 06:33:00', 1);
+INSERT INTO `sys_i18n` VALUES (1414, '供应商和应用', 'zh', 'networkOverview.appType.providerAndApp', '供应商和应用', '', '2022-10-20 08:05:22', 1);
+INSERT INTO `sys_i18n` VALUES (1415, '供应商和应用', 'en', 'networkOverview.appType.providerAndApp', 'Providers and Applications', '', '2022-10-20 08:05:32', 1);
+INSERT INTO `sys_i18n` VALUES (1416, 'IP', 'zh', 'network.ip', 'IP', '', '2022-10-25 01:34:12', 1);
+INSERT INTO `sys_i18n` VALUES (1417, 'IP', 'en', 'network.ip', 'IP', '', '2022-10-25 01:34:24', 1);
+INSERT INTO `sys_i18n` VALUES (1418, '应用', 'zh', 'network.application', '应用', '', '2022-10-25 01:38:35', 1);
+INSERT INTO `sys_i18n` VALUES (1419, '应用', 'en', 'network.application', 'Application', '', '2022-10-25 01:38:49', 1);
+INSERT INTO `sys_i18n` VALUES (1420, 'Metrics', 'zh', 'overview.metrics', '指标', '', '2022-10-27 09:10:10', 1);
+INSERT INTO `sys_i18n` VALUES (1421, 'Metrics', 'en', 'overview.metrics', 'Metrics', '', '2022-10-27 09:10:22', 1);
+INSERT INTO `sys_i18n` VALUES (1422, '应用名', 'zh', 'report.overviewApp', '应用名', '', '2022-10-28 09:45:44', 1);
+INSERT INTO `sys_i18n` VALUES (1423, '应用名', 'en', 'report.overviewApp', 'App', '', '2022-10-28 09:46:09', 1);
+INSERT INTO `sys_i18n` VALUES (1424, '供应商', 'zh', 'report.provider', '供应商', '', '2022-10-28 09:46:28', 1);
+INSERT INTO `sys_i18n` VALUES (1425, '供应商', 'en', 'report.provider', 'Provider', '', '2022-10-28 09:46:47', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
