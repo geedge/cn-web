@@ -15,4 +15,6 @@ public interface ReportCategoryService extends IService<ReportCategory>{
 	
 	ReportCategory queryInfo(Integer id);
 	
+	void configSync(Map<String,Object> param);
+	
 }

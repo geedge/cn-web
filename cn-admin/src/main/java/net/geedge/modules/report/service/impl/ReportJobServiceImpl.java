@@ -650,6 +650,9 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					this.removeByIds(tempJobIds);
 				}
 				break;
+			case 4:
+				
+				break;
 		}
 		/**
 		 * 重新执行任务 需要将相关数据进行清理
