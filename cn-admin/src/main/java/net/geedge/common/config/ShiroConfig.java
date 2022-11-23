@@ -222,6 +222,6 @@ public class ShiroConfig {
 		 * StrUtil.isNotBlank(configEntity.getCvalue()) ?
 		 * Integer.valueOf(configEntity.getCvalue()) : loginExpiration; }
 		 */
-		return 60;
+		return 900000;
 	}
 }
