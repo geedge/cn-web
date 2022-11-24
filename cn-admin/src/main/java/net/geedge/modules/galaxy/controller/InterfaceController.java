@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import cn.hutool.core.util.StrUtil;
@@ -237,7 +239,7 @@ public class InterfaceController extends AbstractController {
 			}
 			//设置 cors 响应头
 			this.setCorsHeaders(response);
-			Tool.IoUtil.writeUtf8(response.getOutputStream(), false, Tool.JSONUtil.toJsonStr(bindings.get("result")));
+			Tool.IoUtil.writeUtf8(response.getOutputStream(), false, JSON.toJSONString(bindings.get("result"),SerializerFeature.WriteMapNullValue));
 			response.flushBuffer();
 		} catch (ScriptException e) {
 			logger.error(e, "script error,preHandle : {},postHandle : {}",preHandle,postHandle);

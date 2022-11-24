@@ -29,6 +29,8 @@ import org.springframework.util.ObjectUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializeFilter;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.JsonObject;
 import com.itextpdf.html2pdf.ConverterProperties;
@@ -360,7 +362,7 @@ public class ReportHandlerTask extends QuartzJobBean {
 		String alias = configObject.get("valueAlias");
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put(alias, resultData);
-		return JSON.toJSONString(result);
+		return JSON.toJSONString(result,SerializerFeature.WriteMapNullValue);
 	}
 	
 	/**
