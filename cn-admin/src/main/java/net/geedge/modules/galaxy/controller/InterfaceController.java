@@ -231,7 +231,7 @@ public class InterfaceController extends AbstractController {
 				//responseHeader.forEach((k,v) -> response.setHeader(k, Tool.StrUtil.join(";", v.toArray())));
 				responseHeader.forEach((k,v) -> {
 					if(StrUtil.equals(k, "Content-Length")) {
-						response.setHeader(k, Tool.StrUtil.join(";", (Tool.JSONUtil.toJsonStr(bindings.get("result"))).getBytes().length));
+						response.setHeader("Transfer-encoding", "Chunked");
 					}else {
 						response.setHeader(k, Tool.StrUtil.join(";", v.toArray()));
 					}
