@@ -40,10 +40,10 @@ public class SetupController  {
     @Value("${server.tomcat.basedir}")
     private String tmpDir;
     @Value("${cn.config.path:./config/cn.properties}")
-    private String nezhaConfigPath;
+    private String cnConfigPath;
     @Value("${spring.datasource.druid.driver-class-name}")
     private String driver;
-    @Value("${cn.restart.command:systemctl restart nzweb.service}")
+    @Value("${cn.restart.command:systemctl restart cnweb.service}")
     private String restartCommand;
     @Value("${database.loginTimeout:10}")
     private Integer dbLoginTimeouot;//数据库登录超时时间
@@ -78,9 +78,9 @@ public class SetupController  {
         }
         try{
         	//配置文件
-        	boolean absolutePath = Tool.FileUtil.isAbsolutePath(nezhaConfigPath);
-    		File configFile = absolutePath ? Tool.FileUtil.file(nezhaConfigPath) : Tool.FileUtil.file(Tool.WebPathUtil.getRootPath(),nezhaConfigPath);
-    		log.info("nezhaConfigPath:{}",configFile.getAbsolutePath());
+        	boolean absolutePath = Tool.FileUtil.isAbsolutePath(cnConfigPath);
+    		File configFile = absolutePath ? Tool.FileUtil.file(cnConfigPath) : Tool.FileUtil.file(Tool.WebPathUtil.getRootPath(),cnConfigPath);
+    		log.info("cnConfigPath:{}",configFile.getAbsolutePath());
     		//更改 cn.inited 为 2，下次启动时不再执行
     		//cn.properties 配置文件路径：./config/cn.properties
     		Props prop = null;
@@ -120,7 +120,7 @@ public class SetupController  {
                 log.info("set up config new file {}", newFile);
             }
             Tool.FileUtil.writeUtf8String(Tool.JSONUtil.toJsonStr(setup), tmpConfigFile);
-            //重启nzweb
+            //重启cnweb
             this.restart();
             return R.ok();
         } catch (IOException e) {

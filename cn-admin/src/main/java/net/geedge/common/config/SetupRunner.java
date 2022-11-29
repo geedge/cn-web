@@ -35,7 +35,7 @@ public class SetupRunner implements CommandLineRunner{
     @Value("${server.tomcat.basedir}")
     private String tmpDir;
     @Value("${cn.config.path:./config/cn.properties}")
-    private String nezhaConfigPath;
+    private String cnConfigPath;
     
     @Autowired
     SysConfigService sysConfigService;
@@ -55,9 +55,6 @@ public class SetupRunner implements CommandLineRunner{
 			log.info("start inited setup");
 			String jsonStr = Tool.FileUtil.readUtf8String(file);
 	        SetupEntity setupEntity = Tool.JSONUtil.toBean(jsonStr, SetupEntity.class);
-	        sysConfigService.updateValueByKey("alert_api",setupEntity.getSystem().getAlertPath());
-//	        sysConfigService.updateValueByKey("alert_path_prefix",setupEntity.getSystem().getAlertPrefix());
-	        sysConfigService.updateValueByKey("prometheus_federation_enabled",setupEntity.getSystem().getFederationEnabled());
 	        log.info("update db config");
 	        SysUserEntity sysUser =  sysUserService.getById(adminId);
 	        sysUser.setId(Long.parseLong(adminId));
@@ -68,8 +65,8 @@ public class SetupRunner implements CommandLineRunner{
 	        Tool.FileUtil.del(file);//删除临时配置文件
 		}
 		//配置文件
-    	boolean absolutePath = Tool.FileUtil.isAbsolutePath(nezhaConfigPath);
-		File configFile = absolutePath ? Tool.FileUtil.file(nezhaConfigPath) : Tool.FileUtil.file(Tool.WebPathUtil.getRootPath(),nezhaConfigPath);
+    	boolean absolutePath = Tool.FileUtil.isAbsolutePath(cnConfigPath);
+		File configFile = absolutePath ? Tool.FileUtil.file(cnConfigPath) : Tool.FileUtil.file(Tool.WebPathUtil.getRootPath(),cnConfigPath);
 		//更改 cn.inited 为 2，下次启动时不再执行
 		//cn.properties 配置文件路径：./config/cn.properties
 		Props prop = new Props(configFile, Constant.DEFAULT_CHARTSET_NAME);

@@ -52,8 +52,8 @@ public class ControllerExecTimeAspect {
         String className = point.getTarget().getClass().getName();
         String methodName = className + "." + signature.getName() + "()";
         String errorMsg;
-        if (e instanceof NZException) {
-            errorMsg = ((NZException) e).getMsg();
+        if (e instanceof CNException) {
+            errorMsg = ((CNException) e).getMsg();
         } else {
             errorMsg = e.getMessage();
         }
