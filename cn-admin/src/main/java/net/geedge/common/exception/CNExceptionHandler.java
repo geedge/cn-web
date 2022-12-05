@@ -57,6 +57,6 @@ public class CNExceptionHandler {
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	public R handleException(Exception e){
 		logger.error(e);
-		return R.error().put("msg", e.getMessage());
+		return R.error().put("message", e.getMessage());
 	}
 }
