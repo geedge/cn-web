@@ -3,6 +3,7 @@ package net.geedge.modules.report.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONString;
@@ -120,6 +122,7 @@ public class ReportCategoryServiceImpl extends ServiceImpl<ReportCategoryDao, Re
 				//将对应job html内容进行同步
 				List<ReportJob> jobs = reportJobService.list(new QueryWrapper<ReportJob>().lambda().eq(ReportJob::getUniq, temp.getUniq()));
 				jobs.stream().forEach(job-> {
+					job.setName(StrUtil.concat(false, temp.getName(),DateUtil.format(new Date(), "yyyyMMdd")));
 					job.setHtmlContent(category.getHtmlContent());
 					job.setUpload(0);
 					job.setState(0);

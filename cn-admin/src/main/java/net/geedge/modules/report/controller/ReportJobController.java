@@ -89,4 +89,11 @@ public class ReportJobController extends AbstractController{
 		reportJobService.restartJob(param);
 		return R.ok();
 	}
+	
+	@PutMapping("/reupload")
+	public R reuploadJob(@RequestParam String ids) {
+		ValidateUtils.is(ids).notNull(RCode.REPORT_JOB_ID_ISNULL);
+		reportJobService.reuploadJob(ids);
+		return R.ok();
+	}
 }

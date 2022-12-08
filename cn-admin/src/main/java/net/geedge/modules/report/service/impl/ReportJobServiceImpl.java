@@ -32,9 +32,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,18 +55,8 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Joiner;
-import com.itextpdf.html2pdf.ConverterProperties;
-import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
-import com.itextpdf.io.font.FontProgram;
-import com.itextpdf.io.font.FontProgramFactory;
-import com.itextpdf.kernel.geom.PageSize;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.font.FontProvider;
 
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FastByteArrayOutputStream;
@@ -80,7 +68,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import freemarker.template.Template;
 import net.geedge.common.exception.CNException;
-import net.geedge.common.utils.CommonUtils;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.FreeMarkerUtil;
 import net.geedge.common.utils.PageUtils;
@@ -118,7 +105,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	
 	@Autowired
 	private ReportTempService reportTempService;
-	
+		
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		Timezone sysTimezone = timezoneService.getOne(new LambdaQueryWrapper<Timezone>().eq(Timezone::getName, sysConfigService.getValue("timezone")));
@@ -230,8 +217,13 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			String htmlName = reportJob.getName()+reportJob.getCtime().getTime()+".html ";
 			String fileName = reportJob.getName()+reportJob.getCtime().getTime()+".pdf ";
 			File file = FileUtil.file(Constant.TEMP_PATH + File.separator +htmlName);
+			File pdfFile = FileUtil.file(Constant.TEMP_PATH + File.separator +fileName);
+			// 删除废弃文件
 			if(file.exists()) {
 				file.delete();
+			}
+			if(pdfFile.exists()) {
+				pdfFile.delete();
 			}
 			FileUtil.writeBytes(html.getBytes(), file);
 			RuntimeUtil.exec("node "+Constant.CONFIG_PATH+File.separator+"report.js "+Constant.TEMP_PATH+File.separator+htmlName+Constant.TEMP_PATH+File.separator+fileName);
@@ -658,5 +650,13 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		 * 重新执行任务 需要将相关数据进行清理
 		**/ 
 		this.baseMapper.deleteResult(Arrays.asList(ids.split(",")), type, overview);
+	}
+
+	@Override
+	public void reuploadJob(String ids) {
+		ReportJob job = new ReportJob();
+		job.setState(0);
+		job.setUpload(0);
+		this.baseMapper.update(job, new QueryWrapper<ReportJob>().lambda().in(ReportJob::getId, Arrays.asList(ids.split(","))));
 	}
 }

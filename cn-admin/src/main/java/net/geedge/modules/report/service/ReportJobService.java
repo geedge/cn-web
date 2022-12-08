@@ -28,4 +28,6 @@ public interface ReportJobService extends IService<ReportJob>{
 	void upload(String fileName) throws FileNotFoundException;
 	
 	void restartJob(Map<String,Object> param);
+	
+	void reuploadJob(String ids);
 }
