@@ -222,9 +222,6 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			if(file.exists()) {
 				file.delete();
 			}
-			if(pdfFile.exists()) {
-				pdfFile.delete();
-			}
 			FileUtil.writeBytes(html.getBytes(), file);
 			RuntimeUtil.exec("node "+Constant.CONFIG_PATH+File.separator+"report.js "+Constant.TEMP_PATH+File.separator+htmlName+Constant.TEMP_PATH+File.separator+fileName);
 		}catch(Exception e) {
