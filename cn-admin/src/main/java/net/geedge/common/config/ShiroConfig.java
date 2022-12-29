@@ -221,11 +221,11 @@ public class ShiroConfig {
 	}
 
 	private Integer getTimeOutData() {
-		String timeout = sysconfigService.getValue(Constant.SYSCONFIG_SESSION_TIMEOUT_KEY);
+		/*String timeout = sysconfigService.getValue(Constant.SYSCONFIG_SESSION_TIMEOUT_KEY);
 		Integer loginExpiration = 30;
 		if (StrUtil.isNotBlank(timeout)) {
 			loginExpiration = Integer.valueOf(timeout);
-		}
-		return loginExpiration;
+		}*/
+		return 360;
 	}
 }
