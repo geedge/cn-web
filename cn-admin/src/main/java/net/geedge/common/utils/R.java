@@ -18,7 +18,7 @@ public class R extends HashMap<String, Object> {
 	
 	public R() {
 		put("code", RCode.SUCCESS.getCode());
-		put("msg", RCode.SUCCESS.getMsg());
+		put("message", RCode.SUCCESS.getMsg());
 		put("time", new Date());
 	}
 	
@@ -29,7 +29,7 @@ public class R extends HashMap<String, Object> {
 	public static R error(RCode rCode) {
 		R r = new R();
 		r.put("code", rCode.getCode());
-		r.put("msg", rCode.getMsg());
+		r.put("message", rCode.getMsg());
 		r.put("time", new Date());
 		return r;
 	}
@@ -37,14 +37,14 @@ public class R extends HashMap<String, Object> {
 	public static R error(Integer code, String msg) {
 		R r = new R();
 		r.put("code", code);
-		r.put("msg", msg);
+		r.put("message", msg);
 		r.put("time", new Date());
 		return r;
 	}
 
 	public static R ok(String msg) {
 		R r = new R();
-		r.put("msg", msg);
+		r.put("message", msg);
 		r.put("time", new Date());
 		return r;
 	}
