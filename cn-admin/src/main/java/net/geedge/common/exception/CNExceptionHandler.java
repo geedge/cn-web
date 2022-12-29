@@ -35,7 +35,7 @@ public class CNExceptionHandler {
 	public R handleCNException(CNException e){
 		R r = new R();
 		r.put("code", e.getCode());
-		r.put("msg", e.getMsg());
+		r.put("message", e.getMsg());
 		return r;
 	}
 
