@@ -1299,7 +1299,7 @@ INSERT INTO `sys_i18n` VALUES (1339, '链路监测', 'zh', 'linkMonitor.linkMoni
 INSERT INTO `sys_i18n` VALUES (1340, '链路监测', 'en', 'linkMonitor.linkMonitor', 'Link Monitor', '', '2022-09-10 02:56:30', 1);
 INSERT INTO `sys_i18n` VALUES (1341, '链路', 'zh', 'linkMonitor.links', '链路', '', '2022-09-10 03:11:00', 1);
 INSERT INTO `sys_i18n` VALUES (1342, '链路', 'en', 'linkMonitor.links', 'Links', '', '2022-09-10 03:11:08', 1);
-INSERT INTO `sys_i18n` VALUES (1343, '下跳网络', 'zh', 'linkMonitor.nextHopInternet', 'Next-Hop Internet', '', '2022-09-10 03:36:29', 1);
+INSERT INTO `sys_i18n` VALUES (1343, '下跳网络', 'zh', 'linkMonitor.nextHopInternet', '下一跳网络', '', '2022-12-30 09:49:37', 1);
 INSERT INTO `sys_i18n` VALUES (1344, '下跳网络', 'en', 'linkMonitor.nextHopInternet', 'Next-Hop Internet', '', '2022-09-10 03:36:19', 1);
 INSERT INTO `sys_i18n` VALUES (1345, '出口', 'en', 'linkMonitor.egress', 'Egress', '', '2022-09-10 08:11:18', 1);
 INSERT INTO `sys_i18n` VALUES (1346, '出口', 'zh', 'linkMonitor.egress', '出口', '', '2022-09-10 08:11:33', 1);
@@ -1467,6 +1467,5 @@ INSERT INTO `sys_i18n` VALUES (1510, 'Metrics', 'en', 'network.metrics', 'Metric
 INSERT INTO `sys_i18n` VALUES (1511, 'Metrics', 'zh', 'network.metrics', 'Metrics', '', '2022-12-01 16:02:13', 1);
 INSERT INTO `sys_i18n` VALUES (1512, '筛选', 'en', 'detections.filters', 'Filters', '', '2022-12-01 16:02:13', 1);
 INSERT INTO `sys_i18n` VALUES (1513, '筛选', 'zh', 'detections.filters', '筛选', '', '2022-12-01 16:02:13', 1);
-
 
 SET FOREIGN_KEY_CHECKS = 1;
