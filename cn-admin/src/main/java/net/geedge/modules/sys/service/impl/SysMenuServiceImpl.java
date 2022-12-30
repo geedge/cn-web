@@ -214,7 +214,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 		}
 
 		// 查到的所有子节点
-		List<SysMenuEntity> list = sysMenuDao.selectList(new LambdaQueryWrapper<SysMenuEntity>().in(SysMenuEntity::getId, menuIds));
+		List<SysMenuEntity> list = sysMenuDao.selectList(new LambdaQueryWrapper<SysMenuEntity>().in(SysMenuEntity::getId, menuIds).eq(SysMenuEntity::getState, 1));
 
 		List<SysMenuEntity> menus = this.getMenuByLeafMenu(list);
 		List<SysMenuEntity> menuTreeList = this.getMenuTreeList(menus, 0);
