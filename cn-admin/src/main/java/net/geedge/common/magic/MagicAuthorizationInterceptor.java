@@ -1,6 +1,7 @@
 package net.geedge.common.magic;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.entity.SysUserEntity;
 import net.geedge.modules.sys.service.SysUserService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
@@ -58,8 +59,7 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
             String pin = sysUser.getPin();
             String salt = sysUser.getSalt();
             if (requireLogin() && pin.equals(ShiroUtils.sha256(password, salt))) {
-                UsernamePasswordToken token = new UsernamePasswordToken(username, pin);
-                this.validToken = token.toString();
+                this.validToken = Tool.IdUtil.simpleUUID();
                 // 登录成功后 构造MagicUser对象
                 this.MagicUser = new MagicUser(username, username, this.validToken);
                 return this.MagicUser;
