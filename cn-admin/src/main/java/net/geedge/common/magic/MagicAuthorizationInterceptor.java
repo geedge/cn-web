@@ -1,17 +1,17 @@
 package net.geedge.common.magic;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.entity.SysUserEntity;
 import net.geedge.modules.sys.service.SysUserService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.ssssssss.magicapi.core.context.MagicUser;
 import org.ssssssss.magicapi.core.exception.MagicLoginException;
 import org.ssssssss.magicapi.core.interceptor.AuthorizationInterceptor;
 
-import java.util.Objects;
 
 
 /**
@@ -25,10 +25,13 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
 
     private String validToken;
 
-    private MagicUser MagicUser;
+    private MagicUser magicUser;
 
-    public MagicAuthorizationInterceptor(SysUserService sysUserService) {
+    private final RedisTemplate redisTemplate;
+
+    public MagicAuthorizationInterceptor(SysUserService sysUserService,RedisTemplate redisTemplate) {
         this.sysUserService = sysUserService;
+        this.redisTemplate = redisTemplate;
     }
     /**
      * 配置是否需要登录
@@ -43,8 +46,10 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
      */
     @Override
     public MagicUser getUserByToken(String token) throws MagicLoginException {
-        if (requireLogin() && Objects.equals(this.validToken, token)) {
-            return this.MagicUser;
+        if (requireLogin() && token != null && redisTemplate.hasKey(token)) {
+            String str = (String)redisTemplate.opsForValue().get(token);
+            MagicUser magicUser = JSON.parseObject(str,MagicUser.class);
+            return magicUser;
         } else {
             throw new MagicLoginException("token无效");
         }
@@ -61,8 +66,10 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
             if (requireLogin() && pin.equals(ShiroUtils.sha256(password, salt))) {
                 this.validToken = Tool.IdUtil.simpleUUID();
                 // 登录成功后 构造MagicUser对象
-                this.MagicUser = new MagicUser(username, username, this.validToken);
-                return this.MagicUser;
+                this.magicUser = new MagicUser(username, username, this.validToken);
+                String str = JSON.toJSONString(this.magicUser);
+                redisTemplate.opsForValue().set(this.validToken,str,100000);
+                return this.magicUser;
             }
         }
         throw new MagicLoginException("用户名或密码不正确或非管理员账号");
