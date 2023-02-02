@@ -185,7 +185,7 @@ INSERT INTO `sys_i18n` VALUES (169, '角色', 'en', 'config.user.roles', 'Roles'
 INSERT INTO `sys_i18n` VALUES (170, 'Email', 'zh', 'config.user.email', '邮箱', '', '2021-07-21 07:12:36', 1);
 INSERT INTO `sys_i18n` VALUES (171, 'Email', 'en', 'config.user.email', 'Email', '', '2021-07-21 07:12:44', 1);
 INSERT INTO `sys_i18n` VALUES (172, 'lastLoginTime', 'zh', 'config.user.lastLoginTime', '最后登录时间', '', '2021-07-21 07:13:41', 1);
-INSERT INTO `sys_i18n` VALUES (173, 'lastLoginTime', 'en', 'config.user.lastLoginTime', 'last login time', '', '2021-07-21 07:14:13', 1);
+INSERT INTO `sys_i18n` VALUES (173, 'lastLoginTime', 'en', 'config.user.lastLoginTime', 'Last login time', '', '2023-01-09 08:24:19', 5);
 INSERT INTO `sys_i18n` VALUES (175, 'lastLoginIp', 'zh', 'config.user.lastLoginIp', '最后登录IP', '', '2021-07-21 07:18:44', 1);
 INSERT INTO `sys_i18n` VALUES (176, 'lastLoginIp', 'en', 'config.user.lastLoginIp', 'Last login IP', '', '2021-07-22 09:42:27', 1);
 INSERT INTO `sys_i18n` VALUES (177, 'source', 'zh', 'config.user.source', '来源', '', '2021-07-21 07:19:37', 1);
@@ -1299,7 +1299,7 @@ INSERT INTO `sys_i18n` VALUES (1339, '链路监测', 'zh', 'linkMonitor.linkMoni
 INSERT INTO `sys_i18n` VALUES (1340, '链路监测', 'en', 'linkMonitor.linkMonitor', 'Link Monitor', '', '2022-09-10 02:56:30', 1);
 INSERT INTO `sys_i18n` VALUES (1341, '链路', 'zh', 'linkMonitor.links', '链路', '', '2022-09-10 03:11:00', 1);
 INSERT INTO `sys_i18n` VALUES (1342, '链路', 'en', 'linkMonitor.links', 'Links', '', '2022-09-10 03:11:08', 1);
-INSERT INTO `sys_i18n` VALUES (1343, '下跳网络', 'zh', 'linkMonitor.nextHopInternet', 'Next-Hop Internet', '', '2022-09-10 03:36:29', 1);
+INSERT INTO `sys_i18n` VALUES (1343, '下跳网络', 'zh', 'linkMonitor.nextHopInternet', '下一跳网络', '', '2022-12-30 09:49:37', 1);
 INSERT INTO `sys_i18n` VALUES (1344, '下跳网络', 'en', 'linkMonitor.nextHopInternet', 'Next-Hop Internet', '', '2022-09-10 03:36:19', 1);
 INSERT INTO `sys_i18n` VALUES (1345, '出口', 'en', 'linkMonitor.egress', 'Egress', '', '2022-09-10 08:11:18', 1);
 INSERT INTO `sys_i18n` VALUES (1346, '出口', 'zh', 'linkMonitor.egress', '出口', '', '2022-09-10 08:11:33', 1);
@@ -1467,6 +1467,15 @@ INSERT INTO `sys_i18n` VALUES (1510, 'Metrics', 'en', 'network.metrics', 'Metric
 INSERT INTO `sys_i18n` VALUES (1511, 'Metrics', 'zh', 'network.metrics', 'Metrics', '', '2022-12-01 16:02:13', 1);
 INSERT INTO `sys_i18n` VALUES (1512, '筛选', 'en', 'detections.filters', 'Filters', '', '2022-12-01 16:02:13', 1);
 INSERT INTO `sys_i18n` VALUES (1513, '筛选', 'zh', 'detections.filters', '筛选', '', '2022-12-01 16:02:13', 1);
-
+INSERT INTO `sys_i18n` VALUES (1515, '下跳网络', 'zh', 'linkMonitor.nextHopInternetOfGrid', '下一跳网络', '', '2023-01-28 07:36:28', 1);
+INSERT INTO `sys_i18n` VALUES (1516, '下跳网络', 'en', 'linkMonitor.nextHopInternetOfGrid', 'Next Hop Internet', '', '2023-01-28 07:35:21', 1);
+INSERT INTO `sys_i18n` VALUES (1517, '结束时间大于开始时间', 'zh', 'validate.endTimeGreaterThanStart', '结束时间必须大于开始时间', '', '2023-02-01 04:01:36', 1);
+INSERT INTO `sys_i18n` VALUES (1518, '结束时间大于开始时间', 'en', 'validate.endTimeGreaterThanStart', 'End time must be greater than start time', '', '2023-02-01 04:01:56', 1);
+INSERT INTO `sys_i18n` VALUES (1519, '备案机构', 'zh', 'entities.icpCompanyName', '备案机构', '', '2023-02-02 09:06:46', 1);
+INSERT INTO `sys_i18n` VALUES (1520, '备案机构', 'en', 'entities.icpCompanyName', 'ICP Company Name', '', '2023-02-02 09:07:07', 1);
+INSERT INTO `sys_i18n` VALUES (1521, '备案号', 'zh', 'entities.icpLicense', '备案号', '', '2023-02-02 09:07:29', 1);
+INSERT INTO `sys_i18n` VALUES (1522, '备案号', 'en', 'entities.icpLicense', 'ICP Site License', '', '2023-02-02 09:07:42', 1);
+INSERT INTO `sys_i18n` VALUES (1523, 'DNS仪表盘', 'en', 'dns.dnsDashboard', 'DNS Dashboard', '', '2023-02-02 10:22:29', 1);
+INSERT INTO `sys_i18n` VALUES (1524, 'DNS仪表盘', 'zh', 'dns.dnsDashboard', 'DNS仪表盘', '', '2023-02-02 10:22:41', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
