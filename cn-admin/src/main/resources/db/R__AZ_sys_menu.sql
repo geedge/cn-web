@@ -38,10 +38,10 @@ INSERT INTO `sys_menu` VALUES (11, 'I18n', 'I18N', '', 26, NULL, 1, '/administra
 INSERT INTO `sys_menu` VALUES (12, 'Detections', 'detections', 'overall.detections', 0, '', 1, '/detection/securityEvent', 'cn-icon cn-icon-detection1', NULL, 21, 1);
 INSERT INTO `sys_menu` VALUES (13, 'Security events', 'securityEvents', 'entities.securityEvents', 12, NULL, 1, '/detection/securityEvent', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (14, 'Performance events', 'performanceEvents', 'overall.performanceEvents', 12, NULL, 1, '/detection/performanceEvent', '', NULL, 11, 1);
-INSERT INTO `sys_menu` VALUES (15, 'Galaxy proxy', 'galaxyProxy', 'galaxyProxy.galaxyProxy', 26, NULL, 1, '/administration/galaxyProxy', 'cn-icon cn-icon-proxy', NULL, 41, 0);
+INSERT INTO `sys_menu` VALUES (15, 'Galaxy proxy', 'galaxyProxy', 'galaxyProxy.galaxyProxy', 26, NULL, 1, '/administration/galaxyProxy', 'cn-icon cn-icon-proxy', NULL, 41, 1);
 INSERT INTO `sys_menu` VALUES (16, 'Crypto currency', 'cryptocurrency', 'overall.cryptocurrency', 1, NULL, 1, '/panel/cryptocurrency', '', NULL, 41, 0);
 INSERT INTO `sys_menu` VALUES (17, 'Temp', 'temp', 'temp', 0, NULL, 1, '/test', '', NULL, 1, 0);
-INSERT INTO `sys_menu` VALUES (18, 'Chart', 'chart', 'overall.chart', 26, NULL, 1, '/administration/chart', 'cn-icon cn-icon-chart', NULL, 1, 0);
+INSERT INTO `sys_menu` VALUES (18, 'Chart', 'chart', 'overall.chart', 26, NULL, 1, '/administration/chart', 'cn-icon cn-icon-chart', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (19, 'Report', 'report', 'overall.report', 0, NULL, 1, '/report/builtIn', 'cn-icon cn-icon-report1', NULL, 26, 1);
 INSERT INTO `sys_menu` VALUES (20, 'Built-in report', 'builtInReport', 'report.builtInReport', 19, 'report:job:add,report:job:delete,report:temp:add,report:temp:update,report:temp:delete', 1, '/report/builtIn', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (21, 'Appearance', 'appearance', 'appearance.appearance', 26, 'sys:appearance:update', 1, '/administration/appearance', '', NULL, 28, 0);
