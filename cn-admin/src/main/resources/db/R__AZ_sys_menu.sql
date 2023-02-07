@@ -45,8 +45,6 @@ INSERT INTO `sys_menu` VALUES (18, 'Chart', 'chart', 'overall.chart', 5, NULL, 1
 INSERT INTO `sys_menu` VALUES (19, 'Report', 'report', 'overall.report', 0, NULL, 1, '/report/builtIn', 'cn-icon cn-icon-report1', NULL, 26, 1);
 INSERT INTO `sys_menu` VALUES (20, 'Built-in report', 'builtInReport', 'report.builtInReport', 19, 'report:job:add,report:job:delete,report:temp:add,report:temp:update,report:temp:delete', 1, '/report/builtIn', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (21, 'Appearance', 'appearance', 'appearance.appearance', 5, 'sys:appearance:update', 1, '/appearance', '', NULL, 28, 0);
-INSERT INTO `sys_menu` VALUES (22, 'Log', 'log', 'overall.log', 0, NULL, 1, NULL, 'cn-icon el-icon-tickets', NULL, 28, 0);
-INSERT INTO `sys_menu` VALUES (23, 'Log viewer', 'logViewer', 'log.logViewer', 22, NULL, 1, '/businessLog/viewer', '', NULL, 28, 0);
 INSERT INTO `sys_menu` VALUES (25, 'Link monitor', 'linkMonitor', 'overall.linkMonitor', 1, NULL, 1, '/panel/linkMonitor', '', NULL, 41, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
