@@ -34,7 +34,7 @@ INSERT INTO `sys_menu` VALUES (7, 'Role', 'role', 'overall.role', 26, NULL, 1, '
 INSERT INTO `sys_menu` VALUES (8, 'Operation log', 'operationLog', 'overall.operationLog', 26, NULL, 1, '/administration/operationLog', 'cn-icon cn-icon-operation-log', NULL, 21, 1);
 INSERT INTO `sys_menu` VALUES (9, 'Entity', 'entity', 'overall.entity', 0, NULL, 1, '/entityExplorer', 'cn-icon cn-icon-entity', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (10, 'Entity explorer', 'entityExplorer', 'overall.entityExplorer', 9, NULL, 1, '/entityExplorer', '', NULL, 11, 1);
-INSERT INTO `sys_menu` VALUES (11, 'I18n', 'I18N', '', 26, NULL, 1, '/administration/i18n', 'cn-icon cn-icon-i18n', NULL, 31, 1);
+INSERT INTO `sys_menu` VALUES (11, 'I18n', 'I18N', '', 26, NULL, 1, '/administration/i18n', 'cn-icon cn-icon-i18n', NULL, 31, 0);
 INSERT INTO `sys_menu` VALUES (12, 'Detections', 'detections', 'overall.detections', 0, '', 1, '/detection/securityEvent', 'cn-icon cn-icon-detection1', NULL, 21, 1);
 INSERT INTO `sys_menu` VALUES (13, 'Security events', 'securityEvents', 'entities.securityEvents', 12, NULL, 1, '/detection/securityEvent', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (14, 'Performance events', 'performanceEvents', 'overall.performanceEvents', 12, NULL, 1, '/detection/performanceEvent', '', NULL, 11, 1);
