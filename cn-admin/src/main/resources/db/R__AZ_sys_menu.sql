@@ -47,7 +47,7 @@ INSERT INTO `sys_menu` VALUES (20, 'Built-in report', 'builtInReport', 'report.b
 INSERT INTO `sys_menu` VALUES (21, 'Appearance', 'appearance', 'appearance.appearance', 26, 'sys:appearance:update', 1, '/administration/appearance', '', NULL, 28, 0);
 INSERT INTO `sys_menu` VALUES (22, 'Log', 'log', 'overall.log', 0, NULL, 1, NULL, 'cn-icon el-icon-tickets', NULL, 28, 0);
 INSERT INTO `sys_menu` VALUES (23, 'Log viewer', 'logViewer', 'log.logViewer', 0, NULL, 1, '/businessLog/viewer', 'cn-icon cn-icon-operation-log', NULL, 28, 1);
-INSERT INTO `sys_menu` VALUES (25, 'Link monitor', 'linkMonitor', 'overall.linkMonitor', 1, NULL, 1, '/panel/linkMonitor', '', NULL, 41, 1);
+INSERT INTO `sys_menu` VALUES (25, 'Link monitor', 'linkMonitor', 'overall.linkMonitor', 1, NULL, 1, '/panel/linkMonitor', '', NULL, 41, 0);
 INSERT INTO `sys_menu` VALUES (26, 'Administration', 'administration', 'overall.administration', 0, NULL, 1, '/administration', 'cn-icon cn-icon-administrations', NULL, 41, 1);
 INSERT INTO `sys_menu` VALUES (27, 'DNS-六所', 'dns6', 'dns.dnsDashboard', 1, NULL, 1, '/dns6/dns6', '', NULL, 51, 1);
 
