@@ -1,11 +1,13 @@
 package net.geedge.common.magic;
 
+import java.util.Date;
+import java.util.HashMap;
+
 import org.springframework.stereotype.Component;
 import org.ssssssss.magicapi.core.context.RequestEntity;
 import org.ssssssss.magicapi.core.interceptor.ResultProvider;
 
-import java.util.Date;
-import java.util.HashMap;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * @Auther: lijinyang
@@ -17,14 +19,24 @@ public class MagicResultProvider implements ResultProvider {
     @Override
     public Object buildResult(RequestEntity requestEntity, int code, String message, Object data) {
         if(code != 200){
-            return new HashMap<String,Object>(){
-                {
-                    put("code",code);
-                    put("message",message);
-                    put("time",new Date());
-                }
-            };
+        	/*
+        	 * 针对统一异常提示进行处理
+        	 */
+        	if(StrUtil.contains(message, "为必填项")) {
+        		message = this.nullHandler(message);
+        	}
+            HashMap<String, Object> result = new HashMap<String,Object>();
+            result.put("code",code);
+            result.put("message",message);
+            result.put("time",new Date());	
+            return result;
         }
         return data;
+    }
+    
+    private String nullHandler(String msg) {
+    	String param = "";
+    	param = StrUtil.split(msg, "[")[1].split("]")[0];
+    	return String.format("param %s can not be empty",param);
     }
 }
