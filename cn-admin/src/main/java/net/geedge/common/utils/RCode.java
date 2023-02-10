@@ -320,6 +320,7 @@ public enum RCode {
     
     NOT_NULL_ERROR(990, "not null error"), //not null错误
     NOT_NUMBER_ERROR(991, "not number error"), //not number错误
+    READ_TIMED_OUT(992, "read timed out"),
     /**
      * 错误的时间格式
      */

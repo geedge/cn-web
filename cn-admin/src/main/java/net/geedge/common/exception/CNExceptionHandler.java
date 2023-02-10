@@ -9,6 +9,8 @@
 package net.geedge.common.exception;
 
 import cn.hutool.log.Log;
+import freemarker.core.InvalidReferenceException;
+import freemarker.template.TemplateException;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
 import org.apache.shiro.authz.AuthorizationException;
@@ -17,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.ResourceAccessException;
+
+import java.net.SocketTimeoutException;
 
 /**
  * 异常处理器
@@ -51,6 +56,13 @@ public class CNExceptionHandler {
 	public R handleAuthorizationException(AuthorizationException e){
 		logger.error(e);
 		return R.error(RCode.SYS_DB_AUTH);
+	}
+
+	@ExceptionHandler(ResourceAccessException.class)
+	@ResponseStatus(value=HttpStatus.GATEWAY_TIMEOUT)
+	public R handleTemplateException(ResourceAccessException e){
+		logger.error(e);
+		return R.error(RCode.READ_TIMED_OUT);
 	}
 
 	@ExceptionHandler(Exception.class)
