@@ -38,7 +38,7 @@ build_image:
     - echo 'XJAR_PIN :' $XJAR_PIN
     - echo 'CNWEB_TAG:' $CNWEB_TAG
     - echo 'exec build_image'
-    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web-$CI_COMMIT_REF_NAME
+    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web-$CI_COMMIT_REF_NAME:$CNWEB_TAG
   #when用于当前一阶段任务故障或者忽略故障的job任务，主要用于清理发生故障时的后续措施。
   #可选项
   #on_success - 默认参数，前一阶段任务成功时才执行
@@ -59,7 +59,7 @@ build_release_image:
     - echo '提交的版本是'
     - echo $CI_COMMIT_REF_NAME
     - echo 'exec build_image'
-    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web-$CI_COMMIT_REF_NAME
+    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web-$CI_COMMIT_REF_NAME:$CNWEB_TAG
   only:
     - tags
   tags:
