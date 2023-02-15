@@ -23,7 +23,7 @@ generate_git-log:
     paths:
       - ./cn-admin/src/main/resources/git.log
   only:
-    - dev
+    - dev-magic
   tags:
     - galaxy
 
@@ -38,7 +38,7 @@ build_image:
     - echo 'XJAR_PIN :' $XJAR_PIN
     - echo 'CNWEB_TAG:' $CNWEB_TAG
     - echo 'exec build_image'
-    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN docker:build -DdockerImageTags=$CNWEB_TAG
+    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web-$CI_COMMIT_REF_NAME
   #when用于当前一阶段任务故障或者忽略故障的job任务，主要用于清理发生故障时的后续措施。
   #可选项
   #on_success - 默认参数，前一阶段任务成功时才执行
@@ -47,7 +47,7 @@ build_image:
   #manual - 手动设置，比较复杂，略过。
   when: on_success
   only:
-    - dev
+    - dev-magic
   tags:
     - galaxy
 
@@ -59,7 +59,7 @@ build_release_image:
     - echo '提交的版本是'
     - echo $CI_COMMIT_REF_NAME
     - echo 'exec build_image'
-    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN docker:build -DdockerImageTags=$CI_COMMIT_TAG
+    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web-$CI_COMMIT_REF_NAME
   only:
     - tags
   tags:
@@ -74,6 +74,6 @@ package_clean:
     - mvn clean
   when: on_failure
   only:
-    - dev
+    - dev-magic
   tags:
     - galaxy

@@ -420,7 +420,7 @@
 					<!--提交到harbor的仓库地址,ip,端口-->
 					<registryUrl>${docker.registry}:${docker.registry.port}</registryUrl>
 					<!--是否向镜像registry(harbor)中推送镜像,如果为false则需要在执行mvn时添加-DpushImage参数-->
-					<pushImage>true</pushImage>
+					<!--<pushImage>true</pushImage>-->
 					<!--生成的镜像名称,镜像名称，只能有 a-z 小写字母(不能有大写字母)，0-9 ，下划线"_"，和点"." 组成
                         192.168.40.153:9080表示仓库地址，
                         tsg表示组织名称,
@@ -428,7 +428,7 @@
                        ${project.version}表示镜像版本tag，如果不指定，docker有该镜像名，版本号自动更替，
                        没有版本号,使用默认的版本latest,也可以在下面的imageTags标签中指定-->
 					<imageName>
-						${docker.registry}:${docker.registry.port}/${docker.registry.project.name}/cn-web
+						<!--${docker.registry}:${docker.registry.port}/${docker.registry.project.name}/cn-web-->
 					</imageName>
 					<!--build 时强制覆盖 tag，配合 imageTags 使用-->
 					<!--
