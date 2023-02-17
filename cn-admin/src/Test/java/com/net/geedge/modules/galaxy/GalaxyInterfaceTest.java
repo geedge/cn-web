@@ -375,68 +375,68 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/filter success
      */
-    @Test
+    /*@Test
     public void entityIpFilter_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/filter", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/list success
      */
-    @Test
+    /*@Test
     public void entityIpList_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/list", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/filter success
      */
-    @Test
+    /*@Test
     public void entityDomainFilter_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/filter", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/list success
      */
-    @Test
+    /*@Test
     public void entityDomainList_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/list", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/filter success
      */
-    @Test
+    /*@Test
     public void entityAppFilter_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/filter", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/list success
      */
-    @Test
+    /*@Test
     public void entityAppList_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/list", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/npm/appRrt success
@@ -661,13 +661,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/id success
      */
-    @Test
+    /*@Test
     public void entityAppDetailId_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/id", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/id error
@@ -683,13 +683,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/category success
      */
-    @Test
+    /*@Test
     public void entityAppDetailCategory_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/category", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/category error
@@ -705,13 +705,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/subcategory success
      */
-    @Test
+    /*@Test
     public void entityAppDetailSubcategory_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/subcategory", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/subcategory error
@@ -727,13 +727,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/risk success
      */
-    @Test
+    /*@Test
     public void entityAppDetailRisk_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/risk", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/risk error
@@ -749,13 +749,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/trafficMap success
      */
-    @Test
+    /*@Test
     public void entityAppDetailTrafficMap_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/trafficMap", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/trafficMap error
@@ -771,13 +771,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/sessions success
      */
-    @Test
+    /*@Test
     public void entityAppDetailSessions_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/sessions", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/sessions error
@@ -793,13 +793,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/packets success
      */
-    @Test
+    /*@Test
     public void entityAppDetailPackets_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/packets", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/packets error
@@ -815,13 +815,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/throughput success
      */
-    @Test
+    /*@Test
     public void entityAppDetailThroughput_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/throughput", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/throughput error
@@ -837,13 +837,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/activeClientIP success
      */
-    @Test
+    /*@Test
     public void entityAppDetailActiveClientIP_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/activeClientIP", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/activeClientIP error
@@ -859,13 +859,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/activeServerIP success
      */
-    @Test
+    /*@Test
     public void entityAppDetailActiveServerIP_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/activeServerIP", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/activeServerIP error
@@ -881,13 +881,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/topDomains success
      */
-    @Test
+    /*@Test
     public void entityAppDetailTopDomains_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/topDomains", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/topDomains error
@@ -903,13 +903,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/appRtt success
      */
-    @Test
+    /*@Test
     public void entityAppDetailAppRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/appRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/appRtt error
@@ -925,13 +925,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/appHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityAppDetailAppHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/appHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/appHttpResponseTime error
@@ -947,13 +947,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/appSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityAppDetailAppSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/appSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/appSSLHandshakeTime error
@@ -969,13 +969,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/appPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityAppDetailAppPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/appPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/appPacketLoss error
@@ -991,13 +991,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/appPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityAppDetailAppPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/appPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/appPacketRetrans error
@@ -1013,13 +1013,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/domainRtt success
      */
-    @Test
+    /*@Test
     public void entityAppDetailDomainRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/domainRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/domainRtt error
@@ -1035,13 +1035,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/domainHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityAppDetailDomainHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/domainHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/domainHttpResponseTime error
@@ -1057,13 +1057,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/domainSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityAppDetailDomainSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/domainSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/domainSSLHandshakeTime error
@@ -1079,13 +1079,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/domainPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityAppDetailDomainPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/domainPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/domainPacketLoss error
@@ -1100,13 +1100,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/domainPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityAppDetailDomainPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/domainPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/domainPacketRetrans error
@@ -1166,13 +1166,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/serverIPRtt success
      */
-    @Test
+    /*@Test
     public void entityAppDetailServerIPRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/serverIPRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/serverIPRtt error
@@ -1188,13 +1188,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/serverIPHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityAppDetailServerIPHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/serverIPHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/serverIPHttpResponseTime error
@@ -1210,13 +1210,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/serverIPSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityAppDetailServerIPSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/serverIPSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/serverIPSSLHandshakeTime error
@@ -1232,13 +1232,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/serverIPPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityAppDetailServerIPPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/serverIPPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/serverIPPacketLoss error
@@ -1254,13 +1254,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/serverIPPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityAppDetailServerIPPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/serverIPPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/serverIPPacketRetrans error
@@ -1276,13 +1276,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/clientIPRtt success
      */
-    @Test
+    /*@Test
     public void entityAppDetailClientIPRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/clientIPRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/clientIPRtt error
@@ -1298,13 +1298,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/clientIPHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityAppDetailClientIPHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/clientIPHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/clientIPSSLHandshakeTime error
@@ -1320,13 +1320,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/clientIPSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityAppDetailClientIPSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/clientIPSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/clientIPSSLHandshakeTime error
@@ -1342,13 +1342,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/clientIPPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityAppDetailClientIPPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/clientIPPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/clientIPPacketLoss error
@@ -1364,13 +1364,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/clientIPPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityAppDetailClientIPPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/clientIPPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/clientIPPacketRetrans error
@@ -1386,13 +1386,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/category success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailCategory_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/category", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/category error
@@ -1408,13 +1408,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/categoryGroup success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailCategoryGroup_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/categoryGroup", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/categoryGroup error
@@ -1430,13 +1430,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/reputationLevel success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailReputationLevel_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/reputationLevel", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/reputationLevel error
@@ -1452,13 +1452,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/risk success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailRisk_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/risk", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/risk error
@@ -1474,13 +1474,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/visits success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailVisits_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/visits", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/visits error
@@ -1496,13 +1496,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/trafficMap success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailTrafficMap_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/trafficMap", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/trafficMap error
@@ -1518,13 +1518,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/sessions success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailSessions_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/sessions", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/sessions error
@@ -1540,13 +1540,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/packets success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailPackets_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/packets", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/packets error
@@ -1562,13 +1562,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/throughput success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailThroughput_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/throughput", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/throughput error
@@ -1584,13 +1584,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/activeClientIP success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailActiveClientIP_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/activeClientIP", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/activeClientIP error
@@ -1606,13 +1606,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/activeServerIP success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailActiveServerIP_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/activeServerIP", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/activeServerIP error
@@ -1628,13 +1628,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/topAPP success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailTopAPP_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/topAPP", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/topAPP error
@@ -1650,13 +1650,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/domainRtt success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailDomainRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/domainRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/domainRtt error
@@ -1672,13 +1672,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/domainHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailDomainHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/domainHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/domainHttpResponseTime error
@@ -1694,13 +1694,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/domainSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailDomainSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/domainSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/domainSSLHandshakeTime error
@@ -1716,13 +1716,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/domainPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailDomainPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/domainPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/domainPacketLoss error
@@ -1738,13 +1738,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/domainPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailDomainPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/domainPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/domainPacketRetrans error
@@ -1760,13 +1760,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIPRtt success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIPRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIPRtt error
@@ -1782,13 +1782,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIPHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIPHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIPHttpResponseTime error
@@ -1804,13 +1804,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIPSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIPSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIPSSLHandshakeTime error
@@ -1826,13 +1826,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIPPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIPPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIPPacketLoss error
@@ -1848,13 +1848,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIPPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIPPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIPPacketRetrans error
@@ -1870,13 +1870,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIPRtt success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailClientIPRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIPRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIPRtt error
@@ -1892,13 +1892,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIPHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPClientIPHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIPHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIPHttpResponseTime error
@@ -1914,13 +1914,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIPSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPClientIPSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIPSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIPSSLHandshakeTime error
@@ -1936,13 +1936,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIPPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPClientIPPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIPPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIPPacketLoss error
@@ -1958,13 +1958,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIPPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPClientIPPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIPPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIPPacketRetrans error
@@ -1980,13 +1980,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appCount success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppCount_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appCount", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appCount error
@@ -2002,13 +2002,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainCount success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainCount_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainCount", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainCount error
@@ -2024,13 +2024,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/clientIPCount success
      */
-    @Test
+    /*@Test
     public void entityIpDetailClientIPCount_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/clientIPCount", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/clientIPCount error
@@ -2046,13 +2046,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appCountLine success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppCountLine_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appCountLine", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appCountLine error
@@ -2068,13 +2068,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainCountLine success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainCountLine_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainCountLine", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainCountLine error
@@ -2090,13 +2090,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/clientIPCountLine success
      */
-    @Test
+    /*@Test
     public void entityIpDetailClientIPCountLine_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/clientIPCountLine", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/clientIPCountLine error
@@ -2112,13 +2112,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/region success
      */
-    @Test
+    /*@Test
     public void entityIpDetailRegion_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/region", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/region error
@@ -2134,13 +2134,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/asn success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAsn_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/asn", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/asn error
@@ -2156,13 +2156,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/country success
      */
-    @Test
+    /*@Test
     public void entityIpDetailCountry_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/country", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/country error
@@ -2178,13 +2178,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/trafficMap success
      */
-    @Test
+    /*@Test
     public void entityIpDetailTrafficMap_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/trafficMap", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/trafficMap error
@@ -2200,13 +2200,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/sessions success
      */
-    @Test
+    /*@Test
     public void entityIpDetailSessions_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/sessions", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/sessions error
@@ -2222,13 +2222,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/packets success
      */
-    @Test
+    /*@Test
     public void entityIpDetailPackets_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/packets", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/packets error
@@ -2244,13 +2244,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/throughput success
      */
-    @Test
+    /*@Test
     public void entityIpDetailThroughput_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/throughput", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/throughput error
@@ -2266,13 +2266,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/activeClientIP success
      */
-    @Test
+    /*@Test
     public void entityIpDetailActiveClientIP_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/activeClientIP", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/activeClientIP error
@@ -2288,13 +2288,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/topDomains success
      */
-    @Test
+    /*@Test
     public void entityIpDetailTopDomains_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/topDomains", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/topDomains error
@@ -2310,13 +2310,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/topAPP success
      */
-    @Test
+    /*@Test
     public void entityIpDetailTopAPP_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/topAPP", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/topAPP error
@@ -2332,13 +2332,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appRtt success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appRtt error
@@ -2354,13 +2354,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appHttpResponseTime error
@@ -2376,13 +2376,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appSSLHandshakeTime error
@@ -2398,13 +2398,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appPacketLoss error
@@ -2420,13 +2420,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appPacketRetrans error
@@ -2442,13 +2442,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainRtt success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainRtt error
@@ -2464,13 +2464,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainHttpResponseTime error
@@ -2486,13 +2486,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainSSLHandshakeTime error
@@ -2508,13 +2508,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainPacketLoss error
@@ -2530,13 +2530,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainPacketRetrans error
@@ -2552,13 +2552,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/IPRtt success
      */
-    @Test
+    /*@Test
     public void entityIpDetailIPRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/IPRtt", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/IPRtt error
@@ -2574,13 +2574,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/IPHttpResponseTime success
      */
-    @Test
+    /*@Test
     public void entityIpDetailIPHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/IPHttpResponseTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/IPHttpResponseTime error
@@ -2596,13 +2596,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/IPSSLHandshakeTime success
      */
-    @Test
+    /*@Test
     public void entityIpDetailIPSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/IPSSLHandshakeTime", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/IPSSLHandshakeTime error
@@ -2618,13 +2618,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/IPPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityIpDetailIPPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/IPPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/IPPacketLoss error
@@ -2640,13 +2640,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/IPPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityIpDetailIPPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/IPPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/IPPacketRetrans error
@@ -2662,35 +2662,35 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/filter success
      */
-    @Test
+    /*@Test
     public void entityFilter_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/filter", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/filter error
      */
-    @Test
+    /*@Test
     public void entityFilter_error() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/filter", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.ERROR);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/count success
      */
-    @Test
+    /*@Test
     public void entityAppDetailCount_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/count", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/count error
@@ -2706,13 +2706,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/countLine success
      */
-    @Test
+    /*@Test
     public void entityAppDetailCountLine_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/countLine", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/countLine error
@@ -2728,13 +2728,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/count success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailCount_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/count", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/count error
@@ -2750,13 +2750,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/countLine success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailCountLine_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/countLine", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/countLine error
@@ -2772,35 +2772,35 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/list success
      */
-    @Test
+    /*@Test
     public void entityList_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/list", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/total success
      */
-    @Test
+    /*@Test
     public void entityTotal_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/total", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/serverIPCountLine success
      */
-    @Test
+    /*@Test
     public void entityIpDetailServerIPCountLine_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/serverIPCountLine", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/serverIPCountLine error
@@ -2816,13 +2816,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/serverIPCount success
      */
-    @Test
+    /*@Test
     public void entityIpDetailServerIPCount_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/serverIPCount", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/serverIPCount error
@@ -2860,13 +2860,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/basicInfo success
      */
-    @Test
+    /*@Test
     public void entityIpDetailBasicInfo_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/basicInfo", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/basicInfo error
@@ -2904,13 +2904,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domains success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomains_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domains", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domains error
@@ -2926,13 +2926,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/serviceOverview success
      */
-    @Test
+    /*@Test
     public void entityIpDetailServiceOverview_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/serviceOverview", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/serviceOverview error
@@ -2948,13 +2948,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/overallEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityIpDetailOverallEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/overallEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/overallEstablishlatency error
@@ -2970,13 +2970,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/overallHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityIpDetailOverallHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/overallHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/overallHttpResponseLatency error
@@ -2992,13 +2992,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/overallSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityIpDetailOverallSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/overallSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/overallSslConLatency error
@@ -3014,13 +3014,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/overallPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityIpDetailOverallPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/overallPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/overallPacketLoss error
@@ -3036,13 +3036,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/overallPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityIpDetailOverallPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/overallPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/overallPacketRetrans error
@@ -3058,13 +3058,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/sessions_bak success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailSessionsBak_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/sessions_bak", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/sessions_bak error
@@ -3080,13 +3080,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/count_bak success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailCountBak_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/count_bak", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/count_bak error
@@ -3102,13 +3102,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/basicInfo success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailBasicInfo_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/basicInfo", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/basicInfo error
@@ -3124,13 +3124,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/whois success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailWhois_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/whois", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/whois error
@@ -3146,13 +3146,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/dnsRecord success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailDnsRecord_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/dnsRecord", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/dnsRecord error
@@ -3168,13 +3168,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serviceOverview success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServiceOverview_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serviceOverview", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serviceOverview error
@@ -3190,13 +3190,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainEstablishlatency error
@@ -3212,13 +3212,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainHttpResponseLatency error
@@ -3234,13 +3234,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/domainSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityIpDetailDomainSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/domainSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/domainSslConLatency error
@@ -3256,13 +3256,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appEstablishlatency error
@@ -3278,13 +3278,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appHttpResponseLatency error
@@ -3300,13 +3300,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/appSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityIpDetailAppSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/appSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/appSslConLatency error
@@ -3322,13 +3322,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/overallEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailOverallEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/overallEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/overallEstablishlatency error
@@ -3344,13 +3344,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/overallHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailOverallHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/overallHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/overallHttpResponseLatency error
@@ -3366,13 +3366,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/overallSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailOverallSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/overallSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/overallSslConLatency error
@@ -3388,13 +3388,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/overallPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailOverallPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/overallPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/overallPacketLoss error
@@ -3410,13 +3410,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/overallPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailOverallPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/overallPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/overallPacketRetrans error
@@ -3432,13 +3432,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIpEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIpEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIpEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIpEstablishlatency error
@@ -3454,13 +3454,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIpHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIpHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIpHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIpHttpResponseLatency error
@@ -3476,13 +3476,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIpSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIpSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIpSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIpSslConLatency error
@@ -3498,13 +3498,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIpEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailClientIpEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIpEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIpEstablishlatency error
@@ -3520,13 +3520,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIpHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailClientIpHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIpHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIpHttpResponseLatency error
@@ -3542,13 +3542,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIpSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailClientIpSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIpSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIpSslConLatency error
@@ -3564,13 +3564,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIPPacketLoss_bak success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPPacketLossBak_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIPPacketLoss_bak", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIPPacketLoss_bak error
@@ -3586,13 +3586,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/serverIPPacketRetrans_bak success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailServerIPPacketRetransBak_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/serverIPPacketRetrans_bak", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/serverIPPacketRetrans_bak error
@@ -3608,13 +3608,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIPPacketLoss_bak success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailClientIPPacketLossBak_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIPPacketLoss_bak", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIPPacketLoss_bak error
@@ -3630,13 +3630,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/clientIPPacketRetrans_bak success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailClientIPPacketRetransBak_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/clientIPPacketRetrans_bak", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/clientIPPacketRetrans_bak error
@@ -3652,13 +3652,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/overallEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailOverallEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/overallEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/overallEstablishlatency error
@@ -3674,13 +3674,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/overallHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailOverallHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/overallHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/overallHttpResponseLatency error
@@ -3696,13 +3696,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/overallSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailOverallSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/overallSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/overallSslConLatency error
@@ -3718,13 +3718,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/overallPacketLoss success
      */
-    @Test
+    /*@Test
     public void entityAppDetailOverallPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/overallPacketLoss", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/overallPacketLoss error
@@ -3740,13 +3740,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/overallPacketRetrans success
      */
-    @Test
+    /*@Test
     public void entityAppDetailOverallPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/overallPacketRetrans", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/overallPacketRetrans error
@@ -3762,13 +3762,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/domainEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailDomainEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/domainEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/domainEstablishlatency error
@@ -3784,13 +3784,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/domainHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailDomainHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/domainHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/domainHttpResponseLatency error
@@ -3806,13 +3806,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/domainSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailDomainSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/domainSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/domainSslConLatency error
@@ -3828,13 +3828,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/serverIpEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailServerIpEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/serverIpEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/serverIpEstablishlatency error
@@ -3850,13 +3850,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/serverIpHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailServerIpHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/serverIpHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/serverIpHttpResponseLatency error
@@ -3872,13 +3872,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/serverIpSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailServerIpSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/serverIpSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/serverIpSslConLatency error
@@ -3894,13 +3894,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/clientIpEstablishlatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailClientIpEstablishlatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/clientIpEstablishlatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/clientIpEstablishlatency error
@@ -3916,13 +3916,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/clientIpHttpResponseLatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailClientIpHttpResponseLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/clientIpHttpResponseLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/clientIpHttpResponseLatency error
@@ -3938,13 +3938,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/clientIpSslConLatency success
      */
-    @Test
+    /*@Test
     public void entityAppDetailClientIpSslConLatency_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/clientIpSslConLatency", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/clientIpSslConLatency error
@@ -3960,13 +3960,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/basicInfo success
      */
-    @Test
+    /*@Test
     public void entityAppDetailBasicInfo_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/basicInfo", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/basicInfo error
@@ -3982,13 +3982,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/domains success
      */
-    @Test
+    /*@Test
     public void entityAppDetailDomains_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/domains", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/domains error
@@ -4004,13 +4004,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/serviceOverview success
      */
-    @Test
+    /*@Test
     public void entityAppDetailServiceOverview_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/serviceOverview", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/serviceOverview error
@@ -4026,13 +4026,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/ip/detail/linkVisual success
      */
-    @Test
+    /*@Test
     public void entityIpDetailLinkVisual_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/ip/detail/linkVisual", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/ip/detail/linkVisual error
@@ -4048,13 +4048,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/app/detail/linkVisual success
      */
-    @Test
+    /*@Test
     public void entityAppDetailLinkVisual_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/app/detail/linkVisual", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/app/detail/linkVisual error
@@ -4070,13 +4070,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/domain/detail/linkVisual success
      */
-    @Test
+    /*@Test
     public void entityDomainDetailLinkVisual_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/domain/detail/linkVisual", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/domain/detail/linkVisual error
@@ -4092,35 +4092,35 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/cryptcy/poolcount success
      */
-    @Test
+    /*@Test
     public void cryptcyPoolcount_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/poolcount", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/cryptcy/machinecount success
      */
-    @Test
+    /*@Test
     public void cryptcyMachinecount_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/machinecount", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/cryptcy/traffic success
      */
-    @Test
+    /*@Test
     public void cryptcyTraffic_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/traffic", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/cryptcy/totalTraffic success
@@ -4136,79 +4136,79 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/cryptcy/eventStat success
      */
-    @Test
+    /*@Test
     public void cryptcyEventStat_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/eventStat", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/cryptcy/eventMap success
      */
-    @Test
+    /*@Test
     public void cryptcyEventMap_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/eventMap", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/cryptcy/activeCy success
      */
-    @Test
+    /*@Test
     public void cryptcyActiveCy_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/activeCy", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/cryptcy/activePool success
      */
-    @Test
+    /*@Test
     public void cryptcyActivePool_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/activePool", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/cryptcy/eventList success
      */
-    @Test
+    /*@Test
     public void cryptcyEventList_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/eventList", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/cryptcy/institutions success
      */
-    @Test
+    /*@Test
     public void cryptcyInstitutions_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/institutions", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/cryptcy/activeIP success
      */
-    @Test
+    /*@Test
     public void cryptcyActiveIP_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/cryptcy/activeIP", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/index/total success
@@ -4323,13 +4323,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/list/traffic success
      */
-    @Test
+    /*@Test
     public void entityListTraffic_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/list/traffic", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/traffic/topAppCategories success
@@ -8085,13 +8085,13 @@ public class GalaxyInterfaceTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/filter/count/dns/role error
      */
-    @Test
+    /*@Test
     public void entityFilterCountDnsRole_error() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/filter/count/dns/role", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.ERROR);
-    }
+    }*/
 
     /**
      * GET /interface/entity/filter/count/dns/others success

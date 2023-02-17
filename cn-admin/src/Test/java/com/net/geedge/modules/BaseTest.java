@@ -52,7 +52,7 @@ public abstract class BaseTest<T> {
 
     @Value("${cn.generate.api.name}")
     public void setApiName(String name) {
-        generateApiName = Tool.StrUtil.isEmpty(name) ? "Network Zodiac API" : name;
+        generateApiName = Tool.StrUtil.isEmpty(name) ? "cyber-narrator" : name;
     }
 
     @Rule

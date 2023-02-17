@@ -2249,6 +2249,7 @@
   },
   "------------------ GET  /interface/entity/detail/overview/ip/dnsQueryRate data---------------------": "note",
   "entityDetailOverviewIpDnsQueryRate_success": {
+    "ip": "116.178.225.21"
   },
   "------------------ GET  /interface/detection/performance/detail/overview/metric/dnsError data---------------------": "note",
   "detectionPerformanceDetailOverviewMetricDnsError_success": {
