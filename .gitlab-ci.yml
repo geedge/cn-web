@@ -23,7 +23,7 @@ generate_git-log:
     paths:
       - ./cn-admin/src/main/resources/git.log
   only:
-    - dev-magic
+    - dev
   tags:
     - galaxy
 
@@ -47,7 +47,7 @@ build_image:
   #manual - 手动设置，比较复杂，略过。
   when: on_success
   only:
-    - dev-magic
+    - dev
   tags:
     - galaxy
 
@@ -74,6 +74,6 @@ package_clean:
     - mvn clean
   when: on_failure
   only:
-    - dev-magic
+    - dev
   tags:
     - galaxy
