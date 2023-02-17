@@ -102,3 +102,16 @@ management:
   metrics:
     tags:
       application: cn-web # prometheus application tag ，标志一个应用
+magic-api:
+  #配置web页面入口
+  web: /magic/web
+  resource: #配置存储方式
+    type: database # 配置存储在数据库中
+    tableName: magic_api_file # 数据库中的表名
+    prefix: # key前缀
+    readonly: false # 是否是只读模式
+  response-code:
+    success: 200 #执行成功的code值
+    invalid: 400 #参数验证未通过的code值
+    exception: 500 #执行出现异常的code值
+  throw-exception: true #执行出错时，异常将抛出处理

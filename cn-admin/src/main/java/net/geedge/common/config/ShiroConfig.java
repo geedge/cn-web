@@ -98,6 +98,7 @@ public class ShiroConfig {
 		filterMap.put("/sys/license/**", "anon");// license 相关接口
 		filterMap.put("/setup/**", "anon");// license 相关接口
 		filterMap.put("/sys/appearance", "anon");
+		filterMap.put("/magic/web/**", "anon");
 //        filterMap.put("/**", "authc");
 		filterMap.put("/**", "tokenCheckFilter");
 

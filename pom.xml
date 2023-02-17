@@ -42,9 +42,15 @@
 		<swagger.version>2.7.0</swagger.version>
 		<mibble.version>2.9.3</mibble.version>
 		<log4j2.version>2.16.0</log4j2.version>
+		<magic.version>2.0.2</magic.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.ssssssss</groupId>
+			<artifactId>magic-api-spring-boot-starter</artifactId>
+			<version>${magic.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
