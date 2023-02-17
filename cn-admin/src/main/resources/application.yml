@@ -115,7 +115,3 @@ magic-api:
     invalid: 400 #参数验证未通过的code值
     exception: 500 #执行出现异常的code值
   throw-exception: true #执行出错时，异常将抛出处理
-  backup: #备份相关配置
-    enable: true #是否启用
-    max-history: -1 #备份保留天数，-1为永久保留
-    table-name: magic_api_backup #使用数据库存储备份时的表名
