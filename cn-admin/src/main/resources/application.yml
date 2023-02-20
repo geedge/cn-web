@@ -6,6 +6,9 @@ server:
     min-spare-threads: 60
     basedir: /opt/cn/tmp
 #  port: 8088
+  compression:
+    enabled: true #启用压缩
+    min-response-size: 256 #大于256kb时压缩
 
 spring:
   main:
