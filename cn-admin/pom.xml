@@ -261,6 +261,12 @@
 			<artifactId>oshi-core</artifactId>
 			<version>5.7.0</version>
 		</dependency>
+		<!-- 生成 junit report 相关依赖 -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.5</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -302,7 +308,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<skipTests>true</skipTests>
+					<skipTests>false</skipTests>
 					<includes>
 						<include>**/*Test.java</include>
 					</includes>

@@ -1,0 +1,2128 @@
+= Network Zodiac API Docs
+:author: shizhendong
+:email: shizhendong@geedgenetworks.com
+:revnumber: v1.0
+:revdate: 2022-02-23
+:toc: left
+:toc-title: Table of Contents
+:toclevels: 4
+:sectlinks:
+[[overview]]
+= Overview
+[[overview-http-verbs]]
+== HTTP verbs
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP verbs.
+|===
+| Verb | Usage
+| `GET`
+| Used to retrieve a resource
+| `POST`
+| Used to create a new resource
+| `PATCH`
+| Used to update an existing resource, including partial updates
+| `DELETE`
+| Used to delete an existing resource
+|===
+RESTful notes tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes.
+|===
+| Status code | Usage
+| `200 OK`
+| The request completed successfully
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+| `404 Not Found`
+| The requested resource did not exist
+| `500 or 999 Internal Server Error
+| Internal Server Error
+|===
+
+
+== Ctl test
+
+
+=== aes_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\ctl-test\aes_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\ctl-test\aes_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\ctl-test\aes_success\http-response.adoc[]
+=== resetAdmin_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\ctl-test\reset-admin_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\ctl-test\reset-admin_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\ctl-test\reset-admin_success\http-response.adoc[]
+
+
+== License test
+
+
+=== sysLicenseDownload_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\license-test\sys-license-download_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\license-test\sys-license-download_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\license-test\sys-license-download_success\http-response.adoc[]
+=== sysLicenseList_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\license-test\sys-license-list_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\license-test\sys-license-list_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\license-test\sys-license-list_success\http-response.adoc[]
+=== sysLicenseState_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\license-test\sys-license-state_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\license-test\sys-license-state_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\license-test\sys-license-state_success\http-response.adoc[]
+
+
+== Sys api key test
+
+
+=== Query
+
+==== querySysApiKeyList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_exist\http-response.adoc[]
+==== querySysApiKeyList_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_ids\http-response.adoc[]
+==== querySysApiKeyList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_name\http-response.adoc[]
+==== querySysApiKeyList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_notexist\http-response.adoc[]
+==== querySysApiKeyList_token
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_token\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_token\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\query-sys-api-key-list_token\http-response.adoc[]
+
+
+=== Save
+
+==== saveSysApiKey_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_check-name\http-response.adoc[]
+==== saveSysApiKey_checkNameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_check-name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_check-name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_check-name-duplicate\http-response.adoc[]
+==== saveSysApiKey_checkRoleId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_check-role-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_check-role-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_check-role-id\http-response.adoc[]
+==== saveSysApiKey_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\save-sys-api-key_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteSysApiKey_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\delete-sys-api-key_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\delete-sys-api-key_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-api-key-test\delete-sys-api-key_success\http-response.adoc[]
+
+
+== Sys attest test
+
+
+=== Query
+
+==== querySysLogList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\query-sys-log-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\query-sys-log-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\query-sys-log-list_exist\http-response.adoc[]
+==== querySysLogList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\query-sys-log-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\query-sys-log-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\query-sys-log-list_notexist\http-response.adoc[]
+
+
+=== logout_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\logout_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\logout_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\logout_success\http-response.adoc[]
+=== sysLogin_error
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\sys-login_error\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\sys-login_error\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\sys-login_error\http-response.adoc[]
+=== sysLogin_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\sys-login_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\sys-login_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-attest-test\sys-login_success\http-response.adoc[]
+
+
+== Sys config test
+
+
+=== Query
+
+==== querySysAppearance_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-appearance_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-appearance_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-appearance_exist\http-response.adoc[]
+==== querySysEmail_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-email_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-email_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-email_success\http-response.adoc[]
+==== querySysSecurity_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-security_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-security_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-security_success\http-response.adoc[]
+==== querySysTimezones_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-timezones_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-timezones_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\query-sys-timezones_success\http-response.adoc[]
+
+
+=== Save
+
+==== saveSysConfig_error
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\save-sys-config_error\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\save-sys-config_error\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\save-sys-config_error\http-response.adoc[]
+==== saveSysConfig_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\save-sys-config_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\save-sys-config_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\save-sys-config_success\http-response.adoc[]
+
+
+=== Update
+
+==== updateSysAppearance_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-appearance_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-appearance_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-appearance_success\http-response.adoc[]
+==== updateSysConfig_error
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-config_error\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-config_error\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-config_error\http-response.adoc[]
+==== updateSysConfig_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-config_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-config_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-config_success\http-response.adoc[]
+==== updateSysEmail_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-email_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-email_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-email_success\http-response.adoc[]
+==== updateSysSecurity_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-security_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-security_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\update-sys-security_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteSysConfig_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\delete-sys-config_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\delete-sys-config_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-config-test\delete-sys-config_success\http-response.adoc[]
+
+
+== Sys dict test
+
+
+=== Query
+
+==== querySysDictInfo_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-info_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-info_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-info_exist\http-response.adoc[]
+==== querySysDictInfo_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-info_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-info_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-info_notexist\http-response.adoc[]
+==== querySysDictList_checkIds
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_check-ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_check-ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_check-ids\http-response.adoc[]
+==== querySysDictList_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_check-type\http-response.adoc[]
+==== querySysDictList_checkValue
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_check-value\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_check-value\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_check-value\http-response.adoc[]
+==== querySysDictList_code
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_code\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_code\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_code\http-response.adoc[]
+==== querySysDictList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_exist\http-response.adoc[]
+==== querySysDictList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_name\http-response.adoc[]
+==== querySysDictList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_notexist\http-response.adoc[]
+==== querySysDictList_remark
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_remark\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_remark\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_remark\http-response.adoc[]
+==== querySysDictList_value
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_value\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_value\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\query-sys-dict-list_value\http-response.adoc[]
+
+
+=== Save
+
+==== saveSysDictList_checkCode
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_check-code\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_check-code\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_check-code\http-response.adoc[]
+==== saveSysDictList_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_check-type\http-response.adoc[]
+==== saveSysDictList_checkValue
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_check-value\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_check-value\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_check-value\http-response.adoc[]
+==== saveSysDictList_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\save-sys-dict-list_success\http-response.adoc[]
+
+
+=== Update
+
+==== updateSysDictList_checkCode
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_check-code\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_check-code\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_check-code\http-response.adoc[]
+==== updateSysDictList_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_check-type\http-response.adoc[]
+==== updateSysDictList_checkValue
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_check-value\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_check-value\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_check-value\http-response.adoc[]
+==== updateSysDictList_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\update-sys-dict-list_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteSysDictList_checkId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\delete-sys-dict-list_check-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\delete-sys-dict-list_check-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\delete-sys-dict-list_check-id\http-response.adoc[]
+==== deleteSysDictList_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\delete-sys-dict-list_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\delete-sys-dict-list_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-dict-test\delete-sys-dict-list_success\http-response.adoc[]
+
+
+== Sys i18n test
+
+
+=== Query
+
+==== querySysI18nId_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-id_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-id_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-id_exist\http-response.adoc[]
+==== querySysI18nId_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-id_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-id_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-id_notexist\http-response.adoc[]
+==== querySysI18nLang_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-lang_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-lang_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-lang_exist\http-response.adoc[]
+==== querySysI18nLang_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-lang_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-lang_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-lang_notexist\http-response.adoc[]
+==== querySysI18nList_code
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_code\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_code\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_code\http-response.adoc[]
+==== querySysI18nList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_exist\http-response.adoc[]
+==== querySysI18nList_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_ids\http-response.adoc[]
+==== querySysI18nList_lang
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_lang\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_lang\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_lang\http-response.adoc[]
+==== querySysI18nList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_notexist\http-response.adoc[]
+==== querySysI18nList_remark
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_remark\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_remark\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_remark\http-response.adoc[]
+==== querySysI18nList_value
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_value\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_value\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\query-sys-i18n-list_value\http-response.adoc[]
+
+
+=== Save
+
+==== saveSysI18n_checkCode
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_check-code\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_check-code\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_check-code\http-response.adoc[]
+==== saveSysI18n_checkLang
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_check-lang\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_check-lang\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_check-lang\http-response.adoc[]
+==== saveSysI18n_checkValue
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_check-value\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_check-value\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_check-value\http-response.adoc[]
+==== saveSysI18n_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\save-sys-i18n_success\http-response.adoc[]
+
+
+=== Update
+
+==== updateSysI18n_checkCode
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-code\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-code\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-code\http-response.adoc[]
+==== updateSysI18n_checkId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-id\http-response.adoc[]
+==== updateSysI18n_checkLang
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-lang\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-lang\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-lang\http-response.adoc[]
+==== updateSysI18n_checkValue
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-value\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-value\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_check-value\http-response.adoc[]
+==== updateSysI18n_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\update-sys-i18n_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteSysI18n_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\delete-sys-i18n_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\delete-sys-i18n_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\delete-sys-i18n_ids\http-response.adoc[]
+==== deleteSysI18n_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\delete-sys-i18n_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\delete-sys-i18n_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-i18n-test\delete-sys-i18n_success\http-response.adoc[]
+
+
+== Sys menu test
+
+
+=== Query
+
+==== querySysMenuList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\query-sys-menu-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\query-sys-menu-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\query-sys-menu-list_exist\http-response.adoc[]
+==== querySysMenuList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\query-sys-menu-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\query-sys-menu-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\query-sys-menu-list_notexist\http-response.adoc[]
+
+
+=== Save
+
+==== saveSysMenuList_code
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_code\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_code\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_code\http-response.adoc[]
+==== saveSysMenuList_codeDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_code-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_code-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_code-duplicate\http-response.adoc[]
+==== saveSysMenuList_i18n
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_i18n\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_i18n\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_i18n\http-response.adoc[]
+==== saveSysMenuList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_name\http-response.adoc[]
+==== saveSysMenuList_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_success\http-response.adoc[]
+==== saveSysMenuList_type
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_type\http-response.adoc[]
+==== saveSysMenuList_typeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\save-sys-menu-list_type-correct\http-response.adoc[]
+
+
+=== Update
+
+==== updateSysMenuList_code
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_code\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_code\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_code\http-response.adoc[]
+==== updateSysMenuList_codeDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_code-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_code-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_code-duplicate\http-response.adoc[]
+==== updateSysMenuList_i18n
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_i18n\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_i18n\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_i18n\http-response.adoc[]
+==== updateSysMenuList_id
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_id\http-response.adoc[]
+==== updateSysMenuList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_name\http-response.adoc[]
+==== updateSysMenuList_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_success\http-response.adoc[]
+==== updateSysMenuList_type
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_type\http-response.adoc[]
+==== updateSysMenuList_typeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\update-sys-menu-list_type-correct\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteSysMenuList_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\delete-sys-menu-list_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\delete-sys-menu-list_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\delete-sys-menu-list_ids\http-response.adoc[]
+==== deleteSysMenuList_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\delete-sys-menu-list_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\delete-sys-menu-list_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-menu-test\delete-sys-menu-list_success\http-response.adoc[]
+
+
+== Sys role test
+
+
+=== Query
+
+==== querySysRoleInfo_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-info_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-info_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-info_exist\http-response.adoc[]
+==== querySysRoleInfo_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-info_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-info_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-info_notexist\http-response.adoc[]
+==== querySysRoleList_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_check-name\http-response.adoc[]
+==== querySysRoleList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_exist\http-response.adoc[]
+==== querySysRoleList_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_ids\http-response.adoc[]
+==== querySysRoleList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_name\http-response.adoc[]
+==== querySysRoleList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\query-sys-role-list_notexist\http-response.adoc[]
+
+
+=== Save
+
+==== saveSysRole_checkMenuIds
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-menu-ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-menu-ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-menu-ids\http-response.adoc[]
+==== saveSysRole_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-name\http-response.adoc[]
+==== saveSysRole_checkNameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-name-duplicate\http-response.adoc[]
+==== saveSysRole_checkRemark
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-remark\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-remark\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_check-remark\http-response.adoc[]
+==== saveSysRole_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\save-sys-role_success\http-response.adoc[]
+
+
+=== Update
+
+==== updateSysRole_checkId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-id\http-response.adoc[]
+==== updateSysRole_checkMenuIds
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-menu-ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-menu-ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-menu-ids\http-response.adoc[]
+==== updateSysRole_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-name\http-response.adoc[]
+==== updateSysRole_checkNameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-name-duplicate\http-response.adoc[]
+==== updateSysRole_checkRemark
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-remark\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-remark\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_check-remark\http-response.adoc[]
+==== updateSysRole_menuIds
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_menu-ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_menu-ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_menu-ids\http-response.adoc[]
+==== updateSysRole_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\update-sys-role_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteSysRole_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\delete-sys-role_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\delete-sys-role_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\delete-sys-role_ids\http-response.adoc[]
+==== deleteSysRole_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\delete-sys-role_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\delete-sys-role_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-role-test\delete-sys-role_success\http-response.adoc[]
+
+
+== Sys user test
+
+
+=== Query
+
+==== querySysUserList_checkIds
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_check-ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_check-ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_check-ids\http-response.adoc[]
+==== querySysUserList_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_check-name\http-response.adoc[]
+==== querySysUserList_email
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_email\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_email\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_email\http-response.adoc[]
+==== querySysUserList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_exist\http-response.adoc[]
+==== querySysUserList_mobile
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_mobile\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_mobile\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_mobile\http-response.adoc[]
+==== querySysUserList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_name\http-response.adoc[]
+==== querySysUserList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_notexist\http-response.adoc[]
+==== querySysUserList_username
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_username\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_username\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-sys-user-list_username\http-response.adoc[]
+==== queryUserInfo_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-user-info_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-user-info_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-user-info_exist\http-response.adoc[]
+==== queryUserInfo_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-user-info_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-user-info_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\query-user-info_notexist\http-response.adoc[]
+
+
+=== Save
+
+==== saveSysUser_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-name\http-response.adoc[]
+==== saveSysUser_checkPin
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-pin\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-pin\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-pin\http-response.adoc[]
+==== saveSysUser_checkRoleIds
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-role-ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-role-ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-role-ids\http-response.adoc[]
+==== saveSysUser_checkUsername
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-username\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-username\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_check-username\http-response.adoc[]
+==== saveSysUser_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\save-sys-user_success\http-response.adoc[]
+
+
+=== Update
+
+==== updateSysUserPin_checkOldpwd
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user-pin_check-oldpwd\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user-pin_check-oldpwd\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user-pin_check-oldpwd\http-response.adoc[]
+==== updateSysUserPin_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user-pin_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user-pin_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user-pin_success\http-response.adoc[]
+==== updateSysUser_checkId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user_check-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user_check-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user_check-id\http-response.adoc[]
+==== updateSysUser_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\update-sys-user_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteSysUser_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\delete-sys-user_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\delete-sys-user_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\delete-sys-user_ids\http-response.adoc[]
+==== deleteSysUser_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\delete-sys-user_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\delete-sys-user_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\sys-user-test\delete-sys-user_success\http-response.adoc[]
+
+
+== Visual chart test
+
+
+=== Query
+
+==== queryVisualChartByPanelId_checkPanelId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-by-panel-id_check-panel-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-by-panel-id_check-panel-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-by-panel-id_check-panel-id\http-response.adoc[]
+==== queryVisualChartByPanelId_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-by-panel-id_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-by-panel-id_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-by-panel-id_exist\http-response.adoc[]
+==== queryVisualChartByPanelId_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-by-panel-id_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-by-panel-id_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-by-panel-id_notexist\http-response.adoc[]
+==== queryVisualChartInfo_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-info_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-info_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-info_exist\http-response.adoc[]
+==== queryVisualChartInfo_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-info_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-info_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-info_notexist\http-response.adoc[]
+==== queryVisualChartList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_exist\http-response.adoc[]
+==== queryVisualChartList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_name\http-response.adoc[]
+==== queryVisualChartList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_notexist\http-response.adoc[]
+==== queryVisualChartList_params
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_params\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_params\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\query-visual-chart-list_params\http-response.adoc[]
+
+
+=== Save
+
+==== saveVisualChart_checkH
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-h\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-h\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-h\http-response.adoc[]
+==== saveVisualChart_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-name\http-response.adoc[]
+==== saveVisualChart_checkPanelId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-panel-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-panel-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-panel-id\http-response.adoc[]
+==== saveVisualChart_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-type\http-response.adoc[]
+==== saveVisualChart_checkW
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-w\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-w\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-w\http-response.adoc[]
+==== saveVisualChart_checkX
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-x\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-x\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-x\http-response.adoc[]
+==== saveVisualChart_checkY
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-y\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-y\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_check-y\http-response.adoc[]
+==== saveVisualChart_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\save-visual-chart_success\http-response.adoc[]
+
+
+=== Update
+
+==== updateVisualChartLayout_chsrts
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_chsrts\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_chsrts\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_chsrts\http-response.adoc[]
+==== updateVisualChartLayout_h
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_h\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_h\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_h\http-response.adoc[]
+==== updateVisualChartLayout_id
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_id\http-response.adoc[]
+==== updateVisualChartLayout_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_success\http-response.adoc[]
+==== updateVisualChartLayout_w
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_w\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_w\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_w\http-response.adoc[]
+==== updateVisualChartLayout_x
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_x\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_x\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_x\http-response.adoc[]
+==== updateVisualChartLayout_y
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_y\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_y\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart-layout_y\http-response.adoc[]
+==== updateVisualChart_checkH
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-h\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-h\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-h\http-response.adoc[]
+==== updateVisualChart_checkId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-id\http-response.adoc[]
+==== updateVisualChart_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-name\http-response.adoc[]
+==== updateVisualChart_checkPanelId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-panel-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-panel-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-panel-id\http-response.adoc[]
+==== updateVisualChart_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-type\http-response.adoc[]
+==== updateVisualChart_checkW
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-w\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-w\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-w\http-response.adoc[]
+==== updateVisualChart_checkX
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-x\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-x\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-x\http-response.adoc[]
+==== updateVisualChart_checkY
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-y\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-y\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_check-y\http-response.adoc[]
+==== updateVisualChart_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\update-visual-chart_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteVisualChart_buildIn
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\delete-visual-chart_build-in\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\delete-visual-chart_build-in\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\delete-visual-chart_build-in\http-response.adoc[]
+==== deleteVisualChart_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\delete-visual-chart_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\delete-visual-chart_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-chart-test\delete-visual-chart_success\http-response.adoc[]
+
+
+== Visual dataset field test
+
+
+=== Query
+
+==== queryVisualDatasetFieldInfo_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-info_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-info_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-info_exist\http-response.adoc[]
+==== queryVisualDatasetFieldInfo_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-info_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-info_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-info_notexist\http-response.adoc[]
+==== queryVisualDatasetFieldList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_exist\http-response.adoc[]
+==== queryVisualDatasetFieldList_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_ids\http-response.adoc[]
+==== queryVisualDatasetFieldList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_name\http-response.adoc[]
+==== queryVisualDatasetFieldList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_notexist\http-response.adoc[]
+==== queryVisualDatasetFieldList_params
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_params\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_params\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_params\http-response.adoc[]
+==== queryVisualDatasetFieldList_remark
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_remark\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_remark\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\query-visual-dataset-field-list_remark\http-response.adoc[]
+
+
+=== Save
+
+==== saveVisualDatasetField_dsetid
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_dsetid\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_dsetid\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_dsetid\http-response.adoc[]
+==== saveVisualDatasetField_expr
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_expr\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_expr\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_expr\http-response.adoc[]
+==== saveVisualDatasetField_idx
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_idx\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_idx\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_idx\http-response.adoc[]
+==== saveVisualDatasetField_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_name\http-response.adoc[]
+==== saveVisualDatasetField_nameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_name-duplicate\http-response.adoc[]
+==== saveVisualDatasetField_stype
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_stype\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_stype\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_stype\http-response.adoc[]
+==== saveVisualDatasetField_stypeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_stype-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_stype-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_stype-correct\http-response.adoc[]
+==== saveVisualDatasetField_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_success\http-response.adoc[]
+==== saveVisualDatasetField_type
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_type\http-response.adoc[]
+==== saveVisualDatasetField_typeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\save-visual-dataset-field_type-correct\http-response.adoc[]
+
+
+=== Update
+
+==== updateVisualDatasetField_dsetid
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_dsetid\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_dsetid\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_dsetid\http-response.adoc[]
+==== updateVisualDatasetField_expr
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_expr\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_expr\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_expr\http-response.adoc[]
+==== updateVisualDatasetField_idx
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_idx\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_idx\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_idx\http-response.adoc[]
+==== updateVisualDatasetField_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_name\http-response.adoc[]
+==== updateVisualDatasetField_stype
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_stype\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_stype\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_stype\http-response.adoc[]
+==== updateVisualDatasetField_stypeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_stype-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_stype-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_stype-correct\http-response.adoc[]
+==== updateVisualDatasetField_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_success\http-response.adoc[]
+==== updateVisualDatasetField_type
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_type\http-response.adoc[]
+==== updateVisualDatasetField_typeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\update-visual-dataset-field_type-correct\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteVisualDatasetField_buildIn
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\delete-visual-dataset-field_build-in\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\delete-visual-dataset-field_build-in\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\delete-visual-dataset-field_build-in\http-response.adoc[]
+==== deleteVisualDatasetField_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\delete-visual-dataset-field_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\delete-visual-dataset-field_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-field-test\delete-visual-dataset-field_success\http-response.adoc[]
+
+
+== Visual dataset test
+
+
+=== Query
+
+==== queryVisualDatasetInfo_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-info_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-info_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-info_exist\http-response.adoc[]
+==== queryVisualDatasetInfo_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-info_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-info_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-info_notexist\http-response.adoc[]
+==== queryVisualDatasetList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_exist\http-response.adoc[]
+==== queryVisualDatasetList_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_ids\http-response.adoc[]
+==== queryVisualDatasetList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_name\http-response.adoc[]
+==== queryVisualDatasetList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_notexist\http-response.adoc[]
+==== queryVisualDatasetList_remark
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_remark\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_remark\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\query-visual-dataset-list_remark\http-response.adoc[]
+
+
+=== Save
+
+==== saveVisualDataset_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-name\http-response.adoc[]
+==== saveVisualDataset_checkNameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-name-duplicate\http-response.adoc[]
+==== saveVisualDataset_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-type\http-response.adoc[]
+==== saveVisualDataset_checkTypeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_check-type-correct\http-response.adoc[]
+==== saveVisualDataset_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\save-visual-dataset_success\http-response.adoc[]
+
+
+=== Update
+
+==== updateVisualDataset_checkId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-id\http-response.adoc[]
+==== updateVisualDataset_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-name\http-response.adoc[]
+==== updateVisualDataset_checkNameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-name-duplicate\http-response.adoc[]
+==== updateVisualDataset_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-type\http-response.adoc[]
+==== updateVisualDataset_checkTypeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_check-type-correct\http-response.adoc[]
+==== updateVisualDataset_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\update-visual-dataset_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteVisualDataset_buildIn
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\delete-visual-dataset_build-in\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\delete-visual-dataset_build-in\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\delete-visual-dataset_build-in\http-response.adoc[]
+==== deleteVisualDataset_checkIds
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\delete-visual-dataset_check-ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\delete-visual-dataset_check-ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\delete-visual-dataset_check-ids\http-response.adoc[]
+==== deleteVisualDataset_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\delete-visual-dataset_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\delete-visual-dataset_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-dataset-test\delete-visual-dataset_success\http-response.adoc[]
+
+
+== Visual datasource test
+
+
+=== Query
+
+==== queryVisualDatasourceInfo_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-info_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-info_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-info_exist\http-response.adoc[]
+==== queryVisualDatasourceInfo_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-info_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-info_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-info_notexist\http-response.adoc[]
+==== queryVisualDatasourceList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_exist\http-response.adoc[]
+==== queryVisualDatasourceList_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_ids\http-response.adoc[]
+==== queryVisualDatasourceList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_name\http-response.adoc[]
+==== queryVisualDatasourceList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_notexist\http-response.adoc[]
+==== queryVisualDatasourceList_params
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_params\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_params\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_params\http-response.adoc[]
+==== queryVisualDatasourceList_remark
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_remark\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_remark\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\query-visual-datasource-list_remark\http-response.adoc[]
+
+
+=== Save
+
+==== saveVisualDatasource_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-name\http-response.adoc[]
+==== saveVisualDatasource_checkNameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-name-duplicate\http-response.adoc[]
+==== saveVisualDatasource_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-type\http-response.adoc[]
+==== saveVisualDatasource_checkTypeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_check-type-correct\http-response.adoc[]
+==== saveVisualDatasource_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\save-visual-datasource_success\http-response.adoc[]
+
+
+=== Update
+
+==== updateVisualDatasource_checkId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-id\http-response.adoc[]
+==== updateVisualDatasource_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-name\http-response.adoc[]
+==== updateVisualDatasource_checkNameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-name-duplicate\http-response.adoc[]
+==== updateVisualDatasource_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-type\http-response.adoc[]
+==== updateVisualDatasource_checkTypeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_check-type-correct\http-response.adoc[]
+==== updateVisualDatasource_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\update-visual-datasource_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteVisualDatasource_buildIn
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\delete-visual-datasource_build-in\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\delete-visual-datasource_build-in\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\delete-visual-datasource_build-in\http-response.adoc[]
+==== deleteVisualDatasource_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\delete-visual-datasource_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\delete-visual-datasource_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-datasource-test\delete-visual-datasource_success\http-response.adoc[]
+
+
+== Visual panel test
+
+
+=== Query
+
+==== queryVisualPanelInfo_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-info_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-info_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-info_exist\http-response.adoc[]
+==== queryVisualPanelInfo_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-info_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-info_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-info_notexist\http-response.adoc[]
+==== queryVisualPanelList_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_check-type\http-response.adoc[]
+==== queryVisualPanelList_exist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_exist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_exist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_exist\http-response.adoc[]
+==== queryVisualPanelList_ids
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_ids\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_ids\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_ids\http-response.adoc[]
+==== queryVisualPanelList_name
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_name\http-response.adoc[]
+==== queryVisualPanelList_notexist
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_notexist\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_notexist\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_notexist\http-response.adoc[]
+==== queryVisualPanelList_q
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_q\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_q\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\query-visual-panel-list_q\http-response.adoc[]
+
+
+=== Save
+
+==== saveVisualPanel_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-name\http-response.adoc[]
+==== saveVisualPanel_checkNameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-name-duplicate\http-response.adoc[]
+==== saveVisualPanel_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-type\http-response.adoc[]
+==== saveVisualPanel_checkTypeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_check-type-correct\http-response.adoc[]
+==== saveVisualPanel_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\save-visual-panel_success\http-response.adoc[]
+
+
+=== Update
+
+==== updateVisualPanel_checkId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-id\http-response.adoc[]
+==== updateVisualPanel_checkName
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-name\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-name\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-name\http-response.adoc[]
+==== updateVisualPanel_checkNameDuplicate
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-name-duplicate\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-name-duplicate\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-name-duplicate\http-response.adoc[]
+==== updateVisualPanel_checkType
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-type\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-type\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-type\http-response.adoc[]
+==== updateVisualPanel_checkTypeCorrect
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-type-correct\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-type-correct\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_check-type-correct\http-response.adoc[]
+==== updateVisualPanel_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\update-visual-panel_success\http-response.adoc[]
+
+
+=== Delete
+
+==== deleteVisualPanel_buildIn
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\delete-visual-panel_build-in\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\delete-visual-panel_build-in\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\delete-visual-panel_build-in\http-response.adoc[]
+==== deleteVisualPanel_checkId
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\delete-visual-panel_check-id\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\delete-visual-panel_check-id\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\delete-visual-panel_check-id\http-response.adoc[]
+==== deleteVisualPanel_success
+.CURL-request
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\delete-visual-panel_success\curl-request.adoc[]
+.Request structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\delete-visual-panel_success\http-request.adoc[]
+.Response structure
+include::D:\cn-web\cn-admin\target\generated-snippets\visual-panel-test\delete-visual-panel_success\http-response.adoc[]
