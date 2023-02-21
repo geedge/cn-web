@@ -33,7 +33,7 @@ test:
   script:
     - mvn clean test
   after_script:
-    - export JUNI_REPORT_NAME=$CI_COMMIT_REF_NAME-test-report-$(date +%Y%m%d%H%M%S).tar.gz
+    - export JUNI_REPORT_NAME=cn-$CI_COMMIT_REF_NAME-test-report-$(date +%Y%m%d%H%M%S).tar.gz
     - echo $JUNI_REPORT_NAME
     - cd ./cn-admin/target
     - tar -zcvf $JUNI_REPORT_NAME surefire-reports
