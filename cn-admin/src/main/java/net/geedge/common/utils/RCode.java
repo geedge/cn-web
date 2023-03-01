@@ -308,6 +308,12 @@ public enum RCode {
     SYS_ROLE_MENUID_ISNULL(581005, "Role related menu id is required"),
     SYS_ROLE_NAME_CANNOT_MODIFY(587006, "The name of the built-in role cannot be modified"),
     SYS_ROLE_CANNOT_DELETE(587007, "Built-in roles cannot be deleted"),
+    
+    KNOWLEDGE_BASE_PARAM_DUPLICATE(591001,"KnowledgeBase names and types are guaranteed to be unique"),
+    KNOWLEDGE_BASE_PARAM_NOTNULL(591002,"KnowledgeBase data can not be empty"),
+    KNOWLEDGE_BASE_NOT_EXIST(591003,"KnowledgeBase does not exist"),
+    KNOWLEDGE_NAME_ISNULL(591004,"KnowledgeBase name is required"),
+    KNOWLEDGE_TYPE_ISNULL(591005,"KnowledgeBase type is required"),
 
     /**
      * stat相关

@@ -129,20 +129,17 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		String tagName = (String) handlerParam.get("tagName");
 		String tagType = (String) handlerParam.get("tagType");
 		String remark = (String) handlerParam.get("remark");
-		ValidateUtils.is(tagName).notNull(RCode.NOT_NULL_ERROR).and(tagType).notNull(RCode.NOT_NULL_ERROR);
+		ValidateUtils.is(tagName).notNull(RCode.KNOWLEDGE_NAME_ISNULL).and(tagType).notNull(RCode.KNOWLEDGE_TYPE_ISNULL);
 		tagType = tagType +"_user_defined";
-		File file = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".csv");
-		List<List<String>> datas = (List<List<String>>) handlerParam.get("handlerData");
+		File file = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".txt");
 		try {
-		    CsvWriter writer = CsvUtil.getWriter(file, CharsetUtil.CHARSET_UTF_8);
-		    datas.forEach(data -> {
-		        writer.write(data.toArray(new String[] {}));
-		    });
+			Map data = (Map) params.get("result");
+		    FileUtil.writeBytes(JSON.toJSONString(data).getBytes(), file);
 		    // 组装参数请求第三方接口
 		    MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 		    map.add("file", new FileSystemResource(file));
 		    map.add("name", tagName);
-		    map.add("format", "csv");
+		    map.add("format", "txt");
 		    map.add("type", tagType);
 		    String galaxyUrl = sysConfigService.getValue("galaxy_url");
 			String url = galaxyUrl+"knowledge_base/v1";
@@ -152,8 +149,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    ResponseEntity response = restTemplate.exchange(url, HttpMethod.POST,entity,Object.class,new HashMap());
 		    if(response.getStatusCodeValue()==200) {
 		    	Map body = (Map) response.getBody();
-		    	Map data = (Map) body.get("data");
-		    	id = (String)data.get("id");
+		    	Map respData = (Map) body.get("data");
+		    	id = (String)respData.get("id");
 		    	// 保存数据到数据库表中
 		    	KnowledgeBase knowledgeBase = new KnowledgeBase();
 		    	knowledgeBase.setCby(ShiroUtils.getUserId());
@@ -179,16 +176,13 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		String knowledgeId = (String) params.get("id");
 		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getKnowledgeId, knowledgeId));
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
-			throw new CNException(RCode.NOT_NULL_ERROR);
+			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
 		Map<String, Object> handlerParam = this.handlerParam(params);
-		File file = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".csv");
-		List<List<String>> datas = (List<List<String>>) handlerParam.get("handlerData");
+		File file = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".txt");
+		Map data = (Map) handlerParam.get("result");
 		try {
-		    CsvWriter writer = CsvUtil.getWriter(file, CharsetUtil.CHARSET_UTF_8);
-		    datas.forEach(data -> {
-		        writer.write(data.toArray(new String[] {}));
-		    });
+		    FileUtil.writeBytes(JSON.toJSONString(data).getBytes(), file);
 		    // 组装参数请求第三方接口
 		    MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 		    map.add("file", new FileSystemResource(file));
@@ -215,25 +209,27 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 	
 	private Map<String,Object> handlerParam(Map<String, Object> params) {
+		String name = (String) params.get("tagName");
 		String type = (String) params.get("tagType");
 		List<Map<String,Object>> datas = (List<Map<String,Object>>) params.get("data");
-		ValidateUtils.is(datas).notNull(RCode.NOT_NULL_ERROR);
+		ValidateUtils.is(datas).notNull(RCode.KNOWLEDGE_BASE_PARAM_NOTNULL);
 		if(StrUtil.isNotBlank(type)) {
 			if(StrUtil.equalsAny(type, "ip","domain","app")) {
 				params.put("type", type+"_user_defined");
 			}
 		}
-		List<List<String>> handlerDatas = new ArrayList<List<String>>();
-		for(Map m : datas) {
-		    List<String> itemList = (List<String>) m.get("itemList");
-		    for(String item : itemList) {
-		    	List<String> handlerList = new ArrayList<String>();
-		    	handlerList.add(item);
-		    	handlerList.add((String)m.get("tagValue"));
-		    	handlerDatas.add(handlerList);
-		    }
+		//校验名称和类型不能重复
+		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getTagName, name).eq(KnowledgeBase::getTagType, type+"_user_defined"));
+		if(ObjectUtil.isNotEmpty(knowledgeBase)) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
 		}
-		params.put("handlerData", handlerDatas);
+		
+		//组装为最后需要的数据格式
+		Map result = new HashMap<String,Object>();
+		result.put("tagName", name);
+		result.put("tagType", type);
+		result.put("data",datas);
+		params.put("result", result);
 		return params;
 	}
 	

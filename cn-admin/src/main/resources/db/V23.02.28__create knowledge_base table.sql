@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS `knowledge_base`;
 CREATE TABLE `knowledge_base`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tag_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `tag_type` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '实体类型，ip、domain、app',
+  `tag_type` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '实体类型，ip、domain、app',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '描述',
   `cby` int(10) NULL DEFAULT NULL COMMENT '创建人id',
   `ctime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
