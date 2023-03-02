@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
+import net.geedge.modules.sys.entity.SysUserEntity;
 
 @Data
 @TableName("knowledge_base")
@@ -38,4 +39,10 @@ public class KnowledgeBase {
 	
 	@TableField(exist = false)
 	private String format;
+
+	@TableField(exist = false)
+	private SysUserEntity cbyObj;
+
+	@TableField(exist = false)
+	private SysUserEntity ubyObj;
 }

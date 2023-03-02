@@ -1,17 +1,15 @@
 package net.geedge.modules.knowledge.service.impl;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import net.geedge.common.utils.*;
+import net.geedge.modules.sys.entity.SysUserEntity;
+import net.geedge.modules.sys.service.SysUserService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,12 +41,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
-import net.geedge.common.utils.Constant;
-import net.geedge.common.utils.KnowledgeCheckUtil;
-import net.geedge.common.utils.PageUtils;
-import net.geedge.common.utils.Query;
-import net.geedge.common.utils.R;
-import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool.ListUtil;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
@@ -65,6 +57,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	private KnowledgeBaseService knowledgeBaseService;
 	@Autowired
 	private SysConfigService sysConfigService;
+	@Autowired
+	private SysUserService sysUserService;
 	@Value("${knowledgeRemoveTimeout:60000}")
 	private Integer knowledgeRemoveTimeout;
 	
@@ -111,9 +105,22 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			result = knowledgeBaseService.getBaseMapper().selectList(new LambdaQueryWrapper<KnowledgeBase>().in(KnowledgeBase::getKnowledgeId, ids));
 			for(KnowledgeBase r : result) {
 				Map<String, Object> map = collect.get(r.getKnowledgeId());
+				r.setTagType(r.getTagType().substring(0,r.getTagType().indexOf(StrUtil.C_UNDERLINE)));
 				r.setFormat((String)map.get("format"));
 				r.setVersion((String)map.get("version"));
-				r.setPath((String)map.get("version"));
+				r.setPath((String)map.get("path"));
+				SysUserEntity cby = sysUserService.getById(r.getCby());
+				SysUserEntity cbyObj = new SysUserEntity();
+				cbyObj.setId(cby.getId());
+				cbyObj.setName(cby.getName());
+				cbyObj.setUsername(cby.getUsername());
+				SysUserEntity uby = sysUserService.getById(r.getUby());
+				SysUserEntity ubyObj = new SysUserEntity();
+				ubyObj.setId(uby.getId());
+				ubyObj.setName(uby.getName());
+				ubyObj.setUsername(uby.getUsername());
+				r.setCbyObj(cbyObj);
+				r.setUbyObj(ubyObj);
 			}
 		}
 		IPage<KnowledgeBase> page=this.page(new Query(KnowledgeBase.class).getPage(params));
@@ -288,7 +295,17 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			Map<String,Object> result = new HashMap<String,Object>();
 			List<Map<String,Object>> handlerData = new ArrayList<Map<String,Object>>();
 
-		    for(CsvRow data : datas.getRows()){
+			List<CsvRow> csvRows = (List<CsvRow>)datas.getRows();
+			//csv文件去重
+			for(int i = 0; i < csvRows.size(); i++){
+				for(int j = 0; j < csvRows.size(); j++){
+					if(i!=j && csvRows.get(i).get(0).trim().equals(csvRows.get(j).get(0).trim()) && csvRows.get(i).get(1).trim().equals(csvRows.get(j).get(1).trim())){
+						csvRows.remove(csvRows.get(j));
+					}
+				}
+			}
+
+		    for(CsvRow data : csvRows){
 		        // 此处进行数据校验
 		    	boolean format = true;
 		    	String row = data.get(0).trim();
