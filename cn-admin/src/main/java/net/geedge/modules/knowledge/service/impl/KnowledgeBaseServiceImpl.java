@@ -297,15 +297,17 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 			List<CsvRow> csvRows = (List<CsvRow>)datas.getRows();
 			//csv文件去重
-			for(int i = 0; i < csvRows.size(); i++){
+			/*for(int i = 0; i < csvRows.size(); i++){
 				for(int j = 0; j < csvRows.size(); j++){
 					if(i!=j && csvRows.get(i).get(0).trim().equals(csvRows.get(j).get(0).trim()) && csvRows.get(i).get(1).trim().equals(csvRows.get(j).get(1).trim())){
 						csvRows.remove(csvRows.get(j));
 					}
 				}
-			}
+			}*/
+			Set<CsvRow> rowsSet = new TreeSet<CsvRow>(Comparator.comparing(row -> row.get(0).trim() + "_____" + row.get(1).trim()));
+			rowsSet.addAll(csvRows);
 
-		    for(CsvRow data : csvRows){
+		    for(CsvRow data : rowsSet){
 		        // 此处进行数据校验
 		    	boolean format = true;
 		    	String row = data.get(0).trim();
