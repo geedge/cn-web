@@ -41,8 +41,8 @@ public class KnowledgeBase {
 	private String format;
 
 	@TableField(exist = false)
-	private SysUserEntity cbyObj;
+	private SysUserEntity cuser;
 
 	@TableField(exist = false)
-	private SysUserEntity ubyObj;
+	private SysUserEntity uuser;
 }
