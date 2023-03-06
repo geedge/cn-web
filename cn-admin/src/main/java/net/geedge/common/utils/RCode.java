@@ -314,7 +314,7 @@ public enum RCode {
     KNOWLEDGE_BASE_NOT_EXIST(591003,"KnowledgeBase does not exist"),
     KNOWLEDGE_NAME_ISNULL(591004,"KnowledgeBase name is required"),
     KNOWLEDGE_TYPE_ISNULL(591005,"KnowledgeBase type is required"),
-
+    KNOWLEDGE_FILE_TYPE_ERROR(591006,"knolwdgeBase file type only supports csv"),
     /**
      * stat相关
      */

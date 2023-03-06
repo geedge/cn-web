@@ -1,15 +1,20 @@
 package net.geedge.modules.knowledge.service.impl;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.geedge.common.utils.*;
-import net.geedge.modules.sys.entity.SysUserEntity;
-import net.geedge.modules.sys.service.SysUserService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,28 +29,37 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.text.csv.CsvData;
 import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.text.csv.CsvUtil;
-import cn.hutool.core.text.csv.CsvWriter;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.Constant;
+import net.geedge.common.utils.JSONUtil;
+import net.geedge.common.utils.KnowledgeCheckUtil;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.Query;
+import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool.ListUtil;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 import net.geedge.modules.sys.service.SysConfigService;
+import net.geedge.modules.sys.service.SysUserService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 @Service("knowledgeBaseService")
 public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, KnowledgeBase> implements KnowledgeBaseService {
@@ -62,69 +76,41 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@Value("${knowledgeRemoveTimeout:60000}")
 	private Integer knowledgeRemoveTimeout;
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public PageUtils base(Map<String, Object> params) {
-		String name = (String) params.get("tagName");
+		String q = (String) params.get("q");
 		String type = (String) params.get("tagType");
-		String isFull = (String) params.get("isFull");
-		String pageNo = (String) params.get("pageNo");
-		String pageSize = (String) params.get("pageSize");
-		int size = -1;
-		int no = 0;
-		if(StrUtil.isNotBlank(pageSize)) {
-			size = Integer.parseInt(pageSize);
+		if(StrUtil.isNotBlank(type)) {
+			params.put("tagType", type + "_user_defined");
 		}
-		if(StrUtil.isNotBlank(pageNo)) {
-			no = Integer.parseInt(pageNo);
-		}
+		IPage<KnowledgeBase> page=this.page(new Query(KnowledgeBase.class).getPage(params));
+		List<KnowledgeBase> knowledgeBases=this.baseMapper.queryPage(page,params);
 		String galaxyUrl = sysConfigService.getValue("galaxy_url");
 		String url = galaxyUrl+"knowledge_base/v1";
 		ResponseEntity response = restTemplate.exchange(url, HttpMethod.GET,null,Object.class,new HashMap());
-		List<KnowledgeBase> result = new ArrayList<KnowledgeBase>(); 
+		List<Map<String,Object>> handlerData = new ArrayList<Map<String,Object>>();
 		if(response.getStatusCodeValue()==200) {
-			List<Map<String,Object>> handlerData = new ArrayList<Map<String,Object>>();
 			HashMap body = (HashMap) response.getBody();
 			handlerData = (List<Map<String,Object>>) body.get("data");
-			// 先以type过滤一次数据信息
-			if(StrUtil.isNotBlank(type)) {
-				handlerData = handlerData.stream().filter(o -> StrUtil.equals((String)o.get("type"), type)).collect(Collectors.toList());
+			log.debug("Get knowledgebases info : {}",JSONUtil.toJsonStr(handlerData));
+			handlerData = handlerData.stream().filter(o -> StrUtil.equals((String)o.get("version"),"latest")).collect(Collectors.toList());
+			Map<Object, Map<String, Object>> secondDatas = handlerData.stream().collect(Collectors.toMap(data->data.get("id"), Function.identity()));
+			// 组装本地数据库数据与galaxy接口数据信息 默认获取文件的最新版本latest
+			for(KnowledgeBase r : knowledgeBases) {
+				Map<String, Object> map = secondDatas.get(r.getKnowledgeId());
+				if(ObjectUtil.isNotEmpty(map)) {
+					r.setFormat((String)map.get("format"));
+					r.setVersion((String)map.get("version"));
+					r.setPath((String)map.get("path"));
+				}else {
+					log.debug("local data error knowledge id : {}",r.getKnowledgeId());
+				}
 			}
-			if(StrUtil.isBlank(isFull) || Integer.parseInt(isFull) == 0) {
-				// 是否展示所有数据 默认只展示leatest数据
-				handlerData = handlerData.stream().filter(o -> StrUtil.equals((String)o.get("version"),"latest")).collect(Collectors.toList());
-			}
-			if(StrUtil.isNotBlank(name)) {
-				handlerData = handlerData.stream().filter(o -> StrUtil.contains((String)o.get("name"),name)).collect(Collectors.toList());
-			}
-			
-			//自定义分页
-			
-			Map<String, Map<String, Object>> collect = handlerData.stream().collect(Collectors.toMap(each -> (String)each.get("id"), Function.identity()));
-			Set<String> ids = collect.keySet();
-			result = knowledgeBaseService.getBaseMapper().selectList(new LambdaQueryWrapper<KnowledgeBase>().in(KnowledgeBase::getKnowledgeId, ids));
-			for(KnowledgeBase r : result) {
-				Map<String, Object> map = collect.get(r.getKnowledgeId());
-				r.setTagType(r.getTagType().substring(0,r.getTagType().indexOf(StrUtil.C_UNDERLINE)));
-				r.setFormat((String)map.get("format"));
-				r.setVersion((String)map.get("version"));
-				r.setPath((String)map.get("path"));
-				SysUserEntity cby = sysUserService.getById(r.getCby());
-				SysUserEntity cbyObj = new SysUserEntity();
-				cbyObj.setId(cby.getId());
-				cbyObj.setName(cby.getName());
-				cbyObj.setUsername(cby.getUsername());
-				SysUserEntity uby = sysUserService.getById(r.getUby());
-				SysUserEntity ubyObj = new SysUserEntity();
-				ubyObj.setId(uby.getId());
-				ubyObj.setName(uby.getName());
-				ubyObj.setUsername(uby.getUsername());
-				r.setCbyObj(cbyObj);
-				r.setUbyObj(ubyObj);
-			}
+		}else{
+			log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
+			log.debug("Get knowledgebases error msg : {}",response.getBody());
 		}
-		IPage<KnowledgeBase> page=this.page(new Query(KnowledgeBase.class).getPage(params));
-		page.setRecords(result);
+		page.setRecords(knowledgeBases);
 		return new PageUtils(page);
 	}
 	
@@ -169,7 +155,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    	knowledgeBase.setTagName(tagName);
 		    	knowledgeBase.setTagType(tagType);
 		    	this.getBaseMapper().insert(knowledgeBase);
-		    }
+		    }else{
+				log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
+				log.debug("Get knowledgebases error msg : {}",response.getBody());
+			}
 		} finally {
 		    if(file != null && file.exists()){
 		        file.delete();
@@ -206,7 +195,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    	knowledgeBase.setUby(ShiroUtils.getUserId());
 		    	knowledgeBase.setUtime(new Date());
 		    	this.getBaseMapper().updateById(knowledgeBase);
-		    }
+		    }else{
+				log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
+				log.debug("Get knowledgebases error msg : {}",response.getBody());
+			}
 		} finally {
 		    if(file != null && file.exists()){
 		        file.delete();
@@ -242,19 +234,31 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	
 	@Override
 	public R removeKnowledgeBase(String ids) {
+		List<String> idList = Arrays.asList(ids.split(StrUtil.COMMA));
+		// 根据id信息进行查询对应的knowledgeId
+		List<KnowledgeBase> knowledgeBases = this.baseMapper.selectBatchIds(idList);
+		List<String> knowledgeIds = knowledgeBases.stream().map(KnowledgeBase::getKnowledgeId).collect(Collectors.toList());
+		if(ObjectUtil.isEmpty(knowledgeIds)) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
+		}
 		try {
 			List<String> failIds = new ArrayList<String>();
 			String galaxyUrl = sysConfigService.getValue("galaxy_url");
 			String url = galaxyUrl+"knowledge_base/v1";
 			List<CompletableFuture<Map<String, Object>>> futureList = ListUtil.list(false);
-			List<String> idList = Arrays.asList(ids.split(StrUtil.COMMA));
-			for(String id : idList) {
+			for(String id : knowledgeIds) {
 				CompletableFuture<Map<String, Object>> future = CompletableFuture.supplyAsync(() -> {
 					Map<String,Object> result =new HashMap<String,Object>();
 					String requestUrl = url+"?id="+id;
 					ResponseEntity response = restTemplate.exchange(requestUrl, HttpMethod.DELETE,null,Object.class);
 					if(response.getStatusCodeValue()!=200) {
 						result.put("id", id);
+					}else {
+						Map map = (Map) response.getBody();
+						Integer status = (Integer)map.get("status");
+						if(status!=200) {
+							result.put("id", id);
+						}
 					}
 	    			return result;
 				});
@@ -272,10 +276,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			});
 			// 将删除成功的id信息从数据库中删除
 			if(ObjectUtils.isEmpty(failIds)) {
-				this.getBaseMapper().delete(new LambdaQueryWrapper<KnowledgeBase>().in(KnowledgeBase::getKnowledgeId, idList));
+				this.getBaseMapper().delete(new LambdaQueryWrapper<KnowledgeBase>().in(KnowledgeBase::getKnowledgeId, knowledgeIds));
 				return R.ok();
 			}else {
-				List<String> successIds = idList.stream().filter(id -> !failIds.contains(id)).collect(Collectors.toList());
+				List<String> successIds = knowledgeIds.stream().filter(knowledgeId -> !failIds.contains(knowledgeId)).collect(Collectors.toList());
 				this.getBaseMapper().delete(new LambdaQueryWrapper<KnowledgeBase>().in(KnowledgeBase::getKnowledgeId, successIds));
 				return R.error(400,JSON.toJSONString(failIds));
 			}
@@ -287,6 +291,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@Override
 	public R importData(MultipartFile file,String type) {
 		File tempFile = null;
+		if(!StrUtil.endWith(file.getOriginalFilename(), ".csv")) {
+			throw new CNException(RCode.KNOWLEDGE_FILE_TYPE_ERROR);
+		}
 		try{
 			tempFile = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".csv");
 			FileUtils.copyInputStreamToFile(file.getInputStream(),tempFile);
@@ -297,13 +304,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 			List<CsvRow> csvRows = (List<CsvRow>)datas.getRows();
 			//csv文件去重
-			/*for(int i = 0; i < csvRows.size(); i++){
-				for(int j = 0; j < csvRows.size(); j++){
-					if(i!=j && csvRows.get(i).get(0).trim().equals(csvRows.get(j).get(0).trim()) && csvRows.get(i).get(1).trim().equals(csvRows.get(j).get(1).trim())){
-						csvRows.remove(csvRows.get(j));
-					}
-				}
-			}*/
 			Set<CsvRow> rowsSet = new TreeSet<CsvRow>(Comparator.comparing(row -> row.get(0).trim() + "_____" + row.get(1).trim()));
 			rowsSet.addAll(csvRows);
 

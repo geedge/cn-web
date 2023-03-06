@@ -168,7 +168,10 @@ public class Constant {
 		Map<String, String> reportOrderFieldMap = new HashMap<>();
 		reportOrderFieldMap.put("name", "rj.name");
 		reportOrderFieldMap.put("type", "rt.id");
-		TABLE_NAME_ORDER_FIELD_MAPPING.put("report_job", reportOrderFieldMap);
+		
+		Map<String, String> knowledgeOrderFieldMap = new HashMap<>();
+		knowledgeOrderFieldMap.put("name", "tag_name");
+		TABLE_NAME_ORDER_FIELD_MAPPING.put("knowledge_base", knowledgeOrderFieldMap);
 	}
 
 	/**
