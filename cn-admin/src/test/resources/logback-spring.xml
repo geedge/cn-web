@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/base.xml" />
+    <!--测试环境部署写日志问题修复-->
+    <!--<include resource="org/springframework/boot/logging/logback/base.xml" />-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
+
     <logger name="org.springframework.web" level="info" />
     <logger name="org.springboot.sample" level="info" />
     <logger name="org.apache" level="info" />
@@ -23,7 +28,7 @@
     <!-- 2.2 level为 INFO 日志，时间滚动输出 -->
     <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文档的路径及文档名 -->
-        <file>${log.path}/nz-web.log</file>
+        <file>${log.path}/cn-web.log</file>
         <!--日志文档输出格式 -->
         <encoder>
             <pattern>${out.pattern}</pattern>
@@ -31,7 +36,7 @@
         </encoder>
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/nz-web-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/cn-web-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>${max.file.size}</maxFileSize>
             <maxHistory>${max.history}</maxHistory>
             <totalSizeCap>${total.size.cap}</totalSizeCap>
@@ -41,7 +46,7 @@
     <!-- 2.1 level为 ERROR 日志，时间滚动输出 -->
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文档的路径及文档名 -->
-        <file>${log.path}/nz-web-error.log</file>
+        <file>${log.path}/cn-web-error.log</file>
         <!--日志文档输出格式 -->
         <encoder>
             <pattern>${out.pattern}</pattern>
@@ -49,7 +54,7 @@
         </encoder>
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/nz-web-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/cn-web-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>${max.file.size}</maxFileSize>
             <maxHistory>${max.history}</maxHistory>
             <totalSizeCap>${total.size.cap}</totalSizeCap>
