@@ -85,6 +85,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		IPage<KnowledgeBase> page=this.page(new Query(KnowledgeBase.class).getPage(params));
 		List<KnowledgeBase> knowledgeBases=this.baseMapper.queryPage(page,params);
+		knowledgeBases.stream().forEach(knowledgeBase -> knowledgeBase.setTagType(StrUtil.replace(knowledgeBase.getTagType(), "_user_defined", "")));
 		String galaxyUrl = sysConfigService.getValue("galaxy_url");
 		String url = galaxyUrl+"knowledge_base/v1";
 		ResponseEntity response = restTemplate.exchange(url, HttpMethod.GET,null,Object.class,new HashMap());
