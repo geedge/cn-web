@@ -27,6 +27,9 @@
             	 and tag_type = #{params.tagType}
             </if>
         </where>
+        <if test="params.orderBy == null or params.orderBy == ''">
+			ORDER BY id desc
+		</if>
     </select>
     
     <select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
