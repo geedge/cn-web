@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!--测试环境部署写日志-->
+    <property name="LOG_TEMP" value="./logs"/>
     <include resource="org/springframework/boot/logging/logback/base.xml" />
-    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring-test.log}"/>
     <logger name="org.springframework.web" level="info" />
     <logger name="org.springboot.sample" level="info" />
     <logger name="org.apache" level="info" />
