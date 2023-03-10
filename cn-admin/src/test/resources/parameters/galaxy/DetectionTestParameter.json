@@ -1,0 +1,122 @@
+{
+  "------------------ GET  /interface/detection/security/filter/severity data---------------------": "note",
+  "detectionSecurityFilterSeverity_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/security/filter/securityType data---------------------": "note",
+  "detectionSecurityFilterSecurityType_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/security/filter/victimIp data---------------------": "note",
+  "detectionSecurityFilterVictimIp_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/security/filter/victimLocation data---------------------": "note",
+  "detectionSecurityFilterVictimLocation_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/security/filter/offenderIp data---------------------": "note",
+  "detectionSecurityFilterOffenderIp_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/security/filter/offenderLocation data---------------------": "note",
+  "detectionSecurityFilterOffenderLocation_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/security/list/basic data---------------------": "note",
+  "detectionSecurityListBasic_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/security/list/count data---------------------": "note",
+  "detectionSecurityListCount_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/security/detail/overview/basic data---------------------": "note",
+  "detectionSecurityDetailOverviewBasic_success": {
+    "eventId": "1134550863207964672",
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/security/detail/overview/event data---------------------": "note",
+  "detectionSecurityDetailOverviewEvent_success": {
+    "startTime": "1672721147",
+    "offenderIp": "173.220.222.227",
+    "victimIp": "116.178.66.233"
+  },
+  "detectionSecurityDetailOverviewEvent_error": {
+  },
+  "------------------ GET  /interface/detection/security/filter/severityTrend data---------------------": "note",
+  "detectionSecurityFilterSeverityTrend_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/performance/filter/severityTrend data---------------------": "note",
+  "detectionPerformanceFilterSeverityTrend_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/performance/filter/severity data---------------------": "note",
+  "detectionPerformanceFilterSeverity_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/performance/filter/eventType data---------------------": "note",
+  "detectionPerformanceFilterEventType_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/basic data---------------------": "note",
+  "detectionPerformanceDetailOverviewBasic_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747",
+    "pageNo": 1,
+    "pageSize": 10
+  },
+  "------------------ GET  /interface/detection/performance/list/count data---------------------": "note",
+  "detectionPerformanceListCount_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747",
+    "pageNo": 1,
+    "pageSize": 10
+  },
+  "------------------ GET  /interface/detection/performance/list/basic data---------------------": "note",
+  "detectionPerformanceListBasic_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747",
+    "pageNo": 1,
+    "pageSize": 10
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/metric data---------------------": "note",
+  "detectionPerformanceDetailOverviewMetric_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/performance/filter/activeEntity data---------------------": "note",
+  "detectionPerformanceFilterActiveEntity_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/metric/dnsError data---------------------": "note",
+  "detectionPerformanceDetailOverviewMetricDnsError_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/metric/httpError data---------------------": "note",
+  "detectionPerformanceDetailOverviewMetricHttpError_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  },
+  "------------------ GET  /interface/detection/performance/detail/overview/metric/highDnsResponseTime data---------------------": "note",
+  "detectionPerformanceDetailOverviewMetricHighDnsResponseTime_success": {
+    "startTime": "1672721147",
+    "endTime": "1672724747"
+  }
+}

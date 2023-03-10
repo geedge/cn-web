@@ -1,0 +1,545 @@
+{
+  "------------------ GET  /interface/application/performance/relatedSessions data---------------------": "note",
+  "applicationPerformanceRelatedSessions_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "ip": "116.178.236.216"
+  },
+  "applicationPerformanceRelatedSessions_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/tcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceLocationTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationTcpLostlenPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/networkMap data---------------------": "note",
+  "applicationPerformanceLocationNetworkMap_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationNetworkMap_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/httpResponseLatency data---------------------": "note",
+  "applicationPerformanceLocationHttpResponseLatency_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationHttpResponseLatency_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/packetsLoss data---------------------": "note",
+  "applicationPerformanceLocationPacketsLoss_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationPacketsLoss_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/packetsRetrains data---------------------": "note",
+  "applicationPerformanceLocationPacketsRetrains_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationPacketsRetrains_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/sslHandshakeLatency data---------------------": "note",
+  "applicationPerformanceLocationSslHandshakeLatency_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationSslHandshakeLatency_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/tcpConnectionEstablishLatency data---------------------": "note",
+  "applicationPerformanceLocationTcpConnectionEstablishLatency_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationTcpConnectionEstablishLatency_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/thoughput data---------------------": "note",
+  "applicationPerformanceLocationThoughput_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationThoughput_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/packetRetransPercent data---------------------": "note",
+  "applicationPerformanceLocationPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationPacketRetransPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceLocationHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/sslConDelay data---------------------": "note",
+  "applicationPerformanceLocationSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationSslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/location/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceLocationTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  "applicationPerformanceLocationTcpSessionDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/dimensionTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDimensionTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "limit": "10"
+  },
+  "applicationPerformanceOverviewDimensionTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/dimensionTcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceOverviewDimensionTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },
+  "applicationPerformanceOverviewDimensionTcpLostlenPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/dimensionCycleTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDimensionCycleTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },
+  "applicationPerformanceOverviewDimensionCycleTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/dimensionNetworkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDimensionNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },
+  "applicationPerformanceOverviewDimensionNetworkAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/dimensionPacketRetransPercent data---------------------": "note",
+  "applicationPerformanceOverviewDimensionPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },
+  "applicationPerformanceOverviewDimensionPacketRetransPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/dimensionHttpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },
+  "applicationPerformanceOverviewDimensionHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/dimensionSslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },
+  "applicationPerformanceOverviewDimensionSslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/dimensionTcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDimensionTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },
+  "applicationPerformanceOverviewDimensionTcpSessionDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/tcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceOverviewTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },
+  "applicationPerformanceOverviewTcpLostlenPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/totalTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewTotalTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewTotalTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/totalNetworkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewTotalNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewTotalNetworkAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/totalHttpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewTotalHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewTotalHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/totalSslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewTotalSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewTotalSslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/packetRetransPercent data---------------------": "note",
+  "applicationPerformanceOverviewPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewPacketRetransPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/appTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewAppTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewAppTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/appTcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceOverviewAppTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewAppTcpLostlenPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/appNetworkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewAppNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewAppNetworkAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/appPacketRetransPercent data---------------------": "note",
+  "applicationPerformanceOverviewAppPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewAppPacketRetransPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/appHttpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewAppHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewAppHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/appSslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewAppSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewAppSslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/appTcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewAppTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewAppTcpSessionDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewSslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "applicationPerformanceOverviewTcpSessionDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "q": "client_country='China'",
+    "limit": 10
+  },
+  "applicationPerformanceOverviewDrilldownDimensionTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionCycleTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionCycleTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "country",
+    "q": "common_server_ip='116.178.236.216'",
+    "params": "'China'",
+    "limit": 10
+  },
+  "applicationPerformanceOverviewDrilldownDimensionCycleTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionHttpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionCycleDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "q": "client_country='China'",
+    "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionCycleDimensionHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionSslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionCycleDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "q": "client_country='China'",
+    "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionCycleDimensionSslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionTcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionCycleDimensionTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "q": "client_country='China'",
+    "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionCycleDimensionTcpSessionDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/drilldown/dimension/trafficGraph data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDrilldownDimensionTrafficGraph_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "country",
+    "q": "country='China'"
+  },
+  "applicationPerformanceOverviewDrilldownDrilldownDimensionTrafficGraph_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/recentEvents data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionRecentEvents_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "param": "114.114.114.114"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionRecentEvents_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/tcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionTcpLostlenPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/networkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensioNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip"
+  },
+  "applicationPerformanceOverviewDrilldownDimensioNetworkAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/allNetworkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensioAllNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip"
+  },
+  "applicationPerformanceOverviewDrilldownDimensioAllNetworkAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/packetRetransPercent data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "domain"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionPacketRetransPercent_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "domain"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "domain"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionSslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "domain"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionTcpSessionDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/country/trafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "typeVal": "116.178.236.216"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/country/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/country/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountrySslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountrySslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/country/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryTcpSessionDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/province/trafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "province": "Beijing",
+    "typeVal": "116.178.236.216"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/province/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "province": "Xinjiang",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang','Beijing'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/province/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "province": "Xinjiang",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang','Beijing'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceSslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/province/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "province": "Xinjiang",
+    "typeVal": "116.178.236.216"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceTcpSessionDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/world/trafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "typeVal": "116.178.236.216"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/world/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "typeVal": "116.178.236.216",
+    "params": "'China'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/world/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "typeVal": "116.178.236.216",
+    "params": "'China'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldSslConDelay_error": {
+  },
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/world/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "typeVal": "116.178.236.216",
+    "params": "'China'"
+  },
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldTcpSessionDelay_error": {
+  }
+}

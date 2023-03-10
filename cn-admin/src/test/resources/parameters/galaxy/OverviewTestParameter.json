@@ -1,0 +1,202 @@
+{
+  "------------------ GET  /interface/overview/appCompanyTrafficAnalysis data---------------------": "note",
+  "overviewAppCompanyTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "appCompanies": "'Jingdong'"
+  },
+  "overviewAppCompanyTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/overview/appCompanyCycleTrafficTotal data---------------------": "note",
+  "overviewAppCompanyCycleTrafficTotal_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "appCompanies": "'Jingdong'"
+  },
+  "overviewAppCompanyCycleTrafficTotal_error": {
+  },
+  "------------------ GET  /interface/overview/dimensionTrafficAnalysis data---------------------": "note",
+  "overviewDimensionTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "orderBy": "totalBytes",
+    "limit": 10
+  },
+  "overviewDimensionTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/overview/dimensionTcpLostlenPercent data---------------------": "note",
+  "overviewDimensionTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDimensionTcpLostlenPercent_error": {
+  },
+  "------------------ GET  /interface/overview/dimensionCycleTrafficAnalysis data---------------------": "note",
+  "overviewDimensionCycleTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDimensionCycleTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/overview/eventType data---------------------": "note",
+  "overviewEventType_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "overviewEventType_error": {
+  },
+  "------------------ GET  /interface/overview/eventSeverity data---------------------": "note",
+  "overviewEventSeverity_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "overviewEventSeverity_error": {
+  },
+  "------------------ GET  /interface/overview/applicationTrafficAnalysis data---------------------": "note",
+  "overviewApplicationTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "appLabels": "'sohu'"
+  },
+  "overviewApplicationTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/overview/applicationCycleTrafficTotal data---------------------": "note",
+  "overviewApplicationCycleTrafficTotal_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "appLabels": "'douyin','kuaishou','wechat','qq','taobao'"
+  },
+  "overviewApplicationCycleTrafficTotal_error": {
+  },
+  "------------------ GET  /interface/overview/totalTrafficAnalysis data---------------------": "note",
+  "overviewTotalTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "overviewTotalTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/overview/dimensionPacketRetransPercent data---------------------": "note",
+  "overviewDimensionPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDimensionPacketRetransPercent_error": {
+  },
+  "------------------ GET  /interface/overview/ddosEventAnalysis data---------------------": "note",
+  "overviewDdosEventAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "overviewDdosEventAnalysis_error": {
+  },
+  "------------------ GET  /interface/overview/dimensionHttpResponseDelay data---------------------": "note",
+  "overviewDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDimensionHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/overview/dimensionSslConDelay data---------------------": "note",
+  "overviewDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDimensionSslConDelay_error": {
+  },
+  "------------------ GET  /interface/overview/dimensionTcpSessionDelay data---------------------": "note",
+  "overviewDimensionTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDimensionTcpSessionDelay_error": {
+  },
+  "------------------ GET  /interface/overview/drilldown/list data---------------------": "note",
+  "overviewDrilldownList_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip"
+  },
+  "overviewDrilldownList_error": {
+  },
+  "------------------ GET  /interface/overview/drilldown/dimensionTrafficAnalysis data---------------------": "note",
+  "overviewDrilldownDimensionTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip"
+  },
+  "overviewDrilldownDimensionTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/overview/drilldown/dimensionCycleTrafficAnalysis data---------------------": "note",
+  "overviewDrilldownDimensionCycleTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDrilldownDimensionCycleTrafficAnalysis_error": {
+  },
+  "------------------ GET  /interface/overview/drilldown/dimensionHttpResponseDelay data---------------------": "note",
+  "overviewDrilldownDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDrilldownDimensionHttpResponseDelay_error": {
+  },
+  "------------------ GET  /interface/overview/drilldown/dimensionSslConDelay data---------------------": "note",
+  "overviewDrilldownDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDrilldownDimensionSslConDelay_error": {
+  },
+  "------------------ GET  /interface/overview/drilldown/dimensionTcpPktRetranPercent data---------------------": "note",
+  "overviewDrilldownDimensionTcpPktRetranPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+  "overviewDrilldownDimensionTcpPktRetranPercent_error": {
+  },
+  "------------------ GET  /interface/overview/event/dimensionEvents data---------------------": "note",
+  "overviewEventDimensionEvents_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "appLabel",
+    "limit": "10"
+  },
+  "overviewEventDimensionEvents_error": {
+  },
+  "------------------ GET  /interface/overview/event/recentEvents data---------------------": "note",
+  "overviewEventRecentEvents_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "overviewEventRecentEvents_error": {
+  },
+  "------------------ GET  /interface/overview/event/list data---------------------": "note",
+  "overviewEventList_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "type"
+  },
+  "overviewEventList_error": {
+  }
+}

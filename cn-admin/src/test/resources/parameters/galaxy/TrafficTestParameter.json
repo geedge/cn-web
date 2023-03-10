@@ -1,0 +1,207 @@
+{
+  "------------------ GET  /interface/traffic/map data---------------------": "note",
+  "trafficMap_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "------------------ GET  /interface/traffic/sessions data---------------------": "note",
+  "trafficSessions_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "------------------ GET  /interface/traffic/packets data---------------------": "note",
+  "trafficPackets_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  "------------------ GET  /interface/traffic/throughput data---------------------": "note",
+  "trafficThroughput_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "order": "sessions",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/activeClientIP data---------------------": "note",
+  "trafficActiveClientIP_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "order": "sessions",
+    "limit": 10
+  },
+  "trafficActiveClientIP_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "order": "sess",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/activeServerIP data---------------------": "note",
+  "trafficActiveServerIP_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "order": "sessions",
+    "limit": 10
+  },
+  "trafficActiveServerIP_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "order": "sess",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/topDomains data---------------------": "note",
+  "trafficTopDomains_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "order": "sessions",
+    "limit": 10
+  },
+  "trafficTopDomains_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "order": "sess",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/topApp data---------------------": "note",
+  "trafficTopApp_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "order": "sessions",
+    "limit": 10
+  },
+  "trafficTopApp_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "order": "sess",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/topDomainCategories data---------------------": "note",
+  "trafficTopDomainCategories_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": 10
+  },
+  "trafficTopDomainCategories_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": "sss"
+  },
+  "------------------ GET  /interface/traffic/activeDomainCategories data---------------------": "note",
+  "trafficActiveDomainCategories_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": 10
+  },
+  "trafficActiveDomainCategories_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": "sss"
+  },
+  "------------------ GET  /interface/traffic/topDomainReputation data---------------------": "note",
+  "trafficTopDomainReputation_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": 10
+  },
+  "trafficTopDomainReputation_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": "sss"
+  },
+  "------------------ GET  /interface/traffic/activeDomainReputation data---------------------": "note",
+  "trafficActiveDomainReputation_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": 10
+  },
+  "trafficActiveDomainReputation_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": "sss"
+  },
+  "------------------ GET  /interface/traffic/domainCategoryServerIpList data---------------------": "note",
+  "trafficDomainCategoryServerIpList_success": {
+    "startTime": "1672621147",
+    "endTime": "1672624747",
+    "domain": "baidu.com",
+    "limit": 10
+  },
+  "trafficDomainCategoryServerIpList_error": {
+  },
+  "------------------ GET  /interface/traffic/domainReputationServerIpList data---------------------": "note",
+  "trafficDomainReputationServerIpList_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "domain": "baidu.com",
+    "limit": 1
+  },
+  "------------------ GET  /interface/traffic/topAppCategories data---------------------": "note",
+  "trafficTopAppCategories_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": 10
+  },
+  "trafficTopAppCategories_error": {
+    "startTime": "1671761197",
+    "endTime": "167176s97",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/appCategoriesList data---------------------": "note",
+  "trafficAppCategoriesList_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": 10
+  },
+  "trafficAppCategoriesList_error": {
+    "startTime": "1671761197",
+    "endTime": "167176s",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/appCategoryServerIpList data---------------------": "note",
+  "trafficAppCategoryServerIpList_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "appName": "qq",
+    "limit": 10
+  },
+  "trafficAppCategoryServerIpList_error": {
+    "startTime": "1671761197",
+    "endTime": "167176s",
+    "appName": "qq",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/topAppRisk data---------------------": "note",
+  "trafficTopAppRisk_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": 10
+  },
+  "trafficTopAppRisk_error": {
+    "startTime": "1671761197",
+    "endTime": "167176s",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/appRiskList data---------------------": "note",
+  "trafficAppRiskList_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "limit": 10
+  },
+  "trafficAppRiskList_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764s",
+    "limit": 10
+  },
+  "------------------ GET  /interface/traffic/appRiskServerIpList data---------------------": "note",
+  "trafficAppRiskServerIpList_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "appName": "qq",
+    "limit": 10
+  },
+  "trafficAppRiskServerIpList_error": {
+    "startTime": "1671761197",
+    "endTime": "1671764s",
+    "appName": "qq",
+    "limit": 10
+  },
+
+}
