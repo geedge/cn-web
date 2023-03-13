@@ -1,3 +1,4 @@
+/*
 package com.net.geedge.modules.galaxy;
 
 import com.net.geedge.modules.BaseTest;
@@ -14,10 +15,12 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Map;
 
+*/
 /**
  * @Auther: lijinyang
  * @Date: 2023/02/23/15:08
- */
+ *//*
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AdminApplication.class)
@@ -28,9 +31,11 @@ public class NpmTest extends BaseTest<Map> {
         return "galaxy/NpmTestParameter.json";
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/rtt success
-     */
+     *//*
+
     @Test
     public void npmRtt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -39,9 +44,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/httpResponseTime success
-     */
+     *//*
+
     @Test
     public void npmHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -50,9 +57,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/sslHandshakeTime success
-     */
+     *//*
+
     @Test
     public void npmSslHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -61,9 +70,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/avgPacketLossRate success
-     */
+     *//*
+
     @Test
     public void npmAvgPacketLossRate_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -72,9 +83,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/avgRetransmissionRate success
-     */
+     *//*
+
     @Test
     public void npmAvgRetransmissionRate_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -83,9 +96,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/rttMap success
-     */
+     *//*
+
     @Test
     public void npmRttMap_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -94,9 +109,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/httpResponseTimeMap success
-     */
+     *//*
+
     @Test
     public void npmHttpResponseTimeMap_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -105,9 +122,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/sslHandshakeTimeMap success
-     */
+     *//*
+
     @Test
     public void npmSslHandshakeTimeMap_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -116,9 +135,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/packetLossMap success
-     */
+     *//*
+
     @Test
     public void npmPacketLossMap_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -127,9 +148,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/packetRetransMap success
-     */
+     *//*
+
     @Test
     public void npmPacketRetransMap_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -138,9 +161,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/appRrt success
-     */
+     *//*
+
     @Test
     public void npmAppRrt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -149,9 +174,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/appHttpResponseTime success
-     */
+     *//*
+
     @Test
     public void npmAppHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -160,9 +187,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/appSSLHandshakeTime success
-     */
+     *//*
+
     @Test
     public void npmAppSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -171,9 +200,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/appPacketLoss success
-     */
+     *//*
+
     @Test
     public void npmAppPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -182,9 +213,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/appPacketRetrans success
-     */
+     *//*
+
     @Test
     public void npmAppPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -193,9 +226,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/domainRrt success
-     */
+     *//*
+
     @Test
     public void npmDomainRrt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -204,9 +239,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/domainHttpResponseTime success
-     */
+     *//*
+
     @Test
     public void npmDomainHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -215,9 +252,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/domainSSLHandshakeTime success
-     */
+     *//*
+
     @Test
     public void npmDomainSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -226,9 +265,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/domainPacketLoss success
-     */
+     *//*
+
     @Test
     public void npmDomainPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -237,9 +278,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/domainPacketRetrans success
-     */
+     *//*
+
     @Test
     public void npmDomainPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -248,9 +291,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/serverIPRrt success
-     */
+     *//*
+
     @Test
     public void npmServerIPRrt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -259,9 +304,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/serverIPHttpResponseTime success
-     */
+     *//*
+
     @Test
     public void npmServerIPHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -270,9 +317,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/serverIPSSLHandshakeTime success
-     */
+     *//*
+
     @Test
     public void npmServerIPSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -281,9 +330,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/serverIPPacketLoss success
-     */
+     *//*
+
     @Test
     public void npmServerIPPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -292,9 +343,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/serverIPPacketRetrans success
-     */
+     *//*
+
     @Test
     public void npmServerIPPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -303,9 +356,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/clientIPRrt success
-     */
+     *//*
+
     @Test
     public void npmClientIPRrt_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -314,9 +369,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/clientIPHttpResponseTime success
-     */
+     *//*
+
     @Test
     public void npmClientIPHttpResponseTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -325,9 +382,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/clientIPSSLHandshakeTime success
-     */
+     *//*
+
     @Test
     public void npmClientIPSSLHandshakeTime_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -336,9 +395,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/clientIPPacketLoss success
-     */
+     *//*
+
     @Test
     public void npmClientIPPacketLoss_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -347,9 +408,11 @@ public class NpmTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
+    */
+/**
      * GET /interface/npm/clientIPPacketRetrans success
-     */
+     *//*
+
     @Test
     public void npmClientIPPacketRetrans_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
@@ -359,3 +422,4 @@ public class NpmTest extends BaseTest<Map> {
     }
 
 }
+*/

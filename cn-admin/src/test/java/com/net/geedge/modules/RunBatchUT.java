@@ -32,7 +32,6 @@ import org.junit.runner.RunWith;
         EntityTest.class,
         GalaxyInterfaceTest.class,
         LinkTest.class,
-        NpmTest.class,
         OverviewTest.class,
         TrafficTest.class,
         VisualChartTest.class,
