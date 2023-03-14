@@ -1515,5 +1515,9 @@ INSERT INTO `sys_i18n` VALUES (1559, '文件类型限制', 'zh', 'validate.fileT
 INSERT INTO `sys_i18n` VALUES (1560, '文件类型限制', 'en', 'validate.fileTypeLimit', 'Only support {types} files', '', '2023-03-08 07:32:52', 1);
 INSERT INTO `sys_i18n` VALUES (1561, '记录已存在', 'en', 'validate.duplicateRecord', '{columns} is duplicated', '', '2023-03-08 09:19:21', 1);
 INSERT INTO `sys_i18n` VALUES (1562, '记录已存在', 'zh', 'validate.duplicateRecord', '{columns}已存在', '', '2023-03-08 09:19:38', 1);
+INSERT INTO `sys_i18n` VALUES (1563, '请选择要删除的数据', 'zh', 'tip.pleaseSelect', '请选择要删除的数据', '', '2023-03-10 08:47:10', 1);
+INSERT INTO `sys_i18n` VALUES (1564, '请选择要删除的数据', 'en', 'tip.pleaseSelect', 'Please select the data to delete', '', '2023-03-10 08:48:17', 1);
+INSERT INTO `sys_i18n` VALUES (1565, '请选择要编辑的数据', 'zh', 'tip.pleaseSelectForEdit', '请选择要编辑的数据', '', '2023-03-10 09:26:58', 1);
+INSERT INTO `sys_i18n` VALUES (1566, '请选择要编辑的数据', 'en', 'tip.pleaseSelectForEdit', 'Please select the data to edit', '', '2023-03-10 09:27:41', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
