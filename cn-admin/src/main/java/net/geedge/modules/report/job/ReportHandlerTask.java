@@ -88,7 +88,7 @@ public class ReportHandlerTask extends QuartzJobBean {
 	@Autowired
 	private ReportTempService reportTempService;
 	
-	@Value("${reportTaskTimeout:30000}")
+	@Value("${cn.reportTaskTimeout:30000}")
 	private Integer reportTaskTimeout;
 	
 	@Override
