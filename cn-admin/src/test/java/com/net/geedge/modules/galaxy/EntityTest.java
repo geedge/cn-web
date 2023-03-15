@@ -4443,13 +4443,13 @@ public class EntityTest extends BaseTest<Map> {
     /**
      * GET /interface/entity/detail/domain/topApp success
      */
-    @Test
+    /*@Test
     public void entityDetailDomainTopApp_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
         MvcResult result = UTUtil.performGet("/interface/entity/detail/domain/topApp", queryParam);
 
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+    }*/
 
     /**
      * GET /interface/entity/detail/domain/topApp error

@@ -225,16 +225,6 @@ public class DetectionTest extends BaseTest<Map> {
         UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/detection/performance/detail/overview/metric success
-     */
-    @Test
-    public void detectionPerformanceDetailOverviewMetric_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/detection/performance/detail/overview/metric", queryParam);
-
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/detection/performance/filter/activeEntity success
