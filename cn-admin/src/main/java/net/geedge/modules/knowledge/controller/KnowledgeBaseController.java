@@ -45,14 +45,14 @@ public class KnowledgeBaseController {
 	
 	@DeleteMapping
 	public R removeKnowledgeBase(@RequestParam("ids") String ids) {
-		ValidateUtils.is(ids).notNull(RCode.NOT_NULL_ERROR);
+		ValidateUtils.is(ids).notNull(RCode.KNOWLEDGE_IDS_ISNULL);
 		return knowledgeBaseService.removeKnowledgeBase(ids);
 	}
 	
 	@PostMapping("/import")
 	public R importKnowledgeBase(@Param("file") MultipartFile file,@Param("type")String type) {
-		ValidateUtils.is(file).notNull(RCode.NOT_NULL_ERROR);
-		ValidateUtils.is(type).notNull(RCode.NOT_NULL_ERROR);
+		ValidateUtils.is(file).notNull(RCode.KNOWLEDGE_FILE_ISNULL);
+		ValidateUtils.is(type).notNull(RCode.KNOWLEDGE_TYPE_ISNULL);
 		return knowledgeBaseService.importData(file,type);
 	}
 }

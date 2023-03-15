@@ -96,7 +96,7 @@ public enum RCode {
     CHART_PARAMTEXT_ISNULL(121056,"Chart param text not found when type is text"),
     CHART_WEIGHT_ISNULL(121057,"Chart weight is required"),
     PANEL_PID_ISNULL(121058,"Panel pid is required"),
-    PANEL_WEIGHT_ISNULL(121059,"Panel weight not be empty"),
+    PANEL_WEIGHT_ISNULL(121059,"Panel weight is required"),
     PANEL_NAME_FORMAT_ERROR(123060,"Panel name format error, cannot include '/'"),
     CHART_GROUPID_ISNULL(121061,"Chart group id is required"),
     CHART_VARTYPE_ISNULL(121062,"Chart var type is required when panel id is empty"),
@@ -310,11 +310,13 @@ public enum RCode {
     SYS_ROLE_CANNOT_DELETE(587007, "Built-in roles cannot be deleted"),
     
     KNOWLEDGE_BASE_PARAM_DUPLICATE(591001,"KnowledgeBase names and types are guaranteed to be unique"),
-    KNOWLEDGE_BASE_PARAM_NOTNULL(591002,"KnowledgeBase data can not be empty"),
+    KNOWLEDGE_BASE_PARAM_NOTNULL(591002,"KnowledgeBase data is required"),
     KNOWLEDGE_BASE_NOT_EXIST(591003,"KnowledgeBase does not exist"),
     KNOWLEDGE_NAME_ISNULL(591004,"KnowledgeBase name is required"),
     KNOWLEDGE_TYPE_ISNULL(591005,"KnowledgeBase type is required"),
-    KNOWLEDGE_FILE_TYPE_ERROR(591006,"knolwdgeBase file type only supports csv"),
+    KNOWLEDGE_FILE_TYPE_ERROR(591006,"KnowledgeBase file type only supports csv"),
+    KNOWLEDGE_FILE_ISNULL(591007,"KnowledgeBase file is required"),
+    KNOWLEDGE_IDS_ISNULL(591008,"KnowledgeBase ids is required"),
     /**
      * stat相关
      */
@@ -326,7 +328,7 @@ public enum RCode {
     
     NOT_NULL_ERROR(990, "not null error"), //not null错误
     NOT_NUMBER_ERROR(991, "not number error"), //not number错误
-    READ_TIMED_OUT(992, "read timed out"),
+    READ_TIMED_OUT(992, "Read timed out"),
     /**
      * 错误的时间格式
      */
