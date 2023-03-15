@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.ResourceAccessException;
+import org.ssssssss.script.exception.MagicScriptException;
 
+import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 /**
@@ -63,6 +65,17 @@ public class CNExceptionHandler {
 	public R handleTemplateException(ResourceAccessException e){
 		logger.error(e);
 		return R.error(RCode.READ_TIMED_OUT);
+	}
+
+	//magic-api组件内报错
+	@ExceptionHandler(MagicScriptException.class)
+	@ResponseStatus(value=HttpStatus.FORBIDDEN)
+	public R handleTemplateException(MagicScriptException e){
+		logger.error(e);
+		if(e.getCause() instanceof ConnectException){
+			return R.error(RCode.CONNECTION_REFUSED);
+		}
+		return R.error().put("message", e.getSimpleMessage());
 	}
 
 	@ExceptionHandler(Exception.class)

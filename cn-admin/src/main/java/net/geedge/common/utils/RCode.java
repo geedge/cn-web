@@ -328,7 +328,8 @@ public enum RCode {
     
     NOT_NULL_ERROR(990, "not null error"), //not null错误
     NOT_NUMBER_ERROR(991, "not number error"), //not number错误
-    READ_TIMED_OUT(992, "Read timed out"),
+    READ_TIMED_OUT(992, "Response timeout"),
+    CONNECTION_REFUSED(993, "Connection refused"),
     /**
      * 错误的时间格式
      */
