@@ -1,10 +1,8 @@
 package net.geedge.modules.report.job;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.StringWriter;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -17,44 +15,34 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.time.StopWatch;
-import org.apache.http.client.utils.DateUtils;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.gson.JsonObject;
-import com.itextpdf.html2pdf.ConverterProperties;
-import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
-import com.itextpdf.io.font.FontProgram;
-import com.itextpdf.io.font.FontProgramFactory;
-import com.itextpdf.kernel.geom.PageSize;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.font.FontProvider;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import freemarker.template.Template;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.FreeMarkerUtil;
-import net.geedge.common.utils.HttpClientUtils;
 import net.geedge.common.utils.Tool.ListUtil;
 import net.geedge.modules.report.entity.ReportJob;
 import net.geedge.modules.report.entity.ReportResult;
@@ -88,6 +76,9 @@ public class ReportHandlerTask extends QuartzJobBean {
 	@Autowired
 	private ReportTempService reportTempService;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+		
 	@Value("${cn.reportTaskTimeout:30000}")
 	private Integer reportTaskTimeout;
 	
@@ -183,8 +174,11 @@ public class ReportHandlerTask extends QuartzJobBean {
 	        		param.put("query.type", "report");
 	        		param.put("query.data_source", source);
 	        		param.put("custom.report.sql", querySql);
+	        		
 	        		CompletableFuture<Map<String, Object>> future = CompletableFuture.supplyAsync(() -> {
-	        			JSONObject result = HttpClientUtils.httpPost(createJobPath, JSON.toJSONString(param));
+	        			//JSONObject result = HttpClientUtils.httpPost(createJobPath, JSON.toJSONString(param));
+	        			ResponseEntity<Object> response = restTemplate.exchange(createJobPath, HttpMethod.POST, new HttpEntity<Object>(param), Object.class, new HashMap<String,Object>());
+		        		Map result = (Map) response.getBody();
 	        			result.put("taskId", task.getId());
 	        			return result;
 	    			});
@@ -239,7 +233,9 @@ public class ReportHandlerTask extends QuartzJobBean {
         		//http://ip:port/admin/query/jobs/[jobId]/status
             	String modifyJobPath = StrUtil.str(rpcHost+"admin/query/jobs/"+task.getCredential()+"/status");
             	CompletableFuture<Map<String, Object>> future = CompletableFuture.supplyAsync(() -> {
-            		JSONObject result = HttpClientUtils.httpGet(modifyJobPath);
+            		//JSONObject result = HttpClientUtils.httpGet(modifyJobPath);
+            		ResponseEntity<Map> response = restTemplate.getForEntity(modifyJobPath,Map.class);
+	        		Map result = (Map) response.getBody();
         			result.put("taskId", task.getId());
         			return result;
     			});
@@ -267,7 +263,7 @@ public class ReportHandlerTask extends QuartzJobBean {
     					boolean isDone = (boolean) resultData.get(0).get("is_done");
     					boolean isCanceled = (boolean) resultData.get(0).get("is_canceled");
     					boolean isFailed = (boolean) resultData.get(0).get("is_failed");
-    					BigDecimal doneProgress = (BigDecimal) resultData.get(0).get("done_progress");
+    					Double doneProgress = (Double) resultData.get(0).get("done_progress");
     					task.setPercent(doneProgress.doubleValue());
     					if(isDone && !isFailed && !isCanceled) {
     						task.setState(2);
@@ -304,7 +300,9 @@ public class ReportHandlerTask extends QuartzJobBean {
         		CompletableFuture<Map<String, Object>> future = CompletableFuture.supplyAsync(() -> {
     				// http://ip:port/admin/query/jobs/[jobId]/report
                 	String resultJobPath = StrUtil.str(rpcHost+"admin/query/jobs/"+task.getCredential()+"/report");
-                	JSONObject result = HttpClientUtils.httpGet(resultJobPath);
+//                	JSONObject result = HttpClientUtils.httpGet(resultJobPath);
+                	ResponseEntity<Map> response = restTemplate.getForEntity(resultJobPath,Map.class);
+	        		Map result = (Map) response.getBody();
         			result.put("taskId", task.getId());
         			return result;
     			});
