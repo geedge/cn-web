@@ -1359,15 +1359,15 @@
     "order": "ss",
     "limit": 10
   },
-  "------------------ GET  /interface/entity/detail/domain/topApp data---------------------": "note",
-  "entityDetailDomainTopApp_success": {
+  "------------------ GET  /interface/entity/detail/domain/topAPP data---------------------": "note",
+  "entityDetailDomainTopAPP_success": {
     "startTime": "1672900559",
     "endTime": "1672986959",
     "domain": "baidu.com",
     "order": "sessions",
     "limit": 10
   },
-  "entityDetailDomainTopApp_error": {
+  "entityDetailDomainTopAPP_error": {
     "startTime": "1672900559",
     "endTime": "1672986959",
     "domain": "baidu.com",

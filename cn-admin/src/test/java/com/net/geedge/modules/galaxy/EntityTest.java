@@ -4441,23 +4441,23 @@ public class EntityTest extends BaseTest<Map> {
     }
 
     /**
-     * GET /interface/entity/detail/domain/topApp success
-     */
-    /*@Test
-    public void entityDetailDomainTopApp_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/entity/detail/domain/topApp", queryParam);
-
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }*/
-
-    /**
-     * GET /interface/entity/detail/domain/topApp error
+     * GET /interface/entity/detail/domain/topAPP success
      */
     @Test
-    public void entityDetailDomainTopApp_error() {
+    public void entityDetailDomainTopAPP_success() {
         Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/entity/detail/domain/topApp", queryParam);
+        MvcResult result = UTUtil.performGet("/interface/entity/detail/domain/topAPP", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+
+    /**
+     * GET /interface/entity/detail/domain/topAPP error
+     */
+    @Test
+    public void entityDetailDomainTopAPP_error() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/entity/detail/domain/topAPP", queryParam);
 
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
