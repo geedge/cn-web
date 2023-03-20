@@ -109,7 +109,7 @@ public class ReportHandlerTask extends QuartzJobBean {
         List<ReportTask> unsubmit = stateTasks.get(0);
         String delayTime = sysConfigService.getValue("delay_time");
         if(StrUtil.isNotBlank(delayTime) && Integer.valueOf(delayTime) > 0 && ObjectUtil.isNotEmpty(unsubmit)) {
-        	DateTime dateTime = DateUtil.offset(new Date(), DateField.MINUTE, Integer.valueOf(delayTime));
+        	DateTime dateTime = DateUtil.offset(new Date(), DateField.MINUTE, -Integer.valueOf(delayTime));
             List<ReportTask> collects = unsubmit.stream().filter(task -> task.getEndTime().getTime() < dateTime.getTime()).collect(Collectors.toList());
             stateTasks.put(0, collects);
         }
