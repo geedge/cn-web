@@ -109,14 +109,9 @@ public class SysConfigController extends AbstractController {
 	 * 系统外观更改
 	 */
 	@PutMapping("/appearance")
-	@RequiresPermissions({"sys:appearance:update"})
 	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
-	public R updateAppearance(@RequestBody JSONObject appearance){
-		String paramKey = "appearance";
-		int isUpdate = sysConfigService.updateConfig(paramKey, appearance);
-		if(isUpdate == 0){
-			return R.error();
-		}
+	public R updateAppearance(@RequestBody Map<String,String> params){
+		sysConfigService.saveBasic(params);
 		return R.ok();
 	}
 	/**

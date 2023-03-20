@@ -15,33 +15,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import cn.hutool.core.lang.Validator;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
-import com.sun.mail.util.MailSSLSocketFactory;
-import net.geedge.common.utils.Tool;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
+import com.sun.mail.util.MailSSLSocketFactory;
+
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysConfigDao;
 import net.geedge.modules.sys.entity.SysConfigEntity;
 import net.geedge.modules.sys.redis.SysConfigRedis;
 import net.geedge.modules.sys.service.SysConfigService;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 @Service("sysConfigService")
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEntity> implements SysConfigService {
@@ -130,7 +137,57 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 		JSONObject jsonObject = Tool.JSONUtil.parseObj(appearance);
 		return jsonObject;
 	}
+	
+	@Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveBasic(Map<String, String> params) {     
+        //过滤非法的key
+        Map<String, String> result = this.validateKeys(BASIC_KEYS, params);
+        //保存
+        this.saveOrUpdateConfsBatch(result);
+    }
+	
+	/**
+    * @Description 校验参数是否存在，并返回过滤后的map
+    * @Date   2021/4/19
+    */
+    private Map<String,String> validateKeys(String[] keys,Map<String,String> params){
+        List<String> keyList = Arrays.asList(keys);
+        Map<String,String> result = new HashMap<>();
+        for (String key : params.keySet()){
+            if(keyList.contains(key)){
+               result.put(key,params.get(key));
+            }
+        }
+        return result;
+    }
+	
+	public Map<String,SysConfigEntity> saveOrUpdateConfsBatch(Map<String,String> params){
 
+        List<SysConfigEntity> exists = this.list(new QueryWrapper<SysConfigEntity>().lambda().in(SysConfigEntity::getCkey,params.keySet()));
+
+        Map<String,SysConfigEntity> map = new HashMap<>();
+
+        for (SysConfigEntity conf : exists){
+            map.put(conf.getCkey(),conf);
+        }
+
+        for (String key : params.keySet()){
+            if(map.containsKey(key)){
+                map.get(key).setCvalue(params.get(key));
+            }else{
+                SysConfigEntity sysConfigEntity = new SysConfigEntity();
+                sysConfigEntity.setCkey(key);
+                sysConfigEntity.setCvalue(params.get(key));
+                map.put(key,sysConfigEntity);
+            }
+        }
+
+        this.saveOrUpdateBatch(map.values());
+
+        return map;
+    }
+	
 	/**
 	 * 系统更改
 	 *

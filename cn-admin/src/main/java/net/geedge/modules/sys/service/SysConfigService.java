@@ -75,5 +75,6 @@ public interface SysConfigService extends IService<SysConfigEntity> {
 
 	/*Map getConfigListByTypes(String[] types, String[] paramKey);*/
 	Map<String,String> queryAppearance();
-
+	
+	void saveBasic(Map<String, String> params);
 }
