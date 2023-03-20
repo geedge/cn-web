@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -98,13 +99,17 @@ public class ReportHandlerTask extends QuartzJobBean {
         
         Map<Integer, List<ReportTask>> stateTasks = tasks.stream().collect(Collectors.groupingBy(ReportTask::getState));
         
+        if(ObjectUtil.isEmpty(stateTasks)) {
+        	log.debug("ReportHandlerTask no tasks to process");
+        	return;
+        }
         /**
          * 根据延迟时间过滤掉不符合条件的任务数据
          */
+        List<ReportTask> unsubmit = stateTasks.get(0);
         String delayTime = sysConfigService.getValue("delay_time");
-        if(StrUtil.isNotBlank(delayTime) && Integer.valueOf(delayTime) > 0) {
+        if(StrUtil.isNotBlank(delayTime) && Integer.valueOf(delayTime) > 0 && ObjectUtil.isNotEmpty(unsubmit)) {
         	DateTime dateTime = DateUtil.offset(new Date(), DateField.MINUTE, Integer.valueOf(delayTime));
-            List<ReportTask> unsubmit = stateTasks.get(0);
             List<ReportTask> collects = unsubmit.stream().filter(task -> task.getEndTime().getTime() > dateTime.getTime()).collect(Collectors.toList());
             stateTasks.put(0, collects);
         }
@@ -138,7 +143,7 @@ public class ReportHandlerTask extends QuartzJobBean {
         	//http://ip:port/admin/query/jobs
         	String createJobPath = StrUtil.str(rpcHost+"admin/query/jobs");
         	List<ReportTask> initTasks = stateTasks.get(0);
-        	List<Integer> tempIds = initTasks.stream().map(ReportTask::getTempId).collect(Collectors.toList());
+        	Set<Integer> tempIds = initTasks.stream().map(ReportTask::getTempId).collect(Collectors.toSet());
         	Collection<ReportTemp> temps = reportTempService.listByIds(tempIds);
         	Map<Integer, ReportTemp> idTemp = temps.stream().collect(Collectors.toMap(ReportTemp::getId, Function.identity()));
         	List<CompletableFuture<Map<String, Object>>> futureList = ListUtil.list(false);
