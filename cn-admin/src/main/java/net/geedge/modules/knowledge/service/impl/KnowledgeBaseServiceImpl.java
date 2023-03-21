@@ -151,7 +151,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			    ResponseEntity<byte[]> resp = restTemplate.getForEntity(uri, byte[].class);
 				if(resp.getStatusCodeValue()==200) {
 					byte[] bytes = (byte[]) resp.getBody();
-					Map<String,Object> datas = (Map<String, Object>) JSON.parse(StrUtil.str(bytes, CharsetUtil.CHARSET_GBK));
+					Map<String,Object> datas = (Map<String, Object>) JSON.parse(StrUtil.str(bytes, CharsetUtil.UTF_8));
 					knowledgeBase.setData(datas.get("data"));
 				}else{
 					log.debug("Get knowledgebase data error code : {}",response.getStatusCodeValue());
