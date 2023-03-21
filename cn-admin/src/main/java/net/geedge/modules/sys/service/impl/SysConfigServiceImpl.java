@@ -294,11 +294,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 		List<SysConfigEntity> list = this.baseMapper.selectList(new LambdaQueryWrapper<SysConfigEntity>().in(SysConfigEntity::getCkey, BASIC_KEYS));
         Map<String,String> map = new HashMap<>();
         for (SysConfigEntity entity : list){
-            if (entity.getCkey().equals("date_format")){
-                map.put("dateFormat",entity.getCvalue());
-            }else {
-                map.put(entity.getCkey(),entity.getCvalue());
-            }
+        	map.put(entity.getCkey(),entity.getCvalue());
         }
         return map;
 	}
