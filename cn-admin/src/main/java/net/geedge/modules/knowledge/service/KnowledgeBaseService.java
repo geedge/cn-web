@@ -22,4 +22,6 @@ public interface KnowledgeBaseService extends IService<KnowledgeBase> {
 	R importData(MultipartFile file,String type);
 	
 	R removeKnowledgeBase(String ids);
+	
+	KnowledgeBase info(Integer id);
 }

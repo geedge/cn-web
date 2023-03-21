@@ -317,6 +317,7 @@ public enum RCode {
     KNOWLEDGE_FILE_TYPE_ERROR(591006,"KnowledgeBase file type only supports csv"),
     KNOWLEDGE_FILE_ISNULL(591007,"KnowledgeBase file is required"),
     KNOWLEDGE_IDS_ISNULL(591008,"KnowledgeBase ids is required"),
+    KNOWLEDGE_ID_ISNULL(591009,"KnowledgeBase id is required"),
     /**
      * stat相关
      */

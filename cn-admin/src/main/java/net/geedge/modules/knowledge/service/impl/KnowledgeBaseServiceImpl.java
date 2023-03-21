@@ -1,6 +1,7 @@
 package net.geedge.modules.knowledge.service.impl;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -14,7 +15,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,6 +113,53 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		page.setRecords(knowledgeBases);
 		return new PageUtils(page);
+	}
+	
+	@Override
+	public KnowledgeBase info(Integer id) {
+		KnowledgeBase knowledgeBase = this.baseMapper.queryInfo(id);
+		if(ObjectUtils.isNotEmpty(knowledgeBase)) {
+			knowledgeBase.setTagType(StrUtil.replace(knowledgeBase.getTagType(), "_user_defined", ""));
+			String galaxyUrl = sysConfigService.getValue("galaxy_url");
+			String url = galaxyUrl+"knowledge_base/v1";
+			ResponseEntity response = restTemplate.exchange(url, HttpMethod.GET,null,Object.class,new HashMap());
+			List<Map<String,Object>> handlerData = new ArrayList<Map<String,Object>>();
+			if(response.getStatusCodeValue()==200) {
+				HashMap body = (HashMap) response.getBody();
+				handlerData = (List<Map<String,Object>>) body.get("data");
+				log.debug("Get knowledgebases info : {}",JSONUtil.toJsonStr(handlerData));
+				handlerData = handlerData.stream().filter(o -> StrUtil.equals((String)o.get("version"),"latest")).collect(Collectors.toList());
+				Map<Object, Map<String, Object>> secondDatas = handlerData.stream().collect(Collectors.toMap(data->data.get("id"), Function.identity()));
+				// 组装本地数据库数据与galaxy接口数据信息 默认获取文件的最新版本latest
+				Map<String, Object> map = secondDatas.get(knowledgeBase.getKnowledgeId());
+				if(ObjectUtil.isNotEmpty(map)) {
+					knowledgeBase.setFormat((String)map.get("format"));
+					knowledgeBase.setVersion((String)map.get("version"));
+					knowledgeBase.setPath((String)map.get("path"));
+				}else {
+					log.debug("local data error knowledge id : {}",knowledgeBase.getKnowledgeId());
+				}
+			}else{
+				log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
+				log.debug("Get knowledgebases error msg : {}",response.getBody());
+			}
+			
+			// 获取到path之后 下载文件组装数据
+			if(StrUtil.isNotBlank(knowledgeBase.getPath())) {
+				String path = knowledgeBase.getPath();
+				URI uri = URI.create(path);
+			    ResponseEntity<byte[]> resp = restTemplate.getForEntity(uri, byte[].class);
+				if(resp.getStatusCodeValue()==200) {
+					byte[] bytes = (byte[]) resp.getBody();
+					Map<String,Object> datas = (Map<String, Object>) JSON.parse(StrUtil.str(bytes, CharsetUtil.CHARSET_GBK));
+					knowledgeBase.setData(datas.get("data"));
+				}else{
+					log.debug("Get knowledgebase data error code : {}",response.getStatusCodeValue());
+					log.debug("Get knowledgebase data error msg : {}",response.getBody());
+				}
+			}
+		}
+		return knowledgeBase;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

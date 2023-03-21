@@ -38,4 +38,10 @@
         where id = #{id}
         and status = 1
     </select>
+    
+    <select id="queryInfo" resultMap="knowledgeBase">
+        select * from
+        knowledge_base
+        where id = #{id}
+    </select>
 </mapper>

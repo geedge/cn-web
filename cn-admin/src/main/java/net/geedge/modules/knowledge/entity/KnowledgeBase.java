@@ -45,4 +45,7 @@ public class KnowledgeBase {
 
 	@TableField(exist = false)
 	private SysUserEntity uuser;
+	
+	@TableField(exist = false)
+	private Object data;
 }
