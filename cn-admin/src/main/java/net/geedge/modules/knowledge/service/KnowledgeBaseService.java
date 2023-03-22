@@ -17,7 +17,7 @@ public interface KnowledgeBaseService extends IService<KnowledgeBase> {
 	
 	String add(Map<String,Object> params);
 	
-	String modify(Map<String,Object> params);
+	Integer modify(Map<String,Object> params);
 	
 	R importData(MultipartFile file,String type);
 	

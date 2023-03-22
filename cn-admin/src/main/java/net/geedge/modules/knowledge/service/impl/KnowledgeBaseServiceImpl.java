@@ -216,12 +216,15 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 	
 	@Override
-	public String modify(Map<String, Object> params) {
-		String knowledgeId = (String) params.get("id");
-		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getKnowledgeId, knowledgeId));
+	public Integer modify(Map<String, Object> params) {
+		Integer id = (Integer) params.get("id");
+		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getId, id));
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
+		// 不允许修改name和type 从库里进行赋值
+		params.put("tagName", knowledgeBase.getTagName());
+		params.put("tagType", knowledgeBase.getTagType());
 		Map<String, Object> handlerParam = this.handlerParam(params);
 		File file = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".txt");
 		Map data = (Map) handlerParam.get("result");
@@ -230,7 +233,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    // 组装参数请求第三方接口
 		    MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 		    map.add("file", new FileSystemResource(file));
-		    map.add("id", knowledgeId);
+		    map.add("id", knowledgeBase.getKnowledgeId());
 		    String galaxyUrl = sysConfigService.getValue("galaxy_url");
 			String url = galaxyUrl+"knowledge_base/v1";
 		    HttpHeaders headers = new HttpHeaders();
@@ -252,10 +255,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		        file.delete();
 		    }
 		}
-		return knowledgeId;
+		return id;
 	}
 	
 	private Map<String,Object> handlerParam(Map<String, Object> params) {
+		Integer id = (Integer) params.get("id");
 		String name = (String) params.get("tagName");
 		String type = (String) params.get("tagType");
 		List<Map<String,Object>> datas = (List<Map<String,Object>>) params.get("data");
@@ -265,10 +269,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				params.put("type", type+"_user_defined");
 			}
 		}
-		//校验名称和类型不能重复
-		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getTagName, name).eq(KnowledgeBase::getTagType, type+"_user_defined"));
-		if(ObjectUtil.isNotEmpty(knowledgeBase)) {
-			throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
+		//校验名称和类型不能重复 仅新增时进行校验
+		if(ObjectUtil.isEmpty(id)) {
+			KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getTagName, name).eq(KnowledgeBase::getTagType, type+"_user_defined"));
+			if(ObjectUtil.isNotEmpty(knowledgeBase)) {
+				throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
+			}
 		}
 		
 		//组装为最后需要的数据格式
