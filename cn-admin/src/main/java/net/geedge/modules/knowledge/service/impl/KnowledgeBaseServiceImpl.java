@@ -218,6 +218,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@Override
 	public Integer modify(Map<String, Object> params) {
 		Integer id = (Integer) params.get("id");
+		String remark = (String) params.get("remark");
 		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getId, id));
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
@@ -245,6 +246,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    	// 保存数据到数据库表中
 		    	knowledgeBase.setUby(ShiroUtils.getUserId());
 		    	knowledgeBase.setUtime(new Date());
+		    	knowledgeBase.setRemark(remark);
 		    	this.getBaseMapper().updateById(knowledgeBase);
 		    }else{
 				log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
