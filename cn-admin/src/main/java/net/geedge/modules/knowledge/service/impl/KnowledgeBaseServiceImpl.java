@@ -110,6 +110,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}else{
 			log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
 			log.debug("Get knowledgebases error msg : {}",response.getBody());
+			throw new CNException(RCode.KNOWLEDGE_QGW_SERVICE_ERROR);
 		}
 		page.setRecords(knowledgeBases);
 		return new PageUtils(page);
@@ -142,6 +143,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			}else{
 				log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
 				log.debug("Get knowledgebases error msg : {}",response.getBody());
+				throw new CNException(RCode.KNOWLEDGE_QGW_SERVICE_ERROR);
 			}
 			
 			// 获取到path之后 下载文件组装数据
@@ -156,6 +158,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				}else{
 					log.debug("Get knowledgebase data error code : {}",response.getStatusCodeValue());
 					log.debug("Get knowledgebase data error msg : {}",response.getBody());
+					throw new CNException(RCode.KNOWLEDGE_HOS_ERROR);
 				}
 			}
 		}
@@ -206,6 +209,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    }else{
 				log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
 				log.debug("Get knowledgebases error msg : {}",response.getBody());
+				throw new CNException(RCode.KNOWLEDGE_QGW_SERVICE_ERROR);
 			}
 		} finally {
 		    if(file != null && file.exists()){
@@ -251,6 +255,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    }else{
 				log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
 				log.debug("Get knowledgebases error msg : {}",response.getBody());
+				throw new CNException(RCode.KNOWLEDGE_QGW_SERVICE_ERROR);
 			}
 		} finally {
 		    if(file != null && file.exists()){
