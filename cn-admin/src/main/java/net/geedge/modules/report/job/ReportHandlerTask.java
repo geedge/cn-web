@@ -99,10 +99,6 @@ public class ReportHandlerTask extends QuartzJobBean {
         
         Map<Integer, List<ReportTask>> stateTasks = tasks.stream().collect(Collectors.groupingBy(ReportTask::getState));
         
-        if(ObjectUtil.isEmpty(stateTasks)) {
-        	log.debug("ReportHandlerTask no tasks to process");
-        	return;
-        }
         /**
          * 根据延迟时间过滤掉不符合条件的任务数据
          */
@@ -431,14 +427,10 @@ public class ReportHandlerTask extends QuartzJobBean {
 						continue;
 					}
 					String fileName = reportJob.getName()+reportJob.getCtime().getTime()+".pdf";
-					while(true) {
-						boolean exist = FileUtil.exist(Constant.TEMP_PATH+File.separator+fileName);
-						if(!exist) {
-							log.debug("s3upload file not existsm file name :{}",fileName);
-							Thread.sleep(3000);
-						}else {
-							break;
-						}
+					boolean exist = FileUtil.exist(Constant.TEMP_PATH+File.separator+fileName);
+					if(!exist) {
+						log.error("s3upload file not existsm file name :{}",fileName);
+						continue;
 					}
 	            	reportJobService.upload(fileName);
 	            	reportJob.setUpload(1);
