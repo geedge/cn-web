@@ -431,10 +431,14 @@ public class ReportHandlerTask extends QuartzJobBean {
 						continue;
 					}
 					String fileName = reportJob.getName()+reportJob.getCtime().getTime()+".pdf";
-	            	boolean exist = FileUtil.exist(Constant.TEMP_PATH+File.separator+fileName);
-					if(!exist) {
-						log.error("s3upload file not existsm file name :{}",fileName);
-						continue;
+					while(true) {
+						boolean exist = FileUtil.exist(Constant.TEMP_PATH+File.separator+fileName);
+						if(!exist) {
+							log.debug("s3upload file not existsm file name :{}",fileName);
+							Thread.sleep(3000);
+						}else {
+							break;
+						}
 					}
 	            	reportJobService.upload(fileName);
 	            	reportJob.setUpload(1);
