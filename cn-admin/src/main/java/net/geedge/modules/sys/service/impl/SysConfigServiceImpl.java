@@ -139,6 +139,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 	}
 	
 	@Override
+	public SysConfigEntity queryByKey(String paramKey) {
+		SysConfigEntity config = baseMapper.queryByKey(paramKey);
+		return config;
+	}
+	
+	@Override
     @Transactional(rollbackFor = Exception.class)
     public void saveBasic(Map<String, String> params) {     
         //过滤非法的key
@@ -184,7 +190,10 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
         }
 
         this.saveOrUpdateBatch(map.values());
-
+        // 清除redis缓存
+        for(String key : map.keySet()) {
+        	sysConfigRedis.saveOrUpdate(map.get(key));
+        }
         return map;
     }
 	
@@ -297,6 +306,35 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
         	map.put(entity.getCkey(),entity.getCvalue());
         }
         return map;
+	}
+
+	@Override
+	public void updateByKey(Map<String,String> params) {
+		List<SysConfigEntity> exists = this.list(new QueryWrapper<SysConfigEntity>().lambda().in(SysConfigEntity::getCkey,params.keySet()));
+
+        Map<String,SysConfigEntity> map = new HashMap<>();
+
+        for (SysConfigEntity conf : exists){
+            map.put(conf.getCkey(),conf);
+        }
+
+        for (String key : params.keySet()){
+            if(map.containsKey(key)){
+                map.get(key).setCvalue(params.get(key));
+            }else{
+                SysConfigEntity sysConfigEntity = new SysConfigEntity();
+                sysConfigEntity.setCkey(key);
+                sysConfigEntity.setCvalue(params.get(key));
+                map.put(key,sysConfigEntity);
+            }
+        }
+
+        this.saveOrUpdateBatch(map.values());
+        
+        // 清除redis缓存
+        for(String key : map.keySet()) {
+        	sysConfigRedis.saveOrUpdate(map.get(key));
+        }
 	}
     
 	/*@Override

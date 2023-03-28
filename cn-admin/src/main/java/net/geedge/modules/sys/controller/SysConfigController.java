@@ -8,7 +8,6 @@
 
 package net.geedge.modules.sys.controller;
 
-
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -37,7 +36,7 @@ import net.geedge.modules.sys.service.SysConfigService;
 /**
  * 系统配置信息
  *
-
+ * 
  */
 @RestController
 @RequestMapping("/sys")
@@ -49,17 +48,16 @@ public class SysConfigController extends AbstractController {
 	 * 所有配置列表
 	 */
 	@GetMapping("/config")
-	public R list(@RequestParam Map<String, Object> params){
+	public R list(@RequestParam Map<String, Object> params) {
 		PageUtils page = sysConfigService.queryPage(params);
 		return R.ok().put("page", page);
 	}
-
 
 	/**
 	 * 配置信息
 	 */
 	@GetMapping("/config/{id}")
-	public R info(@PathVariable("id") Long id){
+	public R info(@PathVariable("id") Long id) {
 		SysConfigEntity config = sysConfigService.getById(id);
 		return R.ok().put("config", config);
 	}
@@ -69,7 +67,7 @@ public class SysConfigController extends AbstractController {
 	 */
 	@SysLog
 	@PostMapping("/config")
-	public R save(@RequestBody SysConfigEntity config){
+	public R save(@RequestBody SysConfigEntity config) {
 		ValidatorUtils.validateEntity(config);
 		sysConfigService.saveConfig(config);
 		return R.ok();
@@ -80,7 +78,7 @@ public class SysConfigController extends AbstractController {
 	 */
 	@SysLog
 	@PutMapping("/config")
-	public R update(@RequestBody SysConfigEntity config){
+	public R update(@RequestBody SysConfigEntity config) {
 		ValidatorUtils.validateEntity(config);
 		sysConfigService.update(config);
 		return R.ok().putData("id", config.getId());
@@ -91,7 +89,7 @@ public class SysConfigController extends AbstractController {
 	 */
 	@SysLog
 	@DeleteMapping("/config")
-	public R delete(@RequestBody Long[] ids){
+	public R delete(@RequestBody Long[] ids) {
 		sysConfigService.deleteBatch(ids);
 		return R.ok();
 	}
@@ -101,79 +99,80 @@ public class SysConfigController extends AbstractController {
 	 *
 	 */
 	@GetMapping("/appearance")
-	public R queryAppearance(){
+	public R queryAppearance() {
 		Map<String, String> appearance = sysConfigService.queryAppearance();
 		return R.ok(appearance);
 	}
+
 	/**
 	 * 系统外观更改
 	 */
 	@PutMapping("/appearance")
-	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
-	public R updateAppearance(@RequestBody Map<String,String> params){
+	@SysLog(operation = OperationEnum.UPDATE, type = TypeEnum.SYSTEM)
+	public R updateAppearance(@RequestBody Map<String, String> params) {
 		sysConfigService.saveBasic(params);
 		return R.ok();
 	}
+
 	/**
-	 * 系统安全设定查询
+	 * 根据key名查询
 	 *
 	 */
-	@GetMapping("/security")
-	public R querySecurity(){
-		String paramKey = "security";
-		JSONObject security = sysConfigService.queryConfig(paramKey);
-		return R.ok(security);
+	@GetMapping("/{key}")
+	public R queryByKey(@PathVariable("key") String ckey) {
+		SysConfigEntity config = sysConfigService.queryByKey(ckey);
+		return R.ok(config);
 	}
+
 	/**
-	 * 系统安全设定修改
+	 * 根据key名批量修改
 	 *
 	 */
-	@PutMapping("/security")
-	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
-	public R updateSecurity(@RequestBody JSONObject security){
-		String paramKey = "security";
-		int isUpdate = sysConfigService.updateConfig(paramKey, security);
-		if(isUpdate == 0){
-			return R.error();
-		}
+	@PutMapping("/batchModify")
+	@SysLog(operation = OperationEnum.UPDATE, type = TypeEnum.SYSTEM)
+	public R updateSecurity(@RequestBody Map<String,String> params) {
+		sysConfigService.updateByKey(params);
 		return R.ok();
 	}
+
 	/**
 	 * 系统邮箱配置查询
 	 *
 	 */
+	/*
 	@GetMapping("/email")
 	public R queryEmail(){
-		String paramKey = "email";
-		JSONObject email = sysConfigService.queryConfig(paramKey);
-		email.remove("authPin");
-		return R.ok(email);
+	String paramKey = "email";
+	JSONObject email = sysConfigService.queryConfig(paramKey);
+	email.remove("authPin");
+	return R.ok(email);
 	}
-	/**
-	 * 系统邮箱配置修改
-	 *
-	 */
+	*//**
+		 * 系统邮箱配置修改
+		 *
+		 */
+	/*
 	@PutMapping("/email")
 	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
 	public R updateEmail(@RequestBody JSONObject email){
-		String paramKey = "email";
-		int isUpdate = sysConfigService.updateConfig(paramKey, email);
-		if(isUpdate == 0){
-			return R.error();
-		}
-		return R.ok();
+	String paramKey = "email";
+	int isUpdate = sysConfigService.updateConfig(paramKey, email);
+	if(isUpdate == 0){
+		return R.error();
 	}
-	/**
-	 * 系统邮箱配置测试
-	 *
-	 */
-	@PutMapping("/email/test")
-	@SysLog
-	public R testEmail(@RequestBody JSONObject email){
-		boolean isSuccess = sysConfigService.testEmail(email);
-		if(!isSuccess){
-			return R.error();
-		}
-		return R.ok();
+	return R.ok();
 	}
+	*//**
+		 * 系统邮箱配置测试
+		 *
+		 *//*
+			@PutMapping("/email/test")
+			@SysLog
+			public R testEmail(@RequestBody JSONObject email){
+			boolean isSuccess = sysConfigService.testEmail(email);
+			if(!isSuccess){
+				return R.error();
+			}
+			return R.ok();
+			}*/
 }
