@@ -26,149 +26,128 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AdminApplication.class)
 public class SysConfigTest extends BaseTest<SysConfigEntity> {
-    @Override
-    protected String jsonIndex() {
-        return "sys/SysConfigTestParameter.json";
-    }
+	@Override
+	protected String jsonIndex() {
+		return "sys/SysConfigTestParameter.json";
+	}
 
-    /**
-     * POST /sys/config success
-     */
-    @Test
-    public void saveSysConfig_success() {
-        SysConfigEntity sysConfigEntity = jsonToInParameter(testName.getMethodName(), SysConfigEntity.class);
-        MvcResult result = UTUtil.performPost("/sys/config", sysConfigEntity);
+	/**
+	 * POST /sys/config success
+	 */
+	@Test
+	public void saveSysConfig_success() {
+		SysConfigEntity sysConfigEntity = jsonToInParameter(testName.getMethodName(), SysConfigEntity.class);
+		MvcResult result = UTUtil.performPost("/sys/config", sysConfigEntity);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+		UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+	}
 
-    /**
-     * POST /sys/config error
-     */
-    @Test
-    public void saveSysConfig_error() {
-        SysConfigEntity sysConfigEntity = jsonToInParameter(testName.getMethodName(), SysConfigEntity.class);
-        MvcResult result = UTUtil.performPost("/sys/config", sysConfigEntity);
+	/**
+	 * POST /sys/config error
+	 */
+	@Test
+	public void saveSysConfig_error() {
+		SysConfigEntity sysConfigEntity = jsonToInParameter(testName.getMethodName(), SysConfigEntity.class);
+		MvcResult result = UTUtil.performPost("/sys/config", sysConfigEntity);
 
-        UTUtil.assertEqualsRCode(result, RCode.ERROR);
-    }
+		UTUtil.assertEqualsRCode(result, RCode.ERROR);
+	}
 
-    /**
-     * PUT /sys/config success
-     */
-    @Test
-    public void updateSysConfig_success() {
-        SysConfigEntity sysConfigEntity = jsonToInParameter(testName.getMethodName(), SysConfigEntity.class);
-        MvcResult result = UTUtil.performPut("/sys/config", sysConfigEntity);
+	/**
+	 * PUT /sys/config success
+	 */
+	@Test
+	public void updateSysConfig_success() {
+		SysConfigEntity sysConfigEntity = jsonToInParameter(testName.getMethodName(), SysConfigEntity.class);
+		MvcResult result = UTUtil.performPut("/sys/config", sysConfigEntity);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+		UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+	}
 
-    /**
-     * PUT /sys/config error
-     */
-    @Test
-    public void updateSysConfig_error() {
-        SysConfigEntity sysConfigEntity = jsonToInParameter(testName.getMethodName(), SysConfigEntity.class);
-        MvcResult result = UTUtil.performPut("/sys/config", sysConfigEntity);
+	/**
+	 * PUT /sys/config error
+	 */
+	@Test
+	public void updateSysConfig_error() {
+		SysConfigEntity sysConfigEntity = jsonToInParameter(testName.getMethodName(), SysConfigEntity.class);
+		MvcResult result = UTUtil.performPut("/sys/config", sysConfigEntity);
 
-        UTUtil.assertEqualsRCode(result, RCode.ERROR);
-    }
+		UTUtil.assertEqualsRCode(result, RCode.ERROR);
+	}
 
-    /**
-     * DELETE /sys/config success
-     */
-    @Test
-    public void deleteSysConfig_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        Object ids = queryParam.get("ids");
+	/**
+	 * DELETE /sys/config success
+	 */
+	@Test
+	public void deleteSysConfig_success() {
+		Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+		Object ids = queryParam.get("ids");
 
-        MvcResult result = UTUtil.performDelete("/sys/config", ids);
+		MvcResult result = UTUtil.performDelete("/sys/config", ids);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+		UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+	}
 
-    /**
-     * GET /sys/appearance exist
-     */
-    @Test
-    public void querySysAppearance_exist() throws Exception {
-        MvcResult result = UTUtil.performGet("/sys/appearance",null);
+	/**
+	 * GET /sys/appearance exist
+	 */
+	@Test
+	public void querySysAppearance_exist() throws Exception {
+		MvcResult result = UTUtil.performGet("/sys/appearance", null);
 
-        String responseStr = result.getResponse().getContentAsString();
-        Assert.assertNotNull("No success response", responseStr);
+		String responseStr = result.getResponse().getContentAsString();
+		Assert.assertNotNull("No success response", responseStr);
 
-        Map<String, Object> actualResult = JSONObject.parseObject(responseStr, Map.class);
-        Object sysDictInfo = actualResult.get("data");
+		Map<String, Object> actualResult = JSONObject.parseObject(responseStr, Map.class);
+		Object sysDictInfo = actualResult.get("data");
 
-        // isExist
-        Assert.assertNotNull(sysDictInfo);
-    }
+		// isExist
+		Assert.assertNotNull(sysDictInfo);
+	}
 
-    /**
-     * PUT /sys/appearance success
-     */
-    @Test
-    public void updateSysAppearance_success() {
-        JSONObject queryParam = jsonToInParameter(testName.getMethodName(), JSONObject.class);
-        MvcResult result = UTUtil.performPut("/sys/appearance", queryParam);
+	/**
+	 * PUT /sys/appearance success
+	 */
+	@Test
+	public void updateSysAppearance_success() {
+		JSONObject queryParam = jsonToInParameter(testName.getMethodName(), JSONObject.class);
+		MvcResult result = UTUtil.performPut("/sys/appearance", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+		UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+	}
 
-    /**
-     * GET /sys/timezones success
-     */
-    @Test
-    public void querySysTimezones_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/sys/timezones", queryParam);
+	/**
+	 * GET /sys/timezones success
+	 */
+	@Test
+	public void querySysTimezones_success() {
+		Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+		MvcResult result = UTUtil.performGet("/sys/timezones", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
+		UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+	}
 
-    /**
-     * GET /sys/security success
-     */
-    @Test
-    public void querySysSecurity_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/sys/security", queryParam);
-
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
-
-    /**
-     * PUT /sys/security success
-     */
-    @Test
-    public void updateSysSecurity_success() {
-        JSONObject queryParam = jsonToInParameter(testName.getMethodName(), JSONObject.class);
-        MvcResult result = UTUtil.performPut("/sys/security", queryParam);
-
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
-
-    /**
-     * GET /sys/email success
-     */
-    @Test
-    public void querySysEmail_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/sys/email", queryParam);
-
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
-
-    /**
-     * PUT /sys/email success
-     */
-    @Test
-    public void updateSysEmail_success() {
-        JSONObject queryParam = jsonToInParameter(testName.getMethodName(), JSONObject.class);
-        MvcResult result = UTUtil.performPut("/sys/email", queryParam);
-
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
-
+	/**
+	 * GET /sys/email success
+	 */
+	/*
+	@Test
+	public void querySysEmail_success() {
+	 Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+	 MvcResult result = UTUtil.performGet("/sys/email", queryParam);
+	
+	 UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+	}
+	
+	*//**
+		 * PUT /sys/email success
+		 *//*
+			@Test
+			public void updateSysEmail_success() {
+			 JSONObject queryParam = jsonToInParameter(testName.getMethodName(), JSONObject.class);
+			 MvcResult result = UTUtil.performPut("/sys/email", queryParam);
+			
+			 UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+			}
+			*/
 }

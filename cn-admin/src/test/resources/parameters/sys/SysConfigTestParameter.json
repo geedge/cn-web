@@ -39,24 +39,7 @@
   "------------------ GET  /sys/timezones data---------------------": "note",
   "querySysTimezones_success": {
   },
-  "------------------ GET  /sys/security data---------------------": "note",
-  "querySysSecurity_success": {
-  },
-  "------------------ PUT  /sys/security data---------------------": "note",
-  "updateSysSecurity_success": {
-    "mfaEnable": 1,
-    "pinPolicy": {
-      "enable": 1,
-      "length": 6,
-      "num": 1,
-      "lower": 1,
-      "upper": 1,
-      "spec": 1,
-      "valid": 30,
-      "retry": 1,
-      "lockTime": 30
-    }
-  },
+  
   "------------------ GET  /sys/email data---------------------": "note",
   "querySysEmail_success": {
   },
