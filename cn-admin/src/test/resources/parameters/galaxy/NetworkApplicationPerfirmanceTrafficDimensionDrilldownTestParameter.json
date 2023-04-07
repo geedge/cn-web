@@ -1,0 +1,55 @@
+{
+  "------------------ GET  /interface/application/performance/overview/drilldown/drilldown/dimension/trafficGraph data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDrilldownDimensionTrafficGraph_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "country",
+    "q": "country='China'"
+  },
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "q": "client_country='China'",
+    "limit": 10
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionCycleTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionCycleTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "country",
+    "q": "common_server_ip='116.178.236.216'",
+    "params": "'China'",
+    "limit": 10
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionTcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionCycleDimensionTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "q": "client_country='China'",
+    "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionHttpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionCycleDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "q": "client_country='China'",
+    "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimensionSslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionCycleDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "q": "client_country='China'",
+    "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
+  }
+}

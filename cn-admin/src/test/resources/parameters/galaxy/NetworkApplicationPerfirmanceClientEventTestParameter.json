@@ -1,0 +1,125 @@
+{
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/world/trafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "typeVal": "116.178.236.216"
+  },
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/world/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "typeVal": "116.178.236.216",
+    "params": "'China'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/world/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "typeVal": "116.178.236.216",
+    "params": "'China'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/world/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsWorldSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "typeVal": "116.178.236.216",
+    "params": "'China'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/country/trafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "typeVal": "116.178.236.216"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/country/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/country/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/country/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountrySslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/province/trafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "province": "Beijing",
+    "typeVal": "116.178.236.216"
+  },
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/province/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "province": "Xinjiang",
+    "typeVal": "116.178.236.216"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/province/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "province": "Xinjiang",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang','Beijing'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/clientLocations/province/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "country": "China",
+    "province": "Xinjiang",
+    "typeVal": "116.178.236.216",
+    "params": "'Xinjiang','Beijing'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/recentEvents data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionRecentEvents_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "param": "114.114.114.114"
+  }
+}

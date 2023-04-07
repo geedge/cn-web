@@ -1,0 +1,85 @@
+{
+  "------------------ GET  /interface/application/performance/location/networkMap data---------------------": "note",
+  "applicationPerformanceLocationNetworkMap_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },
+  
+  "------------------ GET  /interface/application/performance/location/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceLocationTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceLocationHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/sslConDelay data---------------------": "note",
+  "applicationPerformanceLocationSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/tcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceLocationTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/packetRetransPercent data---------------------": "note",
+  "applicationPerformanceLocationPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/thoughput data---------------------": "note",
+  "applicationPerformanceLocationThoughput_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/tcpConnectionEstablishLatency data---------------------": "note",
+  "applicationPerformanceLocationTcpConnectionEstablishLatency_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/httpResponseLatency data---------------------": "note",
+  "applicationPerformanceLocationHttpResponseLatency_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/sslHandshakeLatency data---------------------": "note",
+  "applicationPerformanceLocationSslHandshakeLatency_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/packetsLoss data---------------------": "note",
+  "applicationPerformanceLocationPacketsLoss_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  },  
+  
+  "------------------ GET  /interface/application/performance/location/packetsRetrains data---------------------": "note",
+  "applicationPerformanceLocationPacketsRetrains_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "side": "server"
+  }
+}

@@ -15,19 +15,319 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.Map;
 
 /**
- * @Auther: lijinyang
- * @Date: 2023/02/24/14:46
+ *     Network Applications Performance Overview
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AdminApplication.class)
-public class ApplicationTest extends BaseTest<Map> {
+public class NetworkApplicationPerfirmanceOverviewTest extends BaseTest<Map> {
 
     @Override
     protected String jsonIndex() {
-        return "galaxy/ApplicationTestParameter.json";
+        return "galaxy/NetworkApplicationPerfirmanceOverviewTestParameter.json";
     }
 
+    /**
+     * GET /interface/application/performance/overview/tcpSessionDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewTcpSessionDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/tcpSessionDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/httpResponseDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewHttpResponseDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/httpResponseDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/sslConDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewSslConDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/sslConDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/tcpLostlenPercent success
+     */
+    @Test
+    public void applicationPerformanceOverviewTcpLostlenPercent_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/tcpLostlenPercent", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/packetRetransPercent success
+     */
+    @Test
+    public void applicationPerformanceOverviewPacketRetransPercent_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/packetRetransPercent", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/totalTrafficAnalysis success
+     */
+    @Test
+    public void applicationPerformanceOverviewTotalTrafficAnalysis_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/totalTrafficAnalysis", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/totalNetworkAnalysis success
+     */
+    @Test
+    public void applicationPerformanceOverviewTotalNetworkAnalysis_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/totalNetworkAnalysis", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/totalHttpResponseDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewTotalHttpResponseDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/totalHttpResponseDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/totalSslConDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewTotalSslConDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/totalSslConDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/appTrafficAnalysis success
+     */
+    @Test
+    public void applicationPerformanceOverviewAppTrafficAnalysis_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appTrafficAnalysis", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/appNetworkAnalysis success
+     */
+    @Test
+    public void applicationPerformanceOverviewAppNetworkAnalysis_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appNetworkAnalysis", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/appTcpSessionDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewAppTcpSessionDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appTcpSessionDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/appHttpResponseDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewAppHttpResponseDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appHttpResponseDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/appSslConDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewAppSslConDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appSslConDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/appTcpLostlenPercent success
+     */
+    @Test
+    public void applicationPerformanceOverviewAppTcpLostlenPercent_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appTcpLostlenPercent", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/appPacketRetransPercent success
+     */
+    @Test
+    public void applicationPerformanceOverviewAppPacketRetransPercent_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appPacketRetransPercent", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/dimensionTrafficAnalysis success
+     */
+    @Test
+    public void applicationPerformanceOverviewDimensionTrafficAnalysis_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionTrafficAnalysis", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/dimensionCycleTrafficAnalysis success
+     */
+    @Test
+    public void applicationPerformanceOverviewDimensionCycleTrafficAnalysis_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionCycleTrafficAnalysis", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/dimensionNetworkAnalysis success
+     */
+    @Test
+    public void applicationPerformanceOverviewDimensionNetworkAnalysis_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionNetworkAnalysis", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+
+    /**
+     * GET /interface/application/performance/overview/dimensionTcpSessionDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewDimensionTcpSessionDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionTcpSessionDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/dimensionHttpResponseDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewDimensionHttpResponseDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionHttpResponseDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+
+    /**
+     * GET /interface/application/performance/overview/dimensionSslConDelay success
+     */
+    @Test
+    public void applicationPerformanceOverviewDimensionSslConDelay_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionSslConDelay", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/dimensionTcpLostlenPercent success
+     */
+    @Test
+    public void applicationPerformanceOverviewDimensionTcpLostlenPercent_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionTcpLostlenPercent", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    /**
+     * GET /interface/application/performance/overview/dimensionPacketRetransPercent success
+     */
+    @Test
+    public void applicationPerformanceOverviewDimensionPacketRetransPercent_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionPacketRetransPercent", queryParam);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * GET /interface/application/performance/relatedSessions success
      */
@@ -314,16 +614,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/dimensionTrafficAnalysis success
-     */
-    @Test
-    public void applicationPerformanceOverviewDimensionTrafficAnalysis_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionTrafficAnalysis", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/dimensionTrafficAnalysis error
@@ -336,16 +627,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/dimensionTcpLostlenPercent success
-     */
-    @Test
-    public void applicationPerformanceOverviewDimensionTcpLostlenPercent_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionTcpLostlenPercent", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/dimensionTcpLostlenPercent error
@@ -358,16 +640,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/dimensionCycleTrafficAnalysis success
-     */
-    @Test
-    public void applicationPerformanceOverviewDimensionCycleTrafficAnalysis_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionCycleTrafficAnalysis", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/dimensionCycleTrafficAnalysis error
@@ -380,16 +653,6 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/dimensionNetworkAnalysis success
-     */
-    @Test
-    public void applicationPerformanceOverviewDimensionNetworkAnalysis_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionNetworkAnalysis", queryParam);
-
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/dimensionNetworkAnalysis error
@@ -402,16 +665,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/dimensionPacketRetransPercent success
-     */
-    @Test
-    public void applicationPerformanceOverviewDimensionPacketRetransPercent_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionPacketRetransPercent", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/dimensionPacketRetransPercent error
@@ -424,16 +678,6 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/dimensionHttpResponseDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewDimensionHttpResponseDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionHttpResponseDelay", queryParam);
-
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/dimensionHttpResponseDelay error
@@ -446,16 +690,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/dimensionSslConDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewDimensionSslConDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionSslConDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/dimensionSslConDelay error
@@ -468,16 +703,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/dimensionTcpSessionDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewDimensionTcpSessionDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/dimensionTcpSessionDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/dimensionTcpSessionDelay error
@@ -490,16 +716,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/tcpLostlenPercent success
-     */
-    @Test
-    public void applicationPerformanceOverviewTcpLostlenPercent_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/tcpLostlenPercent", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/tcpLostlenPercent error
@@ -512,16 +729,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/totalTrafficAnalysis success
-     */
-    @Test
-    public void applicationPerformanceOverviewTotalTrafficAnalysis_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/totalTrafficAnalysis", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/totalTrafficAnalysis error
@@ -534,16 +742,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/totalNetworkAnalysis success
-     */
-    @Test
-    public void applicationPerformanceOverviewTotalNetworkAnalysis_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/totalNetworkAnalysis", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/totalNetworkAnalysis error
@@ -556,16 +755,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/totalHttpResponseDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewTotalHttpResponseDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/totalHttpResponseDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/totalHttpResponseDelay error
@@ -578,16 +768,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/totalSslConDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewTotalSslConDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/totalSslConDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/totalSslConDelay error
@@ -600,16 +781,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/packetRetransPercent success
-     */
-    @Test
-    public void applicationPerformanceOverviewPacketRetransPercent_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/packetRetransPercent", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/packetRetransPercent error
@@ -622,16 +794,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/appTrafficAnalysis success
-     */
-    @Test
-    public void applicationPerformanceOverviewAppTrafficAnalysis_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appTrafficAnalysis", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/appTrafficAnalysis error
@@ -644,16 +807,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/appTcpLostlenPercent success
-     */
-    @Test
-    public void applicationPerformanceOverviewAppTcpLostlenPercent_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appTcpLostlenPercent", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/appTcpLostlenPercent error
@@ -666,16 +820,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/appNetworkAnalysis success
-     */
-    @Test
-    public void applicationPerformanceOverviewAppNetworkAnalysis_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appNetworkAnalysis", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/appNetworkAnalysis error
@@ -688,16 +833,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/appPacketRetransPercent success
-     */
-    @Test
-    public void applicationPerformanceOverviewAppPacketRetransPercent_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appPacketRetransPercent", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/appPacketRetransPercent error
@@ -710,16 +846,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/appHttpResponseDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewAppHttpResponseDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appHttpResponseDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/appHttpResponseDelay error
@@ -732,16 +859,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/appSslConDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewAppSslConDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appSslConDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/appSslConDelay error
@@ -754,16 +872,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/appTcpSessionDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewAppTcpSessionDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/appTcpSessionDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/appTcpSessionDelay error
@@ -776,16 +885,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/httpResponseDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewHttpResponseDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/httpResponseDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/httpResponseDelay error
@@ -798,16 +898,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/sslConDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewSslConDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/sslConDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/sslConDelay error
@@ -820,16 +911,7 @@ public class ApplicationTest extends BaseTest<Map> {
         UTUtil.assertNotEqualsRCode(result, RCode.SUCCESS);
     }
 
-    /**
-     * GET /interface/application/performance/overview/tcpSessionDelay success
-     */
-    @Test
-    public void applicationPerformanceOverviewTcpSessionDelay_success() {
-        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
-        MvcResult result = UTUtil.performGet("/interface/application/performance/overview/tcpSessionDelay", queryParam);
 
-        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
-    }
 
     /**
      * GET /interface/application/performance/overview/tcpSessionDelay error

@@ -1,0 +1,40 @@
+{
+  "------------------ GET  /interface/overview/drilldown/dimensionTrafficAnalysis data---------------------": "note",
+  "overviewDrilldownDimensionTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip"
+  },
+
+  "------------------ GET  /interface/overview/drilldown/dimensionCycleTrafficAnalysis data---------------------": "note",
+  "overviewDrilldownDimensionCycleTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+
+  "------------------ GET  /interface/overview/drilldown/dimensionTcpPktRetranPercent data---------------------": "note",
+  "overviewDrilldownDimensionTcpPktRetranPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+
+  "------------------ GET  /interface/overview/drilldown/dimensionHttpResponseDelay data---------------------": "note",
+  "overviewDrilldownDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+
+  "------------------ GET  /interface/overview/drilldown/dimensionSslConDelay data---------------------": "note",
+  "overviewDrilldownDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  }
+}

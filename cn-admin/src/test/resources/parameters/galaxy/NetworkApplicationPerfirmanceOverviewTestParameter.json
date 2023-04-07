@@ -1,4 +1,203 @@
 {
+  "------------------ GET  /interface/application/performance/overview/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  
+  "------------------ GET  /interface/application/performance/overview/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  
+  "------------------ GET  /interface/application/performance/overview/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/tcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceOverviewTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/packetRetransPercent data---------------------": "note",
+  "applicationPerformanceOverviewPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/totalTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewTotalTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  
+  "------------------ GET  /interface/application/performance/overview/totalNetworkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewTotalNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/totalHttpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewTotalHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/totalSslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewTotalSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/appTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewAppTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/appNetworkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewAppNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/appTcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewAppTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/appHttpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewAppHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/appSslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewAppSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/appTcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceOverviewAppTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/appPacketRetransPercent data---------------------": "note",
+  "applicationPerformanceOverviewAppPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/dimensionTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDimensionTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "limit": "10"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/dimensionCycleTrafficAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDimensionCycleTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/dimensionNetworkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDimensionNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },
+  
+  "------------------ GET  /interface/application/performance/overview/dimensionTcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDimensionTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/dimensionHttpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/dimensionSslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/dimensionTcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceOverviewDimensionTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/dimensionPacketRetransPercent data---------------------": "note",
+  "applicationPerformanceOverviewDimensionPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
+  },  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  
+  
+  
   "------------------ GET  /interface/application/performance/relatedSessions data---------------------": "note",
   "applicationPerformanceRelatedSessions_success": {
     "startTime": "1671761197",
@@ -103,190 +302,76 @@
   },
   "applicationPerformanceLocationTcpSessionDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/dimensionTrafficAnalysis data---------------------": "note",
-  "applicationPerformanceOverviewDimensionTrafficAnalysis_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797",
-    "type": "ip",
-    "limit": "10"
-  },
+
   "applicationPerformanceOverviewDimensionTrafficAnalysis_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/dimensionTcpLostlenPercent data---------------------": "note",
-  "applicationPerformanceOverviewDimensionTcpLostlenPercent_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797",
-    "type": "ip",
-    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
-  },
+
   "applicationPerformanceOverviewDimensionTcpLostlenPercent_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/dimensionCycleTrafficAnalysis data---------------------": "note",
-  "applicationPerformanceOverviewDimensionCycleTrafficAnalysis_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797",
-    "type": "ip",
-    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
-  },
+
   "applicationPerformanceOverviewDimensionCycleTrafficAnalysis_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/dimensionNetworkAnalysis data---------------------": "note",
-  "applicationPerformanceOverviewDimensionNetworkAnalysis_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797",
-    "type": "ip",
-    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
-  },
+
   "applicationPerformanceOverviewDimensionNetworkAnalysis_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/dimensionPacketRetransPercent data---------------------": "note",
-  "applicationPerformanceOverviewDimensionPacketRetransPercent_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797",
-    "type": "ip",
-    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
-  },
+
   "applicationPerformanceOverviewDimensionPacketRetransPercent_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/dimensionHttpResponseDelay data---------------------": "note",
-  "applicationPerformanceOverviewDimensionHttpResponseDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797",
-    "type": "ip",
-    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
-  },
+
   "applicationPerformanceOverviewDimensionHttpResponseDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/dimensionSslConDelay data---------------------": "note",
-  "applicationPerformanceOverviewDimensionSslConDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797",
-    "type": "ip",
-    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
-  },
+
   "applicationPerformanceOverviewDimensionSslConDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/dimensionTcpSessionDelay data---------------------": "note",
-  "applicationPerformanceOverviewDimensionTcpSessionDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797",
-    "type": "ip",
-    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
-  },
+
   "applicationPerformanceOverviewDimensionTcpSessionDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/tcpLostlenPercent data---------------------": "note",
-  "applicationPerformanceOverviewTcpLostlenPercent_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797",
-    "type": "ip",
-    "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.78.204'"
-  },
+
   "applicationPerformanceOverviewTcpLostlenPercent_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/totalTrafficAnalysis data---------------------": "note",
-  "applicationPerformanceOverviewTotalTrafficAnalysis_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewTotalTrafficAnalysis_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/totalNetworkAnalysis data---------------------": "note",
-  "applicationPerformanceOverviewTotalNetworkAnalysis_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewTotalNetworkAnalysis_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/totalHttpResponseDelay data---------------------": "note",
-  "applicationPerformanceOverviewTotalHttpResponseDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewTotalHttpResponseDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/totalSslConDelay data---------------------": "note",
-  "applicationPerformanceOverviewTotalSslConDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewTotalSslConDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/packetRetransPercent data---------------------": "note",
-  "applicationPerformanceOverviewPacketRetransPercent_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewPacketRetransPercent_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/appTrafficAnalysis data---------------------": "note",
-  "applicationPerformanceOverviewAppTrafficAnalysis_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewAppTrafficAnalysis_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/appTcpLostlenPercent data---------------------": "note",
-  "applicationPerformanceOverviewAppTcpLostlenPercent_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewAppTcpLostlenPercent_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/appNetworkAnalysis data---------------------": "note",
-  "applicationPerformanceOverviewAppNetworkAnalysis_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewAppNetworkAnalysis_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/appPacketRetransPercent data---------------------": "note",
-  "applicationPerformanceOverviewAppPacketRetransPercent_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewAppPacketRetransPercent_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/appHttpResponseDelay data---------------------": "note",
-  "applicationPerformanceOverviewAppHttpResponseDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewAppHttpResponseDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/appSslConDelay data---------------------": "note",
-  "applicationPerformanceOverviewAppSslConDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewAppSslConDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/appTcpSessionDelay data---------------------": "note",
-  "applicationPerformanceOverviewAppTcpSessionDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewAppTcpSessionDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/httpResponseDelay data---------------------": "note",
-  "applicationPerformanceOverviewHttpResponseDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewHttpResponseDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/sslConDelay data---------------------": "note",
-  "applicationPerformanceOverviewSslConDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewSslConDelay_error": {
   },
-  "------------------ GET  /interface/application/performance/overview/tcpSessionDelay data---------------------": "note",
-  "applicationPerformanceOverviewTcpSessionDelay_success": {
-    "startTime": "1671761197",
-    "endTime": "1671764797"
-  },
+
   "applicationPerformanceOverviewTcpSessionDelay_error": {
   },
   "------------------ GET  /interface/application/performance/overview/drilldown/dimensionTrafficAnalysis data---------------------": "note",

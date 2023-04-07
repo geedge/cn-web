@@ -1,0 +1,57 @@
+{
+  "------------------ GET  /interface/application/performance/relatedSessions data---------------------": "note",
+  "applicationPerformanceRelatedSessions_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "ip": "116.178.236.216"
+  },
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/allNetworkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensioAllNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/networkAnalysis data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensioNetworkAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/tcpSessionDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "domain"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/httpResponseDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "domain"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/sslConDelay data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "domain"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/tcpLostlenPercent data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip"
+  },  
+  
+  "------------------ GET  /interface/application/performance/overview/drilldown/dimension/packetRetransPercent data---------------------": "note",
+  "applicationPerformanceOverviewDrilldownDimensionPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "domain"
+  }
+}

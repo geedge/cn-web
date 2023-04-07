@@ -1,0 +1,22 @@
+{
+  "------------------ GET  /interface/overview/event/list data---------------------": "note",
+  "eventList_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type":"severity"
+  },
+  
+  "------------------ GET  /interface/overview/event/recentEvents data---------------------": "note",
+  "eventRecentEvents_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797"
+  },
+  
+  "------------------ GET  /interface/overview/event/dimensionEvents data---------------------": "note",
+  "eventDimensionEvents_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type":"appLabel",
+    "limit":"10"
+  }
+}

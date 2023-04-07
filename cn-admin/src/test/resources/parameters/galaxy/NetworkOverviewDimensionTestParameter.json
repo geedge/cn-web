@@ -1,0 +1,58 @@
+{
+  "------------------ GET  /interface/overview/dimensionTrafficAnalysis data---------------------": "note",
+  "overviewDimensionTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "orderBy": "totalBytes",
+    "limit": 10
+  },
+
+  "------------------ GET  /interface/overview/dimensionCycleTrafficAnalysis data---------------------": "note",
+  "overviewDimensionCycleTrafficAnalysis_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+
+  "------------------ GET  /interface/overview/dimensionTcpSessionDelay data---------------------": "note",
+  "overviewDimensionTcpSessionDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+
+  "------------------ GET  /interface/overview/dimensionHttpResponseDelay data---------------------": "note",
+  "overviewDimensionHttpResponseDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+
+  "------------------ GET  /interface/overview/dimensionSslConDelay data---------------------": "note",
+  "overviewDimensionSslConDelay_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+
+  "------------------ GET  /interface/overview/dimensionTcpLostlenPercent data---------------------": "note",
+  "overviewDimensionTcpLostlenPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  },
+
+  "------------------ GET  /interface/overview/dimensionPacketRetransPercent data---------------------": "note",
+  "overviewDimensionPacketRetransPercent_success": {
+    "startTime": "1671761197",
+    "endTime": "1671764797",
+    "type": "ip",
+    "params": "'116.178.236.216','116.178.78.204','116.178.78.195'"
+  }
+}

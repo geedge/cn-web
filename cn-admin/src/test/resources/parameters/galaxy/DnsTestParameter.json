@@ -1,143 +1,52 @@
 {
-  "------------------ GET  /interface/dns/rtdns data---------------------": "note",
-  "dnsRtdns_success": {
+  "------------------ GET  /interface/dns/overview/totalTrafficAnalysis data---------------------": "note",
+  "totalTraffic_success": {
+	  	"startTime": "1680846402",
+		"endTime": "1680850002"
   },
-  "------------------ GET  /interface/dns/tldns data---------------------": "note",
-  "dnsTldns_success": {
+  "------------------ GET  /interface/dns/overview/dimensionAnalysis data---------------------": "note",
+  "dimensionAnalysis_success": {
+  		"type": "dnsServer",
+		"orderBy": "totalBytes",
+		"limit": "50",
+		"startTime": "1680846402",
+		"endTime": "1680850002"
   },
-  "------------------ GET  /interface/dns/adns data---------------------": "note",
-  "dnsAdns_success": {
+  "------------------ GET  /interface/dns/overview/dimensionCycleAnalysis data---------------------": "note",
+  "dimensionCycleAnalysis_success": {
+  		"startTime": "1680846402",
+		"endTime": "1680850002",
+		"params": "'8.8.8.8','121.14.154.93','114.114.114.114'",
+		"type": "dnsServer"
   },
-  "------------------ GET  /interface/dns/oprdns data---------------------": "note",
-  "dnsOprdns_success": {
+  "------------------ GET  /interface/dns/overview/drilldown/list data---------------------": "note",
+  "list_success": {
+  		"startTime": "1680846402",
+		"endTime": "1680850002",
+		"limit": "10",
+		"type": "dnsServer",
+		"name": ""
   },
-  "------------------ GET  /interface/dns/os data---------------------": "note",
-  "dnsOs_success": {
+  "------------------ GET  /interface/dns/overview/drilldown/trafficAnalysis data---------------------": "note",
+  "trafficAnalysis_success": {
+  		"startTime": "1680846402",
+		"endTime": "1680850002"
   },
-  "------------------ GET  /interface/dns/software data---------------------": "note",
-  "dnsSoftware_success": {
+  "------------------ GET  /interface/dns/overview/drilldown/dimensionAnalysis data---------------------": "note",
+  "drilldownDimensionAnalysis_success": {
+  		"type": "country",
+		"orderBy": "totalBytes",
+		"limit": "50",
+		"q": "common_server_ip='223.6.6.6'",
+		"startTime": "1680846822",
+		"endTime": "1680850422"
   },
-  "------------------ GET  /interface/dns/org data---------------------": "note",
-  "dnsOrg_success": {
+  "------------------ GET  /interface/dns/overview/drilldown/dimensionCycleAnalysis data---------------------": "note",
+  "drilldownDimensionCycleAnalysis_success": {
+  		"type": "country",
+		"params": "'China'",
+		"q": "common_server_ip='223.6.6.6'",
+		"startTime": "1680846822",
+		"endTime": "1680850422"
   },
-  "------------------ GET  /interface/dns/dnssecSupport data---------------------": "note",
-  "dnsDnssecSupport_success": {
-  },
-  "------------------ GET  /interface/dns/ipv6Support data---------------------": "note",
-  "dnsIpv6Support_success": {
-  },
-  "------------------ GET  /interface/dns/encryptedProtocolSupport data---------------------": "note",
-  "dnsEncryptedProtocolSupport_success": {
-  },
-  "------------------ GET  /interface/dns/dohCount data---------------------": "note",
-  "dnsDohCount_success": {
-  },
-  "------------------ GET  /interface/dns/dotCount data---------------------": "note",
-  "dnsDotCount_success": {
-  },
-  "------------------ GET  /interface/dns/map data---------------------": "note",
-  "dnsMap_success": {
-    "dnsServerRole": "FWDNS"
-  },
-  "dnsMap_error": {
-
-  },
-  "------------------ GET  /interface/dns/queryRate data---------------------": "note",
-  "dnsQueryRate_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747"
-  },
-  "------------------ GET  /interface/dns/dohInquiries data---------------------": "note",
-  "dnsDohInquiries_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747"
-  },
-  "------------------ GET  /interface/dns/dotInquiries data---------------------": "note",
-  "dnsDotInquiries_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747"
-  },
-  "------------------ GET  /interface/dns/activeClientIp data---------------------": "note",
-  "dnsActiveClientIp_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747",
-    "order": "queryCount",
-    "limit": 10
-  },
-  "dnsActiveClientIp_error": {
-    "startTime": "1672721147",
-    "endTime": "1672724747",
-    "order": "quet",
-    "limit": 10
-  },
-  "------------------ GET  /interface/dns/activeDomainServer data---------------------": "note",
-  "dnsActiveDomainServer_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747",
-    "order": "queryRate",
-    "limit": 10
-  },
-  "dnsActiveDomainServer_error": {
-    "startTime": "1672721147",
-    "endTime": "1672724747",
-    "order": "que",
-    "limit": 10
-  },
-  "------------------ GET  /interface/dns/resolveDomain data---------------------": "note",
-  "dnsResolveDomain_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747",
-    "order": "queryCount",
-    "limit": 10
-  },
-  "dnsResolveDomain_error": {
-    "startTime": "1672721147",
-    "endTime": "1672724747",
-    "order": "quer",
-    "limit": 10
-  },
-  "------------------ GET  /interface/dns/averageResolveLatency data---------------------": "note",
-  "dnsAverageResolveLatency_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747"
-  },
-  "------------------ GET  /interface/dns/responseFailureRate data---------------------": "note",
-  "dnsResponseFailureRate_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747"
-  },
-  "------------------ GET  /interface/dns/alarmInfo data---------------------": "note",
-  "dnsAlarmInfo_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747",
-    "pageNo": 1,
-    "pageSize": 10
-  },
-  "------------------ GET  /interface/dns/alarmInfoCount data---------------------": "note",
-  "dnsAlarmInfoCount_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747"
-  },
-  "------------------ GET  /interface/dns/Count data---------------------": "note",
-  "dnsCount_success": {
-  },
-  "------------------ GET  /interface/dns/overallDnsTraffic data---------------------": "note",
-  "dnsOverallDnsTraffic_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747"
-  },
-  "------------------ GET  /interface/dns/dnsTraffic data---------------------": "note",
-  "dnsDnsTraffic_success": {
-    "startTime": "1672721147",
-    "endTime": "1672724747"
-  },
-  "------------------ GET  /interface/dns/rtMirrors data---------------------": "note",
-  "dnsRtMirrors_success": {
-  },
-  "------------------ GET  /interface/dns/rtMirrorsCount data---------------------": "note",
-  "dnsRtMirrorsCount_success": {
-  },
-  "------------------ GET  /interface/dns/fwdns data---------------------": "note",
-  "dnsFwdns_success": {
-  }
 }

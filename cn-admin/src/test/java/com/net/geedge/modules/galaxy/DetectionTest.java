@@ -15,8 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.Map;
 
 /**
- * @Auther: lijinyang
- * @Date: 2023/02/23/15:30
+ *  Detection
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringRunner.class)
