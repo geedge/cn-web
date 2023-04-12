@@ -352,6 +352,7 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				yesterday = DateUtil.offset(yesterday,DateField.MILLISECOND,sysTimezone.getOffset());
 				startTime = DateUtil.beginOfDay(yesterday);
 				endTime = DateUtil.endOfDay(yesterday);
+				endTime = DateUtil.offset(endTime,DateField.MILLISECOND,1000);
 				break;
 			case "today":
 				startTime = DateUtil.beginOfDay(today);
