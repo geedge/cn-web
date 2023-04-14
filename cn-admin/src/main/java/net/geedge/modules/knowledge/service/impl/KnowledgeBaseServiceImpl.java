@@ -312,12 +312,19 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		        // 此处进行数据校验
 		    	boolean format = true;
 		    	String row = data.get(0).trim();
-		    	if(StrUtil.equals(type, "ip")) {
-		    		format = KnowledgeCheckUtil.validIpFormat(row);
-		    	}else if(StrUtil.equals(type, "domain")){
-		    		format = KnowledgeCheckUtil.validateFqdn(row);
-		    	}else {
-		    		format = KnowledgeCheckUtil.validateApp(row);
+		    	String tag = data.get(1).trim();
+		    	// 标签不能为空
+		    	if(StrUtil.isEmpty(tag)){
+		    		format = false;
+		    	}
+		    	if(format) {
+		    		if(StrUtil.equals(type, "ip")) {
+			    		format = KnowledgeCheckUtil.validIpFormat(row);
+			    	}else if(StrUtil.equals(type, "domain")){
+			    		format = KnowledgeCheckUtil.validateFqdn(row);
+			    	}else {
+			    		format = KnowledgeCheckUtil.validateApp(row);
+			    	}
 		    	}
 		        Map<String,Object> res = new HashMap<String,Object>();
 		        res.put("tagItem", data.get(0));
