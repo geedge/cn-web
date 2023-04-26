@@ -31,6 +31,10 @@ public class KnowledgeBase {
 	
 	private String knowledgeId;
 	
+	private Integer builtIn;
+	
+	private Integer enable;
+	
 	@TableField(exist = false)
 	private String version;
 	

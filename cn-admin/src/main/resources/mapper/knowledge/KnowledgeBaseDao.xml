@@ -11,6 +11,8 @@
         <result property="ctime" column="ctime"></result>
         <result property="uby" column="uby"></result>
         <result property="utime" column="utime"></result>
+        <result property="builtIn" column="built_in"></result>
+        <result property="enable" column="enable"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
         <association property="uuser" column="uby" select="queryUserById"></association>
         <association property="cuser" column="cby" select="queryUserById"></association>
@@ -23,8 +25,11 @@
             <if test=" params.q !=null and params.q !='' ">
                 tag_name like concat ( '%', #{params.q}, '%')
             </if>
-            <if test=" params.tagType !=null ">
-            	 and tag_type = #{params.tagType}
+            <if test="params.tagType != null and params.tagType.size>0">
+                and tag_type in
+                <foreach item="type" collection="params.tagType" separator="," open="(" close=")" index="">
+                    #{type}
+                </foreach>
             </if>
         </where>
         <if test="params.orderBy == null or params.orderBy == ''">

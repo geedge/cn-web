@@ -81,7 +81,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		String q = (String) params.get("q");
 		String type = (String) params.get("tagType");
 		if(StrUtil.isNotBlank(type)) {
-			params.put("tagType", type + "_user_defined");
+			List<String> types = StrUtil.split(type, StrUtil.C_COMMA);
+			types = types.stream().map(item->item=item+"_user_defined").collect(Collectors.toList());
+			params.put("tagType", types);
 		}
 		IPage<KnowledgeBase> page=this.page(new Query(KnowledgeBase.class).getPage(params));
 		List<KnowledgeBase> knowledgeBases=this.baseMapper.queryPage(page,params);
@@ -173,6 +175,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		String tagName = (String) handlerParam.get("tagName");
 		String tagType = (String) handlerParam.get("tagType");
 		String remark = (String) handlerParam.get("remark");
+		Integer builtIn = (Integer) handlerParam.get("builtIn");
+		Integer enable = (Integer) handlerParam.get("enable");
 		ValidateUtils.is(tagName).notNull(RCode.KNOWLEDGE_NAME_ISNULL).and(tagType).notNull(RCode.KNOWLEDGE_TYPE_ISNULL);
 		tagType = tagType +"_user_defined";
 		File file = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".txt");
@@ -205,6 +209,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    	knowledgeBase.setRemark(remark);
 		    	knowledgeBase.setTagName(tagName);
 		    	knowledgeBase.setTagType(tagType);
+		    	knowledgeBase.setBuiltIn(builtIn);
+		    	knowledgeBase.setEnable(enable);
 		    	this.getBaseMapper().insert(knowledgeBase);
 		    }else{
 				log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
@@ -220,10 +226,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 	
 	@Override
-	public Integer modify(Map<String, Object> params) {
-		Integer id = (Integer) params.get("id");
+	public String modify(Map<String, Object> params) {
+		String knowledgeId = (String) params.get("id");
 		String remark = (String) params.get("remark");
-		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getId, id));
+		Integer builtIn = (Integer) params.get("builtIn");
+		Integer enable = (Integer) params.get("enable");
+		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getKnowledgeId, knowledgeId));
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
@@ -251,6 +259,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    	knowledgeBase.setUby(ShiroUtils.getUserId());
 		    	knowledgeBase.setUtime(new Date());
 		    	knowledgeBase.setRemark(remark);
+		    	knowledgeBase.setBuiltIn(builtIn);
+		    	knowledgeBase.setEnable(enable);
 		    	this.getBaseMapper().updateById(knowledgeBase);
 		    }else{
 				log.debug("Get knowledgebases error code : {}",response.getStatusCodeValue());
@@ -262,7 +272,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		        file.delete();
 		    }
 		}
-		return id;
+		return knowledgeId;
 	}
 	
 	private Map<String,Object> handlerParam(Map<String, Object> params) {
@@ -372,12 +382,19 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		        // 此处进行数据校验
 		    	boolean format = true;
 		    	String row = data.get(0).trim();
-		    	if(StrUtil.equals(type, "ip")) {
-		    		format = KnowledgeCheckUtil.validIpFormat(row);
-		    	}else if(StrUtil.equals(type, "domain")){
-		    		format = KnowledgeCheckUtil.validateFqdn(row);
-		    	}else {
-		    		format = KnowledgeCheckUtil.validateApp(row);
+		    	String tag = data.get(1).trim();
+		    	// 标签不能为空
+		    	if(StrUtil.isEmpty(tag)){
+		    		format = false;
+		    	}
+		    	if(format) {
+		    		if(StrUtil.equals(type, "ip")) {
+			    		format = KnowledgeCheckUtil.validIpFormat(row);
+			    	}else if(StrUtil.equals(type, "domain")){
+			    		format = KnowledgeCheckUtil.validateFqdn(row);
+			    	}else {
+			    		format = KnowledgeCheckUtil.validateApp(row);
+			    	}
 		    	}
 		        Map<String,Object> res = new HashMap<String,Object>();
 		        res.put("tagItem", data.get(0));
