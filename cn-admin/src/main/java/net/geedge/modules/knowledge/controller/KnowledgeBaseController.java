@@ -48,7 +48,7 @@ public class KnowledgeBaseController {
 	
 	@PutMapping
 	public R modifyKnowledgeBase(@RequestBody Map<String,Object> params) {
-		String id = knowledgeBaseService.modify(params);
+		Integer id = knowledgeBaseService.modify(params);
 		return R.ok().putData("id", id);
 	}
 	

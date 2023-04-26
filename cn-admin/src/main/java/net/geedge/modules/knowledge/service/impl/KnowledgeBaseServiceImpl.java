@@ -226,12 +226,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 	
 	@Override
-	public String modify(Map<String, Object> params) {
-		String knowledgeId = (String) params.get("id");
+	public Integer modify(Map<String, Object> params) {
+		Integer id = (Integer) params.get("id");
 		String remark = (String) params.get("remark");
 		Integer builtIn = (Integer) params.get("builtIn");
 		Integer enable = (Integer) params.get("enable");
-		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getKnowledgeId, knowledgeId));
+		KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getId, id));
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
@@ -272,7 +272,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		        file.delete();
 		    }
 		}
-		return knowledgeId;
+		return id;
 	}
 	
 	private Map<String,Object> handlerParam(Map<String, Object> params) {
