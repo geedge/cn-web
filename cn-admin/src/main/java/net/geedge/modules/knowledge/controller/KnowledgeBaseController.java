@@ -22,7 +22,7 @@ import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 
 @RestController
-@RequestMapping("/knowledge")
+@RequestMapping("/knowledgeBase")
 public class KnowledgeBaseController {
 	@Autowired
 	private KnowledgeBaseService knowledgeBaseService;
