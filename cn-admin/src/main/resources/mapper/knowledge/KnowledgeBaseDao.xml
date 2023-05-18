@@ -33,7 +33,7 @@
                and source like concat ( '%', #{params.source}, '%')
             </if>
             <if test=" params.status !=null and params.status !='' ">
-               and status = #{params.source}
+               and status = #{params.status}
             </if>
         </where>
         <if test="params.orderBy == null or params.orderBy == ''">
