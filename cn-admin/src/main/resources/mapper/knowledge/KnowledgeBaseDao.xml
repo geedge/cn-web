@@ -3,37 +3,41 @@
 <mapper namespace="net.geedge.modules.knowledge.dao.KnowledgeBaseDao">
 
     <resultMap id="knowledgeBase" type="net.geedge.modules.knowledge.entity.KnowledgeBase">
-        <result property="id" column="id"></result>
-        <result property="tagName" column="tag_name"></result>
-        <result property="tagType" column="tag_type"></result>
-        <result property="remark" column="remark"></result>
-        <result property="cby" column="cby"></result>
-        <result property="ctime" column="ctime"></result>
-        <result property="uby" column="uby"></result>
-        <result property="utime" column="utime"></result>
-        <result property="builtIn" column="built_in"></result>
-        <result property="enable" column="enable"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
+        <result property="name" column="name"></result>
+        <result property="category" column="category"></result>
+        <result property="source" column="source"></result>
+        <result property="description" column="description"></result>
+        <result property="opTime" column="op_time"></result>
+        <result property="cTime" column="c_time"></result>
+        <result property="opUser" column="op_user"></result>
+        <result property="isBuiltIn" column="is_built_in"></result>
+        <result property="isPublished" column="is_published"></result>
+        <result property="status" column="status"></result>
         <association property="uuser" column="uby" select="queryUserById"></association>
         <association property="cuser" column="cby" select="queryUserById"></association>
     </resultMap>
 
     <select id="queryPage" resultMap="knowledgeBase">
         select * from
-        knowledge_base
+        cn_knowledge_base
         <where>
-            <if test=" params.q !=null and params.q !='' ">
-                tag_name like concat ( '%', #{params.q}, '%')
+            1 = 1
+            <if test=" params.name !=null and params.name !='' ">
+               and name like concat ( '%', #{params.name}, '%')
             </if>
-            <if test="params.tagType != null and params.tagType.size>0">
-                and tag_type in
-                <foreach item="type" collection="params.tagType" separator="," open="(" close=")" index="">
-                    #{type}
-                </foreach>
+            <if test=" params.category !=null and params.category !='' ">
+               and category like concat ( '%', #{params.category}, '%')
+            </if>
+            <if test=" params.source !=null and params.source !='' ">
+               and source like concat ( '%', #{params.source}, '%')
+            </if>
+            <if test=" params.status !=null and params.status !='' ">
+               and status = #{params.source}
             </if>
         </where>
         <if test="params.orderBy == null or params.orderBy == ''">
-			ORDER BY id desc
+			ORDER BY knowledgeId desc
 		</if>
     </select>
     
@@ -46,7 +50,7 @@
     
     <select id="queryInfo" resultMap="knowledgeBase">
         select * from
-        knowledge_base
-        where id = #{id}
+        cn_knowledge_base
+        where knowledgeId = #{knowledgeId}
     </select>
 </mapper>
