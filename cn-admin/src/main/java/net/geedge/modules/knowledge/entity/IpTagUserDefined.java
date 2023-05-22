@@ -1,5 +1,6 @@
 package net.geedge.modules.knowledge.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -18,11 +19,8 @@ public class IpTagUserDefined {
 
     private String tagValue;
 
-    private String addFormat;
-
-    private String ip1;
-
-    private String ip2;
+    @TableField(exist = false)
+    private Object tagNames;
 
     private byte[] startIpBinary;
 

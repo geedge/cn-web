@@ -1,5 +1,6 @@
 package net.geedge.modules.knowledge.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -17,8 +18,8 @@ public class AppTagUserDefined {
     private Long id;
 
     private String tagValue;
-
-    private String appName;
+    @TableField(value = "app_name")
+    private String tagName;
 
     private Date opTime;
 

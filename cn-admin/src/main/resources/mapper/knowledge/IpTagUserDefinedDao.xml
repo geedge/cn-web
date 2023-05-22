@@ -5,9 +5,7 @@
     <resultMap id="IpTagUserDefined" type="net.geedge.modules.knowledge.entity.IpTagUserDefined">
         <result property="id" column="id"></result>
         <result property="tagValue" column="tag_value"></result>
-        <result property="addFormat" column="add_format"></result>
-        <result property="ip1" column="ip1"></result>
-        <result property="ip2" column="ip2"></result>
+        <result property="tagNames" column="tagNames"></result>
         <result property="startIpBinary" column="start_ip_binary"></result>
         <result property="endIpBinary" column="end_ip_binary"></result>
         <result property="opTime" column="op_time"></result>
@@ -15,5 +13,19 @@
         <result property="opUser" column="op_user"></result>
         <result property="isValid" column="is_valid"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
+        <association property="tagNames" resultMap="tagNames"></association>
     </resultMap>
+    <resultMap id="tagNames" type="java.util.Map">
+        <result property="addrFormat" column="addr_format"></result>
+        <result property="ip1" column="ip_first"></result>
+        <result property="ip2" column="ip_second"></result>
+    </resultMap>
+    <select id="queryPageByKnowledgeId" resultMap="IpTagUserDefined">
+        select * from
+        cn_ip_tag_user_defined
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
 </mapper>

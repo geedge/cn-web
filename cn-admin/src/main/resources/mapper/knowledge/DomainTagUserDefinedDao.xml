@@ -5,11 +5,20 @@
     <resultMap id="DomainTagUserDefined" type="net.geedge.modules.knowledge.entity.DomainTagUserDefined">
         <result property="id" column="id"></result>
         <result property="tagValue" column="tag_value"></result>
-        <result property="domain" column="domain"></result>
+        <result property="tagName" column="domain"></result>
         <result property="opTime" column="op_time"></result>
         <result property="cTime" column="c_time"></result>
         <result property="opUser" column="op_user"></result>
         <result property="isValid" column="is_valid"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
+
+    <select id="queryPageByKnowledgeId" resultMap="DomainTagUserDefined">
+        select * from
+        cn_domain_tag_user_defined
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
 </mapper>
