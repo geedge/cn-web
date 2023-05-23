@@ -323,6 +323,7 @@ public enum RCode {
     KNOWLEDGE_BUILTIN_ERROR(591012,"KnowledgeBase built-in data can not be removed"),
     KNOWLEDGE_BASE_ITEM_NOT_EXIST(591013,"KnowledgeBase item not exist"),
     KNOWLEDGE_BASE_SYNC_VERSION_NOT_EXIST(591014,"KnowledgeBaseSyncVersion does not exist"),
+    KNOWLEDGE_BASE_ENABLE_PARAMS_INVALID(591015,"KnowledgeBase enable params is invalid"),
     /**
      * stat相关
      */

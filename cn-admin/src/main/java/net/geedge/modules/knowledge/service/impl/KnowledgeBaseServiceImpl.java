@@ -15,8 +15,10 @@ import java.util.stream.Collectors;
 import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.*;
 import net.geedge.modules.sys.shiro.ShiroUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -183,6 +185,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	@Override
 	public R enableKnowledgeBase(Map<String,Object> params) {
+		validateEnableParams(params);
 		List<Map<String,Object>> list = (List)params.get("list");
 		for (Map<String,Object> param: list) {
 			Integer knowledgeId = (Integer) param.get("knowledgeId");
@@ -201,6 +204,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			syncVersion(knowledgeId);
 		}
 		return R.ok();
+	}
+
+	private void validateEnableParams(Map<String,Object> params) {
+		if (ObjectUtil.isEmpty(params) || ObjectUtil.isEmpty(params.get("list"))) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_ENABLE_PARAMS_INVALID);
+		}
 	}
 
 	private void syncVersion(Integer knowledgeId) {
