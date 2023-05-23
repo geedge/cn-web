@@ -16,5 +16,7 @@ public interface KnowledgeBaseDao extends BaseMapper<KnowledgeBase> {
 
 	List<KnowledgeBase> queryPage(IPage<KnowledgeBase> page,  @Param("params")Map<String, Object> params);
 	
-	KnowledgeBase queryInfo(@Param("id")Integer id);
+	KnowledgeBase queryInfo(@Param("knowledgeId")Integer id);
+
+	List<KnowledgeBase> queryList(@Param("params")Map<String, Object> params);
 }

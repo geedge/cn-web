@@ -321,6 +321,8 @@ public enum RCode {
     KNOWLEDGE_QGW_SERVICE_ERROR(591010,"Gateway service interface response error"),
     KNOWLEDGE_HOS_ERROR(591011,"HOS service response error"),
     KNOWLEDGE_BUILTIN_ERROR(591012,"KnowledgeBase built-in data can not be removed"),
+    KNOWLEDGE_BASE_ITEM_NOT_EXIST(591013,"KnowledgeBase item not exist"),
+    KNOWLEDGE_BASE_SYNC_VERSION_NOT_EXIST(591014,"KnowledgeBaseSyncVersion does not exist"),
     /**
      * stat相关
      */

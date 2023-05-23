@@ -11,8 +11,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import net.geedge.common.utils.Constant;
-import net.geedge.common.utils.KnowledgeCheckUtil;
+
+import cn.hutool.log.Log;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import net.geedge.common.utils.*;
+import net.geedge.modules.sys.shiro.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +29,6 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import net.geedge.common.exception.CNException;
-import net.geedge.common.utils.R;
-import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.DomainTagUserDefined;
@@ -41,11 +43,13 @@ import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
 import cn.hutool.core.text.csv.CsvData;
 import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.text.csv.CsvUtil;
-import cn.hutool.core.io.resource.ResourceUtil;                                                                                                                                                                                                                                     
+import cn.hutool.core.io.resource.ResourceUtil;
+
+import static net.geedge.modules.knowledge.constant.KnowledgeBaseConstant.*;
 
 @Service("knowledgeBaseService")
 public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, KnowledgeBase> implements KnowledgeBaseService {
-	
+	private Log log = Log.get();
 	@Autowired
 	private KnowledgeBaseSyncVersionService knowledgeBaseSyncVersionService;
 	
@@ -145,4 +149,145 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 	}
 
+	@Override
+	public PageUtils queryKnowledgeBaseList(Map<String, Object> params) {
+		IPage page = this.page(new Query(KnowledgeBase.class).getPage(params));
+		List<KnowledgeBase> knowledgeBases = this.baseMapper.queryPage(page, params);
+		page.setRecords(knowledgeBases);
+		return new PageUtils(page);
+	}
+
+	@Override
+	public R enableKnowledgeBase(Map<String,Object> params) {
+		List<Map<String,Object>> list = (List)params.get("list");
+		for (Map<String,Object> param: list) {
+			Integer knowledgeId = (Integer) param.get("knowledgeId");
+			Integer isPublished = (Integer) param.get("isPublished");
+			Integer status = (Integer) param.get("status");
+			KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getKnowledgeId, knowledgeId));
+			if(ObjectUtil.isEmpty(knowledgeBase)) {
+				log.debug("local data not exist : {}",knowledgeId);
+				throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
+			}
+			knowledgeBase.setOpUser(ShiroUtils.getUserId());
+			knowledgeBase.setOpTime(new Date());
+			knowledgeBase.setIsPublished(isPublished);
+			knowledgeBase.setStatus(status);
+			this.getBaseMapper().updateById(knowledgeBase);
+			syncVersion(knowledgeId);
+		}
+		return R.ok();
+	}
+
+	private void syncVersion(Integer knowledgeId) {
+		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBaseSyncVersion>().eq(KnowledgeBaseSyncVersion::getKnowledgeId, knowledgeId));
+		if(ObjectUtil.isEmpty(knowledgeBaseSyncVersion)) {
+			log.debug("local data not exist : {}",knowledgeId);
+			throw new CNException(RCode.KNOWLEDGE_BASE_SYNC_VERSION_NOT_EXIST);
+		}
+		knowledgeBaseSyncVersion.setVersion(knowledgeBaseSyncVersion.getVersion() + 1);
+		knowledgeBaseSyncVersion.setOpTime(new Date());
+		knowledgeBaseSyncVersionService.getBaseMapper().updateById(knowledgeBaseSyncVersion);
+	}
+
+	@Override
+	public Map<String, Object> statisticsKnowledgeBase(Map<String, Object> params) {
+		List<KnowledgeBase> knowledgeBases = this.getBaseMapper().queryList(params);
+		Set<String> categories = getNonRepetitiveCategory(knowledgeBases);
+		List<Map> categoryList = new ArrayList<>();
+		for (String category : categories) {
+			Map<String, Object> categoryMap = statisticsCategory(knowledgeBases, category);
+			categoryList.add(categoryMap);
+		}
+		List<Map> statusList = statisticsStatus(knowledgeBases);
+		Map<String, Object> data = new HashMap<>();
+		data.put("categoryList", categoryList);
+		data.put("statusList", statusList);
+		return data;
+	}
+
+	private Map<String,Object> statisticsCategory(List<KnowledgeBase> knowledgeBases, String category) {
+		List<KnowledgeBase> knowledge = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getCategory().equals(category)).collect(Collectors.toList());
+		long categoryCount = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getCategory().equals(category)).count();
+		Set<String> sources = getNonRepetitiveSource(knowledge);
+		Map<String, Object> categoryMap = new HashMap<>();
+		categoryMap.put("category", category);
+		categoryMap.put("count", categoryCount);
+		List<Map> sourceList = new ArrayList<>();
+		for (String source : sources) {
+			Map<String, Object> sourceMap = statisticsSource(knowledge, source);
+			sourceList.add(sourceMap);
+		}
+		categoryMap.put("sourceList",sourceList);
+		return categoryMap;
+	}
+
+	private Map<String,Object> statisticsSource(List<KnowledgeBase> knowledge, String source) {
+		long sourceCount = knowledge.stream().filter(knowledgeBase -> knowledgeBase.getSource().equals(source)).count();
+		Map<String, Object> sourceMap = new HashMap<>();
+		sourceMap.put("source", source);
+		sourceMap.put("count", sourceCount);
+		return sourceMap;
+	}
+
+	private List<Map> statisticsStatus(List<KnowledgeBase> knowledgeBases) {
+		List<Map> statusList = new ArrayList<>();
+		long disableCount = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getStatus() == 0).count();
+		Map<String, Object> disable = new HashMap<>();
+		disable.put("status", 0);
+		disable.put("count", disableCount);
+		long enableCount = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getStatus() == 1).count();
+		Map<String, Object> enable = new HashMap<>();
+		enable.put("status", 1);
+		enable.put("count", enableCount);
+		statusList.add(disable);
+		statusList.add(enable);
+		return statusList;
+	}
+
+	private Set<String> getNonRepetitiveCategory(List<KnowledgeBase> knowledgeBases) {
+		Set<String> category = new TreeSet<>();
+		for (KnowledgeBase knowledgeBase : knowledgeBases){
+			category.add(knowledgeBase.getCategory());
+		}
+		return category;
+	}
+
+	private Set<String> getNonRepetitiveSource(List<KnowledgeBase> knowledgeBases){
+		Set<String> source = new TreeSet<>();
+		for (KnowledgeBase knowledgeBase : knowledgeBases){
+			source.add(knowledgeBase.getSource());
+		}
+		return source;
+	}
+
+	@Override
+	public PageUtils queryKnowledgeBaseItem(Integer knowledgeId, Map<String, Object> params) {
+		params.put("knowledgeId",knowledgeId);
+		KnowledgeBase knowledgeBase = this.getBaseMapper().queryInfo(knowledgeId);
+		String source = knowledgeBase.getSource();
+		PageUtils pageUtils = createUserDefinedItemPages(source, params);
+		if(ObjectUtil.isEmpty(pageUtils)) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
+		}
+		return pageUtils;
+	}
+
+	private PageUtils createUserDefinedItemPages(String source, Map<String, Object> params) {
+		PageUtils pageUtils = null;
+		switch (source){
+			case APP_TAG_USER_DEFINED:
+				pageUtils = appTagUserDefinedService.queryListByKnowledgeId(params);
+				break;
+			case DOMAIN_TAG_USER_DEFINED:
+				pageUtils = domainTagUserDefinedService.queryListByKnowledgeId(params);
+				break;
+			case IP_TAG_USER_DEFINED:
+				pageUtils = ipTagUserDefinedService.queryListByKnowledgeId(params);
+				break;
+			default:
+				break;
+		}
+		return pageUtils;
+	}
 }
