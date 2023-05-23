@@ -320,6 +320,7 @@ public enum RCode {
     KNOWLEDGE_ID_ISNULL(591009,"KnowledgeBase id is required"),
     KNOWLEDGE_QGW_SERVICE_ERROR(591010,"Gateway service interface response error"),
     KNOWLEDGE_HOS_ERROR(591011,"HOS service response error"),
+    KNOWLEDGE_BUILTIN_ERROR(591012,"KnowledgeBase built-in data can not be removed"),
     /**
      * stat相关
      */
