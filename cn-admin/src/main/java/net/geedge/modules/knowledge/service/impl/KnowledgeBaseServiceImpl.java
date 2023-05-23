@@ -126,10 +126,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		        res.put("tagItem", data.get(0));
 		        res.put("tagValue", data.get(1));
 		        if(format) {
-		        	res.put("status",1);
+		        	res.put("isValid",1);
 			        res.put("msg","success");
 		        }else {
-		        	res.put("status",0);
+		        	res.put("isValid",0);
 			        res.put("msg","Data format error, please check");
 		        }
 		        handlerData.add(res);
