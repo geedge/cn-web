@@ -28,7 +28,7 @@ public class KnowledgeBaseController {
 		return R.ok(result);
 	}
 	
-	@PostMapping("/import")
+	@PostMapping("/parser")
 	public R importKnowledgeBase(@Param("file") MultipartFile file,@Param("type")String type) {
 		ValidateUtils.is(file).notNull(RCode.KNOWLEDGE_FILE_ISNULL);
 		ValidateUtils.is(type).notNull(RCode.KNOWLEDGE_TYPE_ISNULL);
