@@ -127,7 +127,31 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			    	}
 		    	}
 		        Map<String,Object> res = new HashMap<String,Object>();
-		        res.put("tagItem", data.get(0));
+		        if(StrUtil.equals(type, "ip")) {
+		        	String s = data.get(0);
+		        	Map<String,Object> ip = new HashMap<String,Object>();
+		        	String ipType = "";
+		        	String ip1="";
+		        	String ip2="";
+		        	if(StrUtil.contains(s, StrUtil.C_SLASH)) {
+		        		ipType="CIDR";
+		        		ip1 = StrUtil.split(s, StrUtil.C_SLASH).get(0);
+		        		ip2 = StrUtil.split(s, StrUtil.C_SLASH).get(1);
+		        	}else if(StrUtil.contains(s, StrUtil.DASHED)) {
+		        		ipType="RANGE";
+		        		ip1 = StrUtil.split(s, StrUtil.DASHED)[0];
+		        		ip2 = StrUtil.split(s, StrUtil.DASHED)[1];
+		        	}else {
+		        		ipType="Single";
+		        		ip1 = s;
+		        	}
+		        	ip.put("addrFoamat",ipType);
+		        	ip.put("ip1", ip1);
+		        	ip.put("ip2", ip2);
+		        	res.put("tagNames", ip);
+		        }else {
+		        	res.put("tagName", data.get(0));
+		        }
 		        res.put("tagValue", data.get(1));
 		        if(format) {
 		        	res.put("isValid",1);
