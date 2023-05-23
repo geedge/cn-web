@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.FqdnWhoIsBuiltInDao">
+
+    <resultMap id="FqdnWhoIsBuiltIn" type="net.geedge.modules.knowledge.entity.FqdnWhoIsBuiltIn">
+        <result property="id" column="id"></result>
+        <result property="fqdn" column="fqdn"></result>
+        <result property="source" column="source"></result>
+        <result property="querySuccess" column="query_success"></result>
+        <result property="statusCode" column="status_code"></result>
+        <result property="matchPattern" column="match_pattern"></result>
+        <result property="whoisDomain" column="whois_domain"></result>
+        <result property="whoisUpdateDate" column="whois_update_date"></result>
+        <result property="whoisCreateDate" column="whois_create_date"></result>
+        <result property="whoisExpireDate" column="whois_expire_date"></result>
+        <result property="whoisEmail" column="whois_email"></result>
+        <result property="whoisNs" column="whois_ns"></result>
+        <result property="whoisRegistrarName" column="whois_registrar_name"></result>
+        <result property="whoisRegistrantOrg" column="whois_registrant_org"></result>
+        <result property="whoisRegistrantName" column="whois_registrant_name"></result>
+        <result property="whoisRegistrantStreet" column="whois_registrant_street"></result>
+        <result property="whoisRegistrantCity" column="whois_registrant_city"></result>
+        <result property="whoisRegistrantState" column="whois_registrant_state"></result>
+        <result property="whoisRegistrantPostcode" column="whois_registrant_postcode"></result>
+        <result property="whoisRegistrantCountry" column="whois_registrant_country"></result>
+        <result property="whoisRegistrantPhone" column="whois_registrant_phone"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+</mapper>

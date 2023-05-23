@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.IocDarkwebDao">
+
+    <resultMap id="IocDarkweb" type="net.geedge.modules.knowledge.entity.IocDarkweb">
+        <result property="id" column="id"></result>
+        <result property="iocValue" column="ioc_value"></result>
+        <result property="iocType" column="ioc_type"></result>
+        <result property="nodeType" column="node_type"></result>
+        <result property="ipv6" column="ipv6"></result>
+        <result property="isp" column="isp"></result>
+        <result property="asn" column="asn"></result>
+        <result property="operatingSystem" column="operating_system"></result>
+        <result property="country" column="country"></result>
+        <result property="city" column="city"></result>
+        <result property="latitude" column="latitude"></result>
+        <result property="longtitude" column="longtitude"></result>
+        <result property="torFingerprint" column="tor_fingerprint"></result>
+        <result property="torDirPort" column="tor_dir_port"></result>
+        <result property="torOrPort" column="tor_or_port"></result>
+        <result property="torFlags" column="tor_flags"></result>
+        <result property="torVersion" column="tor_version"></result>
+        <result property="torNickname" column="tor_nickname"></result>
+        <result property="torExitPolicy" column="tor_exit_policy"></result>
+        <result property="i2pHash" column="i2p_hash"></result>
+        <result property="i2pMethod" column="i2p_method"></result>
+        <result property="i2pVersion" column="i2p_version"></result>
+        <result property="i2pIsFloodfill" column="i2p_is_floodfill"></result>
+        <result property="i2pBandwidth" column="i2p_bandwidth"></result>
+        <result property="i2pIsHidden" column="i2p_is_hidden"></result>
+        <result property="i2pIsReachable" column="i2p_is_reachable"></result>
+        <result property="i2pPublishTime" column="i2p_publish_time"></result>
+        <result property="mtproxyPort" column="mtproxy_port"></result>
+        <result property="mtproxySecret" column="mtproxy_secret"></result>
+        <result property="obfs4Port" column="obfs4_port"></result>
+        <result property="obfs4Fingerprint" column="obfs4_fingerprint"></result>
+        <result property="obfs4Cert" column="obfs4_cert"></result>
+        <result property="obfs4IatMode" column="obfs4_iat_mode"></result>
+        <result property="snowflakePort" column="snowflake_port"></result>
+        <result property="firstAppearTime" column="first_appear_time"></result>
+        <result property="lastAppearTime" column="last_appear_time"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+</mapper>

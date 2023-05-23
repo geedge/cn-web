@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.FqdnIcpBuiltInDao">
+
+    <resultMap id="FqdnIcpBuiltIn" type="net.geedge.modules.knowledge.entity.FqdnIcpBuiltIn">
+        <result property="id" column="id"></result>
+        <result property="fqdn" column="fqdn"></result>
+        <result property="source" column="source"></result>
+        <result property="querySuccess" column="query_success"></result>
+        <result property="isAccessible" column="is_accessible"></result>
+        <result property="statusCode" column="status_code"></result>
+        <result property="matchPattern" column="match_pattern"></result>
+        <result property="icpOwner" column="icp_owner"></result>
+        <result property="icpCompanyName" column="icp_company_name"></result>
+        <result property="icpCompanyType" column="icp_company_type"></result>
+        <result property="icpMainPage" column="icp_main_page"></result>
+        <result property="icpSiteLicense" column="icp_site_license"></result>
+        <result property="icpSiteName" column="icp_site_name"></result>
+        <result property="icpVerifyTime" column="icp_verify_time"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+</mapper>

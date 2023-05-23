@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.Psiphon3IpDao">
+
+    <resultMap id="Psiphon3Ip" type="net.geedge.modules.knowledge.entity.Psiphon3Ip">
+        <result property="id" column="id"></result>
+        <result property="isServer" column="is_server"></result>
+        <result property="addrFormat" column="addr_format"></result>
+        <result property="ip1" column="ip_first"></result>
+        <result property="ip2" column="ip_second"></result>
+        <result property="startIpBinary" column="start_ip_binary"></result>
+        <result property="endIpBinary" column="end_ip_binary"></result>
+        <result property="opTime" column="op_time"></result>
+        <result property="cTime" column="c_time"></result>
+        <result property="opUser" column="op_user"></result>
+        <result property="isValid" column="is_valid"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+</mapper>

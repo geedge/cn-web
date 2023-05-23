@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.IpAsnBuiltInDao">
+
+    <resultMap id="IpAsnBuiltIn" type="net.geedge.modules.knowledge.entity.IpAsnBuiltIn">
+        <result property="asnId" column="asn_id"></result>
+        <result property="addrType" column="addr_type"></result>
+        <result property="startIp" column="start_ip"></result>
+        <result property="endIp" column="end_ip"></result>
+        <result property="asn" column="asn"></result>
+        <result property="organization" column="organization"></result>
+        <result property="isValid" column="is_valid"></result>
+        <result property="opTime" column="op_time"></result>
+        <result property="opUser" column="op_user"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+</mapper>
