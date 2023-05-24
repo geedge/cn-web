@@ -2,10 +2,12 @@ package net.geedge.modules.knowledge.entity;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
+import net.geedge.modules.sys.entity.SysUserEntity;
 
 @Data
 @TableName("cn_knowledge_base")
@@ -33,4 +35,6 @@ public class KnowledgeBase {
 
 	private Integer status;
 
+	@TableField(exist = false)
+	private SysUserEntity user;
 }

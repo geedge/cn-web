@@ -17,6 +17,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.*;
+import net.geedge.modules.sys.entity.SysUserEntity;
+import net.geedge.modules.sys.service.SysUserService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +65,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	
 	@Autowired
 	private AppTagUserDefinedService appTagUserDefinedService;
-	
+
+	@Autowired
+	private SysUserService sysUserService;
+
 	@Override
 	public Object remove(String ids) {
 		// 内置数据不可删除

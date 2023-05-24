@@ -14,6 +14,7 @@
         <result property="isBuiltIn" column="is_built_in"></result>
         <result property="isPublished" column="is_published"></result>
         <result property="status" column="status"></result>
+        <association property="user" column="op_user" select="queryUserById"></association>
     </resultMap>
 
     <select id="queryPage" resultMap="knowledgeBase">
@@ -37,6 +38,13 @@
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY knowledge_id desc
         </if>
+    </select>
+
+    <select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
+        select id, name
+        from sys_user
+        where id = #{id}
+          and status = 1
     </select>
 
     <select id="queryInfo" resultMap="knowledgeBase">

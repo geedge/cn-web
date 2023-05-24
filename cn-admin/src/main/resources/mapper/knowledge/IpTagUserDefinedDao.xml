@@ -14,6 +14,7 @@
         <result property="isValid" column="is_valid"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
         <association property="tagNames" resultMap="tagNames"></association>
+        <association property="user" column="op_user" select="queryUserById"></association>
     </resultMap>
     <resultMap id="tagNames" type="java.util.Map">
         <result property="addrFormat" column="addr_format"></result>
@@ -27,5 +28,13 @@
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>
+    </select>
+
+
+    <select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
+        select id, name
+        from sys_user
+        where id = #{id}
+          and status = 1
     </select>
 </mapper>

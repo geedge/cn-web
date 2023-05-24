@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import net.geedge.modules.sys.entity.SysUserEntity;
 
 import java.util.Date;
 
@@ -35,4 +36,7 @@ public class IpTagUserDefined {
     private Integer isValid;
 
     private Integer knowledgeId;
+
+    @TableField(exist = false)
+    private SysUserEntity user;
 }
