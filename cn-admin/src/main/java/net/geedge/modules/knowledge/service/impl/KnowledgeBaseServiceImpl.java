@@ -2,19 +2,13 @@ package net.geedge.modules.knowledge.service.impl;
 
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.*;
 import net.geedge.modules.sys.entity.SysUserEntity;
@@ -182,6 +176,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	@Override
 	public PageUtils queryKnowledgeBaseList(Map<String, Object> params) {
+		preHandleParams(params);
 		IPage page = this.page(new Query(KnowledgeBase.class).getPage(params));
 		List<KnowledgeBase> knowledgeBases = this.baseMapper.queryPage(page, params);
 		page.setRecords(knowledgeBases);
@@ -230,6 +225,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	@Override
 	public Map<String, Object> statisticsKnowledgeBase(Map<String, Object> params) {
+		preHandleParams(params);
 		List<KnowledgeBase> knowledgeBases = this.getBaseMapper().queryList(params);
 		Set<String> categories = getNonRepetitiveCategory(knowledgeBases);
 		List<Map> categoryList = new ArrayList<>();
@@ -242,6 +238,18 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		data.put("categoryList", categoryList);
 		data.put("statusList", statusList);
 		return data;
+	}
+
+	private void preHandleParams(Map<String, Object> params) {
+		if (ObjectUtil.isNotEmpty(params.get("category"))) {
+			params.put("category", Arrays.asList(String.valueOf(params.get("category")).split(StringPool.COMMA)));
+		}
+		if (ObjectUtil.isNotEmpty(params.get("source"))) {
+			params.put("source", Arrays.asList(String.valueOf(params.get("source")).split(StringPool.COMMA)));
+		}
+		if (ObjectUtil.isNotEmpty(params.get("status"))) {
+			params.put("status", Arrays.asList(String.valueOf(params.get("status")).split(StringPool.COMMA)));
+		}
 	}
 
 	private Map<String,Object> statisticsCategory(List<KnowledgeBase> knowledgeBases, String category) {
