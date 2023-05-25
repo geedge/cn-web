@@ -39,4 +39,10 @@ public class IpTagUserDefined {
 
     @TableField(exist = false)
     private SysUserEntity user;
+    
+    private String ipFirst;
+    
+    private String ipSecond;
+    
+    private String addrFormat;
 }

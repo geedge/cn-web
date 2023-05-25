@@ -13,6 +13,9 @@
         <result property="opUser" column="op_user"></result>
         <result property="isValid" column="is_valid"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
+        <result property="addrFormat" column="addr_format"></result>
+        <result property="ipFirst" column="ip_first"></result>
+        <result property="ipSecond" column="ip_second"></result>
         <association property="tagNames" resultMap="tagNames"></association>
         <association property="user" column="op_user" select="queryUserById"></association>
     </resultMap>

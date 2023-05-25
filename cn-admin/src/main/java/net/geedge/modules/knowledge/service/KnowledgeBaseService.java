@@ -25,4 +25,8 @@ public interface KnowledgeBaseService extends IService<KnowledgeBase> {
     Map<String,Object> statisticsKnowledgeBase(Map<String,Object> params);
 
     PageUtils queryKnowledgeBaseItem(Integer knowledgeId, Map<String,Object> params);
+    
+    Integer addOrModifyKnowledgeBase(Map<String,Object> params);
+        
+    Map<String,Object> validateParam(Map<String,Object> params);
 }

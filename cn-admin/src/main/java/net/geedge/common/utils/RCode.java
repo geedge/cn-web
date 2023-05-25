@@ -324,6 +324,8 @@ public enum RCode {
     KNOWLEDGE_BASE_ITEM_NOT_EXIST(591013,"KnowledgeBase item not exist"),
     KNOWLEDGE_BASE_SYNC_VERSION_NOT_EXIST(591014,"KnowledgeBaseSyncVersion does not exist"),
     KNOWLEDGE_BASE_ENABLE_PARAMS_INVALID(591015,"KnowledgeBase enable params is invalid"),
+    KNOWLEDGE_BASE_NAME_DUPLICATE(591016,"KnowledgeBase name already exists"),
+    KNOWLEDGE_BASE_PARAM_FORMAT_ERROR(591017,"KnowledgeBase data format error, please check"),
     /**
      * stat相关
      */

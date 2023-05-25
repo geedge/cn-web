@@ -6,6 +6,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import cn.hutool.log.Log;
+import inet.ipaddr.AddressStringException;
+import inet.ipaddr.IPAddress;
+import inet.ipaddr.IPAddressString;
+import inet.ipaddr.IncompatibleAddressException;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -17,6 +22,7 @@ import net.geedge.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import cn.hutool.core.io.FileUtil;
 import org.apache.commons.io.FileUtils;
@@ -38,6 +44,7 @@ import net.geedge.modules.knowledge.service.DomainTagUserDefinedService;
 import net.geedge.modules.knowledge.service.IpTagUserDefinedService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
+import net.geedge.modules.panel.entity.VisualPanel;
 import cn.hutool.core.text.csv.CsvData;
 import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.text.csv.CsvUtil;
@@ -335,5 +342,225 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				break;
 		}
 		return pageUtils;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Integer addOrModifyKnowledgeBase(Map<String, Object> params) {
+		String type = (String) params.get("type");
+		Integer knowledgeId = (Integer) params.get("knowledgeId");
+		Map<String, Object> result = validateParam(params);
+		
+		KnowledgeBase knowledgeBase = (KnowledgeBase) result.get("knowledgeBase");
+		this.saveOrUpdate(knowledgeBase);
+		if(StrUtil.equals("ip", type)) {
+			List<IpTagUserDefined> ips = (List<IpTagUserDefined>) result.get("ip");
+			if(ObjectUtil.isEmpty(knowledgeId)) {
+				ips.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+			}
+			ipTagUserDefinedService.saveOrUpdateBatch(ips);
+		}else if(StrUtil.equals("domain", type)){
+			List<DomainTagUserDefined> domains = (List<DomainTagUserDefined>) result.get("domain");
+			if(ObjectUtil.isEmpty(knowledgeId)) {
+				domains.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+			}
+			domainTagUserDefinedService.saveOrUpdateBatch(domains);
+		}else {
+			List<AppTagUserDefined> apps = (List<AppTagUserDefined>) result.get("app");
+			if(ObjectUtil.isEmpty(knowledgeId)) {
+				apps.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+			}
+			appTagUserDefinedService.saveOrUpdateBatch(apps);
+		}
+		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getById(knowledgeBase.getKnowledgeId());
+		if(ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
+			Integer version = knowledgeBaseSyncVersion.getVersion();
+			knowledgeBaseSyncVersion.setVersion(version+1);
+		}else {
+			knowledgeBaseSyncVersion = new KnowledgeBaseSyncVersion();
+			knowledgeBaseSyncVersion.setVersion(1);
+		}
+		knowledgeBaseSyncVersion.setKnowledgeId(knowledgeBase.getKnowledgeId());
+		knowledgeBaseSyncVersion.setOpTime(new Date());
+		knowledgeBaseSyncVersionService.saveOrUpdate(knowledgeBaseSyncVersion);
+		return knowledgeBase.getKnowledgeId();
+	}
+	
+	@Override
+	public Map<String,Object> validateParam(Map<String, Object> params) {
+		Map<String,Object> result = new HashMap<String,Object>(); 
+		
+		String handleType = "addItemList";
+		Integer knowledgeId = (Integer) params.get("knowledgeId");
+		if(ObjectUtil.isNotEmpty(knowledgeId)) {
+			handleType = "updateItemList";
+		}
+		String name = (String) params.get("name");
+		String type = (String) params.get("type");
+		String category = (String) params.get("category");
+		String description = (String) params.get("description");
+		List<KnowledgeBase> queryByName = this.baseMapper.selectList(new QueryWrapper<KnowledgeBase>().lambda()
+				.eq(KnowledgeBase::getName, name)
+				.ne(ObjectUtil.isNotEmpty(knowledgeId),KnowledgeBase::getKnowledgeId,knowledgeId));
+		if(ObjectUtil.isNotEmpty(queryByName)) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_NAME_DUPLICATE);
+		}
+		String source = "";
+		List<Map<String,Object>> datas = (List<Map<String, Object>>) params.get(handleType);
+		if(ObjectUtil.isNotEmpty(datas)) {
+			if(StrUtil.equals("ip", type)) {
+				source = "cn_ip_tag_user_defined";
+				List<IpTagUserDefined> ipTagUserDefineds = new ArrayList<IpTagUserDefined>();
+				for(Map data: datas) {
+					Integer id = (Integer) data.get("id");
+					Map<String,Object> tagNames = (Map<String, Object>) data.get("tagNames");
+					String tagValue = (String) data.get("tagValue");
+					Integer isValid = (Integer) data.get("isValid");
+					String addrFormat = (String) tagNames.get("addrFormat");
+					String ip1 = (String) tagNames.get("ip1");
+					String ip2 = "";
+					boolean ipFormat = true;
+					if(!StrUtil.equals(addrFormat, "Single")) {
+						ip2 = (String) tagNames.get("ip2");
+					}
+					// 校验ip格式
+					if(StrUtil.equals(addrFormat, "Single")) {
+						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1);
+					}else if(StrUtil.equals(addrFormat, "Range")){
+						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"-"+ip2);
+					}else {
+						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"/"+ip2);
+					}
+					if(!ipFormat) {
+						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
+					}
+					IpTagUserDefined ipTagUserDefined = new IpTagUserDefined();
+					if(ObjectUtil.isEmpty(knowledgeId)) {
+						ipTagUserDefined.setCTime(new Date());
+					}
+					ipTagUserDefined.setIsValid(isValid);
+					ipTagUserDefined.setAddrFormat(addrFormat);
+					ipTagUserDefined.setKnowledgeId(knowledgeId);
+					ipTagUserDefined.setOpTime(new Date());
+					ipTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
+					ipTagUserDefined.setId(id==null?null:id.longValue());
+					ipTagUserDefined.setTagNames(tagNames);
+					ipTagUserDefined.setIpFirst(ip1);
+					ipTagUserDefined.setTagValue(tagValue);
+					if(StrUtil.equals(addrFormat, "Single")) {
+						ipTagUserDefined.setIpSecond(ip1);
+						String ip1Binary = getIpBinary(ip1);
+						ipTagUserDefined.setStartIpBinary(ip1Binary.getBytes());
+						ipTagUserDefined.setEndIpBinary(ip1Binary.getBytes());
+					}else if(StrUtil.equals(addrFormat, "Range")){
+						ipTagUserDefined.setIpSecond(ip2);
+						String ip1Binary = getIpBinary(ip1);
+						ipTagUserDefined.setStartIpBinary(ip1Binary.getBytes());
+						String ip2Binary = getIpBinary(ip2);
+						ipTagUserDefined.setEndIpBinary(ip2Binary.getBytes());
+					}else {
+						ipTagUserDefined.setIpSecond(ip2);
+						boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
+						Map<String, String> ipsStartEnd = null;
+						String startIp = "";
+						String endIp = "";
+						if(iPv4Address) {
+							ipsStartEnd = IPUtils.getIpsV4ByCidr(ip1+"/"+ip2);
+							startIp = ipsStartEnd.get("startIpStr");
+							endIp = ipsStartEnd.get("endIpStr");
+						}else {
+							ipsStartEnd = IPUtils.getIpsV6ByCidr(ip1+"/"+ip2);
+							startIp = ipsStartEnd.get("startIpStr");
+							endIp = ipsStartEnd.get("endIpStr");
+						}
+						String ip1Binary = getIpBinary(startIp);
+						ipTagUserDefined.setStartIpBinary(ip1Binary.getBytes());
+						String ip2Binary = getIpBinary(endIp);
+						ipTagUserDefined.setEndIpBinary(ip2Binary.getBytes());
+					}
+					ipTagUserDefineds.add(ipTagUserDefined);
+				}
+				result.put("ip", ipTagUserDefineds);
+			}else if(StrUtil.equals("domain", type)){
+				source = "cn_domain_tag_user_defined";
+				List<DomainTagUserDefined> domainTagUserDefineds = new ArrayList<DomainTagUserDefined>();
+				for(Map data : datas) {
+					Integer id = (Integer) data.get("id");
+					String tagName = (String) data.get("tagName");
+					String tagValue = (String) data.get("tagValue");
+					Integer isValid = (Integer) data.get("isValid");
+					boolean flag = KnowledgeCheckUtil.validateFqdn(tagName);
+					if(!flag) {
+						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
+					}
+					DomainTagUserDefined domainTagUserDefined = new DomainTagUserDefined();
+					if(ObjectUtil.isEmpty(knowledgeId)) {
+						domainTagUserDefined.setCTime(new Date());
+					}
+					domainTagUserDefined.setId(id==null?null:id.longValue());
+					domainTagUserDefined.setIsValid(isValid);
+					domainTagUserDefined.setOpTime(new Date());
+					domainTagUserDefined.setKnowledgeId(knowledgeId);
+					domainTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
+					domainTagUserDefined.setTagName(tagName);
+					domainTagUserDefined.setTagValue(tagValue);
+					domainTagUserDefineds.add(domainTagUserDefined);
+				}
+				result.put("domain", domainTagUserDefineds);
+			}else if(StrUtil.equals("app", type)) {
+				source = "cn_app_tag_user_defined";
+				List<AppTagUserDefined> appTagUserDefineds = new ArrayList<AppTagUserDefined>();
+				for(Map data : datas) {
+					Integer id = (Integer) data.get("id");
+					String tagName = (String) data.get("tagName");
+					String tagValue = (String) data.get("tagValue");
+					Integer isValid = (Integer) data.get("isValid");
+					boolean flag = KnowledgeCheckUtil.validateApp(tagName);
+					if(!flag) {
+						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
+					}
+					AppTagUserDefined appTagUserDefined = new AppTagUserDefined();
+					if(ObjectUtil.isEmpty(knowledgeId)) {
+						appTagUserDefined.setCTime(new Date());
+					}
+					appTagUserDefined.setId(id==null?null:id.longValue());
+					appTagUserDefined.setIsValid(isValid);
+					appTagUserDefined.setOpTime(new Date());
+					appTagUserDefined.setKnowledgeId(knowledgeId);
+					appTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
+					appTagUserDefined.setTagName(tagName);
+					appTagUserDefined.setTagValue(tagValue);
+					appTagUserDefineds.add(appTagUserDefined);
+				}
+				result.put("app", appTagUserDefineds);
+			}
+		}
+		KnowledgeBase knowledgeBase = new KnowledgeBase();
+		knowledgeBase.setCategory(category);
+		if(ObjectUtil.isEmpty(knowledgeId)) {
+			knowledgeBase.setCTime(new Date());
+		}
+		knowledgeBase.setDescription(description);
+		knowledgeBase.setIsBuiltIn(0);
+		knowledgeBase.setIsPublished(1);
+		knowledgeBase.setKnowledgeId(knowledgeId);
+		knowledgeBase.setName(name);
+		knowledgeBase.setOpTime(new Date());
+		knowledgeBase.setOpUser(ShiroUtils.getUserId());
+		knowledgeBase.setStatus(1);
+		knowledgeBase.setSource(source);
+		result.put("knowledgeBase", knowledgeBase);
+		return result;
+	}
+	
+	private String getIpBinary(String ip){
+		IPAddress address;
+		try {
+			IPAddressString ipAddress = new IPAddressString(ip);
+			address = ipAddress.toAddress();
+		} catch (Exception e) {
+			throw new CNException("Parsing ip address error");
+		}
+		return address.toBinaryString();
 	}
 }

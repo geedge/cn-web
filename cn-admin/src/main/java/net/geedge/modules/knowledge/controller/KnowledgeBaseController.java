@@ -58,5 +58,19 @@ public class KnowledgeBaseController {
 		PageUtils page = knowledgeBaseService.queryKnowledgeBaseItem(knowledgeId, params);
 		return R.ok(page);
 	}
+	
+	@PostMapping
+	public R addKnowledgeBase(@RequestBody Map<String,Object> params) {
+		Integer id = knowledgeBaseService.addOrModifyKnowledgeBase(params);
+		return R.ok().put("knowledgeId", id);
+	}
+	
+	@PutMapping
+	public R modifyKnowledgeBase(@RequestBody Map<String,Object> params) {
+		Integer knowledgeId = (Integer) params.get("knowledgeId");
+		ValidateUtils.is(knowledgeId).notNull(RCode.KNOWLEDGE_ID_ISNULL);
+		Integer id = knowledgeBaseService.addOrModifyKnowledgeBase(params);
+		return R.ok().put("knowledgeId", id);
+	}
 }
 
