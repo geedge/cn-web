@@ -1,38 +1,52 @@
 package net.geedge.modules.knowledge.service.impl;
 
 
+import static net.geedge.modules.knowledge.constant.KnowledgeBaseConstant.APP_TAG_USER_DEFINED;
+import static net.geedge.modules.knowledge.constant.KnowledgeBaseConstant.DOMAIN_TAG_USER_DEFINED;
+import static net.geedge.modules.knowledge.constant.KnowledgeBaseConstant.IP_TAG_USER_DEFINED;
+
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import cn.hutool.log.Log;
-import inet.ipaddr.AddressStringException;
-import inet.ipaddr.IPAddress;
-import inet.ipaddr.IPAddressString;
-import inet.ipaddr.IncompatibleAddressException;
-
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import net.geedge.common.smartvalidate.ValidateUtils;
-import net.geedge.common.utils.*;
-import net.geedge.modules.sys.entity.SysUserEntity;
-import net.geedge.modules.sys.service.SysUserService;
-import net.geedge.modules.sys.shiro.ShiroUtils;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import cn.hutool.core.io.FileUtil;
-import org.apache.commons.io.FileUtils;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.text.csv.CsvData;
+import cn.hutool.core.text.csv.CsvRow;
+import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
+import net.geedge.common.utils.Constant;
+import net.geedge.common.utils.IPUtils;
+import net.geedge.common.utils.KnowledgeCheckUtil;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.Query;
+import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.DomainTagUserDefined;
@@ -44,13 +58,8 @@ import net.geedge.modules.knowledge.service.DomainTagUserDefinedService;
 import net.geedge.modules.knowledge.service.IpTagUserDefinedService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
-import net.geedge.modules.panel.entity.VisualPanel;
-import cn.hutool.core.text.csv.CsvData;
-import cn.hutool.core.text.csv.CsvRow;
-import cn.hutool.core.text.csv.CsvUtil;
-import cn.hutool.core.io.resource.ResourceUtil;
-
-import static net.geedge.modules.knowledge.constant.KnowledgeBaseConstant.*;
+import net.geedge.modules.sys.service.SysUserService;
+import net.geedge.modules.sys.shiro.ShiroUtils;
 
 @Service("knowledgeBaseService")
 public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, KnowledgeBase> implements KnowledgeBaseService {
@@ -94,6 +103,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				domainTagUserDefinedService.remove(new QueryWrapper<DomainTagUserDefined>().lambda().in(DomainTagUserDefined::getKnowledgeId, sourceKnowledgeBaseIds.get(source)));
 			}
 		}
+		this.remove(new QueryWrapper<KnowledgeBase>().lambda().in(KnowledgeBase::getKnowledgeId,knowlegeIds));
 		return knowlegeIds;
 	}
 
@@ -153,7 +163,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		        		ipType="Single";
 		        		ip1 = s;
 		        	}
-		        	ip.put("addrFoamat",ipType);
+		        	ip.put("addrFormat",ipType);
 		        	ip.put("ip1", ip1);
 		        	ip.put("ip2", ip2);
 		        	res.put("tagNames", ip);
@@ -448,16 +458,16 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					ipTagUserDefined.setIpFirst(ip1);
 					ipTagUserDefined.setTagValue(tagValue);
 					if(StrUtil.equals(addrFormat, "Single")) {
-						ipTagUserDefined.setIpSecond(ip1);
+						/*ipTagUserDefined.setIpSecond(ip1);
 						String ip1Binary = getIpBinary(ip1);
-						ipTagUserDefined.setStartIpBinary(ip1Binary.getBytes());
-						ipTagUserDefined.setEndIpBinary(ip1Binary.getBytes());
+						ipTagUserDefined.setStartIpBinary(Tool.HexUtil.decodeHex(ip1Binary));
+						ipTagUserDefined.setEndIpBinary(Tool.HexUtil.decodeHex(ip1Binary));*/
 					}else if(StrUtil.equals(addrFormat, "Range")){
-						ipTagUserDefined.setIpSecond(ip2);
+						/*ipTagUserDefined.setIpSecond(ip2);
 						String ip1Binary = getIpBinary(ip1);
-						ipTagUserDefined.setStartIpBinary(ip1Binary.getBytes());
+						ipTagUserDefined.setStartIpBinary(Tool.HexUtil.decodeHex(ip1Binary));
 						String ip2Binary = getIpBinary(ip2);
-						ipTagUserDefined.setEndIpBinary(ip2Binary.getBytes());
+						ipTagUserDefined.setEndIpBinary(Tool.HexUtil.decodeHex(ip2Binary));*/
 					}else {
 						ipTagUserDefined.setIpSecond(ip2);
 						boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
@@ -473,10 +483,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 							startIp = ipsStartEnd.get("startIpStr");
 							endIp = ipsStartEnd.get("endIpStr");
 						}
-						String ip1Binary = getIpBinary(startIp);
-						ipTagUserDefined.setStartIpBinary(ip1Binary.getBytes());
+						/*String ip1Binary = getIpBinary(startIp);
+						ipTagUserDefined.setStartIpBinary(Tool.HexUtil.decodeHex(ip1Binary));
 						String ip2Binary = getIpBinary(endIp);
-						ipTagUserDefined.setEndIpBinary(ip2Binary.getBytes());
+						ipTagUserDefined.setEndIpBinary(Tool.HexUtil.decodeHex(ip2Binary));*/
 					}
 					ipTagUserDefineds.add(ipTagUserDefined);
 				}
@@ -553,7 +563,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		return result;
 	}
 	
-	private String getIpBinary(String ip){
+	/*private String getIpBinary(String ip){
 		IPAddress address;
 		try {
 			IPAddressString ipAddress = new IPAddressString(ip);
@@ -562,5 +572,5 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			throw new CNException("Parsing ip address error");
 		}
 		return address.toBinaryString();
-	}
+	}*/
 }
