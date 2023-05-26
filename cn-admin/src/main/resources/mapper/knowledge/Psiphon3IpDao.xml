@@ -4,7 +4,6 @@
 
     <resultMap id="Psiphon3Ip" type="net.geedge.modules.knowledge.entity.Psiphon3Ip">
         <result property="id" column="id"></result>
-        <result property="isServer" column="is_server"></result>
         <result property="addrFormat" column="addr_format"></result>
         <result property="ip1" column="ip_first"></result>
         <result property="ip2" column="ip_second"></result>

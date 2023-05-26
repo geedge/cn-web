@@ -17,8 +17,6 @@ public class Psiphon3Ip {
     @TableId
     private Long id;
 
-    private Integer isServer;
-
     private String addrFormat;
 
     private String ip1;
