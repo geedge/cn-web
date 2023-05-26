@@ -45,7 +45,8 @@
     	insert into cn_ip_tag_user_defined (tag_value,addr_format,ip_first,ip_second,start_ip_binary,
     	end_ip_binary,op_time,c_time,op_user,is_valid,knowledge_id)
     	values
-    	<foreach collection="ipTagUserDefineds" item="ip" separator="," open="(" close=")" index="">
+    	<foreach collection="ipTagUserDefineds" item="ip" separator=",">
+    		(
     		#{ip.tagValue},
     		#{ip.addrFormat},
     		#{ip.ipFirst},
@@ -57,6 +58,7 @@
     		#{ip.opUser},
     		#{ip.isValid},
     		#{ip.knowledgeId}
+    		)
     	</foreach>
     </insert>
     
