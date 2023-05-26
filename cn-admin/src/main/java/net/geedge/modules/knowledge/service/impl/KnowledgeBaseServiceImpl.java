@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -78,7 +79,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	@Autowired
 	private SysUserService sysUserService;
-
+	
 	@Override
 	public Object remove(String ids) {
 		// 内置数据不可删除
@@ -365,21 +366,20 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		this.saveOrUpdate(knowledgeBase);
 		if(StrUtil.equals("ip", type)) {
 			List<IpTagUserDefined> ips = (List<IpTagUserDefined>) result.get("ip");
-			if(ObjectUtil.isEmpty(knowledgeId)) {
-				ips.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-			}
-			ipTagUserDefinedService.saveOrUpdateBatch(ips);
+			ips.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+			// 将ip数据分为新增和更新
+			Map<Boolean, List<IpTagUserDefined>> ipMap = ips.stream().collect(Collectors.groupingBy(ip-> ObjectUtil.isNotEmpty(ip.getId())));
+			List<IpTagUserDefined> updateIps = ipMap.get(true);
+			List<IpTagUserDefined> insertIps = ipMap.get(false);
+			ipTagUserDefinedService.saveBatch(insertIps);
+			ipTagUserDefinedService.modifyBatch(updateIps);
 		}else if(StrUtil.equals("domain", type)){
 			List<DomainTagUserDefined> domains = (List<DomainTagUserDefined>) result.get("domain");
-			if(ObjectUtil.isEmpty(knowledgeId)) {
-				domains.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-			}
+			domains.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
 			domainTagUserDefinedService.saveOrUpdateBatch(domains);
 		}else {
 			List<AppTagUserDefined> apps = (List<AppTagUserDefined>) result.get("app");
-			if(ObjectUtil.isEmpty(knowledgeId)) {
-				apps.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-			}
+			apps.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
 			appTagUserDefinedService.saveOrUpdateBatch(apps);
 		}
 		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getById(knowledgeBase.getKnowledgeId());
@@ -445,10 +445,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
 					}
 					IpTagUserDefined ipTagUserDefined = new IpTagUserDefined();
-					if(ObjectUtil.isEmpty(knowledgeId)) {
+					if(ObjectUtil.isEmpty(ipTagUserDefined.getCTime())) {
 						ipTagUserDefined.setCTime(new Date());
 					}
-					ipTagUserDefined.setIsValid(isValid);
+					ipTagUserDefined.setIsValid(isValid==null?1:isValid);
 					ipTagUserDefined.setAddrFormat(addrFormat);
 					ipTagUserDefined.setKnowledgeId(knowledgeId);
 					ipTagUserDefined.setOpTime(new Date());
@@ -458,16 +458,13 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					ipTagUserDefined.setIpFirst(ip1);
 					ipTagUserDefined.setTagValue(tagValue);
 					if(StrUtil.equals(addrFormat, "Single")) {
-						/*ipTagUserDefined.setIpSecond(ip1);
-						String ip1Binary = getIpBinary(ip1);
-						ipTagUserDefined.setStartIpBinary(Tool.HexUtil.decodeHex(ip1Binary));
-						ipTagUserDefined.setEndIpBinary(Tool.HexUtil.decodeHex(ip1Binary));*/
+						ipTagUserDefined.setIpSecond(ip1);
+						ipTagUserDefined.setStartIpBinary(ip1.getBytes());
+						ipTagUserDefined.setEndIpBinary(ip1.getBytes());
 					}else if(StrUtil.equals(addrFormat, "Range")){
-						/*ipTagUserDefined.setIpSecond(ip2);
-						String ip1Binary = getIpBinary(ip1);
-						ipTagUserDefined.setStartIpBinary(Tool.HexUtil.decodeHex(ip1Binary));
-						String ip2Binary = getIpBinary(ip2);
-						ipTagUserDefined.setEndIpBinary(Tool.HexUtil.decodeHex(ip2Binary));*/
+						ipTagUserDefined.setIpSecond(ip2);
+						ipTagUserDefined.setStartIpBinary(ip1.getBytes());
+						ipTagUserDefined.setEndIpBinary(ip2.getBytes());
 					}else {
 						ipTagUserDefined.setIpSecond(ip2);
 						boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
@@ -483,10 +480,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 							startIp = ipsStartEnd.get("startIpStr");
 							endIp = ipsStartEnd.get("endIpStr");
 						}
-						/*String ip1Binary = getIpBinary(startIp);
-						ipTagUserDefined.setStartIpBinary(Tool.HexUtil.decodeHex(ip1Binary));
-						String ip2Binary = getIpBinary(endIp);
-						ipTagUserDefined.setEndIpBinary(Tool.HexUtil.decodeHex(ip2Binary));*/
+						ipTagUserDefined.setStartIpBinary(startIp.getBytes());
+						ipTagUserDefined.setEndIpBinary(endIp.getBytes());
 					}
 					ipTagUserDefineds.add(ipTagUserDefined);
 				}
@@ -504,11 +499,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
 					}
 					DomainTagUserDefined domainTagUserDefined = new DomainTagUserDefined();
-					if(ObjectUtil.isEmpty(knowledgeId)) {
+					if(ObjectUtil.isEmpty(domainTagUserDefined.getCTime())) {
 						domainTagUserDefined.setCTime(new Date());
 					}
 					domainTagUserDefined.setId(id==null?null:id.longValue());
-					domainTagUserDefined.setIsValid(isValid);
+					domainTagUserDefined.setIsValid(isValid==null?1:isValid);
 					domainTagUserDefined.setOpTime(new Date());
 					domainTagUserDefined.setKnowledgeId(knowledgeId);
 					domainTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
@@ -530,11 +525,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
 					}
 					AppTagUserDefined appTagUserDefined = new AppTagUserDefined();
-					if(ObjectUtil.isEmpty(knowledgeId)) {
+					if(ObjectUtil.isEmpty(appTagUserDefined.getCTime())) {
 						appTagUserDefined.setCTime(new Date());
 					}
 					appTagUserDefined.setId(id==null?null:id.longValue());
-					appTagUserDefined.setIsValid(isValid);
+					appTagUserDefined.setIsValid(isValid==null?1:isValid);
 					appTagUserDefined.setOpTime(new Date());
 					appTagUserDefined.setKnowledgeId(knowledgeId);
 					appTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
@@ -562,15 +557,4 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		result.put("knowledgeBase", knowledgeBase);
 		return result;
 	}
-	
-	/*private String getIpBinary(String ip){
-		IPAddress address;
-		try {
-			IPAddressString ipAddress = new IPAddressString(ip);
-			address = ipAddress.toAddress();
-		} catch (Exception e) {
-			throw new CNException("Parsing ip address error");
-		}
-		return address.toBinaryString();
-	}*/
 }

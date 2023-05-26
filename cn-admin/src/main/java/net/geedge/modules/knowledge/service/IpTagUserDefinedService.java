@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,4 +14,8 @@ import java.util.Map;
 public interface IpTagUserDefinedService extends IService<IpTagUserDefined> {
 
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
+    
+    void saveBatch(List<IpTagUserDefined> ipTagUserDefineds);
+    
+    void modifyBatch(List<IpTagUserDefined> ipTagUserDefineds);
 }

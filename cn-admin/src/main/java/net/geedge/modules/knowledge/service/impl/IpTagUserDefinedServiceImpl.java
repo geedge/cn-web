@@ -2,6 +2,8 @@ package net.geedge.modules.knowledge.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import cn.hutool.core.util.ObjectUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.modules.knowledge.dao.IpTagUserDefinedDao;
@@ -29,4 +31,18 @@ public class IpTagUserDefinedServiceImpl extends ServiceImpl<IpTagUserDefinedDao
         page.setRecords(ipTagUserDefineds);
         return new PageUtils(page);
     }
+
+	@Override
+	public void saveBatch(List<IpTagUserDefined> ipTagUserDefineds) {
+		if(ObjectUtil.isNotEmpty(ipTagUserDefineds)) {
+			this.baseMapper.insertBatch(ipTagUserDefineds);
+		}
+	}
+
+	@Override
+	public void modifyBatch(List<IpTagUserDefined> ipTagUserDefineds) {
+		if(ObjectUtil.isNotEmpty(ipTagUserDefineds)) {
+			this.baseMapper.updateBatch(ipTagUserDefineds);
+		}
+	}
 }

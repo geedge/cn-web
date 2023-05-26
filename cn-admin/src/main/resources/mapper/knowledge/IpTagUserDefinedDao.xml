@@ -40,4 +40,41 @@
         where id = #{id}
           and status = 1
     </select>
+    
+    <insert id="insertBatch">
+    	insert into cn_ip_tag_user_defined (tag_value,addr_format,ip_first,ip_second,start_ip_binary,
+    	end_ip_binary,op_time,c_time,op_user,is_valid,knowledge_id)
+    	values
+    	<foreach collection="ipTagUserDefineds" item="ip" separator="," open="(" close=")" index="">
+    		#{ip.tagValue},
+    		#{ip.addrFormat},
+    		#{ip.ipFirst},
+    		#{ip.ipSecond},
+    		INET6_ATON(#{ip.startIpBinary}),
+    		INET6_ATON(#{ip.endIpBinary}),
+    		#{ip.opTime},
+    		#{ip.cTime},
+    		#{ip.opUser},
+    		#{ip.isValid},
+    		#{ip.knowledgeId}
+    	</foreach>
+    </insert>
+    
+    <update id="updateBatch">
+    	<foreach collection="ipTagUserDefineds" item="ip" separator=";">
+    	 update cn_ip_tag_user_defined  set
+    		tag_value = #{ip.tagValue},
+    		addr_format = #{ip.addrFormat},
+    		ip_first = #{ip.ipFirst},
+    		ip_second = #{ip.ipSecond},
+    		start_ip_binary = INET6_ATON(#{ip.startIpBinary}),
+    		end_ip_binary = INET6_ATON(#{ip.endIpBinary}),
+    		op_time = #{ip.opTime},
+    		c_time = #{ip.cTime},
+    		op_user = #{ip.opUser},
+    		is_valid = #{ip.isValid},
+    		knowledge_id = #{ip.knowledgeId}
+    		where id = #{ip.id}
+    	</foreach>
+    </update>
 </mapper>

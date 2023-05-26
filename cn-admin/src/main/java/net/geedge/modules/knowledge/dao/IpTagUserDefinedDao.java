@@ -17,4 +17,8 @@ import java.util.Map;
 public interface IpTagUserDefinedDao extends BaseMapper<IpTagUserDefined> {
 
     List<IpTagUserDefined> queryPageByKnowledgeId(IPage<IpTagUserDefined> page, @Param("params") Map<String, Object> params);
+    
+    void insertBatch(@Param("ipTagUserDefineds")List<IpTagUserDefined> ipTagUserDefineds);
+    
+    void updateBatch(@Param("ipTagUserDefineds")List<IpTagUserDefined> ipTagUserDefineds);
 }
