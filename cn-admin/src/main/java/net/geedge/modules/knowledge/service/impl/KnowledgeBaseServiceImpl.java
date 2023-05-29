@@ -409,6 +409,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		String type = (String) params.get("type");
 		String category = (String) params.get("category");
 		String description = (String) params.get("description");
+		Integer status = (Integer) params.get("stauts");
 		List<KnowledgeBase> queryByName = this.baseMapper.selectList(new QueryWrapper<KnowledgeBase>().lambda()
 				.eq(KnowledgeBase::getName, name)
 				.ne(ObjectUtil.isNotEmpty(knowledgeId),KnowledgeBase::getKnowledgeId,knowledgeId));
@@ -552,7 +553,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		knowledgeBase.setName(name);
 		knowledgeBase.setOpTime(new Date());
 		knowledgeBase.setOpUser(ShiroUtils.getUserId());
-		knowledgeBase.setStatus(1);
+		knowledgeBase.setStatus(status==null ? 1 : status);
 		knowledgeBase.setSource(source);
 		result.put("knowledgeBase", knowledgeBase);
 		return result;
