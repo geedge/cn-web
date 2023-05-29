@@ -55,8 +55,8 @@ public class KnowledgeBaseController {
 
 	@RequestMapping("/{id}")
 	public R queryKnowledgeBaseItem(@PathVariable(value = "id") Integer knowledgeId,@RequestParam Map<String,Object> params) {
-		PageUtils page = knowledgeBaseService.queryKnowledgeBaseItem(knowledgeId, params);
-		return R.ok(page);
+		Map<String, Object> data = knowledgeBaseService.queryKnowledgeBaseItem(knowledgeId, params);
+		return R.ok(data);
 	}
 	
 	@PostMapping

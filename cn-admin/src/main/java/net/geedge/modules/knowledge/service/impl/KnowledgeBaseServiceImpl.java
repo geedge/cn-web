@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import net.geedge.common.utils.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,13 +42,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
-import net.geedge.common.utils.Constant;
-import net.geedge.common.utils.IPUtils;
-import net.geedge.common.utils.KnowledgeCheckUtil;
-import net.geedge.common.utils.PageUtils;
-import net.geedge.common.utils.Query;
-import net.geedge.common.utils.R;
-import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.DomainTagUserDefined;
@@ -326,15 +320,15 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 
 	@Override
-	public PageUtils queryKnowledgeBaseItem(Integer knowledgeId, Map<String, Object> params) {
+	public Map<String, Object> queryKnowledgeBaseItem(Integer knowledgeId, Map<String, Object> params) {
 		params.put("knowledgeId",knowledgeId);
 		KnowledgeBase knowledgeBase = this.getBaseMapper().queryInfo(knowledgeId);
+		validateKnowledgeBase(knowledgeBase);
 		String source = knowledgeBase.getSource();
 		PageUtils pageUtils = createUserDefinedItemPages(source, params);
-		if(ObjectUtil.isEmpty(pageUtils)) {
-			throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
-		}
-		return pageUtils;
+		validateKnowledgeBaseItem(pageUtils);
+		Map<String, Object> pageMap = addKnowledgeBaseMessage(pageUtils, knowledgeBase);
+		return pageMap;
 	}
 
 	private PageUtils createUserDefinedItemPages(String source, Map<String, Object> params) {
@@ -354,7 +348,26 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		return pageUtils;
 	}
-	
+
+	private Map<String, Object> addKnowledgeBaseMessage(PageUtils pageUtils, KnowledgeBase knowledgeBase){
+		Map<String, Object> pageMap = JSONUtil.parseObj(JSONUtil.toJsonStr(pageUtils));
+		Map<String, Object> knowledge = JSONUtil.parseObj(JSONUtil.toJsonStr(knowledgeBase));
+		pageMap.putAll(knowledge);
+		return pageMap;
+	}
+
+	private void validateKnowledgeBase(KnowledgeBase knowledgeBase) {
+		if(ObjectUtil.isEmpty(knowledgeBase)) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
+		}
+	}
+
+	private void validateKnowledgeBaseItem(PageUtils pageUtils) {
+		if(ObjectUtil.isEmpty(pageUtils) || ObjectUtil.isEmpty(pageUtils.getList())) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
+		}
+	}
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Integer addOrModifyKnowledgeBase(Map<String, Object> params) {
