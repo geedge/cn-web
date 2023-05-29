@@ -22,9 +22,9 @@ public class KnowledgeBaseController {
 	private KnowledgeBaseService knowledgeBaseService;
 
 	@DeleteMapping
-	public R remove(@RequestParam String ids) {
-		ValidateUtils.is(ids).notNull(RCode.KNOWLEDGE_IDS_ISNULL);
-		Object result = knowledgeBaseService.remove(ids);
+	public R remove(@RequestParam("knowledgeIds") String knowledgeIds) {
+		ValidateUtils.is(knowledgeIds).notNull(RCode.KNOWLEDGE_IDS_ISNULL);
+		Object result = knowledgeBaseService.remove(knowledgeIds);
 		return R.ok(result);
 	}
 	

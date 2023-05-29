@@ -316,7 +316,7 @@ public enum RCode {
     KNOWLEDGE_TYPE_ISNULL(591005,"KnowledgeBase type is required"),
     KNOWLEDGE_FILE_TYPE_ERROR(591006,"KnowledgeBase file type only supports csv"),
     KNOWLEDGE_FILE_ISNULL(591007,"KnowledgeBase file is required"),
-    KNOWLEDGE_IDS_ISNULL(591008,"KnowledgeBase ids is required"),
+    KNOWLEDGE_IDS_ISNULL(591008,"KnowledgeBase knowledgeIds is required"),
     KNOWLEDGE_ID_ISNULL(591009,"KnowledgeBase id is required"),
     KNOWLEDGE_QGW_SERVICE_ERROR(591010,"Gateway service interface response error"),
     KNOWLEDGE_HOS_ERROR(591011,"HOS service response error"),

@@ -75,9 +75,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	private SysUserService sysUserService;
 	
 	@Override
-	public Object remove(String ids) {
+	public Object remove(String knowledgeIds) {
 		// 内置数据不可删除
-		List<String> knowlegeIds = StrUtil.split(ids, StrUtil.C_COMMA);
+		List<String> knowlegeIds = StrUtil.split(knowledgeIds, StrUtil.C_COMMA);
 		List<KnowledgeBase> knowledgeBases = this.baseMapper.selectBatchIds(knowlegeIds);
 		List<Integer> builtInIds = knowledgeBases.stream().filter(knowledgeBase-> knowledgeBase.getIsBuiltIn()
 				.equals(1)).map(KnowledgeBase::getKnowledgeId).collect(Collectors.toList());
@@ -422,7 +422,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		String type = (String) params.get("type");
 		String category = (String) params.get("category");
 		String description = (String) params.get("description");
-		Integer status = (Integer) params.get("stauts");
+		Integer status = (Integer) params.get("status");
 		List<KnowledgeBase> queryByName = this.baseMapper.selectList(new QueryWrapper<KnowledgeBase>().lambda()
 				.eq(KnowledgeBase::getName, name)
 				.ne(ObjectUtil.isNotEmpty(knowledgeId),KnowledgeBase::getKnowledgeId,knowledgeId));
