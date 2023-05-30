@@ -43,6 +43,7 @@ import net.geedge.modules.knowledge.entity.DomainTagUserDefined;
 import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import net.geedge.modules.knowledge.entity.KnowledgeBaseSyncVersion;
+import net.geedge.modules.knowledge.entity.Psiphon3Ip;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 
 import static net.geedge.common.utils.Constant.*;
@@ -343,6 +344,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		PageUtils pageUtils = createItemPages(source, params);
 		validateKnowledgeBaseItem(pageUtils);
 		Map<String, Object> pageMap = addKnowledgeBaseMessage(pageUtils, knowledgeBase);
+		pageMap = updateItemList(pageMap);
 		return pageMap;
 	}
 
@@ -398,6 +400,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		return pageMap;
 	}
 
+	private Map<String, Object> updateItemList(Map<String, Object> pageMap) {
+		pageMap.put("itemList",pageMap.get("list"));
+		pageMap.remove("list");
+		return pageMap;
+	}
+
 	private void validateKnowledgeBase(KnowledgeBase knowledgeBase) {
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
@@ -413,29 +421,38 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Integer addOrModifyKnowledgeBase(Map<String, Object> params) {
-		String type = (String) params.get("type");
+		String source = (String) params.get("source");
 		Integer knowledgeId = (Integer) params.get("knowledgeId");
 		Map<String, Object> result = validateParam(params);
 		
 		KnowledgeBase knowledgeBase = (KnowledgeBase) result.get("knowledgeBase");
 		this.saveOrUpdate(knowledgeBase);
-		if(StrUtil.equals("ip", type)) {
-			List<IpTagUserDefined> ips = (List<IpTagUserDefined>) result.get("ip");
+		if(StrUtil.equals(Constant.IP_TAG_USER_DEFINED, source)) {
+			List<IpTagUserDefined> ips = (List<IpTagUserDefined>) result.get(source);
 			ips.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
 			// 将ip数据分为新增和更新
 			Map<Boolean, List<IpTagUserDefined>> ipMap = ips.stream().collect(Collectors.groupingBy(ip-> ObjectUtil.isNotEmpty(ip.getId())));
 			List<IpTagUserDefined> updateIps = ipMap.get(true);
 			List<IpTagUserDefined> insertIps = ipMap.get(false);
-			ipTagUserDefinedService.saveBatch(insertIps);
-			ipTagUserDefinedService.modifyBatch(updateIps);
-		}else if(StrUtil.equals("domain", type)){
-			List<DomainTagUserDefined> domains = (List<DomainTagUserDefined>) result.get("domain");
+			ipTagUserDefinedService.saveBatchForBinary(insertIps);
+			ipTagUserDefinedService.modifyBatchForBinary(updateIps);
+		}else if(StrUtil.equals(Constant.DOMAIN_TAG_USER_DEFINED, source)){
+			List<DomainTagUserDefined> domains = (List<DomainTagUserDefined>) result.get(source);
 			domains.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
 			domainTagUserDefinedService.saveOrUpdateBatch(domains);
-		}else {
-			List<AppTagUserDefined> apps = (List<AppTagUserDefined>) result.get("app");
+		}else if(StrUtil.equals(Constant.APP_TAG_USER_DEFINED, source)){
+			List<AppTagUserDefined> apps = (List<AppTagUserDefined>) result.get(source);
 			apps.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
 			appTagUserDefinedService.saveOrUpdateBatch(apps);
+		}else if(StrUtil.equals(Constant.PSIPHON3_IP, source)){
+			List<Psiphon3Ip> psiphon3Ips = (List<Psiphon3Ip>) result.get(source);
+			psiphon3Ips.stream().forEach(ps3Ip-> ps3Ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+			// 将ip数据分为新增和更新
+			Map<Boolean, List<Psiphon3Ip>> ps3IpMap = psiphon3Ips.stream().collect(Collectors.groupingBy(ps3Ip-> ObjectUtil.isNotEmpty(ps3Ip.getId())));
+			List<Psiphon3Ip> updateIps = ps3IpMap.get(true);
+			List<Psiphon3Ip> insertIps = ps3IpMap.get(false);
+			psiphon3IpService.saveBatchForBinary(insertIps);
+			psiphon3IpService.modifyBatchForBinary(updateIps);
 		}
 		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getById(knowledgeBase.getKnowledgeId());
 		if(ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
@@ -461,7 +478,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			handleType = "updateItemList";
 		}
 		String name = (String) params.get("name");
-		String type = (String) params.get("type");
+		String source = (String) params.get("source");
 		String category = (String) params.get("category");
 		String description = (String) params.get("description");
 		Integer status = (Integer) params.get("status");
@@ -471,23 +488,20 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		if(ObjectUtil.isNotEmpty(queryByName)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NAME_DUPLICATE);
 		}
-		String source = "";
 		List<Map<String,Object>> datas = (List<Map<String, Object>>) params.get(handleType);
 		if(ObjectUtil.isNotEmpty(datas)) {
-			if(StrUtil.equals("ip", type)) {
-				source = "cn_ip_tag_user_defined";
+			if(StrUtil.equals(Constant.IP_TAG_USER_DEFINED, source)) {
 				List<IpTagUserDefined> ipTagUserDefineds = new ArrayList<IpTagUserDefined>();
 				for(Map data: datas) {
 					Integer id = (Integer) data.get("id");
-					Map<String,Object> tagNames = (Map<String, Object>) data.get("tagNames");
 					String tagValue = (String) data.get("tagValue");
 					Integer isValid = (Integer) data.get("isValid");
-					String addrFormat = (String) tagNames.get("addrFormat");
-					String ip1 = (String) tagNames.get("ip1");
+					String addrFormat = (String) data.get("addrFormat");
+					String ip1 = (String) data.get("ip1");
 					String ip2 = "";
 					boolean ipFormat = true;
 					if(!StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
-						ip2 = (String) tagNames.get("ip2");
+						ip2 = (String) data.get("ip2");
 					}
 					// 校验ip格式
 					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
@@ -540,13 +554,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					}
 					ipTagUserDefineds.add(ipTagUserDefined);
 				}
-				result.put("ip", ipTagUserDefineds);
-			}else if(StrUtil.equals("domain", type)){
-				source = "cn_domain_tag_user_defined";
+				result.put(source, ipTagUserDefineds);
+			}else if(StrUtil.equals(Constant.DOMAIN_TAG_USER_DEFINED, source)){
 				List<DomainTagUserDefined> domainTagUserDefineds = new ArrayList<DomainTagUserDefined>();
 				for(Map data : datas) {
 					Integer id = (Integer) data.get("id");
-					String tagName = (String) data.get("tagName");
+					String tagName = (String) data.get("domain");
 					String tagValue = (String) data.get("tagValue");
 					Integer isValid = (Integer) data.get("isValid");
 					boolean flag = KnowledgeCheckUtil.validateFqdn(tagName);
@@ -566,13 +579,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					domainTagUserDefined.setTagValue(tagValue);
 					domainTagUserDefineds.add(domainTagUserDefined);
 				}
-				result.put("domain", domainTagUserDefineds);
-			}else if(StrUtil.equals("app", type)) {
-				source = "cn_app_tag_user_defined";
+				result.put(source, domainTagUserDefineds);
+			}else if(StrUtil.equals(Constant.APP_TAG_USER_DEFINED, source)) {
 				List<AppTagUserDefined> appTagUserDefineds = new ArrayList<AppTagUserDefined>();
 				for(Map data : datas) {
 					Integer id = (Integer) data.get("id");
-					String tagName = (String) data.get("tagName");
+					String tagName = (String) data.get("appName");
 					String tagValue = (String) data.get("tagValue");
 					Integer isValid = (Integer) data.get("isValid");
 					boolean flag = KnowledgeCheckUtil.validateApp(tagName);
@@ -592,7 +604,78 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					appTagUserDefined.setTagValue(tagValue);
 					appTagUserDefineds.add(appTagUserDefined);
 				}
-				result.put("app", appTagUserDefineds);
+				result.put(source, appTagUserDefineds);
+			}else if(StrUtil.equals(Constant.PSIPHON3_IP, source)){
+				List<Psiphon3Ip> psiphon3Ips = new ArrayList<Psiphon3Ip>();
+				for(Map data : datas) {
+					Integer id = (Integer) data.get("id");
+					Integer isValid = (Integer) data.get("isValid");
+					String addrFormat = (String) data.get("addrFormat");
+					Integer confidence = (Integer) data.get("confidence");
+					String confidenceLevel = (String) data.get("confidence_level");
+					String method = (String) data.get("method");
+					Integer type = (Integer) data.get("type");
+					String ip1 = (String) data.get("ip1");
+					String ip2 = "";
+					boolean ipFormat = true;
+					if(!StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
+						ip2 = (String) data.get("ip2");
+					}
+					// 校验ip格式
+					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
+						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1);
+					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
+						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"-"+ip2);
+					}else {
+						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"/"+ip2);
+					}
+					if(!ipFormat) {
+						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
+					}
+					Psiphon3Ip psiphon3Ip = new Psiphon3Ip();
+					if(ObjectUtil.isEmpty(psiphon3Ip.getCTime())) {
+						psiphon3Ip.setCTime(new Date());
+					}
+					psiphon3Ip.setIsValid(isValid==null?1:isValid);
+					psiphon3Ip.setAddrFormat(addrFormat);
+					psiphon3Ip.setKnowledgeId(knowledgeId);
+					psiphon3Ip.setOpTime(new Date());
+					psiphon3Ip.setOpUser(ShiroUtils.getUserId().intValue());
+					psiphon3Ip.setId(id==null?null:id.longValue());
+					psiphon3Ip.setIp1(ip1);
+					psiphon3Ip.setMethod(method);
+					psiphon3Ip.setConfidence(confidence);
+					psiphon3Ip.setConfidenceLevel(confidenceLevel);
+					psiphon3Ip.setType(type);
+					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
+						psiphon3Ip.setIp2(ip1);
+						psiphon3Ip.setStartIpBinary(ip1.getBytes());
+						psiphon3Ip.setEndIpBinary(ip1.getBytes());
+					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
+						psiphon3Ip.setIp2(ip2);
+						psiphon3Ip.setStartIpBinary(ip1.getBytes());
+						psiphon3Ip.setEndIpBinary(ip2.getBytes());
+					}else {
+						psiphon3Ip.setIp2(ip2);
+						boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
+						Map<String, String> ipsStartEnd = null;
+						String startIp = "";
+						String endIp = "";
+						if(iPv4Address) {
+							ipsStartEnd = IPUtils.getIpsV4ByCidr(ip1+"/"+ip2);
+							startIp = ipsStartEnd.get("startIpStr");
+							endIp = ipsStartEnd.get("endIpStr");
+						}else {
+							ipsStartEnd = IPUtils.getIpsV6ByCidr(ip1+"/"+ip2);
+							startIp = ipsStartEnd.get("startIpStr");
+							endIp = ipsStartEnd.get("endIpStr");
+						}
+						psiphon3Ip.setStartIpBinary(startIp.getBytes());
+						psiphon3Ip.setEndIpBinary(endIp.getBytes());
+					}
+					psiphon3Ips.add(psiphon3Ip);
+				}
+				result.put(source, psiphon3Ips);
 			}
 		}
 		KnowledgeBase knowledgeBase = new KnowledgeBase();
