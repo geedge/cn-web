@@ -33,16 +33,16 @@ public class IpTagUserDefinedServiceImpl extends ServiceImpl<IpTagUserDefinedDao
     }
 
 	@Override
-	public void saveBatch(List<IpTagUserDefined> ipTagUserDefineds) {
+	public void saveBatchForBinary(List<IpTagUserDefined> ipTagUserDefineds) {
 		if(ObjectUtil.isNotEmpty(ipTagUserDefineds)) {
-			this.baseMapper.insertBatch(ipTagUserDefineds);
+			this.baseMapper.insertBatchForBinary(ipTagUserDefineds);
 		}
 	}
 
 	@Override
-	public void modifyBatch(List<IpTagUserDefined> ipTagUserDefineds) {
+	public void modifyBatchForBinary(List<IpTagUserDefined> ipTagUserDefineds) {
 		if(ObjectUtil.isNotEmpty(ipTagUserDefineds)) {
-			this.baseMapper.updateBatch(ipTagUserDefineds);
+			this.baseMapper.updateBatchForBinary(ipTagUserDefineds);
 		}
 	}
 }

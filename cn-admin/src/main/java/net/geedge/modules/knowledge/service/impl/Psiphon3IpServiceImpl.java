@@ -2,6 +2,8 @@ package net.geedge.modules.knowledge.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import cn.hutool.core.util.ObjectUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.modules.knowledge.dao.Psiphon3IpDao;
@@ -27,4 +29,18 @@ public class Psiphon3IpServiceImpl extends ServiceImpl<Psiphon3IpDao, Psiphon3Ip
         page.setRecords(psiphon3Ips);
         return new PageUtils(page);
     }
+
+	@Override
+	public void saveBatchForBinary(List<Psiphon3Ip> psiphon3Ips) {
+		if(ObjectUtil.isNotEmpty(psiphon3Ips)) {
+			this.baseMapper.insertBatchForBinary(psiphon3Ips);
+		}
+	}
+
+	@Override
+	public void modifyBatchForBinary(List<Psiphon3Ip> psiphon3Ips) {
+		if(ObjectUtil.isNotEmpty(psiphon3Ips)) {
+			this.baseMapper.updateBatchForBinary(psiphon3Ips);
+		}
+	}
 }

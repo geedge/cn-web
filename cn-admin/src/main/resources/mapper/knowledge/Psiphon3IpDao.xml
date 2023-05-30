@@ -5,8 +5,8 @@
     <resultMap id="Psiphon3Ip" type="net.geedge.modules.knowledge.entity.Psiphon3Ip">
         <result property="id" column="id"></result>
         <result property="addrFormat" column="addr_format"></result>
-        <result property="ip1" column="ip_first"></result>
-        <result property="ip2" column="ip_second"></result>
+        <result property="ip1" column="ip1"></result>
+        <result property="ip2" column="ip2"></result>
         <result property="startIpBinary" column="start_ip_binary"></result>
         <result property="endIpBinary" column="end_ip_binary"></result>
         <result property="opTime" column="op_time"></result>
@@ -14,6 +14,10 @@
         <result property="opUser" column="op_user"></result>
         <result property="isValid" column="is_valid"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
+        <result property="type" column="type"></result>
+        <result property="method" column="method"></result>
+        <result property="confidence" column="confidence"></result>
+        <result property="confidenceLlevel" column="confidence_level"></result>
     </resultMap>
 
     <select id="queryPageByKnowledgeId" resultMap="Psiphon3Ip">
@@ -24,4 +28,50 @@
             ORDER BY id
         </if>
     </select>
+    
+    <insert id="insertBatchForBinary">
+    	insert into cn_psiphon3_ip (addr_format,ip1,ip2,start_ip_binary,
+    	end_ip_binary,op_time,c_time,op_user,is_valid,knowledge_id,type,method,confidence,confidence_level)
+    	values
+    	<foreach collection="psiphon3Ips" item="psiphon3Ip" separator=",">
+    		(
+    		#{psiphon3Ip.addrFormat},
+    		#{psiphon3Ip.ip1},
+    		#{psiphon3Ip.ip2},
+    		INET6_ATON(#{psiphon3Ip.startIpBinary}),
+    		INET6_ATON(#{psiphon3Ip.endIpBinary}),
+    		#{psiphon3Ip.opTime},
+    		#{psiphon3Ip.cTime},
+    		#{psiphon3Ip.opUser},
+    		#{psiphon3Ip.isValid},
+    		#{psiphon3Ip.knowledgeId},
+    		#{psiphon3Ip.type},
+    		#{psiphon3Ip.method},
+    		#{psiphon3Ip.confidence},
+    		#{psiphon3Ip.confidenceLevel}
+    		)
+    	</foreach>
+    </insert>
+    
+    <update id="updateBatchForBinary">
+    	<foreach collection="psiphon3Ips" item="psiphon3Ip" separator=";">
+    	 update cn_psiphon3_ip  set
+    		addr_format = #{psiphon3Ip.addrFormat},
+            ip1 = #{psiphon3Ip.ip1},
+            ip2 = #{psiphon3Ip.ip2},
+    		start_ip_binary = INET6_ATON(#{psiphon3Ip.startIpBinary}),
+    		end_ip_binary = INET6_ATON(#{psiphon3Ip.endIpBinary}),
+    		op_time = #{psiphon3Ip.opTime},
+    		c_time = #{psiphon3Ip.cTime},
+    		op_user = #{psiphon3Ip.opUser},
+    		is_valid = #{psiphon3Ip.isValid},
+    		knowledge_id = #{psiphon3Ip.knowledgeId},
+    		type = #{psiphon3Ip.type},
+    		method = #{psiphon3Ip.method},
+    		confidence = #{psiphon3Ip.confidence},
+    		confidence_level = #{psiphon3Ip.confidenceLevel}
+    		where id = #{psiphon3Ip.id}
+    	</foreach>
+    </update>
+    
 </mapper>

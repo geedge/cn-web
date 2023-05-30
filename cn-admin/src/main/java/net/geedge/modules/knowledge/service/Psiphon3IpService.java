@@ -2,8 +2,10 @@ package net.geedge.modules.knowledge.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.geedge.common.utils.PageUtils;
+import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 import net.geedge.modules.knowledge.entity.Psiphon3Ip;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,4 +15,8 @@ import java.util.Map;
 public interface Psiphon3IpService extends IService<Psiphon3Ip> {
 
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
+    
+    void saveBatchForBinary(List<Psiphon3Ip> ipTagUserDefineds);
+    
+    void modifyBatchForBinary(List<Psiphon3Ip> ipTagUserDefineds);
 }

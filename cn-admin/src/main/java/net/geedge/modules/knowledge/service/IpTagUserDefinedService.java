@@ -15,7 +15,7 @@ public interface IpTagUserDefinedService extends IService<IpTagUserDefined> {
 
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
     
-    void saveBatch(List<IpTagUserDefined> ipTagUserDefineds);
+    void saveBatchForBinary(List<IpTagUserDefined> ipTagUserDefineds);
     
-    void modifyBatch(List<IpTagUserDefined> ipTagUserDefineds);
+    void modifyBatchForBinary(List<IpTagUserDefined> ipTagUserDefineds);
 }

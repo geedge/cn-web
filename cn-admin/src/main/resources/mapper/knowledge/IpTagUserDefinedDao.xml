@@ -34,7 +34,7 @@
           and status = 1
     </select>
     
-    <insert id="insertBatch">
+    <insert id="insertBatchForBinary">
     	insert into cn_ip_tag_user_defined (tag_value,addr_format,ip_first,ip_second,start_ip_binary,
     	end_ip_binary,op_time,c_time,op_user,is_valid,knowledge_id)
     	values
@@ -55,7 +55,7 @@
     	</foreach>
     </insert>
     
-    <update id="updateBatch">
+    <update id="updateBatchForBinary">
     	<foreach collection="ipTagUserDefineds" item="ip" separator=";">
     	 update cn_ip_tag_user_defined  set
     		tag_value = #{ip.tagValue},
