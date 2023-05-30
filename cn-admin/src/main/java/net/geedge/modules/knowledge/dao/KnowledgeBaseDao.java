@@ -19,4 +19,6 @@ public interface KnowledgeBaseDao extends BaseMapper<KnowledgeBase> {
 	KnowledgeBase queryInfo(@Param("knowledgeId")Integer id);
 
 	List<KnowledgeBase> queryList(@Param("params")Map<String, Object> params);
+	
+	void deleteBySource(@Param("source")String source,@Param("knowledgeIds")List<Integer> knowledgeIds);
 }

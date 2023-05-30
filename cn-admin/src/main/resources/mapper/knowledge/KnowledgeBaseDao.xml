@@ -90,4 +90,11 @@
             ORDER BY knowledge_id desc
         </if>
     </select>
+    
+    <delete id="deleteBySource">
+    	delete from ${source} where knowledge_id in 
+    	<foreach item="knowledgeId" collection="knowledgeIds" separator="," open="(" close=")" index="">
+            #{knowledgeId}
+        </foreach>
+    </delete>
 </mapper>

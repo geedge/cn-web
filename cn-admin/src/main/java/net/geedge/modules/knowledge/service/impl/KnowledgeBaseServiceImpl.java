@@ -106,13 +106,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		// 根据类型进行分组 删除对应表中条目数据
 		Map<String, List<Integer>> sourceKnowledgeBaseIds = knowledgeBases.stream().collect(Collectors.groupingBy(KnowledgeBase::getSource,Collectors.mapping(KnowledgeBase::getKnowledgeId, Collectors.toList())));
 		for(String source : sourceKnowledgeBaseIds.keySet()) {
-			if(StrUtil.contains(source, "ip")) {
-				ipTagUserDefinedService.remove(new QueryWrapper<IpTagUserDefined>().lambda().in(IpTagUserDefined::getKnowledgeId, sourceKnowledgeBaseIds.get(source)));
-			}else if(StrUtil.contains(source, "app")){
-				appTagUserDefinedService.remove(new QueryWrapper<AppTagUserDefined>().lambda().in(AppTagUserDefined::getKnowledgeId, sourceKnowledgeBaseIds.get(source)));
-			}else {
-				domainTagUserDefinedService.remove(new QueryWrapper<DomainTagUserDefined>().lambda().in(DomainTagUserDefined::getKnowledgeId, sourceKnowledgeBaseIds.get(source)));
-			}
+			// 根据source 去对应的表删除数据
+			this.baseMapper.deleteBySource(source,sourceKnowledgeBaseIds.get(source));
 		}
 		this.remove(new QueryWrapper<KnowledgeBase>().lambda().in(KnowledgeBase::getKnowledgeId,knowlegeIds));
 		return knowlegeIds;
