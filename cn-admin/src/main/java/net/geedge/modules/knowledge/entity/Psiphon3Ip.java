@@ -18,9 +18,9 @@ public class Psiphon3Ip {
     private Long id;
 
     private String addrFormat;
-
+    @TableField(value = "ip_first")
     private String ip1;
-
+    @TableField(value = "ip_second")
     private String ip2;
 
     private byte[] startIpBinary;
