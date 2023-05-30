@@ -221,4 +221,21 @@ public class Constant {
 	public final static String CN_REPORT_CRON_GROUP="cn_report_cron_group";
 	
 	public final static String CN_REPORT_SINGLE_GROUP="cn_report_single_group";
+
+	//Knowledge
+	public static final String USER_DEFINED = "user_defined";
+	public static final String WEBSKETCH = "websketch";
+	public static final String AI_TAGGING = "ai_tagging";
+	public static final String IP_TAG_USER_DEFINED = "cn_ip_tag_user_defined";
+	public static final String APP_TAG_USER_DEFINED = "cn_app_tag_user_defined";
+	public static final String DOMAIN_TAG_USER_DEFINED = "cn_domain_tag_user_defined";
+	public static final String IOC_DARKWEB = "cn_ioc_darkweb";
+	public static final String IOC_MALWARE = "cn_ioc_malware";
+	public static final String APP_CATEGORY_BUILT_IN = "cn_app_category_built_in";
+	public static final String FQDN_ICP_BUILT_IN = "cn_fqdn_icp_built_in";
+	public static final String FQDN_WHO_IS_BUILT_IN = "cn_fqdn_who_is_built_in";
+	public static final String FQDN_CATEGORY_BUILT_IN = "cn_fqdn_category_built_in";
+	public static final String IP_ASN_BUILT_IN  = "cn_ip_asn_built_in ";
+	public static final String IP_LOCATION_BUILT_IN  = "cn_ip_location_built_in  ";
+	public static final String PSIPHON3_IP = "cn_psiphon3_ip";
 }

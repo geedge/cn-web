@@ -19,8 +19,8 @@ public class AppTagUserDefined {
     private Long id;
 
     private String tagValue;
-    @TableField(value = "app_name")
-    private String tagName;
+
+    private String appName;
 
     private Date opTime;
 

@@ -5,7 +5,6 @@
     <resultMap id="IpTagUserDefined" type="net.geedge.modules.knowledge.entity.IpTagUserDefined">
         <result property="id" column="id"></result>
         <result property="tagValue" column="tag_value"></result>
-        <result property="tagNames" column="tagNames"></result>
         <result property="startIpBinary" column="start_ip_binary"></result>
         <result property="endIpBinary" column="end_ip_binary"></result>
         <result property="opTime" column="op_time"></result>
@@ -14,15 +13,9 @@
         <result property="isValid" column="is_valid"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
         <result property="addrFormat" column="addr_format"></result>
-        <result property="ipFirst" column="ip_first"></result>
-        <result property="ipSecond" column="ip_second"></result>
-        <association property="tagNames" resultMap="tagNames"></association>
-        <association property="user" column="op_user" select="queryUserById"></association>
-    </resultMap>
-    <resultMap id="tagNames" type="java.util.Map">
-        <result property="addrFormat" column="addr_format"></result>
         <result property="ip1" column="ip_first"></result>
         <result property="ip2" column="ip_second"></result>
+        <association property="user" column="op_user" select="queryUserById"></association>
     </resultMap>
     <select id="queryPageByKnowledgeId" resultMap="IpTagUserDefined">
         select * from
@@ -49,8 +42,8 @@
     		(
     		#{ip.tagValue},
     		#{ip.addrFormat},
-    		#{ip.ipFirst},
-    		#{ip.ipSecond},
+    		#{ip.ip1},
+    		#{ip.ip2},
     		INET6_ATON(#{ip.startIpBinary}),
     		INET6_ATON(#{ip.endIpBinary}),
     		#{ip.opTime},
@@ -67,8 +60,8 @@
     	 update cn_ip_tag_user_defined  set
     		tag_value = #{ip.tagValue},
     		addr_format = #{ip.addrFormat},
-    		ip_first = #{ip.ipFirst},
-    		ip_second = #{ip.ipSecond},
+            ip_first = #{ip.ip1},
+            ip_second = #{ip.ip2},
     		start_ip_binary = INET6_ATON(#{ip.startIpBinary}),
     		end_ip_binary = INET6_ATON(#{ip.endIpBinary}),
     		op_time = #{ip.opTime},

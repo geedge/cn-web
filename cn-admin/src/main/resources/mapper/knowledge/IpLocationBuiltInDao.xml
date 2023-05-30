@@ -28,4 +28,12 @@
         <result property="opUser" column="op_user"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
+    <select id="queryPageByKnowledgeId" resultMap="IpLocationBuiltIn">
+        select * from
+        cn_ip_location_built_in
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
 </mapper>

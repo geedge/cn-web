@@ -1,10 +1,5 @@
 package net.geedge.modules.knowledge.service.impl;
 
-
-import static net.geedge.modules.knowledge.constant.KnowledgeBaseConstant.APP_TAG_USER_DEFINED;
-import static net.geedge.modules.knowledge.constant.KnowledgeBaseConstant.DOMAIN_TAG_USER_DEFINED;
-import static net.geedge.modules.knowledge.constant.KnowledgeBaseConstant.IP_TAG_USER_DEFINED;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +13,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import net.geedge.common.utils.*;
+import net.geedge.modules.knowledge.service.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -48,13 +43,9 @@ import net.geedge.modules.knowledge.entity.DomainTagUserDefined;
 import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import net.geedge.modules.knowledge.entity.KnowledgeBaseSyncVersion;
-import net.geedge.modules.knowledge.service.AppTagUserDefinedService;
-import net.geedge.modules.knowledge.service.DomainTagUserDefinedService;
-import net.geedge.modules.knowledge.service.IpTagUserDefinedService;
-import net.geedge.modules.knowledge.service.KnowledgeBaseService;
-import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
-import net.geedge.modules.sys.service.SysUserService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
+
+import static net.geedge.common.utils.Constant.*;
 
 @Service("knowledgeBaseService")
 public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, KnowledgeBase> implements KnowledgeBaseService {
@@ -72,8 +63,32 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	private AppTagUserDefinedService appTagUserDefinedService;
 
 	@Autowired
-	private SysUserService sysUserService;
-	
+	private IocDarkwebService iocDarkwebService;
+
+	@Autowired
+	private IocMalwareService iocMalwareService;
+
+	@Autowired
+	private Psiphon3IpService psiphon3IpService;
+
+	@Autowired
+	private AppCategoryBuiltInService appCategoryBuiltInService;
+
+	@Autowired
+	private FqdnIcpBuiltInService fqdnIcpBuiltInService;
+
+	@Autowired
+	private FqdnWhoIsBuiltInService fqdnWhoIsBuiltInService;
+
+	@Autowired
+	private FqdnCategoryBuiltInService fqdnCategoryBuiltInService;
+
+	@Autowired
+	private IpAsnBuiltInService ipAsnBuiltInService;
+
+	@Autowired
+	private IpLocationBuiltInService ipLocationBuiltInService;
+
 	@Override
 	public Object remove(String knowledgeIds) {
 		// 内置数据不可删除
@@ -325,13 +340,13 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		KnowledgeBase knowledgeBase = this.getBaseMapper().queryInfo(knowledgeId);
 		validateKnowledgeBase(knowledgeBase);
 		String source = knowledgeBase.getSource();
-		PageUtils pageUtils = createUserDefinedItemPages(source, params);
+		PageUtils pageUtils = createItemPages(source, params);
 		validateKnowledgeBaseItem(pageUtils);
 		Map<String, Object> pageMap = addKnowledgeBaseMessage(pageUtils, knowledgeBase);
 		return pageMap;
 	}
 
-	private PageUtils createUserDefinedItemPages(String source, Map<String, Object> params) {
+	private PageUtils createItemPages(String source, Map<String, Object> params) {
 		PageUtils pageUtils = null;
 		switch (source){
 			case APP_TAG_USER_DEFINED:
@@ -342,6 +357,33 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				break;
 			case IP_TAG_USER_DEFINED:
 				pageUtils = ipTagUserDefinedService.queryListByKnowledgeId(params);
+				break;
+			case IOC_DARKWEB:
+				pageUtils = iocDarkwebService.queryListByKnowledgeId(params);
+				break;
+			case IOC_MALWARE:
+				pageUtils = iocMalwareService.queryListByKnowledgeId(params);
+				break;
+			case PSIPHON3_IP:
+				pageUtils = psiphon3IpService.queryListByKnowledgeId(params);
+				break;
+			case APP_CATEGORY_BUILT_IN:
+				pageUtils = appCategoryBuiltInService.queryListByKnowledgeId(params);
+				break;
+			case FQDN_ICP_BUILT_IN:
+				pageUtils = fqdnIcpBuiltInService.queryListByKnowledgeId(params);
+				break;
+			case FQDN_WHO_IS_BUILT_IN:
+				pageUtils = fqdnWhoIsBuiltInService.queryListByKnowledgeId(params);
+				break;
+			case FQDN_CATEGORY_BUILT_IN:
+				pageUtils = fqdnCategoryBuiltInService.queryListByKnowledgeId(params);
+				break;
+			case IP_ASN_BUILT_IN:
+				pageUtils = ipAsnBuiltInService.queryListByKnowledgeId(params);
+				break;
+			case IP_LOCATION_BUILT_IN:
+				pageUtils = ipLocationBuiltInService.queryListByKnowledgeId(params);
 				break;
 			default:
 				break;
@@ -468,19 +510,18 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					ipTagUserDefined.setOpTime(new Date());
 					ipTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
 					ipTagUserDefined.setId(id==null?null:id.longValue());
-					ipTagUserDefined.setTagNames(tagNames);
-					ipTagUserDefined.setIpFirst(ip1);
+					ipTagUserDefined.setIp1(ip1);
 					ipTagUserDefined.setTagValue(tagValue);
 					if(StrUtil.equals(addrFormat, "Single")) {
-						ipTagUserDefined.setIpSecond(ip1);
+						ipTagUserDefined.setIp2(ip1);
 						ipTagUserDefined.setStartIpBinary(ip1.getBytes());
 						ipTagUserDefined.setEndIpBinary(ip1.getBytes());
 					}else if(StrUtil.equals(addrFormat, "Range")){
-						ipTagUserDefined.setIpSecond(ip2);
+						ipTagUserDefined.setIp2(ip2);
 						ipTagUserDefined.setStartIpBinary(ip1.getBytes());
 						ipTagUserDefined.setEndIpBinary(ip2.getBytes());
 					}else {
-						ipTagUserDefined.setIpSecond(ip2);
+						ipTagUserDefined.setIp2(ip2);
 						boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
 						Map<String, String> ipsStartEnd = null;
 						String startIp = "";
@@ -521,7 +562,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					domainTagUserDefined.setOpTime(new Date());
 					domainTagUserDefined.setKnowledgeId(knowledgeId);
 					domainTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
-					domainTagUserDefined.setTagName(tagName);
+					domainTagUserDefined.setDomain(tagName);
 					domainTagUserDefined.setTagValue(tagValue);
 					domainTagUserDefineds.add(domainTagUserDefined);
 				}
@@ -547,7 +588,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					appTagUserDefined.setOpTime(new Date());
 					appTagUserDefined.setKnowledgeId(knowledgeId);
 					appTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
-					appTagUserDefined.setTagName(tagName);
+					appTagUserDefined.setAppName(tagName);
 					appTagUserDefined.setTagValue(tagValue);
 					appTagUserDefineds.add(appTagUserDefined);
 				}

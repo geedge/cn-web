@@ -20,9 +20,6 @@ public class IpTagUserDefined {
 
     private String tagValue;
 
-    @TableField(exist = false)
-    private Object tagNames;
-
     private byte[] startIpBinary;
 
     private byte[] endIpBinary;
@@ -39,10 +36,10 @@ public class IpTagUserDefined {
 
     @TableField(exist = false)
     private SysUserEntity user;
-    
-    private String ipFirst;
-    
-    private String ipSecond;
+    @TableField(value = "ip_first")
+    private String ip1;
+    @TableField(value = "ip_second")
+    private String ip2;
     
     private String addrFormat;
 }

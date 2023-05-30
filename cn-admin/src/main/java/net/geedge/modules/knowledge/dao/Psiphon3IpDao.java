@@ -2,8 +2,14 @@ package net.geedge.modules.knowledge.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.Psiphon3Ip;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Auther: lijinyang
@@ -11,4 +17,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface Psiphon3IpDao extends BaseMapper<Psiphon3Ip> {
+
+    List<Psiphon3Ip> queryPageByKnowledgeId(IPage<Psiphon3Ip> page, @Param("params") Map<String, Object> params);
 }

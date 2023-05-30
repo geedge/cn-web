@@ -20,4 +20,12 @@
         <result property="isValid" column="is_valid"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
+    <select id="queryPageByKnowledgeId" resultMap="AppCategoryBuiltIn">
+        select * from
+        cn_app_category_built_in
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
 </mapper>

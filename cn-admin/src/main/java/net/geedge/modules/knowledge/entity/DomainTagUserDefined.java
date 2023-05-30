@@ -19,8 +19,8 @@ public class DomainTagUserDefined {
     private Long id;
 
     private String tagValue;
-    @TableField(value = "domain")
-    private String tagName;
+
+    private String domain;
 
     private Date opTime;
 
