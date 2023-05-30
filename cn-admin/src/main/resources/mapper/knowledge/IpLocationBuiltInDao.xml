@@ -24,8 +24,11 @@
         <result property="subdivisionAddr" column="subdivision_addr"></result>
         <result property="timeZone" column="time_zone"></result>
         <result property="isValid" column="is_valid"></result>
+        <result property="parentLocationId" column="parent_location_id"></result>
         <result property="opTime" column="op_time"></result>
         <result property="opUser" column="op_user"></result>
+        <result property="vsysId" column="vsys_id"></result>
+        <result property="isShared" column="is_shared"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
     <select id="queryPageByKnowledgeId" resultMap="IpLocationBuiltIn">

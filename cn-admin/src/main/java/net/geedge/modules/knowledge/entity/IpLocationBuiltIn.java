@@ -56,9 +56,15 @@ public class IpLocationBuiltIn {
 
     private Integer isValid;
 
+    private Integer parentLocationId;
+
     private Date opTime;
 
     private Integer opUser;
+
+    private Integer vsysId;
+
+    private Integer isShared;
 
     private Integer knowledgeId;
 

@@ -343,6 +343,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		PageUtils pageUtils = createItemPages(source, params);
 		validateKnowledgeBaseItem(pageUtils);
 		Map<String, Object> pageMap = addKnowledgeBaseMessage(pageUtils, knowledgeBase);
+		pageMap = updateItemList(pageMap);
 		return pageMap;
 	}
 
@@ -395,6 +396,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		Map<String, Object> pageMap = JSONUtil.parseObj(JSONUtil.toJsonStr(pageUtils));
 		Map<String, Object> knowledge = JSONUtil.parseObj(JSONUtil.toJsonStr(knowledgeBase));
 		pageMap.putAll(knowledge);
+		return pageMap;
+	}
+
+	private Map<String, Object> updateItemList(Map<String, Object> pageMap) {
+		pageMap.put("itemList",pageMap.get("list"));
+		pageMap.remove("list");
 		return pageMap;
 	}
 
