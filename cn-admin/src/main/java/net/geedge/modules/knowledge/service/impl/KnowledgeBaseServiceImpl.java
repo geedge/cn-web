@@ -281,11 +281,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	private Map<String,Object> statisticsCategory(List<KnowledgeBase> knowledgeBases, String category) {
 		List<KnowledgeBase> knowledge = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getCategory().equals(category)).collect(Collectors.toList());
-		long categoryCount = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getCategory().equals(category)).count();
+		long knowledgeCount = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getCategory().equals(category)).count();
 		Set<String> sources = getNonRepetitiveSource(knowledge);
 		Map<String, Object> categoryMap = new HashMap<>();
-		categoryMap.put("category", category);
-		categoryMap.put("count", categoryCount);
+		categoryMap.put("name", category);
+		categoryMap.put("count", knowledgeCount);
 		List<Map> sourceList = new ArrayList<>();
 		for (String source : sources) {
 			Map<String, Object> sourceMap = statisticsSource(knowledge, source);
@@ -296,10 +296,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 
 	private Map<String,Object> statisticsSource(List<KnowledgeBase> knowledge, String source) {
-		long sourceCount = knowledge.stream().filter(knowledgeBase -> knowledgeBase.getSource().equals(source)).count();
+		long knowledgeCount = knowledge.stream().filter(knowledgeBase -> knowledgeBase.getSource().equals(source)).count();
 		Map<String, Object> sourceMap = new HashMap<>();
-		sourceMap.put("source", source);
-		sourceMap.put("count", sourceCount);
+		sourceMap.put("name", source);
+		sourceMap.put("count", knowledgeCount);
 		return sourceMap;
 	}
 
