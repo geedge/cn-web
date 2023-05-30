@@ -16,7 +16,7 @@ public interface KnowledgeBaseService extends IService<KnowledgeBase> {
 	
 	Object remove(String ids);
 	
-	R importData(MultipartFile file,String type);
+	R importData(MultipartFile file,String source);
 
     PageUtils queryKnowledgeBaseList(Map<String,Object> params);
 

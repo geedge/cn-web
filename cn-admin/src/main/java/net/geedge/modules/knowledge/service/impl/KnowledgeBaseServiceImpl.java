@@ -118,7 +118,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 
 	@Override
-	public R importData(MultipartFile file,String type) {
+	public R importData(MultipartFile file,String source) {
 		File tempFile = null;
 		if(!StrUtil.endWith(file.getOriginalFilename(), ".csv")) {
 			throw new CNException(RCode.KNOWLEDGE_FILE_TYPE_ERROR);
@@ -146,39 +146,39 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		    		format = false;
 		    	}
 		    	if(format) {
-		    		if(StrUtil.equals(type, "ip")) {
+		    		if(StrUtil.equals(source, Constant.IP_TAG_USER_DEFINED)) {
 			    		format = KnowledgeCheckUtil.validIpFormat(row);
-			    	}else if(StrUtil.equals(type, "domain")){
+			    	}else if(StrUtil.equals(source, Constant.DOMAIN_TAG_USER_DEFINED)){
 			    		format = KnowledgeCheckUtil.validateFqdn(row);
 			    	}else {
 			    		format = KnowledgeCheckUtil.validateApp(row);
 			    	}
 		    	}
 		        Map<String,Object> res = new HashMap<String,Object>();
-		        if(StrUtil.equals(type, "ip")) {
+		        if(StrUtil.equals(source, Constant.IP_TAG_USER_DEFINED)) {
 		        	String s = data.get(0);
-		        	Map<String,Object> ip = new HashMap<String,Object>();
 		        	String ipType = "";
 		        	String ip1="";
 		        	String ip2="";
 		        	if(StrUtil.contains(s, StrUtil.C_SLASH)) {
-		        		ipType="CIDR";
+		        		ipType = Constant.IpFormatType.CIDR.getValue();
 		        		ip1 = StrUtil.split(s, StrUtil.C_SLASH).get(0);
 		        		ip2 = StrUtil.split(s, StrUtil.C_SLASH).get(1);
 		        	}else if(StrUtil.contains(s, StrUtil.DASHED)) {
-		        		ipType="RANGE";
+		        		ipType = Constant.IpFormatType.RANGE.getValue();
 		        		ip1 = StrUtil.split(s, StrUtil.DASHED)[0];
 		        		ip2 = StrUtil.split(s, StrUtil.DASHED)[1];
 		        	}else {
-		        		ipType="Single";
+		        		ipType = Constant.IpFormatType.SINGLE.getValue();
 		        		ip1 = s;
 		        	}
-		        	ip.put("addrFormat",ipType);
-		        	ip.put("ip1", ip1);
-		        	ip.put("ip2", ip2);
-		        	res.put("tagNames", ip);
+		        	res.put("addrFormat",ipType);
+		        	res.put("ip1", ip1);
+		        	res.put("ip2", ip2);
+		        }else if(StrUtil.equals(source, Constant.DOMAIN_TAG_USER_DEFINED)){
+		        	res.put("domain", data.get(0));
 		        }else {
-		        	res.put("tagName", data.get(0));
+		        	res.put("appName", data.get(0));
 		        }
 		        res.put("tagValue", data.get(1));
 		        if(format) {
@@ -281,11 +281,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	private Map<String,Object> statisticsCategory(List<KnowledgeBase> knowledgeBases, String category) {
 		List<KnowledgeBase> knowledge = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getCategory().equals(category)).collect(Collectors.toList());
-		long categoryCount = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getCategory().equals(category)).count();
+		long knowledgeCount = knowledgeBases.stream().filter(knowledgeBase -> knowledgeBase.getCategory().equals(category)).count();
 		Set<String> sources = getNonRepetitiveSource(knowledge);
 		Map<String, Object> categoryMap = new HashMap<>();
-		categoryMap.put("category", category);
-		categoryMap.put("count", categoryCount);
+		categoryMap.put("name", category);
+		categoryMap.put("count", knowledgeCount);
 		List<Map> sourceList = new ArrayList<>();
 		for (String source : sources) {
 			Map<String, Object> sourceMap = statisticsSource(knowledge, source);
@@ -296,10 +296,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 
 	private Map<String,Object> statisticsSource(List<KnowledgeBase> knowledge, String source) {
-		long sourceCount = knowledge.stream().filter(knowledgeBase -> knowledgeBase.getSource().equals(source)).count();
+		long knowledgeCount = knowledge.stream().filter(knowledgeBase -> knowledgeBase.getSource().equals(source)).count();
 		Map<String, Object> sourceMap = new HashMap<>();
-		sourceMap.put("source", source);
-		sourceMap.put("count", sourceCount);
+		sourceMap.put("name", source);
+		sourceMap.put("count", knowledgeCount);
 		return sourceMap;
 	}
 
@@ -486,13 +486,13 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					String ip1 = (String) tagNames.get("ip1");
 					String ip2 = "";
 					boolean ipFormat = true;
-					if(!StrUtil.equals(addrFormat, "Single")) {
+					if(!StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
 						ip2 = (String) tagNames.get("ip2");
 					}
 					// 校验ip格式
-					if(StrUtil.equals(addrFormat, "Single")) {
+					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
 						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1);
-					}else if(StrUtil.equals(addrFormat, "Range")){
+					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
 						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"-"+ip2);
 					}else {
 						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"/"+ip2);
@@ -512,11 +512,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					ipTagUserDefined.setId(id==null?null:id.longValue());
 					ipTagUserDefined.setIp1(ip1);
 					ipTagUserDefined.setTagValue(tagValue);
-					if(StrUtil.equals(addrFormat, "Single")) {
+					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
 						ipTagUserDefined.setIp2(ip1);
 						ipTagUserDefined.setStartIpBinary(ip1.getBytes());
 						ipTagUserDefined.setEndIpBinary(ip1.getBytes());
-					}else if(StrUtil.equals(addrFormat, "Range")){
+					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
 						ipTagUserDefined.setIp2(ip2);
 						ipTagUserDefined.setStartIpBinary(ip1.getBytes());
 						ipTagUserDefined.setEndIpBinary(ip2.getBytes());

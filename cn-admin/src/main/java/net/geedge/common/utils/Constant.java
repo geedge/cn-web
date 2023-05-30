@@ -238,4 +238,27 @@ public class Constant {
 	public static final String IP_ASN_BUILT_IN  = "cn_ip_asn_built_in ";
 	public static final String IP_LOCATION_BUILT_IN  = "cn_ip_location_built_in  ";
 	public static final String PSIPHON3_IP = "cn_psiphon3_ip";
+	
+	/**
+	 * IP格式类型分类
+	 */
+	public enum IpFormatType {
+		SINGLE("Single"), RANGE("Range"), CIDR("CIDR");
+
+		private String value;
+
+		IpFormatType(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+	}
+	
+
 }

@@ -29,10 +29,10 @@ public class KnowledgeBaseController {
 	}
 	
 	@PostMapping("/parser")
-	public R importKnowledgeBase(@Param("file") MultipartFile file,@Param("type")String type) {
+	public R importKnowledgeBase(@Param("file") MultipartFile file,@Param("source")String source) {
 		ValidateUtils.is(file).notNull(RCode.KNOWLEDGE_FILE_ISNULL);
-		ValidateUtils.is(type).notNull(RCode.KNOWLEDGE_TYPE_ISNULL);
-		return knowledgeBaseService.importData(file,type);
+		ValidateUtils.is(source).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
+		return knowledgeBaseService.importData(file,source);
 	}
 
 	@PatchMapping("/status")
