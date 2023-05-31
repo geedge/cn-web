@@ -12,8 +12,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import net.geedge.common.utils.*;
-import net.geedge.modules.knowledge.service.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +35,14 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
+import net.geedge.common.utils.Constant;
+import net.geedge.common.utils.IPUtils;
+import net.geedge.common.utils.JSONUtil;
+import net.geedge.common.utils.KnowledgeCheckUtil;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.Query;
+import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.DomainTagUserDefined;
@@ -44,9 +50,21 @@ import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import net.geedge.modules.knowledge.entity.KnowledgeBaseSyncVersion;
 import net.geedge.modules.knowledge.entity.Psiphon3Ip;
+import net.geedge.modules.knowledge.service.AppCategoryBuiltInService;
+import net.geedge.modules.knowledge.service.AppTagUserDefinedService;
+import net.geedge.modules.knowledge.service.DomainTagUserDefinedService;
+import net.geedge.modules.knowledge.service.FqdnCategoryBuiltInService;
+import net.geedge.modules.knowledge.service.FqdnIcpBuiltInService;
+import net.geedge.modules.knowledge.service.FqdnWhoIsBuiltInService;
+import net.geedge.modules.knowledge.service.IocDarkwebService;
+import net.geedge.modules.knowledge.service.IocMalwareService;
+import net.geedge.modules.knowledge.service.IpAsnBuiltInService;
+import net.geedge.modules.knowledge.service.IpLocationBuiltInService;
+import net.geedge.modules.knowledge.service.IpTagUserDefinedService;
+import net.geedge.modules.knowledge.service.KnowledgeBaseService;
+import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
+import net.geedge.modules.knowledge.service.Psiphon3IpService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
-
-import static net.geedge.common.utils.Constant.*;
 
 @Service("knowledgeBaseService")
 public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, KnowledgeBase> implements KnowledgeBaseService {
@@ -422,6 +440,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		
 		KnowledgeBase knowledgeBase = (KnowledgeBase) result.get("knowledgeBase");
 		this.saveOrUpdate(knowledgeBase);
+		List<Integer> deleteItemIds = (List<Integer>) params.get("deleteItemIds");
 		if(StrUtil.equals(Constant.IP_TAG_USER_DEFINED, source)) {
 			List<IpTagUserDefined> ips = (List<IpTagUserDefined>) result.get(source);
 			ips.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
@@ -431,14 +450,23 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			List<IpTagUserDefined> insertIps = ipMap.get(false);
 			ipTagUserDefinedService.saveBatchForBinary(insertIps);
 			ipTagUserDefinedService.modifyBatchForBinary(updateIps);
+			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+				ipTagUserDefinedService.removeByIds(deleteItemIds);
+			}
 		}else if(StrUtil.equals(Constant.DOMAIN_TAG_USER_DEFINED, source)){
 			List<DomainTagUserDefined> domains = (List<DomainTagUserDefined>) result.get(source);
 			domains.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
 			domainTagUserDefinedService.saveOrUpdateBatch(domains);
+			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+				domainTagUserDefinedService.removeByIds(deleteItemIds);
+			}
 		}else if(StrUtil.equals(Constant.APP_TAG_USER_DEFINED, source)){
 			List<AppTagUserDefined> apps = (List<AppTagUserDefined>) result.get(source);
 			apps.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
 			appTagUserDefinedService.saveOrUpdateBatch(apps);
+			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+				appTagUserDefinedService.removeByIds(deleteItemIds);
+			}
 		}else if(StrUtil.equals(Constant.PSIPHON3_IP, source)){
 			List<Psiphon3Ip> psiphon3Ips = (List<Psiphon3Ip>) result.get(source);
 			psiphon3Ips.stream().forEach(ps3Ip-> ps3Ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
@@ -448,6 +476,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			List<Psiphon3Ip> insertIps = ps3IpMap.get(false);
 			psiphon3IpService.saveBatchForBinary(insertIps);
 			psiphon3IpService.modifyBatchForBinary(updateIps);
+			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+				psiphon3IpService.removeByIds(deleteItemIds);
+			}
 		}
 		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getById(knowledgeBase.getKnowledgeId());
 		if(ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
@@ -466,12 +497,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@Override
 	public Map<String,Object> validateParam(Map<String, Object> params) {
 		Map<String,Object> result = new HashMap<String,Object>(); 
-		
-		String handleType = "addItemList";
 		Integer knowledgeId = (Integer) params.get("knowledgeId");
-		if(ObjectUtil.isNotEmpty(knowledgeId)) {
-			handleType = "updateItemList";
-		}
 		String name = (String) params.get("name");
 		String source = (String) params.get("source");
 		String category = (String) params.get("category");
@@ -483,7 +509,15 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		if(ObjectUtil.isNotEmpty(queryByName)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NAME_DUPLICATE);
 		}
-		List<Map<String,Object>> datas = (List<Map<String, Object>>) params.get(handleType);
+		List<Map<String,Object>> addDatas  = (List<Map<String, Object>>) params.get("addItemList");
+		List<Map<String,Object>> modifyDatas  = (List<Map<String, Object>>) params.get("updateItemList");
+		List<Map<String,Object>> datas = new ArrayList<Map<String,Object>>();
+		if(ObjectUtil.isNotEmpty(addDatas)) {
+			datas.addAll(addDatas);
+		}
+		if(ObjectUtil.isNotEmpty(modifyDatas)) {
+			datas.addAll(modifyDatas);
+		}
 		if(ObjectUtil.isNotEmpty(datas)) {
 			if(StrUtil.equals(Constant.IP_TAG_USER_DEFINED, source)) {
 				List<IpTagUserDefined> ipTagUserDefineds = new ArrayList<IpTagUserDefined>();
