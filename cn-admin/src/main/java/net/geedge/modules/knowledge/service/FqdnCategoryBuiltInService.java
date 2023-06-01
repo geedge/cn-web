@@ -13,4 +13,6 @@ import java.util.Map;
 public interface FqdnCategoryBuiltInService extends IService<FqdnCategoryBuiltIn> {
 
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
+
+    Map<String, Object> queryEntityDetail(String resource);
 }

@@ -18,4 +18,6 @@ import java.util.Map;
 public interface IpAsnBuiltInDao extends BaseMapper<IpAsnBuiltIn> {
 
     List<IpAsnBuiltIn> queryPageByKnowledgeId(IPage<IpAsnBuiltIn> page, @Param("params") Map<String, Object> params);
+
+    Map<String, Object> queryEntityDetail(@Param("resource") String resource);
 }

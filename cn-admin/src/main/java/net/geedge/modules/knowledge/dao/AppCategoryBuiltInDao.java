@@ -18,4 +18,6 @@ import java.util.Map;
 public interface AppCategoryBuiltInDao extends BaseMapper<AppCategoryBuiltIn> {
 
     List<AppCategoryBuiltIn> queryPageByKnowledgeId(IPage<AppCategoryBuiltIn> page, @Param("params") Map<String, Object> params);
+
+    Map<String, Object> queryEntityDetail(@Param("resource") String resource);
 }

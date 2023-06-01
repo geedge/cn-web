@@ -17,4 +17,6 @@ import java.util.Map;
 public interface IpAsnBuiltInService extends IService<IpAsnBuiltIn> {
 
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
+
+    Map<String, Object> queryEntityDetail(String resource);
 }

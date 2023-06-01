@@ -27,4 +27,10 @@ public class AppCategoryBuiltInServiceImpl extends ServiceImpl<AppCategoryBuiltI
         page.setRecords(appCategoryBuiltIns);
         return new PageUtils(page);
     }
+
+    @Override
+    public Map<String, Object> queryEntityDetail(String resource) {
+        Map<String, Object> data = this.baseMapper.queryEntityDetail(resource);
+        return data;
+    }
 }

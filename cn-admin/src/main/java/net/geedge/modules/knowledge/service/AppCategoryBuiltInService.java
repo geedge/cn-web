@@ -14,4 +14,6 @@ import java.util.Map;
 public interface AppCategoryBuiltInService extends IService<AppCategoryBuiltIn> {
 
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
+
+    Map<String, Object> queryEntityDetail(String resource);
 }

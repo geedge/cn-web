@@ -327,6 +327,9 @@ public enum RCode {
     KNOWLEDGE_BASE_NAME_DUPLICATE(591016,"KnowledgeBase name already exists"),
     KNOWLEDGE_BASE_PARAM_FORMAT_ERROR(591017,"KnowledgeBase data format error, please check"),
     KNOWLEDGE_SOURCE_ISNULL(591018,"KnowledgeBase source is required"),
+
+    ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
+    ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
     /**
      * stat相关
      */

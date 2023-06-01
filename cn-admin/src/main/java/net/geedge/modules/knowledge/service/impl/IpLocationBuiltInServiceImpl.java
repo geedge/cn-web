@@ -28,4 +28,10 @@ public class IpLocationBuiltInServiceImpl extends ServiceImpl<IpLocationBuiltInD
         page.setRecords(ipLocationBuiltIns);
         return new PageUtils(page);
     }
+
+    @Override
+    public Map<String, Object> queryEntityDetail(String resource) {
+        Map<String, Object> data = this.baseMapper.queryEntityDetail(resource);
+        return data;
+    }
 }

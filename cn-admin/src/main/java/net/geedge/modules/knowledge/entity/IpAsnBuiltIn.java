@@ -22,6 +22,10 @@ public class IpAsnBuiltIn {
 
     private String endIp;
 
+    private byte[] startIpBinary;
+
+    private byte[] endIpBinary;
+
     private String asn;
 
     private String organization;

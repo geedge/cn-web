@@ -27,4 +27,10 @@ public class FqdnWhoIsBuiltInServiceImpl extends ServiceImpl<FqdnWhoIsBuiltInDao
         page.setRecords(fqdnWhoIsBuiltIns);
         return new PageUtils(page);
     }
+
+    @Override
+    public Map<String, Object> queryEntityDetail(String resource) {
+        Map<String, Object> data = this.baseMapper.queryEntityDetail(resource);
+        return data;
+    }
 }

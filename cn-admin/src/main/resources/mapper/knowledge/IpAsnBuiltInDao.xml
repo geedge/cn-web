@@ -7,6 +7,8 @@
         <result property="addrType" column="addr_type"></result>
         <result property="startIp" column="start_ip"></result>
         <result property="endIp" column="end_ip"></result>
+        <result property="startIpBinary" column="start_ip_binary"></result>
+        <result property="endIpBinary" column="end_ip_binary"></result>
         <result property="asn" column="asn"></result>
         <result property="organization" column="organization"></result>
         <result property="isValid" column="is_valid"></result>
@@ -21,5 +23,12 @@
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>
+    </select>
+
+    <select id="queryEntityDetail" resultType="java.util.Map">
+        select asn_id as asnId, asn as asn, organization as organization from
+        cn_ip_asn_built_in
+        where INET6_ATON(#{resource}) between start_ip_binary and end_ip_binary
+        limit 1
     </select>
 </mapper>
