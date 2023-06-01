@@ -1,5 +1,7 @@
 package net.geedge.modules.knowledge.service.impl;
 
+
+import static net.geedge.common.utils.Constant.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -732,5 +734,4 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		result.put("knowledgeBase", knowledgeBase);
 		return result;
 	}
-	
 }
