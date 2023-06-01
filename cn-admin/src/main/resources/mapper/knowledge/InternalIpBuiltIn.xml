@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.InternalIpBuiltInDao">
+
+    <resultMap id="internalIpBuiltIn" type="net.geedge.modules.knowledge.entity.InternalIpBuiltIn">
+        <result property="id" column="id"></result>
+        <result property="addrFormat" column="addr_format"></result>
+        <result property="ip1" column="ip1"></result>
+        <result property="ip2" column="ip2"></result>
+        <result property="startIpBinary" column="start_ip_binary"></result>
+        <result property="endIpBinary" column="end_ip_binary"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+    
+</mapper>

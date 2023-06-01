@@ -11,60 +11,48 @@ import java.util.Date;
  * @Date: 2023/05/18/11:30
  */
 @Data
-@TableName("cn_domain_tag_user_defined")
+@TableName("cn_ip_location_built_in")
 public class IpLocationBuiltIn {
     @TableId
     private Long locationId;
 
-    private Long geonameId;
-
     private Integer addrType;
 
     private String startIp;
-
+    
     private String endIp;
+    
+    private String minip;
 
-    private byte[] startIpBinary;
+    private String maxip;
 
-    private byte[] endIpBinary;
+    private double lngwgs;
 
-    private double latitude;
+    private double latwgs;
 
-    private double longitude;
+    private String continent;
 
-    private double coords;
+    private String areacode;
 
-    private String language;
+    private String country;
 
-    private String continentAbbr;
+    private String province;
 
-    private String continentFull;
+    private String city;
 
-    private String countryAbbr;
+    private String owner;
 
-    private String countryFull;
+    private String isp;
 
-    private String provinceAbbr;
-
-    private String provinceFull;
-
-    private String cityFull;
-
-    private String subdivisionAddr;
+    private String asnumber;
 
     private String timeZone;
 
     private Integer isValid;
 
-    private Integer parentLocationId;
-
     private Date opTime;
 
     private Integer opUser;
-
-    private Integer vsysId;
-
-    private Integer isShared;
 
     private Integer knowledgeId;
 

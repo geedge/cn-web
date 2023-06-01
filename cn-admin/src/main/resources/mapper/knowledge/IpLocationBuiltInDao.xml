@@ -4,31 +4,25 @@
 
     <resultMap id="IpLocationBuiltIn" type="net.geedge.modules.knowledge.entity.IpLocationBuiltIn">
         <result property="locationId" column="location_id"></result>
-        <result property="geonameId" column="geoname_id"></result>
         <result property="addrType" column="addr_type"></result>
         <result property="startIp" column="start_ip"></result>
         <result property="endIp" column="end_ip"></result>
-        <result property="startIpBinary" column="start_ip_binary"></result>
-        <result property="endIpBinary" column="end_ip_binary"></result>
-        <result property="latitude" column="latitude"></result>
-        <result property="longitude" column="longitude"></result>
-        <result property="coords" column="coords"></result>
-        <result property="language" column="language"></result>
-        <result property="continentAbbr" column="continent_abbr"></result>
-        <result property="continentFull" column="continent_full"></result>
-        <result property="countryAbbr" column="country_abbr"></result>
-        <result property="countryFull" column="country_full"></result>
-        <result property="provinceAbbr" column="province_abbr"></result>
-        <result property="provinceFull" column="province_full"></result>
-        <result property="cityFull" column="city_full"></result>
-        <result property="subdivisionAddr" column="subdivision_addr"></result>
-        <result property="timeZone" column="time_zone"></result>
+        <result property="minip" column="minip"></result>
+        <result property="maxip" column="maxip"></result>
+        <result property="continent" column="continent"></result>
+        <result property="areacode" column="areacode"></result>
+        <result property="country" column="country"></result>
+        <result property="province" column="province"></result>
+        <result property="city" column="city"></result>
+        <result property="lngwgs" column="lngwgs"></result>
+        <result property="latwgs" column="latwgs"></result>
+        <result property="owner" column="owner"></result>
+        <result property="isp" column="isp"></result>
+        <result property="asnumber" column="asnumber"></result>
+        <result property="timezone" column="timezone"></result>
         <result property="isValid" column="is_valid"></result>
-        <result property="parentLocationId" column="parent_location_id"></result>
         <result property="opTime" column="op_time"></result>
         <result property="opUser" column="op_user"></result>
-        <result property="vsysId" column="vsys_id"></result>
-        <result property="isShared" column="is_shared"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
     <select id="queryPageByKnowledgeId" resultMap="IpLocationBuiltIn">

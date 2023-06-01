@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.LinkDirectionBuiltInDao">
+
+    <resultMap id="linkDirectionBuiltIn" type="net.geedge.modules.knowledge.entity.LinkDirectionBuiltIn">
+        <result property="id" column="id"></result>
+        <result property="interfaceName" column="interface_name"></result>
+        <result property="direction" column="direction"></result>
+        <result property="peerProvince" column="peer_province"></result>
+        <result property="peerCity" column="peer_city"></result>
+     	<result property="linkId" column="link_id"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+    
+</mapper>
