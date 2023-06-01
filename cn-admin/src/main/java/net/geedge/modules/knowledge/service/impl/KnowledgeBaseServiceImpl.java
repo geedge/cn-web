@@ -443,39 +443,47 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		List<Integer> deleteItemIds = (List<Integer>) params.get("deleteItemIds");
 		if(StrUtil.equals(Constant.IP_TAG_USER_DEFINED, source)) {
 			List<IpTagUserDefined> ips = (List<IpTagUserDefined>) result.get(source);
-			ips.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-			// 将ip数据分为新增和更新
-			Map<Boolean, List<IpTagUserDefined>> ipMap = ips.stream().collect(Collectors.groupingBy(ip-> ObjectUtil.isNotEmpty(ip.getId())));
-			List<IpTagUserDefined> updateIps = ipMap.get(true);
-			List<IpTagUserDefined> insertIps = ipMap.get(false);
-			ipTagUserDefinedService.saveBatchForBinary(insertIps);
-			ipTagUserDefinedService.modifyBatchForBinary(updateIps);
+			if(ObjectUtil.isNotEmpty(ips)) {
+				ips.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+				// 将ip数据分为新增和更新
+				Map<Boolean, List<IpTagUserDefined>> ipMap = ips.stream().collect(Collectors.groupingBy(ip-> ObjectUtil.isNotEmpty(ip.getId())));
+				List<IpTagUserDefined> updateIps = ipMap.get(true);
+				List<IpTagUserDefined> insertIps = ipMap.get(false);
+				ipTagUserDefinedService.saveBatchForBinary(insertIps);
+				ipTagUserDefinedService.modifyBatchForBinary(updateIps);
+			}
 			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
 				ipTagUserDefinedService.removeByIds(deleteItemIds);
 			}
 		}else if(StrUtil.equals(Constant.DOMAIN_TAG_USER_DEFINED, source)){
 			List<DomainTagUserDefined> domains = (List<DomainTagUserDefined>) result.get(source);
-			domains.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-			domainTagUserDefinedService.saveOrUpdateBatch(domains);
+			if(ObjectUtil.isNotEmpty(domains)) {
+				domains.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+				domainTagUserDefinedService.saveOrUpdateBatch(domains);
+			}
 			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
 				domainTagUserDefinedService.removeByIds(deleteItemIds);
 			}
 		}else if(StrUtil.equals(Constant.APP_TAG_USER_DEFINED, source)){
 			List<AppTagUserDefined> apps = (List<AppTagUserDefined>) result.get(source);
-			apps.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-			appTagUserDefinedService.saveOrUpdateBatch(apps);
+			if(ObjectUtil.isNotEmpty(apps)) {
+				apps.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+				appTagUserDefinedService.saveOrUpdateBatch(apps);
+			}
 			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
 				appTagUserDefinedService.removeByIds(deleteItemIds);
 			}
 		}else if(StrUtil.equals(Constant.PSIPHON3_IP, source)){
 			List<Psiphon3Ip> psiphon3Ips = (List<Psiphon3Ip>) result.get(source);
-			psiphon3Ips.stream().forEach(ps3Ip-> ps3Ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-			// 将ip数据分为新增和更新
-			Map<Boolean, List<Psiphon3Ip>> ps3IpMap = psiphon3Ips.stream().collect(Collectors.groupingBy(ps3Ip-> ObjectUtil.isNotEmpty(ps3Ip.getId())));
-			List<Psiphon3Ip> updateIps = ps3IpMap.get(true);
-			List<Psiphon3Ip> insertIps = ps3IpMap.get(false);
-			psiphon3IpService.saveBatchForBinary(insertIps);
-			psiphon3IpService.modifyBatchForBinary(updateIps);
+			if(ObjectUtil.isNotEmpty(psiphon3Ips)) {
+				psiphon3Ips.stream().forEach(ps3Ip-> ps3Ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+				// 将ip数据分为新增和更新
+				Map<Boolean, List<Psiphon3Ip>> ps3IpMap = psiphon3Ips.stream().collect(Collectors.groupingBy(ps3Ip-> ObjectUtil.isNotEmpty(ps3Ip.getId())));
+				List<Psiphon3Ip> updateIps = ps3IpMap.get(true);
+				List<Psiphon3Ip> insertIps = ps3IpMap.get(false);
+				psiphon3IpService.saveBatchForBinary(insertIps);
+				psiphon3IpService.modifyBatchForBinary(updateIps);
+			}
 			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
 				psiphon3IpService.removeByIds(deleteItemIds);
 			}
@@ -724,4 +732,5 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		result.put("knowledgeBase", knowledgeBase);
 		return result;
 	}
+	
 }
