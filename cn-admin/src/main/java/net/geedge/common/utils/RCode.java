@@ -327,7 +327,10 @@ public enum RCode {
     KNOWLEDGE_BASE_NAME_DUPLICATE(591016,"KnowledgeBase name already exists"),
     KNOWLEDGE_BASE_PARAM_FORMAT_ERROR(591017,"KnowledgeBase data format error, please check"),
     KNOWLEDGE_SOURCE_ISNULL(591018,"KnowledgeBase source is required"),
-
+    KNOWLEDGE_CATEGORY_ISNULL(591019,"KnowledgeBase category is required"),
+    KNOWLEDGE_SOURCE_ERROR(591020,"The source is inconsistent with the system template"),
+    KNOWLEDGE_IMPORT_ACTION_ISNULL(591021,"KnowledgeBase import action is required"),
+    
     ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
     ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
     /**
@@ -375,6 +378,16 @@ public enum RCode {
 	REPORT_BUILD_IN_ERROR(311014,"Report build_in data cannot remove"),
 	REPORT_CRON_MONTH_WEEK_DATE_ERROR(311015,"Report cron month week date error must in (1-5)"),
 	
+	/**
+	 * 导入相关错误提示
+	 */
+	EXCELFILE_TYPE_ERROR(800, "The type can only be xlsx, json, csv"),
+    EXCELFILE_PARSE_ERROR(801, "Import file resolution failed"),
+    EXCELFILE_HEADER_TEMPLATE_ERROR(802,"The header row of the import template is inconsistent with the system template"),
+    IMPORT_FIELD_DUPLICATE(803, "Import data duplicate"),
+    IMPORT_FIELD_REQUIRED(804, "Import data is required"),
+    IMPORT_IGNORE(805, "Duplicate data, ignore the data in this row"),
+    IMPORT_ERROR(806, "Import data error"),
     ERROR(999, "error"); //通用错误/未知错误
 
 	

@@ -5,6 +5,7 @@ import static net.geedge.common.utils.Constant.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,11 +16,14 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -29,6 +33,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.csv.CsvData;
 import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.text.csv.CsvUtil;
@@ -37,27 +42,45 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
+import net.geedge.common.utils.CSVUtils;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.IPUtils;
+import net.geedge.common.utils.ImportValidateUtil;
 import net.geedge.common.utils.JSONUtil;
 import net.geedge.common.utils.KnowledgeCheckUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
+import net.geedge.modules.knowledge.entity.AppCategoryBuiltIn;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
+import net.geedge.modules.knowledge.entity.DnsServerInfoBuiltIn;
 import net.geedge.modules.knowledge.entity.DomainTagUserDefined;
+import net.geedge.modules.knowledge.entity.FqdnCategoryBuiltIn;
+import net.geedge.modules.knowledge.entity.FqdnIcpBuiltIn;
+import net.geedge.modules.knowledge.entity.FqdnWhoIsBuiltIn;
+import net.geedge.modules.knowledge.entity.IdcRenterBuiltIn;
+import net.geedge.modules.knowledge.entity.InternalIpBuiltIn;
+import net.geedge.modules.knowledge.entity.IocDarkweb;
+import net.geedge.modules.knowledge.entity.IocMalware;
+import net.geedge.modules.knowledge.entity.IpAsnBuiltIn;
+import net.geedge.modules.knowledge.entity.IpLocationBuiltIn;
 import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import net.geedge.modules.knowledge.entity.KnowledgeBaseSyncVersion;
+import net.geedge.modules.knowledge.entity.LinkDirectionBuiltIn;
 import net.geedge.modules.knowledge.entity.Psiphon3Ip;
 import net.geedge.modules.knowledge.service.AppCategoryBuiltInService;
 import net.geedge.modules.knowledge.service.AppTagUserDefinedService;
+import net.geedge.modules.knowledge.service.DnsServerInfoBuiltInService;
 import net.geedge.modules.knowledge.service.DomainTagUserDefinedService;
 import net.geedge.modules.knowledge.service.FqdnCategoryBuiltInService;
 import net.geedge.modules.knowledge.service.FqdnIcpBuiltInService;
 import net.geedge.modules.knowledge.service.FqdnWhoIsBuiltInService;
+import net.geedge.modules.knowledge.service.IdcRenterBuiltInService;
+import net.geedge.modules.knowledge.service.InternalIpBuiltInService;
 import net.geedge.modules.knowledge.service.IocDarkwebService;
 import net.geedge.modules.knowledge.service.IocMalwareService;
 import net.geedge.modules.knowledge.service.IpAsnBuiltInService;
@@ -65,7 +88,10 @@ import net.geedge.modules.knowledge.service.IpLocationBuiltInService;
 import net.geedge.modules.knowledge.service.IpTagUserDefinedService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
+import net.geedge.modules.knowledge.service.LinkDirectionBuiltInService;
 import net.geedge.modules.knowledge.service.Psiphon3IpService;
+import net.geedge.modules.sys.service.BasicImportAndExportService;
+import net.geedge.modules.sys.service.SysConfigService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 
 @Service("knowledgeBaseService")
@@ -109,6 +135,24 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	@Autowired
 	private IpLocationBuiltInService ipLocationBuiltInService;
+	
+	@Autowired
+	private SysConfigService sysConfigService;
+	
+	@Autowired
+	private BasicImportAndExportService basicImportAndExportService;
+	
+	@Autowired
+	private LinkDirectionBuiltInService linkDirectionBuiltInService;
+	
+	@Autowired
+	private DnsServerInfoBuiltInService dnsServerInfoBuiltInService;
+	
+	@Autowired
+	private IdcRenterBuiltInService idcRenterBuiltInService;
+	
+	@Autowired
+	private InternalIpBuiltInService internalIpBuiltInService;
 
 	@Override
 	public Object remove(String knowledgeIds) {
@@ -148,6 +192,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			List<Map<String,Object>> handlerData = new ArrayList<Map<String,Object>>();
 
 			List<CsvRow> csvRows = (List<CsvRow>)datas.getRows();
+			//去除表头
+			csvRows.remove(0);
 			//csv文件去重
 			Set<CsvRow> rowsSet = new TreeSet<CsvRow>(Comparator.comparing(row -> row.get(0).trim() + "_____" + row.get(1).trim()));
 			rowsSet.addAll(csvRows);
@@ -733,5 +779,279 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		knowledgeBase.setSource(source);
 		result.put("knowledgeBase", knowledgeBase);
 		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer importBatch(MultipartFile file, Integer knowledgeId, String action) {
+		Map params = new HashMap();
+		KnowledgeBase knowledgeBase = this.baseMapper.selectById(knowledgeId);
+		if(ObjectUtil.isEmpty(knowledgeBase)) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
+		}
+		params.put("knowledgeBase", knowledgeBase);
+		// 根据source获取对应的表头信息
+		String knowledgeImportConfigJson = sysConfigService.getValue("knowledge_import_config_json");
+		HashMap knowledgeConfigs = JSONObject.parseObject(knowledgeImportConfigJson, HashMap.class);
+		Map<String,Object> sourceConfig = (Map<String, Object>) knowledgeConfigs.get(knowledgeBase.getSource());
+		params.put("sourceConfig", sourceConfig);
+		params.put("source", knowledgeBase.getSource());
+		params.put("action", action);
+		String headerStr = (String) sourceConfig.get("headers");
+		List<String> sysHeaders = StrUtil.split(headerStr, StrUtil.C_COMMA);
+		if(ObjectUtils.isEmpty(sysHeaders)) {
+			throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
+		}
+		List<Map<Integer, String>> importDataList = this.getImportDataFromMultipartFile(file, sysHeaders,params);
+		this.saveDatasFromImportDataList(importDataList,params);
+		return knowledgeId;
+	}
+
+	@Override
+	public List<Map<String, String>> getImportDataFromMultipartFile(
+			MultipartFile file, List<String> headerInfos,Map<String,Object> params) {
+		String fileType = FilenameUtils.getExtension(file.getOriginalFilename());
+		String source = (String) params.get("source");
+		String action = (String) params.get("action");
+		Map<String,Object> sourceConfig = (Map<String, Object>) params.get("sourceConfig");
+		List<Map<String,Object>> infos = (List<Map<String, Object>>) sourceConfig.get("infos");
+		String validateColumn = (String)sourceConfig.get("validateColumn");
+        List<Map<String, String>> importDataList = new ArrayList<>();
+        List<Integer> deleteIds = new ArrayList<Integer>();
+        switch (fileType) {
+            case "csv": {
+                CsvData csvData = CSVUtils.getCsvDataFromMultipartFile(file);
+                List<CsvRow> rows = csvData.getRows();
+                CsvRow headers = rows.get(0);
+                // 表头校验
+                if (!CSVUtils.validateCSVHeader(headers, headerInfos)) {
+                    throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
+                }
+                for (int i = 1; i < rows.size(); i++) {
+                    CsvRow csvRow = rows.get(i);
+                    Map<String, String> tmpMap = Tool.MapUtil.newHashMap();
+                    for (int j = 0; j < headerInfos.size(); j++) {
+                        String cellStr = StrUtil.trim(csvRow.get(j));
+                        if ((StrUtil.startWith(cellStr, "[") && StrUtil.endWith(cellStr, "]")) ||
+                                (StrUtil.startWith(cellStr, "{") && StrUtil.endWith(cellStr, "}"))) { // csv文件中json格式双引号会变成两个
+                            cellStr = StrUtil.replace(cellStr, "\"\"", "\"");
+                        }
+                        Map<String, Object> info = infos.get(j);
+                        String valName = (String)info.get("name");
+                        String checkType = (String) info.get("checkType");
+                        List<String> validateVal = (List<String>) info.get("validateVal");
+                        if(StrUtil.equals(checkType, "in")) {
+                        	if(!validateVal.contains(cellStr)) {
+                        		throw new CNException(RCode.IMPORT_ERROR);
+                        	}
+                        }else if(StrUtil.equals(checkType, "range")) {
+                        	if(!(Integer.valueOf(validateVal.get(0))<=Integer.valueOf(cellStr) && Integer.valueOf(validateVal.get(1))>=Integer.valueOf(cellStr))) {
+                        		throw new CNException(RCode.IMPORT_ERROR);
+                        	}
+                        }else if(StrUtil.equals(checkType, "ip")) {
+                        	boolean validIpFormat = KnowledgeCheckUtil.validIpFormat(cellStr);
+                        	if(!validIpFormat) {
+                        		throw new CNException(RCode.IMPORT_ERROR);
+                        	}
+                        }
+                        tmpMap.put(valName, cellStr);
+                    }
+                    // 根据配置校验数据是否重复
+                    List<String> validateColumns = StrUtil.split(validateColumn, StrUtil.C_COMMA);
+                    HashMap<String, String> checkDataMap = Tool.MapUtil.newHashMap();
+                    for(String validateCol : validateColumns) {
+                    	checkDataMap.put(validateCol, tmpMap.get(validateCol));
+                    }
+                    List<Map> dbData = basicImportAndExportService.queryList(source, checkDataMap);
+                    if(StrUtil.equals(action, "overwrite")) {
+                    	dbData.stream().forEach(d->deleteIds.add((Integer)d.get("id")));
+                    }
+                    importDataList.add(tmpMap);
+                }
+                break;
+            }
+            default: {
+                throw new CNException(RCode.EXCELFILE_TYPE_ERROR);
+            }
+        }
+        if(ObjectUtil.isNotEmpty(deleteIds)) {
+        	basicImportAndExportService.removeList(source,deleteIds);
+        }
+        return importDataList;
+	}
+	
+	
+	private void saveDatasFromImportDataList(List importDataList,Map<String,Object> params) {
+		KnowledgeBase knowledgeBase = (KnowledgeBase) params.get("knowledgeBase");
+		String source = knowledgeBase.getSource();		
+		// 根据类型不同 生成对应实体 保存入库
+		switch(source) {
+			case IP_TAG_USER_DEFINED:
+				List<IpTagUserDefined> ipTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpTagUserDefined.class);
+				ipTagUserDefineds.stream().forEach(data->{
+					data.setStartIpBinary(data.getIp1().getBytes());
+					data.setEndIpBinary(data.getIp2().getBytes());
+					data.setCTime(new Date());
+					data.setOpUser(ShiroUtils.getUserId().intValue());
+					data.setOpTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				ipTagUserDefinedService.saveBatchForBinary(ipTagUserDefineds);
+				break;
+			case APP_TAG_USER_DEFINED:
+				List<AppTagUserDefined> appTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),AppTagUserDefined.class);
+				appTagUserDefineds.stream().forEach(data->{
+					data.setCTime(new Date());
+					data.setOpUser(ShiroUtils.getUserId().intValue());
+					data.setOpTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				appTagUserDefinedService.saveBatch(appTagUserDefineds);
+				break;
+			case DOMAIN_TAG_USER_DEFINED:
+				List<DomainTagUserDefined> domainTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),DomainTagUserDefined.class);
+				domainTagUserDefineds.stream().forEach(data->{
+					data.setCTime(new Date());
+					data.setOpUser(ShiroUtils.getUserId().intValue());
+					data.setOpTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				domainTagUserDefinedService.saveBatch(domainTagUserDefineds);
+				break;
+			case IOC_DARKWEB:
+				List<IocDarkweb> iocDarkwebs = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IocDarkweb.class);
+				iocDarkwebs.stream().forEach(data->{
+					data.setCreateTime(new Date().getTime());
+					data.setUpdateTime(new Date().getTime());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				iocDarkwebService.saveBatch(iocDarkwebs);
+				break;
+			case IOC_MALWARE:
+				List<IocMalware> iocMalwares = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IocMalware.class);
+				iocMalwares.stream().forEach(data->{
+					data.setCreateTime(new Date().getTime());
+					data.setUpdateTime(new Date().getTime());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				iocMalwareService.saveBatch(iocMalwares);
+				break;
+			case APP_CATEGORY_BUILT_IN:
+				List<AppCategoryBuiltIn> appCategoryBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),AppCategoryBuiltIn.class);
+				appCategoryBuiltIns.stream().forEach(data->{
+					data.setCTime(new Date());
+					data.setOpUser(ShiroUtils.getUserId().intValue());
+					data.setOpTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				appCategoryBuiltInService.saveBatch(appCategoryBuiltIns);
+				break;
+			case FQDN_ICP_BUILT_IN:
+				List<FqdnIcpBuiltIn> fqdnIcpBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),FqdnIcpBuiltIn.class);
+				fqdnIcpBuiltIns.stream().forEach(data->{
+					data.setCreateTime(new Date());
+					data.setUpdateTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				fqdnIcpBuiltInService.saveBatch(fqdnIcpBuiltIns);
+				break;
+			case FQDN_WHO_IS_BUILT_IN:
+				List<FqdnWhoIsBuiltIn> fqdnWhoIsBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),FqdnWhoIsBuiltIn.class);
+				fqdnWhoIsBuiltIns.stream().forEach(data->{
+					data.setCreateTime(new Date());
+					data.setUpdateTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				fqdnWhoIsBuiltInService.saveBatch(fqdnWhoIsBuiltIns);
+				break;
+			case FQDN_CATEGORY_BUILT_IN:
+				List<FqdnCategoryBuiltIn> fqdnCategoryBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),FqdnCategoryBuiltIn.class);
+				fqdnCategoryBuiltIns.stream().forEach(data->{
+					data.setCreateTime(new Date());
+					data.setUpdateTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				fqdnCategoryBuiltInService.saveBatch(fqdnCategoryBuiltIns);
+				break;
+			case IP_ASN_BUILT_IN:
+				List<IpAsnBuiltIn> ipAsnBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpAsnBuiltIn.class);
+				ipAsnBuiltIns.stream().forEach(data->{
+					data.setOpUser(ShiroUtils.getUserId().intValue());
+					data.setOpTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				ipAsnBuiltInService.saveBatch(ipAsnBuiltIns);
+				break;
+			case IP_LOCATION_BUILT_IN:
+				List<IpLocationBuiltIn> ipLocationBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpLocationBuiltIn.class);
+				ipLocationBuiltIns.stream().forEach(data->{
+					data.setOpUser(ShiroUtils.getUserId().intValue());
+					data.setOpTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				ipLocationBuiltInService.saveBatch(ipLocationBuiltIns);
+				break;
+			case PSIPHON3_IP:
+				List<Psiphon3Ip> psiphon3Ips = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),Psiphon3Ip.class);
+				psiphon3Ips.stream().forEach(data->{
+					data.setStartIpBinary(data.getIp1().getBytes());
+					data.setEndIpBinary(data.getIp2().getBytes());
+					data.setCTime(new Date());
+					data.setOpUser(ShiroUtils.getUserId().intValue());
+					data.setOpTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				psiphon3IpService.saveBatchForBinary(psiphon3Ips);
+				break;
+			case IDC_RENTER_BUILT_IN:
+				List<IdcRenterBuiltIn> idcRenterBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IdcRenterBuiltIn.class);
+				idcRenterBuiltIns.stream().forEach(data->{
+					data.setStartIpBinary(data.getIp1().getBytes());
+					data.setEndIpBinary(data.getIp2().getBytes());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				idcRenterBuiltInService.saveBatchForBinary(idcRenterBuiltIns);
+				break;
+			case INTERNAL_IP_BUILT_IN:
+				List<InternalIpBuiltIn> internalIpBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),InternalIpBuiltIn.class);
+				internalIpBuiltIns.stream().forEach(data->{
+					data.setStartIpBinary(data.getIp1().getBytes());
+					data.setEndIpBinary(data.getIp2().getBytes());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				internalIpBuiltInService.saveBatchForBinary(internalIpBuiltIns);
+				break;
+			case LINK_DIRECTION_BUILT_IN:
+				List<LinkDirectionBuiltIn> linkDirectionBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),LinkDirectionBuiltIn.class);
+				linkDirectionBuiltIns.stream().forEach(data->{
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				linkDirectionBuiltInService.saveBatch(linkDirectionBuiltIns);
+				break;
+			case DNS_SERVER_INFO_BUILT_IN:
+				List<DnsServerInfoBuiltIn> dnsServerInfoBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),DnsServerInfoBuiltIn.class);
+				dnsServerInfoBuiltIns.stream().forEach(data->{
+					data.setCreateTime(new Date());
+					data.setUpdateTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				dnsServerInfoBuiltInService.saveBatch(dnsServerInfoBuiltIns);
+				break;
+			default:{
+				throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);
+			}
+		}
+		// 创建或更新knowledgeBase version记录
+		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getById(knowledgeBase.getKnowledgeId());
+		if(ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
+			Integer version = knowledgeBaseSyncVersion.getVersion();
+			knowledgeBaseSyncVersion.setVersion(version+1);
+		}else {
+			knowledgeBaseSyncVersion = new KnowledgeBaseSyncVersion();
+			knowledgeBaseSyncVersion.setVersion(1);
+		}
+		knowledgeBaseSyncVersion.setKnowledgeId(knowledgeBase.getKnowledgeId());
+		knowledgeBaseSyncVersion.setOpTime(new Date());
+		knowledgeBaseSyncVersionService.saveOrUpdate(knowledgeBaseSyncVersion);
 	}
 }

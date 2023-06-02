@@ -238,6 +238,10 @@ public class Constant {
 	public static final String IP_ASN_BUILT_IN  = "cn_ip_asn_built_in ";
 	public static final String IP_LOCATION_BUILT_IN  = "cn_ip_location_built_in  ";
 	public static final String PSIPHON3_IP = "cn_psiphon3_ip";
+	public static final String IDC_RENTER_BUILT_IN = "cn_idc_renter_built_in";
+	public static final String INTERNAL_IP_BUILT_IN = "cn_internal_ip_built_in";
+	public static final String LINK_DIRECTION_BUILT_IN = "cn_link_direction_built_in";
+	public static final String DNS_SERVER_INFO_BUILT_IN = "cn_dns_server_info_built_in";
 	
 	/**
 	 * IP格式类型分类
@@ -259,6 +263,4 @@ public class Constant {
 			this.value = value;
 		}
 	}
-	
-
 }

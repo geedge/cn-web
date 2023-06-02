@@ -72,5 +72,14 @@ public class KnowledgeBaseController {
 		Integer id = knowledgeBaseService.addOrModifyKnowledgeBase(params);
 		return R.ok().put("knowledgeId", id);
 	}
+	
+	@PostMapping("/items/batch")
+	public R importBatch(@Param("file") MultipartFile file,@Param("knowledgeId")Integer knowledgeId,@Param("action")String action) {
+		ValidateUtils.is(file).notNull(RCode.KNOWLEDGE_FILE_ISNULL);
+		ValidateUtils.is(knowledgeId).notNull(RCode.KNOWLEDGE_ID_ISNULL);
+		ValidateUtils.is(action).notNull(RCode.KNOWLEDGE_IMPORT_ACTION_ISNULL);
+		knowledgeBaseService.importBatch(file,knowledgeId,action);
+		return R.ok().putData("knowledgeId",knowledgeId);
+	}
 }
 

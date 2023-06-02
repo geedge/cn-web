@@ -12,4 +12,33 @@
         <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
     
+    
+    <insert id="insertBatchForBinary">
+    	insert into cn_internal_ip_built_in (addr_format,ip1,ip2,start_ip_binary,
+    	end_ip_binary,knowledge_id)
+    	values
+    	<foreach collection="psiphon3Ips" item="psiphon3Ip" separator=",">
+    		(
+    		#{psiphon3Ip.addrFormat},
+    		#{psiphon3Ip.ip1},
+    		#{psiphon3Ip.ip2},
+    		INET6_ATON(#{psiphon3Ip.startIpBinary}),
+    		INET6_ATON(#{psiphon3Ip.endIpBinary}),
+    		#{psiphon3Ip.knowledgeId}
+    		)
+    	</foreach>
+    </insert>
+    
+    <update id="updateBatchForBinary">
+    	<foreach collection="psiphon3Ips" item="psiphon3Ip" separator=";">
+    	 update cn_internal_ip_built_in  set
+    		addr_format = #{psiphon3Ip.addrFormat},
+            ip1 = #{psiphon3Ip.ip1},
+            ip2 = #{psiphon3Ip.ip2},
+    		start_ip_binary = INET6_ATON(#{psiphon3Ip.startIpBinary}),
+    		end_ip_binary = INET6_ATON(#{psiphon3Ip.endIpBinary}),
+    		knowledge_id = #{psiphon3Ip.knowledgeId}
+    		where id = #{psiphon3Ip.id}
+    	</foreach>
+    </update>
 </mapper>
