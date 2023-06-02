@@ -17,4 +17,6 @@ import java.util.Map;
 public interface DomainTagUserDefinedDao extends BaseMapper<DomainTagUserDefined> {
 
     List<DomainTagUserDefined> queryPageByKnowledgeId(IPage<DomainTagUserDefined> page, @Param("params") Map<String, Object> params);
+
+    List<Map> queryDomainEntityTag(@Param("resource") String resource);
 }

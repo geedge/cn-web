@@ -73,5 +73,13 @@
     		where id = #{psiphon3Ip.id}
     	</foreach>
     </update>
-    
+
+	<select id="queryIpEntityTag" resultType="java.util.Map">
+		select type as type, method as method, confidence as confidence,
+		       confidence_level as confidenceLevel, op_time as updateTime,
+		       c_time as createTime, is_valid as isValid from
+		cn_psiphon3_ip
+		where  INET6_ATON(#{resource}) between start_ip_binary and end_ip_binary
+		limit 1
+	</select>
 </mapper>

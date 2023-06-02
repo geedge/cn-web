@@ -72,4 +72,11 @@
     		where id = #{ip.id}
     	</foreach>
     </update>
+
+    <select id="queryIpEntityTag" resultType="java.util.Map">
+        select id as id, tag_value as tagValue, op_time as updateTime,
+               c_time as createTime, is_valid as isValid from
+        cn_ip_tag_user_defined
+        where  INET6_ATON(#{resource}) between start_ip_binary and end_ip_binary
+    </select>
 </mapper>

@@ -24,4 +24,6 @@ public interface Psiphon3IpDao extends BaseMapper<Psiphon3Ip> {
     void insertBatchForBinary(@Param("psiphon3Ips")List<Psiphon3Ip> psiphon3Ips);
     
     void updateBatchForBinary(@Param("psiphon3Ips")List<Psiphon3Ip> psiphon3Ips);
+
+    Map<String, Object> queryIpEntityTag(@Param("resource") String resource);
 }

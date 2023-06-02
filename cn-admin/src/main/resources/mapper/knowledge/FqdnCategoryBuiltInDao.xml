@@ -31,7 +31,9 @@
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        select category_name as categoryName, category_group as categoryGroup, reputation_level as reputationLevel from
+        select category_name as categoryName, category_group as categoryGroup,
+               reputation_level as reputationLevel, update_time as updateTime,
+               create_time as createTime, 1 as isValid from
         cn_fqdn_category_built_in
         where fqdn = #{resource}
         limit 1

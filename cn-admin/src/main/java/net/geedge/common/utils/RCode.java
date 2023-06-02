@@ -333,6 +333,7 @@ public enum RCode {
     
     ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
     ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
+    ENTITY_TAG_NOT_EXIST(601003,"Entity tag not exist"),
     /**
      * stat相关
      */

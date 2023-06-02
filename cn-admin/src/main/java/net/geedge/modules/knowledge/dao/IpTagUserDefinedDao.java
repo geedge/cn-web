@@ -21,4 +21,6 @@ public interface IpTagUserDefinedDao extends BaseMapper<IpTagUserDefined> {
     void insertBatchForBinary(@Param("ipTagUserDefineds")List<IpTagUserDefined> ipTagUserDefineds);
     
     void updateBatchForBinary(@Param("ipTagUserDefineds")List<IpTagUserDefined> ipTagUserDefineds);
+
+    List<Map> queryIpEntityTag(@Param("resource") String resource);
 }

@@ -31,7 +31,6 @@ public class IpLocationBuiltInServiceImpl extends ServiceImpl<IpLocationBuiltInD
 
     @Override
     public Map<String, Object> queryEntityDetail(String resource) {
-        Map<String, Object> data = this.baseMapper.queryEntityDetail(resource);
-        return data;
+        return this.baseMapper.queryEntityDetail(resource);
     }
 }

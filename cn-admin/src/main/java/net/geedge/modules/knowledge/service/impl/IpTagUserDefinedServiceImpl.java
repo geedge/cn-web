@@ -45,4 +45,10 @@ public class IpTagUserDefinedServiceImpl extends ServiceImpl<IpTagUserDefinedDao
 			this.baseMapper.updateBatchForBinary(ipTagUserDefineds);
 		}
 	}
+
+
+	@Override
+	public List<Map> queryIpEntityTag(String resource) {
+		return this.baseMapper.queryIpEntityTag(resource);
+	}
 }

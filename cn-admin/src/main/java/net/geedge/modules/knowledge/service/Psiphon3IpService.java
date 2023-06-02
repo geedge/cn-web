@@ -19,4 +19,6 @@ public interface Psiphon3IpService extends IService<Psiphon3Ip> {
     void saveBatchForBinary(List<Psiphon3Ip> ipTagUserDefineds);
     
     void modifyBatchForBinary(List<Psiphon3Ip> ipTagUserDefineds);
+
+    Map<String, Object> queryIpEntityTag(String resource);
 }

@@ -27,4 +27,10 @@ public class DomainTagUserDefinedServiceImpl extends ServiceImpl<DomainTagUserDe
         page.setRecords(domainTagUserDefineds);
         return new PageUtils(page);
     }
+
+
+    @Override
+    public List<Map> queryDomainEntityTag(String resource) {
+        return this.baseMapper.queryDomainEntityTag(resource);
+    }
 }

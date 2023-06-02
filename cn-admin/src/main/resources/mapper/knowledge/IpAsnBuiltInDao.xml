@@ -26,7 +26,7 @@
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        select asn_id as asnId, asn as asn, organization as organization from
+        select asn_id as id, asn as asn, organization as organization from
         cn_ip_asn_built_in
         where INET6_ATON(#{resource}) between start_ip_binary and end_ip_binary
         limit 1

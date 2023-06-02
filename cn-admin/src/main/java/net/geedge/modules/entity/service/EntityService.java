@@ -1,5 +1,7 @@
 package net.geedge.modules.entity.service;
 
+import net.geedge.common.utils.PageUtils;
+
 import java.util.Map;
 
 /**
@@ -9,4 +11,6 @@ import java.util.Map;
 public interface EntityService {
 
     Map<String, Object> queryEntityDetail(String entityType, String resource);
+
+    Map<String, Object> queryEntityTag(String entityType, String resource);
 }

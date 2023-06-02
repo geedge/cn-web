@@ -18,4 +18,6 @@ public interface IpTagUserDefinedService extends IService<IpTagUserDefined> {
     void saveBatchForBinary(List<IpTagUserDefined> ipTagUserDefineds);
     
     void modifyBatchForBinary(List<IpTagUserDefined> ipTagUserDefineds);
+
+    List<Map> queryIpEntityTag(String resource);
 }

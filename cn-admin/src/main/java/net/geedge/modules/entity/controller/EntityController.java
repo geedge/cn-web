@@ -29,4 +29,11 @@ public class EntityController {
         Map<String, Object> data = entityService.queryEntityDetail(entityType, resource);
         return R.ok(data);
     }
+
+    @RequestMapping("/kb/intelligence/tag/{entityType}")
+    public R queryEntityTag(@PathVariable(value = "entityType") String entityType, @Param("resource")String resource) {
+        ValidateUtils.is(resource).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
+        Map<String, Object> data = entityService.queryEntityTag(entityType, resource);
+        return R.ok(data);
+    }
 }

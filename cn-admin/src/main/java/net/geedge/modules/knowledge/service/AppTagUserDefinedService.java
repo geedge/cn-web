@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,4 +14,6 @@ import java.util.Map;
 public interface AppTagUserDefinedService extends IService<AppTagUserDefined> {
 
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
+
+    List<Map> queryAppEntityTag(String resource);
 }

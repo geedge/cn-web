@@ -26,4 +26,15 @@ public class IocDarkwebServiceImpl extends ServiceImpl<IocDarkwebDao, IocDarkweb
         page.setRecords(iocDarkwebs);
         return new PageUtils(page);
     }
+
+    @Override
+    public Map<String, Object> queryIpEntityTag(String resource) {
+        return this.baseMapper.queryIpEntityTag(resource);
+    }
+
+    @Override
+    public Map<String, Object> queryDomainEntityTag(String resource) {
+        return this.baseMapper.queryDomainEntityTag(resource);
+    }
+
 }

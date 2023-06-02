@@ -30,7 +30,6 @@ public class FqdnCategoryBuiltInServiceImpl extends ServiceImpl<FqdnCategoryBuil
 
     @Override
     public Map<String, Object> queryEntityDetail(String resource) {
-        Map<String, Object> data = this.baseMapper.queryEntityDetail(resource);
-        return data;
+        return this.baseMapper.queryEntityDetail(resource);
     }
 }

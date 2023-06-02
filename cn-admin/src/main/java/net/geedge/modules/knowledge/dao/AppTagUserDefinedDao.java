@@ -17,4 +17,6 @@ import java.util.Map;
 public interface AppTagUserDefinedDao extends BaseMapper<AppTagUserDefined> {
 
     List<AppTagUserDefined> queryPageByKnowledgeId(IPage<AppTagUserDefined> page, @Param("params") Map<String, Object> params);
+
+    List<Map> queryAppEntityTag(@Param("resource") String resource);
 }

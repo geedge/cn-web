@@ -28,4 +28,9 @@ public class AppTagUserDefinedServiceImpl extends ServiceImpl<AppTagUserDefinedD
         page.setRecords(appTagUserDefineds);
         return new PageUtils(page);
     }
+
+    @Override
+    public List<Map> queryAppEntityTag(String resource) {
+        return this.baseMapper.queryAppEntityTag(resource);
+    }
 }

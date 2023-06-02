@@ -43,4 +43,9 @@ public class Psiphon3IpServiceImpl extends ServiceImpl<Psiphon3IpDao, Psiphon3Ip
 			this.baseMapper.updateBatchForBinary(psiphon3Ips);
 		}
 	}
+
+	@Override
+	public Map<String, Object> queryIpEntityTag(String resource) {
+		return this.baseMapper.queryIpEntityTag(resource);
+	}
 }

@@ -35,7 +35,9 @@
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        select continent as continent, country as country, province as province, city as city, lngwgs as lngwgs, latwgs as latwgs, isp as isp, owner as owner from
+        select continent as continent, country as country, province as province,
+               city as city, lngwgs as lngwgs, latwgs as latwgs, isp as isp,
+               owner as owner from
             cn_ip_location_built_in
         where #{resource} between minip and maxip
         limit 1

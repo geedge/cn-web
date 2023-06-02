@@ -51,4 +51,20 @@
             ORDER BY id
         </if>
     </select>
+
+    <select id="queryIpEntityTag" resultType="java.util.Map">
+        select node_type as nodeType, update_time as updateTime,
+               create_time as createTime, 1 as isValid from
+        cn_ioc_darkweb
+        where ioc_type = 'ip' and ioc_value = #{resource}
+        limit 1
+    </select>
+
+    <select id="queryDomainEntityTag" resultType="java.util.Map">
+        select node_type as nodeType, update_time as updateTime,
+               create_time as createTime, 1 as isValid from
+            cn_ioc_darkweb
+        where ioc_type = 'domain' and ioc_value = #{resource}
+        limit 1
+    </select>
 </mapper>
