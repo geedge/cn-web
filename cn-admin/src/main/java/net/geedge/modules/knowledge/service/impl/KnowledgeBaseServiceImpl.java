@@ -827,34 +827,93 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                 if (!CSVUtils.validateCSVHeader(headers, headerInfos)) {
                     throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
                 }
-                for (int i = 1; i < rows.size(); i++) {
+                Map<Integer,String> indexHeader = new HashMap<Integer,String>();
+                for (int i = 0; i < rows.size(); i++) {
                     CsvRow csvRow = rows.get(i);
                     Map<String, String> tmpMap = Tool.MapUtil.newHashMap();
+                    boolean ipHandler = false;
                     for (int j = 0; j < headerInfos.size(); j++) {
                         String cellStr = StrUtil.trim(csvRow.get(j));
                         if ((StrUtil.startWith(cellStr, "[") && StrUtil.endWith(cellStr, "]")) ||
                                 (StrUtil.startWith(cellStr, "{") && StrUtil.endWith(cellStr, "}"))) { // csv文件中json格式双引号会变成两个
                             cellStr = StrUtil.replace(cellStr, "\"\"", "\"");
                         }
-                        Map<String, Object> info = infos.get(j);
-                        String valName = (String)info.get("name");
-                        String checkType = (String) info.get("checkType");
-                        List<String> validateVal = (List<String>) info.get("validateVal");
-                        if(StrUtil.equals(checkType, "in")) {
-                        	if(!validateVal.contains(cellStr)) {
-                        		throw new CNException(RCode.IMPORT_ERROR);
-                        	}
-                        }else if(StrUtil.equals(checkType, "range")) {
-                        	if(!(Integer.valueOf(validateVal.get(0))<=Integer.valueOf(cellStr) && Integer.valueOf(validateVal.get(1))>=Integer.valueOf(cellStr))) {
-                        		throw new CNException(RCode.IMPORT_ERROR);
-                        	}
-                        }else if(StrUtil.equals(checkType, "ip")) {
-                        	boolean validIpFormat = KnowledgeCheckUtil.validIpFormat(cellStr);
-                        	if(!validIpFormat) {
-                        		throw new CNException(RCode.IMPORT_ERROR);
-                        	}
+                        if(i==0) {
+                        	indexHeader.put(j, cellStr);
+                        }else {
+							Map<String, Object> info = infos.get(j);
+							String valName = indexHeader.get(j);
+							/*String checkType = (String) info.get("checkType");
+							List<String> validateVal = (List<String>) info.get("validateVal");
+							if(StrUtil.equals(checkType, "in")) {
+								if(!validateVal.contains(cellStr)) {
+									log.error("knowledgeBase import data error , line is {}",i);
+									throw new CNException(RCode.IMPORT_ERROR);
+								}
+							}else if(StrUtil.equals(checkType, "range")) {
+								if(!(Integer.valueOf(validateVal.get(0))<=Integer.valueOf(cellStr) && Integer.valueOf(validateVal.get(1))>=Integer.valueOf(cellStr))) {
+									log.error("knowledgeBase import data error , line is {}",i);
+									throw new CNException(RCode.IMPORT_ERROR);
+								}
+							}else if(StrUtil.equals(checkType, "ip")) {
+								boolean validIpFormat = KnowledgeCheckUtil.validIpFormat(cellStr);
+								if(!validIpFormat) {
+									log.error("knowledgeBase import data error , line is {}",i);
+									throw new CNException(RCode.IMPORT_ERROR);
+								}
+							}*/
+	                        if(StrUtil.equals(cellStr, "addr_format")) {
+	                        	ipHandler = true;
+	                        }
+	                        tmpMap.put(valName, cellStr);
                         }
-                        tmpMap.put(valName, cellStr);
+                    }
+                    // 进行ip1 ip2相关数据内容处理
+                    if(ipHandler) {
+                    	String addrFormat = tmpMap.get("addr_format");
+                    	String ip1 = tmpMap.get("ip1");
+                    	String ip2 = tmpMap.get("ip2");
+                    	boolean validIpFormat = KnowledgeCheckUtil.validIpFormat(ip1);
+                    	if(!validIpFormat) {
+                    		log.error("knowledgeBase import data error , line is {}",i);
+                    		throw new CNException(RCode.IMPORT_ERROR);
+                    	}
+                    	if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
+                    		tmpMap.put("ip2",ip1);
+                    		tmpMap.put("start_ip_binary",ip1);
+    						tmpMap.put("end_ip_binary",ip1);
+    					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
+    						validIpFormat = KnowledgeCheckUtil.validIpFormat(ip2);
+                        	if(!validIpFormat) {
+                        		log.error("knowledgeBase import data error , line is {}",i);
+                        		throw new CNException(RCode.IMPORT_ERROR);
+                        	}
+    						tmpMap.put("ip2",ip2);
+    						tmpMap.put("start_ip_binary",ip1);
+    						tmpMap.put("end_ip_binary",ip2);
+    					}else {
+    						validIpFormat = KnowledgeCheckUtil.validIpFormat(ip1+"/"+ip2);
+                        	if(!validIpFormat) {
+                        		log.error("knowledgeBase import data error , line is {}",i);
+                        		throw new CNException(RCode.IMPORT_ERROR);
+                        	}
+    						tmpMap.put("ip2",ip2);
+    						boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
+    						Map<String, String> ipsStartEnd = null;
+    						String startIp = "";
+    						String endIp = "";
+    						if(iPv4Address) {
+    							ipsStartEnd = IPUtils.getIpsV4ByCidr(ip1+"/"+ip2);
+    							startIp = ipsStartEnd.get("startIpStr");
+    							endIp = ipsStartEnd.get("endIpStr");
+    						}else {
+    							ipsStartEnd = IPUtils.getIpsV6ByCidr(ip1+"/"+ip2);
+    							startIp = ipsStartEnd.get("startIpStr");
+    							endIp = ipsStartEnd.get("endIpStr");
+    						}
+    						tmpMap.put("start_ip_binary",startIp);
+    						tmpMap.put("end_ip_binary",endIp);
+    					}
                     }
                     // 根据配置校验数据是否重复
                     List<String> validateColumns = StrUtil.split(validateColumn, StrUtil.C_COMMA);
@@ -866,7 +925,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                     if(StrUtil.equals(action, "overwrite")) {
                     	dbData.stream().forEach(d->deleteIds.add((Integer)d.get("id")));
                     }
-                    importDataList.add(tmpMap);
+                    if(ObjectUtil.isNotEmpty(tmpMap)) {
+                    	importDataList.add(tmpMap);
+                    }
                 }
                 break;
             }
@@ -879,8 +940,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
         }
         return importDataList;
 	}
-	
-	
+		
 	private void saveDatasFromImportDataList(List importDataList,Map<String,Object> params) {
 		KnowledgeBase knowledgeBase = (KnowledgeBase) params.get("knowledgeBase");
 		String source = knowledgeBase.getSource();		
@@ -889,8 +949,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			case IP_TAG_USER_DEFINED:
 				List<IpTagUserDefined> ipTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpTagUserDefined.class);
 				ipTagUserDefineds.stream().forEach(data->{
-					data.setStartIpBinary(data.getIp1().getBytes());
-					data.setEndIpBinary(data.getIp2().getBytes());
 					data.setCTime(new Date());
 					data.setOpUser(ShiroUtils.getUserId().intValue());
 					data.setOpTime(new Date());
@@ -994,8 +1052,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			case PSIPHON3_IP:
 				List<Psiphon3Ip> psiphon3Ips = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),Psiphon3Ip.class);
 				psiphon3Ips.stream().forEach(data->{
-					data.setStartIpBinary(data.getIp1().getBytes());
-					data.setEndIpBinary(data.getIp2().getBytes());
 					data.setCTime(new Date());
 					data.setOpUser(ShiroUtils.getUserId().intValue());
 					data.setOpTime(new Date());
@@ -1006,8 +1062,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			case IDC_RENTER_BUILT_IN:
 				List<IdcRenterBuiltIn> idcRenterBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IdcRenterBuiltIn.class);
 				idcRenterBuiltIns.stream().forEach(data->{
-					data.setStartIpBinary(data.getIp1().getBytes());
-					data.setEndIpBinary(data.getIp2().getBytes());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
 				idcRenterBuiltInService.saveBatchForBinary(idcRenterBuiltIns);
@@ -1015,8 +1069,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			case INTERNAL_IP_BUILT_IN:
 				List<InternalIpBuiltIn> internalIpBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),InternalIpBuiltIn.class);
 				internalIpBuiltIns.stream().forEach(data->{
-					data.setStartIpBinary(data.getIp1().getBytes());
-					data.setEndIpBinary(data.getIp2().getBytes());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
 				internalIpBuiltInService.saveBatchForBinary(internalIpBuiltIns);

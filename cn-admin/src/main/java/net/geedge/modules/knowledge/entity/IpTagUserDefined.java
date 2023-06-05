@@ -36,9 +36,7 @@ public class IpTagUserDefined {
 
     @TableField(exist = false)
     private SysUserEntity user;
-    @TableField(value = "ip_first")
     private String ip1;
-    @TableField(value = "ip_second")
     private String ip2;
     
     private String addrFormat;

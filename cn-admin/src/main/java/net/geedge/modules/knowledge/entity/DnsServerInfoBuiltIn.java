@@ -32,11 +32,11 @@ public class DnsServerInfoBuiltIn {
 	
 	private String dnsSoftware;
 	
-	private boolean dnssecSupport;
+	private Integer dnssecSupport;
 	
-	private boolean dotSupport;
+	private Integer dotSupport;
 	
-	private boolean dohSupport;
+	private Integer dohSupport;
 	
 	private String rootMirrorLocations;
 	

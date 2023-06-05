@@ -35,13 +35,16 @@ public class CSVUtils {
     }
 
     public static boolean validateCSVHeader(CsvRow headers, List<String> headerInfos) {
-        for (int i = 0; i < headerInfos.size(); i++) {
-            String header = headers.get(i);
-            if(header.indexOf("\uFEFF") >= 0) header = header.substring(1); //去除BOM头
-            if (!Tool.StrUtil.equalsIgnoreCase(headerInfos.get(i), header)) {
-                return false;
+    	// 先判断表头数量是否一致  再循环判断每个表头是否存在 表头位置不用一一对应 存在即可
+    	if(headers.size() == headerInfos.size()) {
+    		for (int i = 0; i < headerInfos.size(); i++) {
+                String header = headers.get(i);
+                if(header.indexOf("\uFEFF") >= 0) header = header.substring(1); //去除BOM头
+                if (headerInfos.contains(header)) {
+                    return false;
+                }
             }
-        }
+    	}
         return true;
     }
 }
