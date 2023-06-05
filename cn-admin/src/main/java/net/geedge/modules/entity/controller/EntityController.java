@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -34,6 +35,15 @@ public class EntityController {
     public R queryEntityTag(@PathVariable(value = "entityType") String entityType, @Param("resource")String resource) {
         ValidateUtils.is(resource).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
         Map<String, Object> data = entityService.queryEntityTag(entityType, resource);
+        return R.ok(data);
+    }
+
+    @RequestMapping("/kb/intelligence/list/{entityType}")
+    public R queryEntityList(@PathVariable(value = "entityType") String entityType, @RequestParam Map<String, Object> params) {
+        ValidateUtils.is(params.get("resource")).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
+        ValidateUtils.is(params.get("pageNo")).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
+        ValidateUtils.is(params.get("pageSize")).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
+        Map<String, Object> data = entityService.queryEntityList(entityType, params);
         return R.ok(data);
     }
 }
