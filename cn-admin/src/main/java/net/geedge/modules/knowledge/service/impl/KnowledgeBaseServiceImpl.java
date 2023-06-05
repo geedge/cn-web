@@ -828,10 +828,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                     throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
                 }
                 Map<Integer,String> indexHeader = new HashMap<Integer,String>();
+                boolean ipHandler = false;
                 for (int i = 0; i < rows.size(); i++) {
                     CsvRow csvRow = rows.get(i);
                     Map<String, String> tmpMap = Tool.MapUtil.newHashMap();
-                    boolean ipHandler = false;
                     for (int j = 0; j < headerInfos.size(); j++) {
                         String cellStr = StrUtil.trim(csvRow.get(j));
                         if ((StrUtil.startWith(cellStr, "[") && StrUtil.endWith(cellStr, "]")) ||
@@ -840,6 +840,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                         }
                         if(i==0) {
                         	indexHeader.put(j, cellStr);
+                        	if(StrUtil.equals(cellStr, "addr_format")) {
+	                        	ipHandler = true;
+	                        }
                         }else {
 							Map<String, Object> info = infos.get(j);
 							String valName = indexHeader.get(j);
@@ -862,14 +865,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 									throw new CNException(RCode.IMPORT_ERROR);
 								}
 							}*/
-	                        if(StrUtil.equals(cellStr, "addr_format")) {
-	                        	ipHandler = true;
-	                        }
 	                        tmpMap.put(valName, cellStr);
                         }
                     }
                     // 进行ip1 ip2相关数据内容处理
-                    if(ipHandler) {
+                    if(ipHandler && i>0) {
                     	String addrFormat = tmpMap.get("addr_format");
                     	String ip1 = tmpMap.get("ip1");
                     	String ip2 = tmpMap.get("ip2");
@@ -1038,7 +1038,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				ipAsnBuiltInService.saveBatch(ipAsnBuiltIns);
+				ipAsnBuiltInService.saveBatchForBinary(ipAsnBuiltIns);
 				break;
 			case IP_LOCATION_BUILT_IN:
 				List<IpLocationBuiltIn> ipLocationBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpLocationBuiltIn.class);

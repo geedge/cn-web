@@ -2,11 +2,14 @@ package net.geedge.modules.knowledge.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import cn.hutool.core.util.ObjectUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.modules.knowledge.dao.IpAsnBuiltInDao;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.IpAsnBuiltIn;
+import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 import net.geedge.modules.knowledge.service.IpAsnBuiltInService;
 import org.springframework.stereotype.Service;
 
@@ -33,4 +36,18 @@ public class IpAsnBuiltInServiceImpl extends ServiceImpl<IpAsnBuiltInDao, IpAsnB
     public Map<String, Object> queryEntityDetail(String resource) {
         return this.baseMapper.queryEntityDetail(resource);
     }
+    
+    @Override
+	public void saveBatchForBinary(List<IpAsnBuiltIn> ipAsnBuiltIns) {
+		if(ObjectUtil.isNotEmpty(ipAsnBuiltIns)) {
+			this.baseMapper.insertBatchForBinary(ipAsnBuiltIns);
+		}
+	}
+
+	@Override
+	public void modifyBatchForBinary(List<IpAsnBuiltIn> ipAsnBuiltIns) {
+		if(ObjectUtil.isNotEmpty(ipAsnBuiltIns)) {
+			this.baseMapper.updateBatchForBinary(ipAsnBuiltIns);
+		}
+	}
 }

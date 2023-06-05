@@ -17,14 +17,16 @@ public class IpAsnBuiltIn {
     private Integer asnId;
 
     private Integer addrType;
+    
+    private String addrFormat;
 
-    private String startIp;
+    private String ip1;
 
-    private String endIp;
+    private String ip2;
 
-    private byte[] startIpBinary;
+    private String startIpBinary;
 
-    private byte[] endIpBinary;
+    private String endIpBinary;
 
     private String asn;
 

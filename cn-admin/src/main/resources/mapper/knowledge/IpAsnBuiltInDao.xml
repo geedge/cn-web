@@ -5,10 +5,11 @@
     <resultMap id="IpAsnBuiltIn" type="net.geedge.modules.knowledge.entity.IpAsnBuiltIn">
         <result property="asnId" column="asn_id"></result>
         <result property="addrType" column="addr_type"></result>
-        <result property="startIp" column="start_ip"></result>
-        <result property="endIp" column="end_ip"></result>
+        <result property="ip1" column="ip1"></result>
+        <result property="ip2" column="ip2"></result>
         <result property="startIpBinary" column="start_ip_binary"></result>
         <result property="endIpBinary" column="end_ip_binary"></result>
+        <result property="addrFormat" column="addr_format"></result>
         <result property="asn" column="asn"></result>
         <result property="organization" column="organization"></result>
         <result property="isValid" column="is_valid"></result>
@@ -31,4 +32,45 @@
         where INET6_ATON(#{resource}) between start_ip_binary and end_ip_binary
         limit 1
     </select>
+    
+    <insert id="insertBatchForBinary">
+    	insert into cn_ip_asn_built_in (addr_type,addr_format,ip1,ip2,start_ip_binary,
+    	end_ip_binary,asn,organization,op_user,is_valid,knowledge_id,op_time)
+    	values
+    	<foreach collection="ipAsnBuiltIns" item="ip" separator=",">
+    		(
+    		#{ip.addrType},
+    		#{ip.addrFormat},
+    		#{ip.ip1},
+    		#{ip.ip2},
+    		INET6_ATON(#{ip.startIpBinary}),
+    		INET6_ATON(#{ip.endIpBinary}),
+    		#{ip.asn},
+    		#{ip.organization},
+    		#{ip.opUser},
+    		#{ip.isValid},
+    		#{ip.knowledgeId},
+    		#{ip.opTime}
+    		)
+    	</foreach>
+    </insert>
+    
+    <update id="updateBatchForBinary">
+    	<foreach collection="ipAsnBuiltIns" item="ip" separator=";">
+    	 update cn_ip_asn_built_in  set
+    		addr_type = #{ip.addrType},
+    		addr_format = #{ip.addrFormat},
+            ip1 = #{ip.ip1},
+            ip2 = #{ip.ip2},
+    		start_ip_binary = INET6_ATON(#{ip.startIpBinary}),
+    		end_ip_binary = INET6_ATON(#{ip.endIpBinary}),
+    		asn = #{asn},
+    		organization= #{organization},
+    		op_time = #{ip.opTime},
+    		op_user = #{ip.opUser},
+    		is_valid = #{ip.isValid},
+    		knowledge_id = #{ip.knowledgeId}
+    		where asn_id = #{ip.asnId}
+    	</foreach>
+    </update>
 </mapper>

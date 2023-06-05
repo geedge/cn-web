@@ -1,14 +1,12 @@
 package net.geedge.modules.knowledge.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
-import net.geedge.common.utils.PageUtils;
-import net.geedge.modules.knowledge.entity.AppTagUserDefined;
-import net.geedge.modules.knowledge.entity.IpAsnBuiltIn;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+
+import net.geedge.common.utils.PageUtils;
+import net.geedge.modules.knowledge.entity.IpAsnBuiltIn;
 
 /**
  * @Auther: lijinyang
@@ -19,4 +17,8 @@ public interface IpAsnBuiltInService extends IService<IpAsnBuiltIn> {
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
 
     Map<String, Object> queryEntityDetail(String resource);
+    
+	void modifyBatchForBinary(List<IpAsnBuiltIn> ipAsnBuiltIns);
+
+	void saveBatchForBinary(List<IpAsnBuiltIn> ipAsnBuiltIns);
 }
