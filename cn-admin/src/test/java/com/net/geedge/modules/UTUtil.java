@@ -168,6 +168,22 @@ public class UTUtil extends BaseTest {
         return result;
     }
 
+    public static MvcResult performPacth(String url, Object requestBody) {
+        MvcResult result = null;
+        try {
+            result = mockMvc.perform(
+                    MockMvcRequestBuilders.patch(url)
+                            .header(Authorization, TEST_TOKEN)
+                            .accept(MediaType.APPLICATION_JSON_UTF8)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(JSONObject.toJSONString(requestBody))
+            )
+                    .andReturn();
+        } catch (Exception e) {
+            log.error(e);
+        }
+        return result;
+    }
 
     /**
      * 用于断言接口实际返回 Rcode 是否和 期望Rcode 一致

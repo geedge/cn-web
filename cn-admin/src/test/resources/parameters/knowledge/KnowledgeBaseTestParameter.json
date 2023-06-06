@@ -1,0 +1,115 @@
+{
+  "------------------ GET  /v1/knowledgeBase/statistics data---------------------": "note",
+  "knowledgeBaseStatistics_success": {
+  },
+  "------------------ GET  /v1/knowledgeBase/list data---------------------": "note",
+  "knowledgeBaseList_success": {
+    "category": "websketch,user_defined",
+    "source": "cn_ip_location_built_in,cn_app_tag_user_defined,cn_ip_tag_user_defined,cn_domain_tag_user_defined",
+    "status": [0,1],
+    "pageSize": 10,
+    "pageNo": 1
+  },
+  "------------------ GET  /v1/knowledgeBase/{id} data---------------------": "note",
+  "knowledgeBaseItem_success": {
+    "knowledgeId": 2,
+    "pageSize": 10,
+    "pageNo": 1
+  },
+  "knowledgeBaseItem_notExist": {
+    "knowledgeId": 99,
+    "pageSize": 10,
+    "pageNo": 1
+  },
+  "------------------ PATCH  /v1/knowledgeBase/status data---------------------": "note",
+  "knowledgeBaseStatus_success": {
+    "list": [{
+      "knowledgeId": 2,
+      "isPublished": 1,
+      "status": 1
+    },{
+      "knowledgeId": 3,
+      "isPublished": 1,
+      "status": 1
+    }]
+  },
+  "knowledgeBaseStatus_paramsInvalid": {
+  },
+  "------------------ DELETE  /v1/knowledgeBase data---------------------": "note",
+  "deleteKnowledgeBase_success": {
+    "knowledgeIds": ["1","4"]
+  },
+  "deleteKnowledgeBase_error": {
+  },
+  "------------------ POST  /v1/knowledgeBase data---------------------": "note",
+  "addKnowledgeBase_success": {
+    "name": "dy",
+    "category": "user_defined",
+    "source": "cn_app_tag_user_defined",
+    "type": "app",
+    "status": 1,
+    "addItemList": [
+      {
+        "appName": "dy1",
+        "tagValue": "钓鱼app1",
+        "isValid": 1
+      },
+      {
+        "appName": "dy2",
+        "tagValue": "钓鱼app2",
+        "isValid": 1
+      },
+      {
+        "appName": "dy3",
+        "tagValue": "钓鱼app3",
+        "isValid": 1
+      }
+    ]
+  },
+  "addKnowledgeBase_error": {
+  },
+  "------------------ PUT  /v1/knowledgeBase data---------------------": "note",
+  "modifyKnowledgeBase_success": {
+    "knowledgeId":2,
+    "name":"IP移动网类别",
+    "category":"user_defined",
+    "source":"cn_ip_tag_user_defined",
+    "description":"this is description",
+    "status":1,
+    "updateItemList":[{
+      "id":2,
+      "addrFormat":"Single",
+      "ip1":"192.168.22.1",
+      "ip2":"11",
+      "tagValue":"IP移动网类别1",
+      "user": {
+        "id": 1,
+        "name": "admin"
+      },
+      "isValid":1
+    },
+    {
+      "addrFormat":"Single",
+      "ip1":"192.168.25.1",
+      "ip2":"12",
+      "tagValue":"IP移动网类别2",
+      "user": {
+        "id": 1,
+        "name": "admin"
+      },
+      "isValid":1
+    }],
+    "deleteItemIds": [
+      1,
+      3
+    ]
+  },
+  "modifyKnowledgeBase_idIsNull": {
+  },
+  "------------------ POST  /v1/knowledgeBase/parser data---------------------": "note",
+  "parserKnowledgeBase_success": {
+    "source": "cn_ip_tag_user_defined"
+  },
+  "parserKnowledgeBase_sourceIsNull": {
+  }
+}
