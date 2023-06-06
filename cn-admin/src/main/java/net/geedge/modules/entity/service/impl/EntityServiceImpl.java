@@ -66,6 +66,7 @@ public class EntityServiceImpl implements EntityService {
             data.put("category", category);
         } else if ("domain".equals(entityType)){
             Map<String, Object> whois = fqdnWhoIsBuiltInService.queryEntityDetail(resource);
+            dateToTimestamp(whois);
             Map<String, Object> category = fqdnCategoryBuiltInService.queryEntityDetail(resource);
             data.put("whois", whois);
             data.put("category", category);
@@ -82,6 +83,13 @@ public class EntityServiceImpl implements EntityService {
             data.put("location", location);
         }
         return data;
+    }
+
+    private void dateToTimestamp(Map<String, Object> whois){
+        Date createDate = (Date)whois.get("createDate");
+        Date expireDate = (Date)whois.get("expireDate");
+        whois.put("createDate", createDate.getTime());
+        whois.put("expireDate", expireDate.getTime());
     }
 
     private String toIpNumber(String resource) throws Exception{
