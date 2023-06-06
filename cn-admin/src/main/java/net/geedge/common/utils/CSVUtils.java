@@ -25,7 +25,7 @@ public class CSVUtils {
         try {
             FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), tempCsvFile);
             //data = reader.read(tempCsvFile);
-            data = reader.read(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetUtil.CHARSET_UTF_8));
+            data = reader.read(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetUtil.CHARSET_GBK));
         } catch (IOException e) {
             logger.error(e);
         } finally {
@@ -44,6 +44,8 @@ public class CSVUtils {
                     return false;
                 }
             }
+    	}else {
+    		return false;
     	}
         return true;
     }

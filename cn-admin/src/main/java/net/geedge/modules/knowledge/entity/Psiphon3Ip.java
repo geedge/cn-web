@@ -21,9 +21,9 @@ public class Psiphon3Ip {
     private String ip1;
     private String ip2;
 
-    private byte[] startIpBinary;
+    private String startIpBinary;
 
-    private byte[] endIpBinary;
+    private String endIpBinary;
 
     private Date opTime;
 

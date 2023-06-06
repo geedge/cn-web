@@ -18,9 +18,9 @@ public class InternalIpBuiltIn {
 	
 	private String ip2;
 	
-	private byte[] startIpBinary;
+	private String startIpBinary;
 	
-	private byte[] endIpBinary;
+	private String endIpBinary;
 		
 	private Integer knowledgeId;
 }

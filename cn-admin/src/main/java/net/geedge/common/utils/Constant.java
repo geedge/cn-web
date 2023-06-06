@@ -236,7 +236,7 @@ public class Constant {
 	public static final String FQDN_WHO_IS_BUILT_IN = "cn_fqdn_who_is_built_in";
 	public static final String FQDN_CATEGORY_BUILT_IN = "cn_fqdn_category_built_in";
 	public static final String IP_ASN_BUILT_IN  = "cn_ip_asn_built_in";
-	public static final String IP_LOCATION_BUILT_IN  = "cn_ip_location_built_in  ";
+	public static final String IP_LOCATION_BUILT_IN  = "cn_ip_location_built_in";
 	public static final String PSIPHON3_IP = "cn_psiphon3_ip";
 	public static final String IDC_RENTER_BUILT_IN = "cn_idc_renter_built_in";
 	public static final String INTERNAL_IP_BUILT_IN = "cn_internal_ip_built_in";

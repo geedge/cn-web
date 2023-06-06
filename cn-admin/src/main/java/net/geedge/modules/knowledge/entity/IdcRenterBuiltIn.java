@@ -17,9 +17,9 @@ public class IdcRenterBuiltIn {
 	
 	private String ip2;
 	
-	private byte[] startIpBinary;
+	private String startIpBinary;
 	
-	private byte[] endIpBinary;
+	private String endIpBinary;
 	
 	private String idcRenter;
 	
