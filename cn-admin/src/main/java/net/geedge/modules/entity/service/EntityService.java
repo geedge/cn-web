@@ -1,6 +1,8 @@
 package net.geedge.modules.entity.service;
 
 
+import net.geedge.common.utils.R;
+
 import java.util.Map;
 
 /**
@@ -9,9 +11,9 @@ import java.util.Map;
  */
 public interface EntityService {
 
-    Map<String, Object> queryEntityDetail(String entityType, String resource);
+    R queryEntityDetail(String entityType, String resource);
 
-    Map<String, Object> queryEntityTag(String entityType, String resource);
+    R queryEntityTag(String entityType, String resource);
 
-    Map<String, Object> queryEntityList(String entityType, Map<String,Object> params);
+    R queryEntityList(String entityType, Map<String,Object> params);
 }

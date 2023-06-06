@@ -1,10 +1,10 @@
 package net.geedge.modules.entity.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.net.InetAddresses;
-import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.*;
 import net.geedge.modules.entity.service.EntityService;
 import net.geedge.modules.knowledge.service.*;
@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -59,7 +57,7 @@ public class EntityServiceImpl implements EntityService {
     private DomainTagUserDefinedService domainTagUserDefinedService;
 
     @Override
-    public Map<String, Object> queryEntityDetail(String entityType, String resource) {
+    public R queryEntityDetail(String entityType, String resource) {
         Map<String, Object> data = new HashMap<>();
         if ("app".equals(entityType)){
             Map<String, Object> category = appCategoryBuiltInService.queryEntityDetail(resource);
@@ -76,20 +74,22 @@ public class EntityServiceImpl implements EntityService {
             try {
                 ipNumber = toIpNumber(resource);
             } catch (Exception e) {
-                return R.error(400,e.getMessage());
+                return R.error(400,"ip "+e.getMessage()+"is not ipv4 or ipv6");
             }
             Map<String, Object> location = ipLocationBuiltInService.queryEntityDetail(ipNumber);
             data.put("asn", asn);
             data.put("location", location);
         }
-        return data;
+        return R.ok(data);
     }
 
     private void dateToTimestamp(Map<String, Object> whois){
-        Date createDate = (Date)whois.get("createDate");
-        Date expireDate = (Date)whois.get("expireDate");
-        whois.put("createDate", createDate.getTime());
-        whois.put("expireDate", expireDate.getTime());
+        if (ObjectUtil.isNotEmpty(whois) && ObjectUtil.isNotEmpty(whois.get("createDate")) && ObjectUtil.isNotEmpty(whois.get("expireDate"))) {
+            Date createDate = (Date)whois.get("createDate");
+            Date expireDate = (Date)whois.get("expireDate");
+            whois.put("createDate", createDate.getTime());
+            whois.put("expireDate", expireDate.getTime());
+        }
     }
 
     private String toIpNumber(String resource) throws Exception{
@@ -99,7 +99,7 @@ public class EntityServiceImpl implements EntityService {
     }
 
     @Override
-    public Map<String, Object> queryEntityTag(String entityType, String resource) {
+    public R queryEntityTag(String entityType, String resource) {
         Map<String, Object> data = new HashMap<>();
         if ("app".equals(entityType)){
             List<Map> userDefinedTags = appTagUserDefinedService.queryAppEntityTag(resource);
@@ -121,22 +121,22 @@ public class EntityServiceImpl implements EntityService {
             data.put("psiphon3Ip", psiphon3Ip);
             data.put("userDefinedTags", userDefinedTags);
         }
-        return data;
+        return R.ok(data);
     }
 
     @Override
-    public Map<String, Object> queryEntityList(String entityType, Map<String, Object> params){
+    public R queryEntityList(String entityType, Map<String, Object> params){
         String resource = (String)params.get("resource");
         int pageNo = Integer.parseInt((String) params.get("pageNo"));
         int pageSize = Integer.parseInt((String) params.get("pageSize"));
         List<Map<String,Object>> entityList = createEntityList(entityType, resource);
         IPage page = listToPage(entityList, pageNo, pageSize);
         PageUtils pageUtils = new PageUtils(page);
-        Map<String, Object> data = JSONUtil.parseObj(JSONUtil.toJsonStr(pageUtils));
+        Map<String, Object> data = JSONObject.parseObject(JSONObject.toJSONString(pageUtils));
         data.put("resultType", "table");
         data.put("result", pageUtils.getList());
         data.remove("list");
-        return data;
+        return R.ok(data);
     }
 
     private IPage listToPage(List<Map<String,Object>> list, int pageNo, int pageSize){
@@ -217,12 +217,15 @@ public class EntityServiceImpl implements EntityService {
     }
 
     private void sortByUpdateTime(List<Map<String,Object>> entityList) {
-        entityList.sort(Comparator.comparing(obj -> {
-                    Map.Entry<String, Object> next = obj.entrySet().iterator().next();
-                    Map<String,Object> value = (Map)next.getValue();
-                    Long updateTime = (Long)value.get("updateTime");
-                    return 0-updateTime;
-                }));
+        entityList.sort(Comparator.nullsLast(Comparator.comparing(obj -> {
+            Map.Entry<String, Object> next = obj.entrySet().iterator().next();
+            Map<String,Object> value = (Map)next.getValue();
+            Long updateTime = 0L;
+            if(ObjectUtil.isNotEmpty(value.get("updateTime"))) {
+                updateTime = (Long) value.get("updateTime");
+            }
+            return 0-updateTime;
+        })));
     }
 
     private void mapChangeTimestamp(Map<String,Object> tagMap) {
@@ -230,14 +233,16 @@ public class EntityServiceImpl implements EntityService {
             Map.Entry<String, Object> next = tagMap.entrySet().iterator().next();
             if (ObjectUtil.isNotEmpty(next.getValue())) {
                 Map<String, Object> value = (Map)next.getValue();
-                if (value.get("updateTime") instanceof Date) {
-                    Date updateTime = (Date) value.get("updateTime");
-                    Date createTime = (Date) value.get("createTime");
-                    value.put("updateTime", updateTime.getTime() / 1000);
-                    value.put("createTime", createTime.getTime() / 1000);
-                } else {
-                    value.put("updateTime", value.get("updateTime"));
-                    value.put("createTime", value.get("createTime"));
+                if(ObjectUtil.isNotEmpty(value.get("updateTime")) && ObjectUtil.isNotEmpty(value.get("createTime"))) {
+                    if (value.get("updateTime") instanceof Date) {
+                        Date updateTime = (Date) value.get("updateTime");
+                        Date createTime = (Date) value.get("createTime");
+                        value.put("updateTime", updateTime.getTime() / 1000);
+                        value.put("createTime", createTime.getTime() / 1000);
+                    } else {
+                        value.put("updateTime", value.get("updateTime"));
+                        value.put("createTime", value.get("createTime"));
+                    }
                 }
                 tagMap.put(next.getKey(),value);
             }
@@ -247,7 +252,7 @@ public class EntityServiceImpl implements EntityService {
     private List<Map> listChangeTimestamp(List<Map> tagsList) {
         List<Map> newList = new ArrayList<>();
         for (Map tagMap: tagsList) {
-            if (ObjectUtil.isNotEmpty(tagMap)) {
+            if (ObjectUtil.isNotEmpty(tagMap) && ObjectUtil.isNotEmpty(tagMap.get("updateTime")) && ObjectUtil.isNotEmpty(tagMap.get("createTime"))) {
                 Date updateTime = (Date) tagMap.get("updateTime");
                 Date createTime = (Date) tagMap.get("createTime");
                 tagMap.put("updateTime", updateTime.getTime()/1000);

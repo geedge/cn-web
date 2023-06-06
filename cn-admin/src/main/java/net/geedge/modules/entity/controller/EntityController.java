@@ -27,15 +27,13 @@ public class EntityController {
     @RequestMapping("/basic/{entityType}")
     public R queryEntityDetail(@PathVariable(value = "entityType") String entityType, @Param("resource")String resource) {
         ValidateUtils.is(resource).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
-        Map<String, Object> data = entityService.queryEntityDetail(entityType, resource);
-        return R.ok(data);
+        return entityService.queryEntityDetail(entityType, resource);
     }
 
     @RequestMapping("/kb/intelligence/tag/{entityType}")
     public R queryEntityTag(@PathVariable(value = "entityType") String entityType, @Param("resource")String resource) {
         ValidateUtils.is(resource).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
-        Map<String, Object> data = entityService.queryEntityTag(entityType, resource);
-        return R.ok(data);
+        return entityService.queryEntityTag(entityType, resource);
     }
 
     @RequestMapping("/kb/intelligence/list/{entityType}")
@@ -43,7 +41,6 @@ public class EntityController {
         ValidateUtils.is(params.get("resource")).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
         ValidateUtils.is(params.get("pageNo")).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
         ValidateUtils.is(params.get("pageSize")).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
-        Map<String, Object> data = entityService.queryEntityList(entityType, params);
-        return R.ok(data);
+        return entityService.queryEntityList(entityType, params);
     }
 }
