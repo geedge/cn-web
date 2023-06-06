@@ -44,8 +44,8 @@
                 </foreach>
             </if>
         </where>
-        <if test="params.orderBy == null or params.orderBy == ''">
-            ORDER BY knowledge_id desc
+        <if test="params.orderBy != null and params.orderBy != ''">
+            ORDER BY ${params.orderBy}
         </if>
     </select>
 

@@ -39,8 +39,6 @@ public class EntityController {
     @RequestMapping("/kb/intelligence/list/{entityType}")
     public R queryEntityList(@PathVariable(value = "entityType") String entityType, @RequestParam Map<String, Object> params) {
         ValidateUtils.is(params.get("resource")).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
-        ValidateUtils.is(params.get("pageNo")).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
-        ValidateUtils.is(params.get("pageSize")).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
         return entityService.queryEntityList(entityType, params);
     }
 }

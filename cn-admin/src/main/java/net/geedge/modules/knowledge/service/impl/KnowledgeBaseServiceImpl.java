@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSONArray;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -269,8 +270,19 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		preHandleParams(params);
 		IPage page = this.page(new Query(KnowledgeBase.class).getPage(params));
 		List<KnowledgeBase> knowledgeBases = this.baseMapper.queryPage(page, params);
-		page.setRecords(knowledgeBases);
+		List<Map<String, Object>> list = knowledgeBaseToMap(knowledgeBases);
+		list.stream().forEach(m -> mapDateToTimestamp(m));
+		page.setRecords(list);
 		return new PageUtils(page);
+	}
+
+	private List<Map<String, Object>> knowledgeBaseToMap(List<KnowledgeBase> knowledgeBases) {
+		List<Map<String, Object>> list = new ArrayList<>();
+		for (KnowledgeBase knowledgeBase: knowledgeBases) {
+			Map<String, Object> knowledgeMap = JSONObject.parseObject(JSONObject.toJSONString(knowledgeBase));
+			list.add(knowledgeMap);
+		}
+		return list;
 	}
 
 	@Override
@@ -458,11 +470,23 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	private Map<String, Object> addKnowledgeBaseMessage(PageUtils pageUtils, KnowledgeBase knowledgeBase){
 		Map<String, Object> pageMap = JSONUtil.parseObj(JSONUtil.toJsonStr(pageUtils));
 		Map<String, Object> knowledge = JSONUtil.parseObj(JSONUtil.toJsonStr(knowledgeBase));
+		mapDateToTimestamp(knowledge);
 		pageMap.putAll(knowledge);
 		return pageMap;
 	}
 
+	private void mapDateToTimestamp(Map<String, Object> map) {
+		if (ObjectUtil.isNotEmpty(map.get("opTime"))) {
+			map.put("opTime", (Long)map.get("opTime")/1000);
+		}
+		if (ObjectUtil.isNotEmpty(map.get("cTime"))) {
+			map.put("cTime", (Long)map.get("cTime")/1000);
+		}
+	}
+
 	private Map<String, Object> updateItemList(Map<String, Object> pageMap) {
+		List<Map<String, Object>> list = (List<Map<String, Object>>)pageMap.get("list");
+		list.stream().forEach(m -> mapDateToTimestamp(m));
 		pageMap.put("itemList",pageMap.get("list"));
 		pageMap.remove("list");
 		return pageMap;
