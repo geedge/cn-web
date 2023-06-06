@@ -233,6 +233,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		        	}else {
 		        		ipType = Constant.IpFormatType.SINGLE.getValue();
 		        		ip1 = s;
+		        		ip2 = s;
 		        	}
 		        	res.put("addrFormat",ipType);
 		        	res.put("ip1", ip1);
