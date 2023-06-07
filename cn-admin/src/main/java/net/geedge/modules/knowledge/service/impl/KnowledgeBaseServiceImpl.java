@@ -187,7 +187,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		try{
 			tempFile = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".csv");
 			FileUtils.copyInputStreamToFile(file.getInputStream(),tempFile);
-			CsvData datas = CsvUtil.getReader().read(ResourceUtil.getReader(tempFile.getPath(), CharsetUtil.CHARSET_GBK));
+			CsvData datas = CsvUtil.getReader().read(ResourceUtil.getReader(tempFile.getPath(), CharsetUtil.CHARSET_UTF_8));
 			
 			Map<String,Object> result = new HashMap<String,Object>();
 			List<Map<String,Object>> handlerData = new ArrayList<Map<String,Object>>();
