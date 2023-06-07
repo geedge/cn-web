@@ -27,7 +27,7 @@ public class IpTagUserDefinedServiceImpl extends ServiceImpl<IpTagUserDefinedDao
     public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
         IPage page = this.page(new Query(IpTagUserDefined.class).getPage(params));
         List<IpTagUserDefined> ipTagUserDefineds = this.baseMapper.queryPageByKnowledgeId(page, params);
-        ipTagUserDefineds.forEach(ip -> {ip.setStartIpBinary(new byte[]{}); ip.setEndIpBinary(new byte[]{});});
+        ipTagUserDefineds.forEach(ip -> {ip.setStartIpBinary(""); ip.setEndIpBinary("");});
         page.setRecords(ipTagUserDefineds);
         return new PageUtils(page);
     }

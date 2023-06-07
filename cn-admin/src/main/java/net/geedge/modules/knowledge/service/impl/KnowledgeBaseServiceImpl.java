@@ -638,12 +638,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					ipTagUserDefined.setTagValue(tagValue);
 					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
 						ipTagUserDefined.setIp2(ip1);
-						ipTagUserDefined.setStartIpBinary(ip1.getBytes());
-						ipTagUserDefined.setEndIpBinary(ip1.getBytes());
+						ipTagUserDefined.setStartIpBinary(ip1);
+						ipTagUserDefined.setEndIpBinary(ip1);
 					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
 						ipTagUserDefined.setIp2(ip2);
-						ipTagUserDefined.setStartIpBinary(ip1.getBytes());
-						ipTagUserDefined.setEndIpBinary(ip2.getBytes());
+						ipTagUserDefined.setStartIpBinary(ip1);
+						ipTagUserDefined.setEndIpBinary(ip2);
 					}else {
 						ipTagUserDefined.setIp2(ip2);
 						boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
@@ -659,8 +659,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 							startIp = ipsStartEnd.get("startIpStr");
 							endIp = ipsStartEnd.get("endIpStr");
 						}
-						ipTagUserDefined.setStartIpBinary(startIp.getBytes());
-						ipTagUserDefined.setEndIpBinary(endIp.getBytes());
+						ipTagUserDefined.setStartIpBinary(startIp);
+						ipTagUserDefined.setEndIpBinary(endIp);
 					}
 					ipTagUserDefineds.add(ipTagUserDefined);
 				}

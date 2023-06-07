@@ -20,9 +20,9 @@ public class IpTagUserDefined {
 
     private String tagValue;
 
-    private byte[] startIpBinary;
+    private String startIpBinary;
 
-    private byte[] endIpBinary;
+    private String endIpBinary;
 
     private Date opTime;
 
