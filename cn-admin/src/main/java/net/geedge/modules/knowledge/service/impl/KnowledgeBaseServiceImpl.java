@@ -352,6 +352,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		if (ObjectUtil.isNotEmpty(params.get("status"))) {
 			params.put("status", Arrays.asList(String.valueOf(params.get("status")).split(StringPool.COMMA)));
 		}
+		if (ObjectUtil.isNotEmpty(params.get("orderBy"))) {
+			params.put("orderBy", StrUtil.toUnderlineCase((String)params.get("orderBy")));
+		}
 	}
 
 	private Map<String,Object> statisticsCategory(List<KnowledgeBase> knowledgeBases, String category) {

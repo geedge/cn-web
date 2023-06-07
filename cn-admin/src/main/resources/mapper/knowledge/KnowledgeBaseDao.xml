@@ -44,9 +44,14 @@
                 </foreach>
             </if>
         </where>
-        <if test="params.orderBy != null and params.orderBy != ''">
-            ORDER BY ${params.orderBy}
-        </if>
+        <choose>
+            <when test="params.orderBy != null and params.orderBy != ''">
+                ORDER BY ${params.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY knowledge_id desc
+            </otherwise>
+        </choose>
     </select>
 
     <select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
