@@ -3,7 +3,7 @@
 <mapper namespace="net.geedge.modules.knowledge.dao.IpAsnBuiltInDao">
 
     <resultMap id="IpAsnBuiltIn" type="net.geedge.modules.knowledge.entity.IpAsnBuiltIn">
-        <result property="asnId" column="asn_id"></result>
+        <result property="id" column="asn_id"></result>
         <result property="addrType" column="addr_type"></result>
         <result property="ip1" column="ip1"></result>
         <result property="ip2" column="ip2"></result>

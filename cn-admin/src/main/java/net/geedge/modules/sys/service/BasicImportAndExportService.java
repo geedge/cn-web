@@ -5,7 +5,9 @@ import java.util.Map;
 
 public interface BasicImportAndExportService {
 	
-	List queryList(String tableName,Map<String,String> columnVal);
+	Long queryDataId(String tableName,Map<String,String> columnVal,Integer knowledgeId);
 	
 	void removeList(String tableName,List<Integer> deleteIds);
+	
+	void removeList(String tableName,Integer knowledgeId);
 }

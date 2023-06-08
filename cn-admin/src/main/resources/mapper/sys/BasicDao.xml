@@ -3,10 +3,10 @@
 <mapper namespace="net.geedge.modules.sys.dao.BasicImportAndExportDao">
 
     <!--执行自定义SQL将返回结果保存到Map中-->
-    <select id="selectList" resultType="java.util.Map">
-        SELECT * FROM ${tableName} WHERE 
-		<foreach collection="params.keys" item="key" separator="and">
-			#{key} = #{params[key]}
+    <select id="selectDataId" resultType="java.lang.Long">
+        SELECT id FROM ${tableName} WHERE knowledge_id = #{knowledgeId} and
+		<foreach collection="params.entrySet()" item="value" index="key" separator="and">
+			${key} = #{value}
 		</foreach>
     </select>
 
@@ -15,5 +15,9 @@
 		<foreach collection="deleteIds" item="id" separator="," open="(" close=")" >
 			#{id}
 		</foreach>
+	</delete>
+	
+	<delete id="deleteListByKnowledgeId">
+		delete from ${tableName} where knowledge_id = #{knowledgeId}
 	</delete>
 </mapper>

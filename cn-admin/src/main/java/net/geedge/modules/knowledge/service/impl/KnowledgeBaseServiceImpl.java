@@ -352,6 +352,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		if (ObjectUtil.isNotEmpty(params.get("status"))) {
 			params.put("status", Arrays.asList(String.valueOf(params.get("status")).split(StringPool.COMMA)));
 		}
+		if (ObjectUtil.isNotEmpty(params.get("orderBy"))) {
+			params.put("orderBy", StrUtil.toUnderlineCase((String)params.get("orderBy")));
+		}
 	}
 
 	private Map<String,Object> statisticsCategory(List<KnowledgeBase> knowledgeBases, String category) {
@@ -416,7 +419,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		validateKnowledgeBase(knowledgeBase);
 		String source = knowledgeBase.getSource();
 		PageUtils pageUtils = createItemPages(source, params);
-		validateKnowledgeBaseItem(pageUtils);
 		Map<String, Object> pageMap = addKnowledgeBaseMessage(pageUtils, knowledgeBase);
 		pageMap = updateItemList(pageMap);
 		return pageMap;
@@ -495,12 +497,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	private void validateKnowledgeBase(KnowledgeBase knowledgeBase) {
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
-		}
-	}
-
-	private void validateKnowledgeBaseItem(PageUtils pageUtils) {
-		if(ObjectUtil.isEmpty(pageUtils) || ObjectUtil.isEmpty(pageUtils.getList())) {
-			throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
 		}
 	}
 
@@ -835,6 +831,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@Override
 	public List<Map<String, String>> getImportDataFromMultipartFile(
 			MultipartFile file, List<String> headerInfos,Map<String,Object> params) {
+		KnowledgeBase knowledgeBase = (KnowledgeBase) params.get("knowledgeBase");
 		String fileType = FilenameUtils.getExtension(file.getOriginalFilename());
 		String source = (String) params.get("source");
 		String action = (String) params.get("action");
@@ -847,7 +844,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		String validateColumn = (String)sourceConfig.get("validateColumn");
         List<Map<String, String>> importDataList = new ArrayList<>();
-        List<Integer> deleteIds = new ArrayList<Integer>();
         switch (fileType) {
             case "csv": {
                 CsvData csvData = CSVUtils.getCsvDataFromMultipartFile(file);
@@ -895,6 +891,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 								log.error("knowledgeBase import data error , line is {},columnName is {}",i,valName);
 								throw new CNException(RCode.IMPORT_ERROR);
 							}
+						}else if(StrUtil.equals(checkType, "notNull")) {
+							if(ObjectUtil.isEmpty(cellStr)) {
+								log.error("knowledgeBase import data error , line is {},columnName is {}",i,valName);
+								throw new CNException(RCode.IMPORT_ERROR);
+							}
 						}
                         tmpMap.put(valName, cellStr);
                     }
@@ -907,14 +908,23 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                     	tmpMap.putAll(ipHandlerResult);
                     }
                     // 根据配置校验数据是否重复
-                    List<String> validateColumns = StrUtil.split(validateColumn, StrUtil.C_COMMA);
+                	List<String> validateColumns = StrUtil.split(validateColumn, StrUtil.C_COMMA);
+                	if(ObjectUtil.isEmpty(validateColumns)) {
+                		throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_NOTNULL);
+                	}
                     HashMap<String, String> checkDataMap = Tool.MapUtil.newHashMap();
                     for(String validateCol : validateColumns) {
                     	checkDataMap.put(validateCol, tmpMap.get(validateCol));
                     }
-                    List<Map> dbData = basicImportAndExportService.queryList(source, checkDataMap);
+                    Long dbDataId = basicImportAndExportService.queryDataId(source, checkDataMap,knowledgeBase.getKnowledgeId());
+                    if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "update")) {
+                    	tmpMap.put("id", dbDataId.toString());
+                    }else if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "append")){
+                    	throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
+                    }
+                    // 覆盖操作 将对应表中数据删除清空
                     if(StrUtil.equals(action, "overwrite")) {
-                    	dbData.stream().forEach(d->deleteIds.add((Integer)d.get("id")));
+                    	basicImportAndExportService.removeList(source, knowledgeBase.getKnowledgeId());
                     }
                     if(ObjectUtil.isNotEmpty(tmpMap)) {
                     	importDataList.add(tmpMap);
@@ -925,9 +935,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
             default: {
                 throw new CNException(RCode.EXCELFILE_TYPE_ERROR);
             }
-        }
-        if(ObjectUtil.isNotEmpty(deleteIds)) {
-        	basicImportAndExportService.removeList(source,deleteIds);
         }
         return importDataList;
 	}
@@ -945,7 +952,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				ipTagUserDefinedService.saveBatchForBinary(ipTagUserDefineds);
+				Map<Boolean, List<IpTagUserDefined>> ipTagUserDefinedMap = ipTagUserDefineds.stream().collect(Collectors.groupingBy(ipTagUserDefined-> ObjectUtil.isNotEmpty(ipTagUserDefined.getId())));
+				List<IpTagUserDefined> updateIps = ipTagUserDefinedMap.get(true);
+				List<IpTagUserDefined> insertIps = ipTagUserDefinedMap.get(false);
+				ipTagUserDefinedService.saveBatchForBinary(insertIps);
+				ipTagUserDefinedService.modifyBatchForBinary(updateIps);
 				break;
 			case APP_TAG_USER_DEFINED:
 				List<AppTagUserDefined> appTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),AppTagUserDefined.class);
@@ -955,7 +966,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				appTagUserDefinedService.saveBatch(appTagUserDefineds);
+				appTagUserDefinedService.saveOrUpdateBatch(appTagUserDefineds);
 				break;
 			case DOMAIN_TAG_USER_DEFINED:
 				List<DomainTagUserDefined> domainTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),DomainTagUserDefined.class);
@@ -965,7 +976,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				domainTagUserDefinedService.saveBatch(domainTagUserDefineds);
+				domainTagUserDefinedService.saveOrUpdateBatch(domainTagUserDefineds);
 				break;
 			case IOC_DARKWEB:
 				List<IocDarkweb> iocDarkwebs = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IocDarkweb.class);
@@ -974,7 +985,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setUpdateTime(new Date().getTime());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				iocDarkwebService.saveBatch(iocDarkwebs);
+				iocDarkwebService.saveOrUpdateBatch(iocDarkwebs);
 				break;
 			case IOC_MALWARE:
 				List<IocMalware> iocMalwares = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IocMalware.class);
@@ -983,7 +994,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setUpdateTime(new Date().getTime());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				iocMalwareService.saveBatch(iocMalwares);
+				iocMalwareService.saveOrUpdateBatch(iocMalwares);
 				break;
 			case APP_CATEGORY_BUILT_IN:
 				List<AppCategoryBuiltIn> appCategoryBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),AppCategoryBuiltIn.class);
@@ -993,7 +1004,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				appCategoryBuiltInService.saveBatch(appCategoryBuiltIns);
+				appCategoryBuiltInService.saveOrUpdateBatch(appCategoryBuiltIns);
 				break;
 			case FQDN_ICP_BUILT_IN:
 				List<FqdnIcpBuiltIn> fqdnIcpBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),FqdnIcpBuiltIn.class);
@@ -1002,7 +1013,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setUpdateTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				fqdnIcpBuiltInService.saveBatch(fqdnIcpBuiltIns);
+				fqdnIcpBuiltInService.saveOrUpdateBatch(fqdnIcpBuiltIns);
 				break;
 			case FQDN_WHO_IS_BUILT_IN:
 				List<FqdnWhoIsBuiltIn> fqdnWhoIsBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),FqdnWhoIsBuiltIn.class);
@@ -1011,7 +1022,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setUpdateTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				fqdnWhoIsBuiltInService.saveBatch(fqdnWhoIsBuiltIns);
+				fqdnWhoIsBuiltInService.saveOrUpdateBatch(fqdnWhoIsBuiltIns);
 				break;
 			case FQDN_CATEGORY_BUILT_IN:
 				List<FqdnCategoryBuiltIn> fqdnCategoryBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),FqdnCategoryBuiltIn.class);
@@ -1020,7 +1031,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setUpdateTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				fqdnCategoryBuiltInService.saveBatch(fqdnCategoryBuiltIns);
+				fqdnCategoryBuiltInService.saveOrUpdateBatch(fqdnCategoryBuiltIns);
 				break;
 			case IP_ASN_BUILT_IN:
 				List<IpAsnBuiltIn> ipAsnBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpAsnBuiltIn.class);
@@ -1029,7 +1040,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				ipAsnBuiltInService.saveBatchForBinary(ipAsnBuiltIns);
+				Map<Boolean, List<IpAsnBuiltIn>> ipAsnBuiltInMap = ipAsnBuiltIns.stream().collect(Collectors.groupingBy(ipAsnBuiltIn-> ObjectUtil.isNotEmpty(ipAsnBuiltIn.getId())));
+				List<IpAsnBuiltIn> updateIpAsnBuiltIns = ipAsnBuiltInMap.get(true);
+				List<IpAsnBuiltIn> insertIpAsnBuiltIns = ipAsnBuiltInMap.get(false);
+				ipAsnBuiltInService.saveBatchForBinary(insertIpAsnBuiltIns);
+				ipAsnBuiltInService.modifyBatchForBinary(updateIpAsnBuiltIns);
 				break;
 			case IP_LOCATION_BUILT_IN:
 				List<IpLocationBuiltIn> ipLocationBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpLocationBuiltIn.class);
@@ -1038,7 +1053,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				ipLocationBuiltInService.saveBatch(ipLocationBuiltIns);
+				ipLocationBuiltInService.saveOrUpdateBatch(ipLocationBuiltIns);
 				break;
 			case PSIPHON3_IP:
 				List<Psiphon3Ip> psiphon3Ips = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),Psiphon3Ip.class);
@@ -1048,28 +1063,40 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				psiphon3IpService.saveBatchForBinary(psiphon3Ips);
+				Map<Boolean, List<Psiphon3Ip>> psiphon3IpMap = psiphon3Ips.stream().collect(Collectors.groupingBy(psiphon3Ip-> ObjectUtil.isNotEmpty(psiphon3Ip.getId())));
+				List<Psiphon3Ip> updatePsiphon3Ips = psiphon3IpMap.get(true);
+				List<Psiphon3Ip> insertPsiphon3Ips = psiphon3IpMap.get(false);
+				psiphon3IpService.saveBatchForBinary(insertPsiphon3Ips);
+				psiphon3IpService.modifyBatchForBinary(updatePsiphon3Ips);
 				break;
 			case IDC_RENTER_BUILT_IN:
 				List<IdcRenterBuiltIn> idcRenterBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IdcRenterBuiltIn.class);
 				idcRenterBuiltIns.stream().forEach(data->{
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				idcRenterBuiltInService.saveBatchForBinary(idcRenterBuiltIns);
+				Map<Boolean, List<IdcRenterBuiltIn>> idcRenterBuiltInMap = idcRenterBuiltIns.stream().collect(Collectors.groupingBy(idcRenterBuiltIn-> ObjectUtil.isNotEmpty(idcRenterBuiltIn.getId())));
+				List<IdcRenterBuiltIn> updateIdcRenterBuiltIns = idcRenterBuiltInMap.get(true);
+				List<IdcRenterBuiltIn> insertIdcRenterBuiltIns = idcRenterBuiltInMap.get(false);
+				idcRenterBuiltInService.saveBatchForBinary(insertIdcRenterBuiltIns);
+				idcRenterBuiltInService.modifyBatchForBinary(updateIdcRenterBuiltIns);
 				break;
 			case INTERNAL_IP_BUILT_IN:
 				List<InternalIpBuiltIn> internalIpBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),InternalIpBuiltIn.class);
 				internalIpBuiltIns.stream().forEach(data->{
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				internalIpBuiltInService.saveBatchForBinary(internalIpBuiltIns);
+				Map<Boolean, List<InternalIpBuiltIn>> internalIpBuiltInMap = internalIpBuiltIns.stream().collect(Collectors.groupingBy(internalIpBuiltIn-> ObjectUtil.isNotEmpty(internalIpBuiltIn.getId())));
+				List<InternalIpBuiltIn> updateInternalIpBuiltIns = internalIpBuiltInMap.get(true);
+				List<InternalIpBuiltIn> insertInternalIpBuiltIns = internalIpBuiltInMap.get(false);
+				internalIpBuiltInService.saveBatchForBinary(insertInternalIpBuiltIns);
+				internalIpBuiltInService.modifyBatchForBinary(updateInternalIpBuiltIns);
 				break;
 			case LINK_DIRECTION_BUILT_IN:
 				List<LinkDirectionBuiltIn> linkDirectionBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),LinkDirectionBuiltIn.class);
 				linkDirectionBuiltIns.stream().forEach(data->{
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				linkDirectionBuiltInService.saveBatch(linkDirectionBuiltIns);
+				linkDirectionBuiltInService.saveOrUpdateBatch(linkDirectionBuiltIns);
 				break;
 			case DNS_SERVER_INFO_BUILT_IN:
 				List<DnsServerInfoBuiltIn> dnsServerInfoBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),DnsServerInfoBuiltIn.class);
@@ -1078,7 +1105,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setUpdateTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				dnsServerInfoBuiltInService.saveBatch(dnsServerInfoBuiltIns);
+				dnsServerInfoBuiltInService.saveOrUpdateBatch(dnsServerInfoBuiltIns);
 				break;
 			default:{
 				throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);
@@ -1116,7 +1143,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
     		result.put("start_ip_binary",ip1);
     		result.put("end_ip_binary",ip1);
 		}else if(StrUtil.equals(ipFormat, Constant.IpFormatType.RANGE.getValue())){
-			validIpFormat = KnowledgeCheckUtil.validIpFormat(ip2);
+			validIpFormat = KnowledgeCheckUtil.validIpFormat(ip1+"-"+ip2);
         	if(!validIpFormat) {
         		throw new CNException(RCode.IMPORT_ERROR);
         	}

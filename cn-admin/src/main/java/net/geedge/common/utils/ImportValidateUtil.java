@@ -88,9 +88,9 @@ public class ImportValidateUtil {
      * 校验传入参数是否重复
      *
      * @return
-     */
+     
     public boolean validateIndexDuplicate(String tableName, Map<String,String> columnVal, int lineNum, int headerIndex) {
-        List list = basicImportAndExportService.queryList(tableName, columnVal);
+        List list = basicImportAndExportService.queryDataId(tableName, columnVal);
 
         if (Tool.CollectionUtil.isNotEmpty(list) && !StrUtil.equals("1", existed)) {
             String header = headerInfos.get(headerIndex);
@@ -98,7 +98,7 @@ public class ImportValidateUtil {
             return true;
         }
         return false;
-    }
+    }*/
 
     /**
      * 校验出入参数是否在允许范围内
