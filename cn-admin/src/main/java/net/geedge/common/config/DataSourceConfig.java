@@ -45,7 +45,7 @@ public class DataSourceConfig {
 	 */
 	@Value("${spring.datasource.druid.driver-class-name:com.mysql.jdbc.Driver}")
 	private String driver;
-	@Value("${spring.datasource.druid.url-pattern:jdbc:mysql://{{host}}:{{port}}/{{dbName}}?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false}")
+	@Value("${spring.datasource.druid.url-pattern:jdbc:mysql://{{host}}:{{port}}/{{dbName}}?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&zeroDateTimeBehavior=convertToNull}")
 	private String urlPattern;
 	@Value("${spring.datasource.druid.initial-size:10}")
 	private int initialSize;
