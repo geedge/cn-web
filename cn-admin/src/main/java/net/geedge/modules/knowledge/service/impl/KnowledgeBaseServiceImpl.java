@@ -419,7 +419,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		validateKnowledgeBase(knowledgeBase);
 		String source = knowledgeBase.getSource();
 		PageUtils pageUtils = createItemPages(source, params);
-		validateKnowledgeBaseItem(pageUtils);
 		Map<String, Object> pageMap = addKnowledgeBaseMessage(pageUtils, knowledgeBase);
 		pageMap = updateItemList(pageMap);
 		return pageMap;
@@ -498,12 +497,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	private void validateKnowledgeBase(KnowledgeBase knowledgeBase) {
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
-		}
-	}
-
-	private void validateKnowledgeBaseItem(PageUtils pageUtils) {
-		if(ObjectUtil.isEmpty(pageUtils) || ObjectUtil.isEmpty(pageUtils.getList())) {
-			throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
 		}
 	}
 
