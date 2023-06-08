@@ -30,7 +30,7 @@
         cn_ip_location_built_in
         where knowledge_id = #{params.knowledgeId}
         <if test="params.orderBy == null or params.orderBy == ''">
-            ORDER BY id
+            ORDER BY location_id
         </if>
     </select>
 

@@ -25,28 +25,33 @@
             <if test=" params.name !=null and params.name !='' ">
                 and name like concat ( '%', #{params.name}, '%')
             </if>
-            <if test="params.category != null">
+            <if test="params.category != null and params.category != ''">
                 and category in
                 <foreach item="category" collection="params.category" separator="," open="(" close=")" index="">
                     #{category}
                 </foreach>
             </if>
-            <if test="params.source != null">
+            <if test="params.source != null and params.source != ''">
                 and source in
                 <foreach item="source" collection="params.source" separator="," open="(" close=")" index="">
                     #{source}
                 </foreach>
             </if>
-            <if test="params.status != null">
+            <if test="params.status != null and params.status != ''">
                 and status in
                 <foreach item="status" collection="params.status" separator="," open="(" close=")" index="">
                     #{status}
                 </foreach>
             </if>
         </where>
-        <if test="params.orderBy != null and params.orderBy != ''">
-            ORDER BY ${params.orderBy}
-        </if>
+        <choose>
+            <when test="params.orderBy != null and params.orderBy != ''">
+                ORDER BY ${params.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY knowledge_id desc
+            </otherwise>
+        </choose>
     </select>
 
     <select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
@@ -67,19 +72,19 @@
         cn_knowledge_base
         <where>
             1 = 1
-            <if test="params.category != null">
+            <if test="params.category != null and params.category != ''">
                 and category in
                 <foreach item="category" collection="params.category" separator="," open="(" close=")" index="">
                     #{category}
                 </foreach>
             </if>
-            <if test="params.source != null">
+            <if test="params.source != null and params.source != ''">
                 and source in
                 <foreach item="source" collection="params.source" separator="," open="(" close=")" index="">
                     #{source}
                 </foreach>
             </if>
-            <if test="params.status != null">
+            <if test="params.status != null and params.status != ''">
                 and status in
                 <foreach item="status" collection="params.status" separator="," open="(" close=")" index="">
                     #{status}

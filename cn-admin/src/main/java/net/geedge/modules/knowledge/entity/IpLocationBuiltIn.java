@@ -46,7 +46,7 @@ public class IpLocationBuiltIn {
 
     private String asnumber;
 
-    private String timeZone;
+    private String timezone;
 
     private Integer isValid;
 
