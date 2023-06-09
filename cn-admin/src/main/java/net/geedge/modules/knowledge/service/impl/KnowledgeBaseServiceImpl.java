@@ -1047,15 +1047,16 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					for(String validateCol : validateColumns) {
 						checkDataMap.put(validateCol, tmpMap.get(validateCol));
 					}
-					Long dbDataId = basicImportAndExportService.queryDataId(source, checkDataMap,knowledgeBase.getKnowledgeId());
-					if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "update")) {
-						tmpMap.put("id", dbDataId.toString());
-					}else if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "append")){
-						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
-					}
                     // 覆盖操作 将对应表中数据删除清空
                     if(StrUtil.equals(action, "overwrite")) {
                     	basicImportAndExportService.removeList(source, knowledgeBase.getKnowledgeId());
+                    }else {
+                    	Long dbDataId = basicImportAndExportService.queryDataId(source, checkDataMap,knowledgeBase.getKnowledgeId());
+    					if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "update")) {
+    						tmpMap.put("id", dbDataId.toString());
+    					}else if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "append")){
+    						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
+    					}
                     }
                     if(ObjectUtil.isNotEmpty(tmpMap)) {
                     	importDataList.add(tmpMap);
