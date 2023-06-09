@@ -345,12 +345,18 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	private void preHandleParams(Map<String, Object> params) {
 		if (ObjectUtil.isNotEmpty(params.get("category"))) {
 			params.put("category", Arrays.asList(String.valueOf(params.get("category")).split(StringPool.COMMA)));
+		} else {
+			params.put("category", new ArrayList<>());
 		}
 		if (ObjectUtil.isNotEmpty(params.get("source"))) {
 			params.put("source", Arrays.asList(String.valueOf(params.get("source")).split(StringPool.COMMA)));
+		} else {
+			params.put("source", new ArrayList<>());
 		}
 		if (ObjectUtil.isNotEmpty(params.get("status"))) {
 			params.put("status", Arrays.asList(String.valueOf(params.get("status")).split(StringPool.COMMA)));
+		} else {
+			params.put("status", new ArrayList<>());
 		}
 		if (ObjectUtil.isNotEmpty(params.get("orderBy"))) {
 			params.put("orderBy", StrUtil.toUnderlineCase((String)params.get("orderBy")));
