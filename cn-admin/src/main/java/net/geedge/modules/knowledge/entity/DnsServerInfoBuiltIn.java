@@ -20,7 +20,7 @@ public class DnsServerInfoBuiltIn {
 	
 	private String locationProvince;
 	
-	private String locitionRegion;
+	private String locationRegion;
 	
 	private String asn;
 	

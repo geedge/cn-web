@@ -3,7 +3,7 @@
 <mapper namespace="net.geedge.modules.knowledge.dao.IpAsnBuiltInDao">
 
     <resultMap id="IpAsnBuiltIn" type="net.geedge.modules.knowledge.entity.IpAsnBuiltIn">
-        <result property="id" column="asn_id"></result>
+        <result property="id" column="id"></result>
         <result property="addrType" column="addr_type"></result>
         <result property="ip1" column="ip1"></result>
         <result property="ip2" column="ip2"></result>
@@ -27,7 +27,7 @@
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        select asn_id as id, asn as asn, organization as organization from
+        select id as id, asn as asn, organization as organization from
         cn_ip_asn_built_in
         where INET6_ATON(#{resource}) between start_ip_binary and end_ip_binary
         limit 1
@@ -70,7 +70,7 @@
     		op_user = #{ip.opUser},
     		is_valid = #{ip.isValid},
     		knowledge_id = #{ip.knowledgeId}
-    		where asn_id = #{ip.asnId}
+    		where id = #{ip.asnId}
     	</foreach>
     </update>
 </mapper>

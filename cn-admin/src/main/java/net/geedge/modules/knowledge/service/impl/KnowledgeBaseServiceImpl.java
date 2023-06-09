@@ -345,12 +345,18 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	private void preHandleParams(Map<String, Object> params) {
 		if (ObjectUtil.isNotEmpty(params.get("category"))) {
 			params.put("category", Arrays.asList(String.valueOf(params.get("category")).split(StringPool.COMMA)));
+		} else {
+			params.put("category", new ArrayList<>());
 		}
 		if (ObjectUtil.isNotEmpty(params.get("source"))) {
 			params.put("source", Arrays.asList(String.valueOf(params.get("source")).split(StringPool.COMMA)));
+		} else {
+			params.put("source", new ArrayList<>());
 		}
 		if (ObjectUtil.isNotEmpty(params.get("status"))) {
 			params.put("status", Arrays.asList(String.valueOf(params.get("status")).split(StringPool.COMMA)));
+		} else {
+			params.put("status", new ArrayList<>());
 		}
 		if (ObjectUtil.isNotEmpty(params.get("orderBy"))) {
 			params.put("orderBy", StrUtil.toUnderlineCase((String)params.get("orderBy")));
@@ -510,52 +516,192 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		KnowledgeBase knowledgeBase = (KnowledgeBase) result.get("knowledgeBase");
 		this.saveOrUpdate(knowledgeBase);
 		List<Integer> deleteItemIds = (List<Integer>) params.get("deleteItemIds");
-		if(StrUtil.equals(Constant.IP_TAG_USER_DEFINED, source)) {
-			List<IpTagUserDefined> ips = (List<IpTagUserDefined>) result.get(source);
-			if(ObjectUtil.isNotEmpty(ips)) {
-				ips.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-				// 将ip数据分为新增和更新
-				Map<Boolean, List<IpTagUserDefined>> ipMap = ips.stream().collect(Collectors.groupingBy(ip-> ObjectUtil.isNotEmpty(ip.getId())));
-				List<IpTagUserDefined> updateIps = ipMap.get(true);
-				List<IpTagUserDefined> insertIps = ipMap.get(false);
-				ipTagUserDefinedService.saveBatchForBinary(insertIps);
-				ipTagUserDefinedService.modifyBatchForBinary(updateIps);
-			}
-			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
-				ipTagUserDefinedService.removeByIds(deleteItemIds);
-			}
-		}else if(StrUtil.equals(Constant.DOMAIN_TAG_USER_DEFINED, source)){
-			List<DomainTagUserDefined> domains = (List<DomainTagUserDefined>) result.get(source);
-			if(ObjectUtil.isNotEmpty(domains)) {
-				domains.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-				domainTagUserDefinedService.saveOrUpdateBatch(domains);
-			}
-			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
-				domainTagUserDefinedService.removeByIds(deleteItemIds);
-			}
-		}else if(StrUtil.equals(Constant.APP_TAG_USER_DEFINED, source)){
-			List<AppTagUserDefined> apps = (List<AppTagUserDefined>) result.get(source);
-			if(ObjectUtil.isNotEmpty(apps)) {
-				apps.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-				appTagUserDefinedService.saveOrUpdateBatch(apps);
-			}
-			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
-				appTagUserDefinedService.removeByIds(deleteItemIds);
-			}
-		}else if(StrUtil.equals(Constant.PSIPHON3_IP, source)){
-			List<Psiphon3Ip> psiphon3Ips = (List<Psiphon3Ip>) result.get(source);
-			if(ObjectUtil.isNotEmpty(psiphon3Ips)) {
-				psiphon3Ips.stream().forEach(ps3Ip-> ps3Ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
-				// 将ip数据分为新增和更新
-				Map<Boolean, List<Psiphon3Ip>> ps3IpMap = psiphon3Ips.stream().collect(Collectors.groupingBy(ps3Ip-> ObjectUtil.isNotEmpty(ps3Ip.getId())));
-				List<Psiphon3Ip> updateIps = ps3IpMap.get(true);
-				List<Psiphon3Ip> insertIps = ps3IpMap.get(false);
-				psiphon3IpService.saveBatchForBinary(insertIps);
-				psiphon3IpService.modifyBatchForBinary(updateIps);
-			}
-			if(ObjectUtil.isNotEmpty(deleteItemIds)) {
-				psiphon3IpService.removeByIds(deleteItemIds);
-			}
+		switch(source) {
+			case IP_TAG_USER_DEFINED:
+				List<IpTagUserDefined> ips = (List<IpTagUserDefined>) result.get(source);
+				if(ObjectUtil.isNotEmpty(ips)) {
+					ips.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					// 将ip数据分为新增和更新
+					Map<Boolean, List<IpTagUserDefined>> ipMap = ips.stream().collect(Collectors.groupingBy(ip-> ObjectUtil.isNotEmpty(ip.getId())));
+					List<IpTagUserDefined> updateIps = ipMap.get(true);
+					List<IpTagUserDefined> insertIps = ipMap.get(false);
+					ipTagUserDefinedService.saveBatchForBinary(insertIps);
+					ipTagUserDefinedService.modifyBatchForBinary(updateIps);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					ipTagUserDefinedService.removeByIds(deleteItemIds);
+				}
+				break;
+			case APP_TAG_USER_DEFINED:
+				List<AppTagUserDefined> apps = (List<AppTagUserDefined>) result.get(source);
+				if(ObjectUtil.isNotEmpty(apps)) {
+					apps.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					appTagUserDefinedService.saveOrUpdateBatch(apps);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					appTagUserDefinedService.removeByIds(deleteItemIds);
+				}
+				break;
+			case DOMAIN_TAG_USER_DEFINED:
+				List<DomainTagUserDefined> domains = (List<DomainTagUserDefined>) result.get(source);
+				if(ObjectUtil.isNotEmpty(domains)) {
+					domains.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					domainTagUserDefinedService.saveOrUpdateBatch(domains);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					domainTagUserDefinedService.removeByIds(deleteItemIds);
+				}
+				break;
+			case IOC_DARKWEB:
+				List<IocDarkweb> iocDarkwebs = (List<IocDarkweb>) result.get(source);
+				if(ObjectUtil.isNotEmpty(iocDarkwebs)) {
+					iocDarkwebs.stream().forEach(iocDarkweb-> iocDarkweb.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					iocDarkwebService.saveOrUpdateBatch(iocDarkwebs);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					iocDarkwebService.removeByIds(deleteItemIds);
+				}
+				break;
+			case IOC_MALWARE:
+				List<IocMalware> iocMalwares = (List<IocMalware>) result.get(source);
+				if(ObjectUtil.isNotEmpty(iocMalwares)) {
+					iocMalwares.stream().forEach(iocMalware-> iocMalware.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					iocMalwareService.saveOrUpdateBatch(iocMalwares);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					iocMalwareService.removeByIds(deleteItemIds);
+				}
+				break;
+			case APP_CATEGORY_BUILT_IN:
+				List<AppCategoryBuiltIn> appCategoryBuiltIns = (List<AppCategoryBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(appCategoryBuiltIns)) {
+					appCategoryBuiltIns.stream().forEach(appCategoryBuiltIn-> appCategoryBuiltIn.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					appCategoryBuiltInService.saveOrUpdateBatch(appCategoryBuiltIns);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					appCategoryBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
+			case FQDN_ICP_BUILT_IN:
+				List<FqdnIcpBuiltIn> fqdnIcpBuiltIns = (List<FqdnIcpBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(fqdnIcpBuiltIns)) {
+					fqdnIcpBuiltIns.stream().forEach(fqdnIcpBuiltIn-> fqdnIcpBuiltIn.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					fqdnIcpBuiltInService.saveOrUpdateBatch(fqdnIcpBuiltIns);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					fqdnIcpBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
+			case FQDN_WHO_IS_BUILT_IN:
+				List<FqdnWhoIsBuiltIn> fqdnWhoIsBuiltIns = (List<FqdnWhoIsBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(fqdnWhoIsBuiltIns)) {
+					fqdnWhoIsBuiltIns.stream().forEach(fqdnWhoIsBuiltIn-> fqdnWhoIsBuiltIn.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					fqdnWhoIsBuiltInService.saveOrUpdateBatch(fqdnWhoIsBuiltIns);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					fqdnWhoIsBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
+			case FQDN_CATEGORY_BUILT_IN:
+				List<FqdnCategoryBuiltIn> fqdnCategoryBuiltIns = (List<FqdnCategoryBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(fqdnCategoryBuiltIns)) {
+					fqdnCategoryBuiltIns.stream().forEach(fqdnCategoryBuiltIn-> fqdnCategoryBuiltIn.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					fqdnCategoryBuiltInService.saveOrUpdateBatch(fqdnCategoryBuiltIns);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					fqdnCategoryBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
+			case IP_ASN_BUILT_IN:
+				List<IpAsnBuiltIn> ipAsnBuiltIns = (List<IpAsnBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(ipAsnBuiltIns)) {
+					ipAsnBuiltIns.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					// 将ip数据分为新增和更新
+					Map<Boolean, List<IpAsnBuiltIn>> ipMap = ipAsnBuiltIns.stream().collect(Collectors.groupingBy(ip-> ObjectUtil.isNotEmpty(ip.getId())));
+					List<IpAsnBuiltIn> updateIps = ipMap.get(true);
+					List<IpAsnBuiltIn> insertIps = ipMap.get(false);
+					ipAsnBuiltInService.saveBatchForBinary(insertIps);
+					ipAsnBuiltInService.modifyBatchForBinary(updateIps);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					ipAsnBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
+			case IP_LOCATION_BUILT_IN:
+				List<IpLocationBuiltIn> ipLocationBuiltIns = (List<IpLocationBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(ipLocationBuiltIns)) {
+					ipLocationBuiltIns.stream().forEach(ipLocationBuiltIn-> ipLocationBuiltIn.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					ipLocationBuiltInService.saveOrUpdateBatch(ipLocationBuiltIns);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					ipLocationBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
+			case PSIPHON3_IP:
+				List<Psiphon3Ip> psiphon3Ips = (List<Psiphon3Ip>) result.get(source);
+				if(ObjectUtil.isNotEmpty(psiphon3Ips)) {
+					psiphon3Ips.stream().forEach(ps3Ip-> ps3Ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					// 将ip数据分为新增和更新
+					Map<Boolean, List<Psiphon3Ip>> ps3IpMap = psiphon3Ips.stream().collect(Collectors.groupingBy(ps3Ip-> ObjectUtil.isNotEmpty(ps3Ip.getId())));
+					List<Psiphon3Ip> updateIps = ps3IpMap.get(true);
+					List<Psiphon3Ip> insertIps = ps3IpMap.get(false);
+					psiphon3IpService.saveBatchForBinary(insertIps);
+					psiphon3IpService.modifyBatchForBinary(updateIps);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					psiphon3IpService.removeByIds(deleteItemIds);
+				}
+				break;
+			case IDC_RENTER_BUILT_IN:
+				List<IdcRenterBuiltIn> idcRenterBuiltIns = (List<IdcRenterBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(idcRenterBuiltIns)) {
+					idcRenterBuiltIns.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					// 将ip数据分为新增和更新
+					Map<Boolean, List<IdcRenterBuiltIn>> ipMap = idcRenterBuiltIns.stream().collect(Collectors.groupingBy(ip-> ObjectUtil.isNotEmpty(ip.getId())));
+					List<IdcRenterBuiltIn> updateIps = ipMap.get(true);
+					List<IdcRenterBuiltIn> insertIps = ipMap.get(false);
+					idcRenterBuiltInService.saveBatchForBinary(insertIps);
+					idcRenterBuiltInService.modifyBatchForBinary(updateIps);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					idcRenterBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
+			case INTERNAL_IP_BUILT_IN:
+				List<InternalIpBuiltIn> internalIpBuiltIns = (List<InternalIpBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(internalIpBuiltIns)) {
+					internalIpBuiltIns.stream().forEach(ip-> ip.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					// 将ip数据分为新增和更新
+					Map<Boolean, List<InternalIpBuiltIn>> ipMap = internalIpBuiltIns.stream().collect(Collectors.groupingBy(ip-> ObjectUtil.isNotEmpty(ip.getId())));
+					List<InternalIpBuiltIn> updateIps = ipMap.get(true);
+					List<InternalIpBuiltIn> insertIps = ipMap.get(false);
+					internalIpBuiltInService.saveBatchForBinary(insertIps);
+					internalIpBuiltInService.modifyBatchForBinary(updateIps);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					internalIpBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
+			case LINK_DIRECTION_BUILT_IN:
+				List<LinkDirectionBuiltIn> linkDirectionBuiltIns = (List<LinkDirectionBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(linkDirectionBuiltIns)) {
+					linkDirectionBuiltIns.stream().forEach(linkDirectionBuiltIn-> linkDirectionBuiltIn.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					linkDirectionBuiltInService.saveOrUpdateBatch(linkDirectionBuiltIns);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					linkDirectionBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
+			case DNS_SERVER_INFO_BUILT_IN:
+				List<DnsServerInfoBuiltIn> dnsServerInfoBuiltIns = (List<DnsServerInfoBuiltIn>) result.get(source);
+				if(ObjectUtil.isNotEmpty(dnsServerInfoBuiltIns)) {
+					dnsServerInfoBuiltIns.stream().forEach(dnsServerInfoBuiltIn-> dnsServerInfoBuiltIn.setKnowledgeId(knowledgeBase.getKnowledgeId()));
+					dnsServerInfoBuiltInService.saveOrUpdateBatch(dnsServerInfoBuiltIns);
+				}
+				if(ObjectUtil.isNotEmpty(deleteItemIds)) {
+					dnsServerInfoBuiltInService.removeByIds(deleteItemIds);
+				}
+				break;
 		}
 		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getById(knowledgeBase.getKnowledgeId());
 		if(ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
@@ -596,192 +742,177 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			datas.addAll(modifyDatas);
 		}
 		if(ObjectUtil.isNotEmpty(datas)) {
-			if(StrUtil.equals(Constant.IP_TAG_USER_DEFINED, source)) {
-				List<IpTagUserDefined> ipTagUserDefineds = new ArrayList<IpTagUserDefined>();
-				for(Map data: datas) {
-					Integer id = (Integer) data.get("id");
-					String tagValue = (String) data.get("tagValue");
-					Integer isValid = (Integer) data.get("isValid");
-					String addrFormat = (String) data.get("addrFormat");
-					String ip1 = (String) data.get("ip1");
-					String ip2 = "";
-					boolean ipFormat = true;
-					if(!StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
-						ip2 = (String) data.get("ip2");
-					}
-					// 校验ip格式
-					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
-						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1);
-					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
-						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"-"+ip2);
-					}else {
-						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"/"+ip2);
-					}
-					if(!ipFormat) {
-						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
-					}
-					IpTagUserDefined ipTagUserDefined = new IpTagUserDefined();
-					if(ObjectUtil.isEmpty(ipTagUserDefined.getCTime())) {
-						ipTagUserDefined.setCTime(new Date());
-					}
-					ipTagUserDefined.setIsValid(isValid==null?1:isValid);
-					ipTagUserDefined.setAddrFormat(addrFormat);
-					ipTagUserDefined.setKnowledgeId(knowledgeId);
-					ipTagUserDefined.setOpTime(new Date());
-					ipTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
-					ipTagUserDefined.setId(id==null?null:id.longValue());
-					ipTagUserDefined.setIp1(ip1);
-					ipTagUserDefined.setTagValue(tagValue);
-					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
-						ipTagUserDefined.setIp2(ip1);
-						ipTagUserDefined.setStartIpBinary(ip1);
-						ipTagUserDefined.setEndIpBinary(ip1);
-					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
-						ipTagUserDefined.setIp2(ip2);
-						ipTagUserDefined.setStartIpBinary(ip1);
-						ipTagUserDefined.setEndIpBinary(ip2);
-					}else {
-						ipTagUserDefined.setIp2(ip2);
-						boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
-						Map<String, String> ipsStartEnd = null;
-						String startIp = "";
-						String endIp = "";
-						if(iPv4Address) {
-							ipsStartEnd = IPUtils.getIpsV4ByCidr(ip1+"/"+ip2);
-							startIp = ipsStartEnd.get("startIpStr");
-							endIp = ipsStartEnd.get("endIpStr");
-						}else {
-							ipsStartEnd = IPUtils.getIpsV6ByCidr(ip1+"/"+ip2);
-							startIp = ipsStartEnd.get("startIpStr");
-							endIp = ipsStartEnd.get("endIpStr");
+			switch(source) {
+				case IP_TAG_USER_DEFINED:
+					List<IpTagUserDefined> ipTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(datas),IpTagUserDefined.class);
+					ipTagUserDefineds.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCTime(new Date());
 						}
-						ipTagUserDefined.setStartIpBinary(startIp);
-						ipTagUserDefined.setEndIpBinary(endIp);
-					}
-					ipTagUserDefineds.add(ipTagUserDefined);
-				}
-				result.put(source, ipTagUserDefineds);
-			}else if(StrUtil.equals(Constant.DOMAIN_TAG_USER_DEFINED, source)){
-				List<DomainTagUserDefined> domainTagUserDefineds = new ArrayList<DomainTagUserDefined>();
-				for(Map data : datas) {
-					Integer id = (Integer) data.get("id");
-					String tagName = (String) data.get("domain");
-					String tagValue = (String) data.get("tagValue");
-					Integer isValid = (Integer) data.get("isValid");
-					boolean flag = KnowledgeCheckUtil.validateFqdn(tagName);
-					if(!flag) {
-						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
-					}
-					DomainTagUserDefined domainTagUserDefined = new DomainTagUserDefined();
-					if(ObjectUtil.isEmpty(domainTagUserDefined.getCTime())) {
-						domainTagUserDefined.setCTime(new Date());
-					}
-					domainTagUserDefined.setId(id==null?null:id.longValue());
-					domainTagUserDefined.setIsValid(isValid==null?1:isValid);
-					domainTagUserDefined.setOpTime(new Date());
-					domainTagUserDefined.setKnowledgeId(knowledgeId);
-					domainTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
-					domainTagUserDefined.setDomain(tagName);
-					domainTagUserDefined.setTagValue(tagValue);
-					domainTagUserDefineds.add(domainTagUserDefined);
-				}
-				result.put(source, domainTagUserDefineds);
-			}else if(StrUtil.equals(Constant.APP_TAG_USER_DEFINED, source)) {
-				List<AppTagUserDefined> appTagUserDefineds = new ArrayList<AppTagUserDefined>();
-				for(Map data : datas) {
-					Integer id = (Integer) data.get("id");
-					String tagName = (String) data.get("appName");
-					String tagValue = (String) data.get("tagValue");
-					Integer isValid = (Integer) data.get("isValid");
-					boolean flag = KnowledgeCheckUtil.validateApp(tagName);
-					if(!flag) {
-						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
-					}
-					AppTagUserDefined appTagUserDefined = new AppTagUserDefined();
-					if(ObjectUtil.isEmpty(appTagUserDefined.getCTime())) {
-						appTagUserDefined.setCTime(new Date());
-					}
-					appTagUserDefined.setId(id==null?null:id.longValue());
-					appTagUserDefined.setIsValid(isValid==null?1:isValid);
-					appTagUserDefined.setOpTime(new Date());
-					appTagUserDefined.setKnowledgeId(knowledgeId);
-					appTagUserDefined.setOpUser(ShiroUtils.getUserId().intValue());
-					appTagUserDefined.setAppName(tagName);
-					appTagUserDefined.setTagValue(tagValue);
-					appTagUserDefineds.add(appTagUserDefined);
-				}
-				result.put(source, appTagUserDefineds);
-			}else if(StrUtil.equals(Constant.PSIPHON3_IP, source)){
-				List<Psiphon3Ip> psiphon3Ips = new ArrayList<Psiphon3Ip>();
-				for(Map data : datas) {
-					Integer id = (Integer) data.get("id");
-					Integer isValid = (Integer) data.get("isValid");
-					String addrFormat = (String) data.get("addrFormat");
-					Integer confidence = (Integer) data.get("confidence");
-					String confidenceLevel = (String) data.get("confidence_level");
-					String method = (String) data.get("method");
-					Integer type = (Integer) data.get("type");
-					String ip1 = (String) data.get("ip1");
-					String ip2 = "";
-					boolean ipFormat = true;
-					if(!StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
-						ip2 = (String) data.get("ip2");
-					}
-					// 校验ip格式
-					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
-						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1);
-					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
-						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"-"+ip2);
-					}else {
-						ipFormat = KnowledgeCheckUtil.validIpFormat(ip1+"/"+ip2);
-					}
-					if(!ipFormat) {
-						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_FORMAT_ERROR);
-					}
-					Psiphon3Ip psiphon3Ip = new Psiphon3Ip();
-					if(ObjectUtil.isEmpty(psiphon3Ip.getCTime())) {
-						psiphon3Ip.setCTime(new Date());
-					}
-					psiphon3Ip.setIsValid(isValid==null?1:isValid);
-					psiphon3Ip.setAddrFormat(addrFormat);
-					psiphon3Ip.setKnowledgeId(knowledgeId);
-					psiphon3Ip.setOpTime(new Date());
-					psiphon3Ip.setOpUser(ShiroUtils.getUserId().intValue());
-					psiphon3Ip.setId(id==null?null:id.longValue());
-					psiphon3Ip.setIp1(ip1);
-					psiphon3Ip.setMethod(method);
-					psiphon3Ip.setConfidence(confidence);
-					psiphon3Ip.setConfidenceLevel(confidenceLevel);
-					psiphon3Ip.setType(type);
-					if(StrUtil.equals(addrFormat, Constant.IpFormatType.SINGLE.getValue())) {
-						psiphon3Ip.setIp2(ip1);
-						psiphon3Ip.setStartIpBinary(ip1);
-						psiphon3Ip.setEndIpBinary(ip1);
-					}else if(StrUtil.equals(addrFormat, Constant.IpFormatType.RANGE.getValue())){
-						psiphon3Ip.setIp2(ip2);
-						psiphon3Ip.setStartIpBinary(ip1);
-						psiphon3Ip.setEndIpBinary(ip2);
-					}else {
-						psiphon3Ip.setIp2(ip2);
-						boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
-						Map<String, String> ipsStartEnd = null;
-						String startIp = "";
-						String endIp = "";
-						if(iPv4Address) {
-							ipsStartEnd = IPUtils.getIpsV4ByCidr(ip1+"/"+ip2);
-							startIp = ipsStartEnd.get("startIpStr");
-							endIp = ipsStartEnd.get("endIpStr");
-						}else {
-							ipsStartEnd = IPUtils.getIpsV6ByCidr(ip1+"/"+ip2);
-							startIp = ipsStartEnd.get("startIpStr");
-							endIp = ipsStartEnd.get("endIpStr");
+						data.setOpUser(ShiroUtils.getUserId().intValue());
+						data.setOpTime(new Date());
+						// 计算ip binary
+						Map<String, String> ipHandler = ipHandler(data.getAddrFormat(),data.getIp1(),data.getIp2());
+						data.setStartIpBinary(ipHandler.get("start_ip_binary"));
+						data.setEndIpBinary(ipHandler.get("end_ip_binary"));
+					});
+					result.put(source, ipTagUserDefineds);
+					break;
+				case APP_TAG_USER_DEFINED:
+					List<AppTagUserDefined> appTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(datas),AppTagUserDefined.class);
+					appTagUserDefineds.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCTime(new Date());
 						}
-						psiphon3Ip.setStartIpBinary(startIp);
-						psiphon3Ip.setEndIpBinary(endIp);
-					}
-					psiphon3Ips.add(psiphon3Ip);
+						data.setOpUser(ShiroUtils.getUserId().intValue());
+						data.setOpTime(new Date());
+					});
+					result.put(source, appTagUserDefineds);
+					break;
+				case DOMAIN_TAG_USER_DEFINED:
+					List<DomainTagUserDefined> domainTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(datas),DomainTagUserDefined.class);
+					domainTagUserDefineds.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCTime(new Date());
+						}
+						data.setOpUser(ShiroUtils.getUserId().intValue());
+						data.setOpTime(new Date());
+					});
+					result.put(source, domainTagUserDefineds);
+					break;
+				case IOC_DARKWEB:
+					List<IocDarkweb> iocDarkwebs = JSONUtil.toList(JSONUtil.toJsonStr(datas),IocDarkweb.class);
+					iocDarkwebs.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCreateTime(new Date().getTime());
+						}
+						data.setUpdateTime(new Date().getTime());
+					});
+					result.put(source,iocDarkwebs);
+					break;
+				case IOC_MALWARE:
+					List<IocMalware> iocMalwares = JSONUtil.toList(JSONUtil.toJsonStr(datas),IocMalware.class);
+					iocMalwares.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCreateTime(new Date().getTime());
+						}
+						data.setUpdateTime(new Date().getTime());
+					});
+					result.put(source, iocMalwares);
+					break;
+				case APP_CATEGORY_BUILT_IN:
+					List<AppCategoryBuiltIn> appCategoryBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),AppCategoryBuiltIn.class);
+					appCategoryBuiltIns.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCTime(new Date());
+						}
+						data.setOpUser(ShiroUtils.getUserId().intValue());
+						data.setOpTime(new Date());
+					});
+					result.put(source, appCategoryBuiltIns);
+					break;
+				case FQDN_ICP_BUILT_IN:
+					List<FqdnIcpBuiltIn> fqdnIcpBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),FqdnIcpBuiltIn.class);
+					fqdnIcpBuiltIns.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCreateTime(new Date());
+						}
+						data.setUpdateTime(new Date());
+					});
+					result.put(source,fqdnIcpBuiltIns);
+					break;
+				case FQDN_WHO_IS_BUILT_IN:
+					List<FqdnWhoIsBuiltIn> fqdnWhoIsBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),FqdnWhoIsBuiltIn.class);
+					fqdnWhoIsBuiltIns.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCreateTime(new Date());
+						}
+						data.setUpdateTime(new Date());
+					});
+					result.put(source, fqdnWhoIsBuiltIns);
+					break;
+				case FQDN_CATEGORY_BUILT_IN:
+					List<FqdnCategoryBuiltIn> fqdnCategoryBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),FqdnCategoryBuiltIn.class);
+					fqdnCategoryBuiltIns.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCreateTime(new Date());
+						}
+						data.setUpdateTime(new Date());
+					});
+					result.put(source, fqdnCategoryBuiltIns);
+					break;
+				case IP_ASN_BUILT_IN:
+					List<IpAsnBuiltIn> ipAsnBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),IpAsnBuiltIn.class);
+					ipAsnBuiltIns.stream().forEach(data->{
+						data.setOpUser(ShiroUtils.getUserId().intValue());
+						data.setOpTime(new Date());
+						// 计算ip binary
+						Map<String, String> ipHandler = ipHandler(data.getAddrFormat(),data.getIp1(),data.getIp2());
+						data.setStartIpBinary(ipHandler.get("start_ip_binary"));
+						data.setEndIpBinary(ipHandler.get("end_ip_binary"));
+					});
+					result.put(source, ipAsnBuiltIns);
+					break;
+				case IP_LOCATION_BUILT_IN:
+					List<IpLocationBuiltIn> ipLocationBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),IpLocationBuiltIn.class);
+					ipLocationBuiltIns.stream().forEach(data->{
+						data.setOpUser(ShiroUtils.getUserId().intValue());
+						data.setOpTime(new Date());
+					});
+					result.put(source, ipLocationBuiltIns);
+					break;
+				case PSIPHON3_IP:
+					List<Psiphon3Ip> psiphon3Ips = JSONUtil.toList(JSONUtil.toJsonStr(datas),Psiphon3Ip.class);
+					psiphon3Ips.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCTime(new Date());
+						}
+						data.setOpUser(ShiroUtils.getUserId().intValue());
+						data.setOpTime(new Date());
+						// 计算ip binary
+						Map<String, String> ipHandler = ipHandler(data.getAddrFormat(),data.getIp1(),data.getIp2());
+						data.setStartIpBinary(ipHandler.get("start_ip_binary"));
+						data.setEndIpBinary(ipHandler.get("end_ip_binary"));
+					});
+					result.put(source, psiphon3Ips);
+					break;
+				case IDC_RENTER_BUILT_IN:
+					List<IdcRenterBuiltIn> idcRenterBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),IdcRenterBuiltIn.class);
+					idcRenterBuiltIns.stream().forEach(data->{
+						// 计算ip binary
+						Map<String, String> ipHandler = ipHandler(data.getAddrFormat(),data.getIp1(),data.getIp2());
+						data.setStartIpBinary(ipHandler.get("start_ip_binary"));
+						data.setEndIpBinary(ipHandler.get("end_ip_binary"));
+					});
+					result.put(source, idcRenterBuiltIns);
+					break;
+				case INTERNAL_IP_BUILT_IN:
+					List<InternalIpBuiltIn> internalIpBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),InternalIpBuiltIn.class);
+					internalIpBuiltIns.stream().forEach(data->{
+						// 计算ip binary
+						Map<String, String> ipHandler = ipHandler(data.getAddrFormat(),data.getIp1(),data.getIp2());
+						data.setStartIpBinary(ipHandler.get("start_ip_binary"));
+						data.setEndIpBinary(ipHandler.get("end_ip_binary"));
+					});
+					result.put(source, internalIpBuiltIns);
+					break;
+				case LINK_DIRECTION_BUILT_IN:
+					List<LinkDirectionBuiltIn> linkDirectionBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),LinkDirectionBuiltIn.class);
+					result.put(source, linkDirectionBuiltIns);
+					break;
+				case DNS_SERVER_INFO_BUILT_IN:
+					List<DnsServerInfoBuiltIn> dnsServerInfoBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(datas),DnsServerInfoBuiltIn.class);
+					dnsServerInfoBuiltIns.stream().forEach(data->{
+						if(ObjectUtil.isEmpty(data.getId())) {
+							data.setCreateTime(new Date());
+						}
+						data.setUpdateTime(new Date());
+					});
+					result.put(source, dnsServerInfoBuiltIns);
+					break;
+				default:{
+					throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);
 				}
-				result.put(source, psiphon3Ips);
 			}
 		}
 		KnowledgeBase knowledgeBase = new KnowledgeBase();
@@ -908,20 +1039,20 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                     	tmpMap.putAll(ipHandlerResult);
                     }
                     // 根据配置校验数据是否重复
-                	List<String> validateColumns = StrUtil.split(validateColumn, StrUtil.C_COMMA);
-                	if(ObjectUtil.isEmpty(validateColumns)) {
-                		throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_NOTNULL);
-                	}
-                    HashMap<String, String> checkDataMap = Tool.MapUtil.newHashMap();
-                    for(String validateCol : validateColumns) {
-                    	checkDataMap.put(validateCol, tmpMap.get(validateCol));
-                    }
-                    Long dbDataId = basicImportAndExportService.queryDataId(source, checkDataMap,knowledgeBase.getKnowledgeId());
-                    if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "update")) {
-                    	tmpMap.put("id", dbDataId.toString());
-                    }else if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "append")){
-                    	throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
-                    }
+					List<String> validateColumns = StrUtil.split(validateColumn, StrUtil.C_COMMA);
+					if(ObjectUtil.isEmpty(validateColumns)) {
+						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_NOTNULL);
+					}
+					HashMap<String, String> checkDataMap = Tool.MapUtil.newHashMap();
+					for(String validateCol : validateColumns) {
+						checkDataMap.put(validateCol, tmpMap.get(validateCol));
+					}
+					Long dbDataId = basicImportAndExportService.queryDataId(source, checkDataMap,knowledgeBase.getKnowledgeId());
+					if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "update")) {
+						tmpMap.put("id", dbDataId.toString());
+					}else if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "append")){
+						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
+					}
                     // 覆盖操作 将对应表中数据删除清空
                     if(StrUtil.equals(action, "overwrite")) {
                     	basicImportAndExportService.removeList(source, knowledgeBase.getKnowledgeId());

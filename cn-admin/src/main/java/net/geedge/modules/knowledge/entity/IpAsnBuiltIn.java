@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @TableName("cn_ip_asn_built_in")
 public class IpAsnBuiltIn {
-    @TableId(value = "asn_id")
+    @TableId
     private Integer id;
 
     private Integer addrType;
