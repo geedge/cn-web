@@ -14,7 +14,7 @@ import java.util.Date;
 @TableName("cn_ip_location_built_in")
 public class IpLocationBuiltIn {
     @TableId
-    private Long locationId;
+    private Long id;
 
     private Integer addrType;
 

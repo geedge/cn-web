@@ -3,7 +3,7 @@
 <mapper namespace="net.geedge.modules.knowledge.dao.IpLocationBuiltInDao">
 
     <resultMap id="IpLocationBuiltIn" type="net.geedge.modules.knowledge.entity.IpLocationBuiltIn">
-        <result property="locationId" column="location_id"></result>
+        <result property="id" column="id"></result>
         <result property="addrType" column="addr_type"></result>
         <result property="startIp" column="start_ip"></result>
         <result property="endIp" column="end_ip"></result>

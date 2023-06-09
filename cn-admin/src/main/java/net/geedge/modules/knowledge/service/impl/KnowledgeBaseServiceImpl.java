@@ -935,6 +935,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Integer importBatch(MultipartFile file, Integer knowledgeId, String action) {
 		Map params = new HashMap();
 		KnowledgeBase knowledgeBase = this.baseMapper.selectById(knowledgeId);
@@ -1048,10 +1049,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 						checkDataMap.put(validateCol, tmpMap.get(validateCol));
 					}
                     // 覆盖操作 将对应表中数据删除清空
-                    if(StrUtil.equals(action, "overwrite")) {
-                    	basicImportAndExportService.removeList(source, knowledgeBase.getKnowledgeId());
-                    }else {
-                    	Long dbDataId = basicImportAndExportService.queryDataId(source, checkDataMap,knowledgeBase.getKnowledgeId());
+                    if(!StrUtil.equals(action, "overwrite")) {
+                    	Long dbDataId = basicImportAndExportService.queryDataId(source, checkDataMap,knowledgeBase.getKnowledgeId(),null);
     					if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "update")) {
     						tmpMap.put("id", dbDataId.toString());
     					}else if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "append")){
@@ -1068,6 +1067,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                 throw new CNException(RCode.EXCELFILE_TYPE_ERROR);
             }
         }
+        // 覆盖操作 将对应表中数据删除清空
+        if(StrUtil.equals(action, "overwrite")) {
+        	basicImportAndExportService.removeList(source, knowledgeBase.getKnowledgeId());
+        } 
         return importDataList;
 	}
 	
