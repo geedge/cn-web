@@ -8,6 +8,9 @@
 		<foreach collection="params.entrySet()" item="value" index="key" separator="and">
 			${key} = #{value}
 		</foreach>
+		<if test="id != null">
+            and id != #{id}
+        </if>
     </select>
 
 	<delete id="deleteList">

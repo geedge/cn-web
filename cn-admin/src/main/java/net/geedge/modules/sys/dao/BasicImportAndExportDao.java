@@ -20,7 +20,7 @@ public interface BasicImportAndExportDao extends BaseMapper{
      * @param params
      * @return
      */
-    Long selectDataId(@Param("tableName") String tableName, @Param("params") Map<String,String> columnVal,@Param("knowledgeId") Integer knowledgeId);
+    Long selectDataId(@Param("tableName") String tableName, @Param("params") Map<String,String> columnVal,@Param("knowledgeId") Integer knowledgeId,@Param("id") Long id);
     
     /**
      * 指定表名 删除id集合
