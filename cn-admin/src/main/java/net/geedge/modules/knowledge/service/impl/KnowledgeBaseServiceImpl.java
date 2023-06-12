@@ -940,7 +940,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		Map params = new HashMap();
 		KnowledgeBase knowledgeBase = this.baseMapper.selectById(knowledgeId);
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
-			throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
+			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
 		params.put("knowledgeBase", knowledgeBase);
 		// 根据source获取对应的表头信息
@@ -1053,9 +1053,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                     	Long dbDataId = basicImportAndExportService.queryDataId(source, checkDataMap,knowledgeBase.getKnowledgeId(),null);
     					if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "update")) {
     						tmpMap.put("id", dbDataId.toString());
-    					}else if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "append")){
-    						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
-    					}
+						} /*else if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "append")){
+							throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
+						}*/
                     }
                     if(ObjectUtil.isNotEmpty(tmpMap)) {
                     	importDataList.add(tmpMap);
