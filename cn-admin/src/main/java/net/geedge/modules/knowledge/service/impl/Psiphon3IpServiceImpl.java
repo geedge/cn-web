@@ -26,6 +26,7 @@ public class Psiphon3IpServiceImpl extends ServiceImpl<Psiphon3IpDao, Psiphon3Ip
     public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
         IPage page = this.page(new Query(Psiphon3Ip.class).getPage(params));
         List<Psiphon3Ip> psiphon3Ips = this.baseMapper.queryPageByKnowledgeId(page, params);
+		psiphon3Ips.forEach(ip -> {ip.setStartIpBinary(""); ip.setEndIpBinary("");});
         page.setRecords(psiphon3Ips);
         return new PageUtils(page);
     }

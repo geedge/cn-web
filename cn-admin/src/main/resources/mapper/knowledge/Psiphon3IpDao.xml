@@ -17,7 +17,7 @@
         <result property="type" column="type"></result>
         <result property="method" column="method"></result>
         <result property="confidence" column="confidence"></result>
-        <result property="confidenceLlevel" column="confidence_level"></result>
+        <result property="confidenceLevel" column="confidence_level"></result>
     </resultMap>
 
     <select id="queryPageByKnowledgeId" resultMap="Psiphon3Ip">
