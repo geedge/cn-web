@@ -514,6 +514,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		Map<String, Object> result = validateParam(params);
 		
 		KnowledgeBase knowledgeBase = (KnowledgeBase) result.get("knowledgeBase");
+		source = knowledgeBase.getSource();
 		this.saveOrUpdate(knowledgeBase);
 		List<Integer> deleteItemIds = (List<Integer>) params.get("deleteItemIds");
 		switch(source) {
@@ -732,6 +733,27 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		if(ObjectUtil.isNotEmpty(queryByName)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NAME_DUPLICATE);
 		}
+		KnowledgeBase knowledgeBase = null;
+		if(ObjectUtil.isEmpty(knowledgeId)){
+			if(StrUtil.isEmpty(source)) {
+				throw new CNException(RCode.KNOWLEDGE_SOURCE_ISNULL);
+			}
+			knowledgeBase = new KnowledgeBase();
+			knowledgeBase.setCTime(new Date());
+			knowledgeBase.setIsBuiltIn(0);
+			knowledgeBase.setIsPublished(1);
+			knowledgeBase.setKnowledgeId(knowledgeId);
+		}else {
+			knowledgeBase = this.getById(knowledgeId);
+			source = knowledgeBase.getSource();
+		}
+		knowledgeBase.setName(name);
+		knowledgeBase.setCategory(category);
+		knowledgeBase.setDescription(description);
+		knowledgeBase.setOpTime(new Date());
+		knowledgeBase.setOpUser(ShiroUtils.getUserId());
+		knowledgeBase.setStatus(status==null ? 1 : status);
+		result.put("knowledgeBase", knowledgeBase);		
 		List<Map<String,Object>> addDatas  = (List<Map<String, Object>>) params.get("addItemList");
 		List<Map<String,Object>> modifyDatas  = (List<Map<String, Object>>) params.get("updateItemList");
 		List<Map<String,Object>> datas = new ArrayList<Map<String,Object>>();
@@ -915,21 +937,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				}
 			}
 		}
-		KnowledgeBase knowledgeBase = new KnowledgeBase();
-		knowledgeBase.setCategory(category);
-		if(ObjectUtil.isEmpty(knowledgeId)) {
-			knowledgeBase.setCTime(new Date());
-		}
-		knowledgeBase.setDescription(description);
-		knowledgeBase.setIsBuiltIn(0);
-		knowledgeBase.setIsPublished(1);
-		knowledgeBase.setKnowledgeId(knowledgeId);
-		knowledgeBase.setName(name);
-		knowledgeBase.setOpTime(new Date());
-		knowledgeBase.setOpUser(ShiroUtils.getUserId());
-		knowledgeBase.setStatus(status==null ? 1 : status);
-		knowledgeBase.setSource(source);
-		result.put("knowledgeBase", knowledgeBase);
 		return result;
 	}
 	
