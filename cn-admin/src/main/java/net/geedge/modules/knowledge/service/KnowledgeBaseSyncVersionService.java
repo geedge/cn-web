@@ -9,4 +9,13 @@ import net.geedge.modules.knowledge.entity.KnowledgeBaseSyncVersion;
  * @Date: 2023/05/18/11:45
  */
 public interface KnowledgeBaseSyncVersionService extends IService<KnowledgeBaseSyncVersion> {
+    /**
+     * Desc: 版本同步
+     *
+     * @param knowledgeId
+     * @return
+     * @created by wWei
+     * @date 2023/6/14 18:34
+     */
+    void syncVersion(Integer knowledgeId);
 }

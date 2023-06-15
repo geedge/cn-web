@@ -32,6 +32,6 @@ public interface KnowledgeBaseService extends IService<KnowledgeBase> {
     Map<String,Object> validateParam(Map<String,Object> params);
     
     Integer importBatch(MultipartFile file,Integer knowledgeId, String action);
-    
-    List<Map<String,String>> getImportDataFromMultipartFile(MultipartFile file,List<String> headerInfos,Map<String,Object> params);
+
+    void validAndBuildDatasets(MultipartFile file, KnowledgeBase knowledgeBase, String action, List<Map<String, String>> importDataList, List<Integer> deleteDataIds);
 }

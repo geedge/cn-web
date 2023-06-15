@@ -5,7 +5,6 @@ import static net.geedge.common.utils.Constant.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,11 +14,10 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import com.alibaba.fastjson.JSONArray;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +32,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.csv.CsvData;
 import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.text.csv.CsvUtil;
@@ -46,7 +43,6 @@ import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.CSVUtils;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.IPUtils;
-import net.geedge.common.utils.ImportValidateUtil;
 import net.geedge.common.utils.JSONUtil;
 import net.geedge.common.utils.KnowledgeCheckUtil;
 import net.geedge.common.utils.PageUtils;
@@ -303,7 +299,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			knowledgeBase.setIsPublished(isPublished);
 			knowledgeBase.setStatus(status);
 			this.getBaseMapper().updateById(knowledgeBase);
-			syncVersion(knowledgeId);
+			knowledgeBaseSyncVersionService.syncVersion(knowledgeId);
 		}
 		return R.ok();
 	}
@@ -314,16 +310,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 	}
 
-	private void syncVersion(Integer knowledgeId) {
-		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBaseSyncVersion>().eq(KnowledgeBaseSyncVersion::getKnowledgeId, knowledgeId));
-		if(ObjectUtil.isEmpty(knowledgeBaseSyncVersion)) {
-			log.debug("local data not exist : {}",knowledgeId);
-			throw new CNException(RCode.KNOWLEDGE_BASE_SYNC_VERSION_NOT_EXIST);
-		}
-		knowledgeBaseSyncVersion.setVersion(knowledgeBaseSyncVersion.getVersion() + 1);
-		knowledgeBaseSyncVersion.setOpTime(new Date());
-		knowledgeBaseSyncVersionService.getBaseMapper().updateById(knowledgeBaseSyncVersion);
-	}
 
 	@Override
 	public Map<String, Object> statisticsKnowledgeBase(Map<String, Object> params) {
@@ -939,50 +925,50 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Integer importBatch(MultipartFile file, Integer knowledgeId, String action) {
-		Map params = new HashMap();
 		KnowledgeBase knowledgeBase = this.baseMapper.selectById(knowledgeId);
-		if(ObjectUtil.isEmpty(knowledgeBase)) {
+		if (ObjectUtil.isEmpty(knowledgeBase)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
-		params.put("knowledgeBase", knowledgeBase);
-		// 根据source获取对应的表头信息
-		String knowledgeImportConfigJson = sysConfigService.getValue("knowledge_import_config_json");
-		HashMap knowledgeConfigs = JSONObject.parseObject(knowledgeImportConfigJson, HashMap.class);
-		Map<String,Object> sourceConfig = (Map<String, Object>) knowledgeConfigs.get(knowledgeBase.getSource());
-		params.put("sourceConfig", sourceConfig);
-		params.put("source", knowledgeBase.getSource());
-		params.put("action", action);
-		String headerStr = (String) sourceConfig.get("headers");
-		List<String> sysHeaders = StrUtil.split(headerStr, StrUtil.C_COMMA);
-		if(ObjectUtils.isEmpty(sysHeaders)) {
-			throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
+		List<Integer> deleteDataIds = Lists.newArrayList();
+		List<Map<String, String>> saveOrUpdateList = Lists.newArrayList();
+		this.validAndBuildDatasets(file, knowledgeBase, action, saveOrUpdateList, deleteDataIds);
+		//更新操作时 删除多余重复数据
+		if (StrUtil.equals(action, "update") && !deleteDataIds.isEmpty()) {
+			basicImportAndExportService.removeList(knowledgeBase.getSource(), deleteDataIds);
 		}
-		List<Map<Integer, String>> importDataList = this.getImportDataFromMultipartFile(file, sysHeaders,params);
-		this.saveDatasFromImportDataList(importDataList,params);
+		//覆盖操作时 将对应表中数据删除清空
+		if (StrUtil.equals(action, "overwrite")) {
+			basicImportAndExportService.removeList(knowledgeBase.getSource(), knowledgeBase.getKnowledgeId());
+		}
+		this.saveOrUpdateBatch(saveOrUpdateList, knowledgeBase);
+		knowledgeBaseSyncVersionService.syncVersion(knowledgeBase.getKnowledgeId());
 		return knowledgeId;
 	}
 
 	@Override
-	public List<Map<String, String>> getImportDataFromMultipartFile(
-			MultipartFile file, List<String> headerInfos,Map<String,Object> params) {
-		KnowledgeBase knowledgeBase = (KnowledgeBase) params.get("knowledgeBase");
+	public void validAndBuildDatasets(MultipartFile file, KnowledgeBase knowledgeBase, String action, List<Map<String, String>> importDataList, List<Integer> deleteDataIds) {
+		// 根据source获取对应的表头信息
+		String knowledgeImportConfigJson = sysConfigService.getValue("knowledge_import_config_json");
+		HashMap knowledgeConfigs = JSONObject.parseObject(knowledgeImportConfigJson, HashMap.class);
+		Map<String,Object> sourceConfig = (Map<String, Object>) knowledgeConfigs.get(knowledgeBase.getSource());
+		List<String> headerInfos = StrUtil.split((String)sourceConfig.get("headers"), StrUtil.C_COMMA);
+		if(ObjectUtils.isEmpty(headerInfos)) {
+			throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
+		}
 		String fileType = FilenameUtils.getExtension(file.getOriginalFilename());
-		String source = (String) params.get("source");
-		String action = (String) params.get("action");
-		Map<String,Object> sourceConfig = (Map<String, Object>) params.get("sourceConfig");
 		List<Map<String,Object>> infos = (List<Map<String, Object>>) sourceConfig.get("infos");
 		// 将系统配置表头和验证相关整理成map
-		Map<String,Map<String,Object>> configs = new HashMap<String,Map<String,Object>>();
+		Map<String,Map<String,Object>> configs = new HashMap<>();
 		for(Map m : infos) {
 			configs.put((String)m.get("name"), m);
 		}
 		String validateColumn = (String)sourceConfig.get("validateColumn");
-        List<Map<String, String>> importDataList = new ArrayList<>();
+
         switch (fileType) {
             case "csv": {
                 CsvData csvData = CSVUtils.getCsvDataFromMultipartFile(file);
@@ -1052,38 +1038,33 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_NOTNULL);
 					}
 					HashMap<String, String> checkDataMap = Tool.MapUtil.newHashMap();
-					for(String validateCol : validateColumns) {
+					for (String validateCol : validateColumns) {
 						checkDataMap.put(validateCol, tmpMap.get(validateCol));
 					}
-                    // 覆盖操作 将对应表中数据删除清空
-                    if(!StrUtil.equals(action, "overwrite")) {
-                    	Long dbDataId = basicImportAndExportService.queryDataId(source, checkDataMap,knowledgeBase.getKnowledgeId(),null);
-    					if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "update")) {
-    						tmpMap.put("id", dbDataId.toString());
-						} /*else if(ObjectUtil.isNotEmpty(dbDataId) && StrUtil.equals(action, "append")){
-							throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_DUPLICATE);
-						}*/
-                    }
-                    if(ObjectUtil.isNotEmpty(tmpMap)) {
-                    	importDataList.add(tmpMap);
-                    }
-                }
-                break;
-            }
+					// 更新操作 更新最早创建数据、删除其余冗余数据
+					if (StrUtil.equals(action, "update")) {
+						List<Integer> dbDataIds = basicImportAndExportService.queryDataIds(knowledgeBase.getSource(), checkDataMap, knowledgeBase.getKnowledgeId(), null);
+						if (ObjectUtil.isNotEmpty(dbDataIds)) {
+							tmpMap.put("id", dbDataIds.get(0).toString());
+							if (dbDataIds.size() > 1) {
+								deleteDataIds.addAll(dbDataIds.subList(1, dbDataIds.size()));
+							}
+						}
+					}
+					if (ObjectUtil.isNotEmpty(tmpMap)) {
+						importDataList.add(tmpMap);
+					}
+				}
+				break;
+			}
             default: {
                 throw new CNException(RCode.EXCELFILE_TYPE_ERROR);
             }
         }
-        // 覆盖操作 将对应表中数据删除清空
-        if(StrUtil.equals(action, "overwrite")) {
-        	basicImportAndExportService.removeList(source, knowledgeBase.getKnowledgeId());
-        } 
-        return importDataList;
 	}
-	
-	private void saveDatasFromImportDataList(List importDataList,Map<String,Object> params) {
-		KnowledgeBase knowledgeBase = (KnowledgeBase) params.get("knowledgeBase");
-		String source = knowledgeBase.getSource();		
+
+	private void saveOrUpdateBatch(List importDataList, KnowledgeBase knowledgeBase) {
+		String source = knowledgeBase.getSource();
 		// 根据类型不同 生成对应实体 保存入库
 		switch(source) {
 			case IP_TAG_USER_DEFINED:
@@ -1198,16 +1179,20 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				ipLocationBuiltInService.saveOrUpdateBatch(ipLocationBuiltIns);
 				break;
 			case PSIPHON3_IP:
-				List<Psiphon3Ip> psiphon3Ips = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),Psiphon3Ip.class);
-				psiphon3Ips.stream().forEach(data->{
-					data.setCTime(new Date());
+				List<Psiphon3Ip> insertPsiphon3Ips = Lists.newArrayList();
+				List<Psiphon3Ip> updatePsiphon3Ips = Lists.newArrayList();
+				List<Psiphon3Ip> psiphon3Ips = JSONUtil.toList(JSONUtil.toJsonStr(importDataList), Psiphon3Ip.class);
+				psiphon3Ips.stream().forEach(data -> {
 					data.setOpUser(ShiroUtils.getUserId().intValue());
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+					if (ObjectUtil.isEmpty(data.getId())) {
+						data.setCTime(new Date());
+						insertPsiphon3Ips.add(data);
+					} else {
+						updatePsiphon3Ips.add(data);
+					}
 				});
-				Map<Boolean, List<Psiphon3Ip>> psiphon3IpMap = psiphon3Ips.stream().collect(Collectors.groupingBy(psiphon3Ip-> ObjectUtil.isNotEmpty(psiphon3Ip.getId())));
-				List<Psiphon3Ip> updatePsiphon3Ips = psiphon3IpMap.get(true);
-				List<Psiphon3Ip> insertPsiphon3Ips = psiphon3IpMap.get(false);
 				psiphon3IpService.saveBatchForBinary(insertPsiphon3Ips);
 				psiphon3IpService.modifyBatchForBinary(updatePsiphon3Ips);
 				break;
@@ -1253,18 +1238,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);
 			}
 		}
-		// 创建或更新knowledgeBase version记录
-		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getById(knowledgeBase.getKnowledgeId());
-		if(ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
-			Integer version = knowledgeBaseSyncVersion.getVersion();
-			knowledgeBaseSyncVersion.setVersion(version+1);
-		}else {
-			knowledgeBaseSyncVersion = new KnowledgeBaseSyncVersion();
-			knowledgeBaseSyncVersion.setVersion(1);
-		}
-		knowledgeBaseSyncVersion.setKnowledgeId(knowledgeBase.getKnowledgeId());
-		knowledgeBaseSyncVersion.setOpTime(new Date());
-		knowledgeBaseSyncVersionService.saveOrUpdate(knowledgeBaseSyncVersion);
 	}
 	
 	/**

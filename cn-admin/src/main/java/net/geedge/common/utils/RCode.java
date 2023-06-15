@@ -330,7 +330,8 @@ public enum RCode {
     KNOWLEDGE_CATEGORY_ISNULL(591019,"KnowledgeBase category is required"),
     KNOWLEDGE_SOURCE_ERROR(591020,"The source is inconsistent with the system template"),
     KNOWLEDGE_IMPORT_ACTION_ISNULL(591021,"KnowledgeBase import action is required"),
-    
+    KNOWLEDGE_IMPORT_ACTION_VALUE_ERROR(591022,"KnowledgeBase import action must be one of overwrite,append,update"),
+
     ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
     ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
     ENTITY_TAG_NOT_EXIST(601003,"Entity tag not exist"),

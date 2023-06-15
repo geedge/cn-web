@@ -3,7 +3,7 @@
 <mapper namespace="net.geedge.modules.sys.dao.BasicImportAndExportDao">
 
     <!--执行自定义SQL将返回结果保存到Map中-->
-    <select id="selectDataId" resultType="java.lang.Long">
+    <select id="selectDataId" resultType="java.lang.Integer">
         SELECT id FROM ${tableName} WHERE knowledge_id = #{knowledgeId} and
 		<foreach collection="params.entrySet()" item="value" index="key" separator="and">
 			${key} = #{value}
@@ -11,6 +11,7 @@
 		<if test="id != null">
             and id != #{id}
         </if>
+        ORDER BY id ASC
     </select>
 
 	<delete id="deleteList">

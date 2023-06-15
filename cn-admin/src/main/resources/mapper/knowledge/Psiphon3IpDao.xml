@@ -62,7 +62,9 @@
     		start_ip_binary = INET6_ATON(#{psiphon3Ip.startIpBinary}),
     		end_ip_binary = INET6_ATON(#{psiphon3Ip.endIpBinary}),
     		op_time = #{psiphon3Ip.opTime},
-    		c_time = #{psiphon3Ip.cTime},
+			<if test="psiphon3Ip.cTime != null and psiphon3Ip.cTime != ''">
+				c_time = #{psiphon3Ip.cTime},
+			</if>
     		op_user = #{psiphon3Ip.opUser},
     		is_valid = #{psiphon3Ip.isValid},
     		knowledge_id = #{psiphon3Ip.knowledgeId},
