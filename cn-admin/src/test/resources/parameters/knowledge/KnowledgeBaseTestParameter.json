@@ -66,33 +66,34 @@
       }
     ]
   },
-  "addKnowledgeBase_error": {
+  "addKnowledgeBase_sourceIsNull": {
   },
   "------------------ PUT  /v1/knowledgeBase data---------------------": "note",
   "modifyKnowledgeBase_success": {
     "knowledgeId":2,
     "name":"IP移动网类别",
     "category":"user_defined",
-    "source":"cn_ip_tag_user_defined",
     "description":"this is description",
     "status":1,
+    "addItemList": [{
+      "addrFormat":"Single",
+      "ip1":"192.168.25.1",
+      "ip2":"12",
+      "tagValue":"IP移动网类别2",
+      "user": {
+        "id": 1,
+        "name": "admin"
+      },
+      "isValid":1
+    }],
     "updateItemList":[{
       "id":2,
       "addrFormat":"Single",
       "ip1":"192.168.22.1",
       "ip2":"11",
       "tagValue":"IP移动网类别1",
-      "user": {
-        "id": 1,
-        "name": "admin"
-      },
-      "isValid":1
-    },
-    {
-      "addrFormat":"Single",
-      "ip1":"192.168.25.1",
-      "ip2":"12",
-      "tagValue":"IP移动网类别2",
+      "cTime": 1685412014,
+      "opTime": 1685412014,
       "user": {
         "id": 1,
         "name": "admin"

@@ -725,6 +725,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				throw new CNException(RCode.KNOWLEDGE_SOURCE_ISNULL);
 			}
 			knowledgeBase = new KnowledgeBase();
+			knowledgeBase.setSource(source);
 			knowledgeBase.setCTime(new Date());
 			knowledgeBase.setIsBuiltIn(0);
 			knowledgeBase.setIsPublished(1);
