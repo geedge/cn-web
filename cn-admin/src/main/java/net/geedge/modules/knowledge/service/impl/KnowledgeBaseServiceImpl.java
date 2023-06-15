@@ -470,11 +470,23 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 
 	private void mapDateToTimestamp(Map<String, Object> map) {
-		if (ObjectUtil.isNotEmpty(map.get("opTime"))) {
-			map.put("opTime", (Long)map.get("opTime")/1000);
+		if(ObjectUtil.isNotEmpty(map.get("opTime"))) {
+			if (map.get("opTime") instanceof Date) {
+				Date opTime = (Date) map.get("opTime");
+				map.put("opTime", opTime.getTime()/1000);
+			} else {
+				long opTime = Long.valueOf(map.get("opTime").toString())/1000;
+				map.put("opTime", opTime);
+			}
 		}
 		if (ObjectUtil.isNotEmpty(map.get("cTime"))) {
-			map.put("cTime", (Long)map.get("cTime")/1000);
+			if (map.get("cTime") instanceof Date) {
+				Date cTime = (Date) map.get("cTime");
+				map.put("cTime", cTime.getTime()/1000);
+			} else {
+				long cTime = Long.valueOf(map.get("cTime").toString())/1000;
+				map.put("cTime", cTime);
+			}
 		}
 	}
 
