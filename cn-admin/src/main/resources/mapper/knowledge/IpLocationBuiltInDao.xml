@@ -30,16 +30,22 @@
         cn_ip_location_built_in
         where knowledge_id = #{params.knowledgeId}
         <if test="params.orderBy == null or params.orderBy == ''">
-            ORDER BY location_id
+            ORDER BY id
         </if>
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        select continent as continent, country as country, province as province,
-               city as city, lngwgs as lngwgs, latwgs as latwgs, isp as isp,
-               owner as owner from
-            cn_ip_location_built_in
-        where #{resource} between minip and maxip
-        limit 1
+        select t.continent as continent, t.country as country, t.province as province,
+               t.city as city, t.lngwgs as lngwgs, t.latwgs as latwgs, t.isp as isp,
+               t.owner as owner from
+            (   select continent as continent, country as country, province as province,
+                       city as city, lngwgs as lngwgs, latwgs as latwgs, isp as isp,
+                       owner as owner, minip as minip, maxip as maxip from
+                    cn_ip_location_built_in
+                where minip &lt;= #{resource}
+                ORDER BY minip DESC
+                limit 1
+            ) AS t
+        where t.maxip &gt;= #{resource}
     </select>
 </mapper>
