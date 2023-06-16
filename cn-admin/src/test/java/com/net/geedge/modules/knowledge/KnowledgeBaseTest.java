@@ -187,4 +187,30 @@ public class KnowledgeBaseTest extends BaseTest<KnowledgeBase> {
 
         UTUtil.assertEqualsRCode(result, RCode.KNOWLEDGE_SOURCE_ISNULL);
     }
+
+    /**
+     * POST /v1/knowledgeBase/items/batch success
+     */
+    @Test
+    public void importKnowledgeBaseBatch_success() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        Map<String, String> requestHeader = new HashMap<>();
+        requestHeader.put("contentType", MediaType.MULTIPART_FORM_DATA_VALUE);
+        MvcResult result = UTUtil.performMultipart("/v1/knowledgeBase/items/batch", "/doc/knowledge/自定义APP标签.csv", "file", queryParam, requestHeader);
+
+        UTUtil.assertEqualsRCode(result, RCode.SUCCESS);
+    }
+
+    /**
+     * POST /v1/knowledgeBase/items/batch id is null
+     */
+    @Test
+    public void importKnowledgeBaseBatch_idIsNull() {
+        Map<String, Object> queryParam = jsonToInParameter(testName.getMethodName(), Map.class);
+        Map<String, String> requestHeader = new HashMap<>();
+        requestHeader.put("contentType", MediaType.MULTIPART_FORM_DATA_VALUE);
+        MvcResult result = UTUtil.performMultipart("/v1/knowledgeBase/items/batch", "/doc/knowledge/自定义APP标签.csv", "file", queryParam, requestHeader);
+
+        UTUtil.assertEqualsRCode(result, RCode.KNOWLEDGE_ID_ISNULL);
+    }
 }

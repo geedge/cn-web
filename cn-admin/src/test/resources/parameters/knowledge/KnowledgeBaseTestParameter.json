@@ -112,5 +112,12 @@
     "source": "cn_ip_tag_user_defined"
   },
   "parserKnowledgeBase_sourceIsNull": {
+  },
+  "------------------ POST /v1/knowledgeBase/items/batch data---------------------": "note",
+  "importKnowledgeBaseBatch_success": {
+    "knowledgeId": 3,
+    "action": "append"
+  },
+  "importKnowledgeBaseBatch_idIsNull": {
   }
 }
