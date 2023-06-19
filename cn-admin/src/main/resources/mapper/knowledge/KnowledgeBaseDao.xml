@@ -45,8 +45,11 @@
             </if>
         </where>
         <choose>
-            <when test="params.orderBy != null and params.orderBy != ''">
-                ORDER BY ${params.orderBy}
+            <when test="params.orderBy != null and params.orderBy != '' and params.orderBy.contains(&quot;-&quot;)">
+                ORDER BY ${params.orderBy.substring(1)} desc
+            </when>
+            <when test="params.orderBy != null and params.orderBy != '' and !params.orderBy.contains(&quot;-&quot;)">
+                ORDER BY ${params.orderBy} asc
             </when>
             <otherwise>
                 ORDER BY knowledge_id desc
