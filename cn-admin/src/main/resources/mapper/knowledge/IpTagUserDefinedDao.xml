@@ -74,9 +74,16 @@
     </update>
 
     <select id="queryIpEntityTag" resultType="java.util.Map">
-        select id as id, tag_value as tagValue, op_time as updateTime,
-               c_time as createTime, is_valid as isValid from
-        cn_ip_tag_user_defined
-        where  INET6_ATON(#{resource}) between start_ip_binary and end_ip_binary
+        select t.id as id, t.tag_value as tagValue, t.op_time as updateTime,
+               t.c_time as createTime, t.is_valid as isValid from
+            (   select id, tag_value, op_time,
+                       c_time, is_valid, start_ip_binary,
+                       end_ip_binary from
+                cn_ip_tag_user_defined
+                where start_ip_binary &lt;= INET6_ATON(#{resource})
+                ORDER BY start_ip_binary DESC
+                limit 1
+            ) AS t
+        where  t.end_ip_binary &gt;= INET6_ATON(#{resource})
     </select>
 </mapper>

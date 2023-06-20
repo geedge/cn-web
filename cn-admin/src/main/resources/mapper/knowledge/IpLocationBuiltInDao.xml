@@ -38,9 +38,9 @@
         select t.continent as continent, t.country as country, t.province as province,
                t.city as city, t.lngwgs as lngwgs, t.latwgs as latwgs, t.isp as isp,
                t.owner as owner from
-            (   select continent as continent, country as country, province as province,
-                       city as city, lngwgs as lngwgs, latwgs as latwgs, isp as isp,
-                       owner as owner, minip as minip, maxip as maxip from
+            (   select continent, country, province,
+                       city, lngwgs, latwgs, isp,
+                       owner, minip, maxip from
                     cn_ip_location_built_in
                 where minip &lt;= #{resource}
                 ORDER BY minip DESC

@@ -80,8 +80,13 @@
 		select type as type, method as method, confidence as confidence,
 		       confidence_level as confidenceLevel, op_time as updateTime,
 		       c_time as createTime, is_valid as isValid from
-		cn_psiphon3_ip
-		where  INET6_ATON(#{resource}) between start_ip_binary and end_ip_binary
-		limit 1
+			(   select type, method, confidence,confidence_level, op_time,
+			           c_time, is_valid, start_ip_binary, end_ip_binary from
+				cn_psiphon3_ip
+				where start_ip_binary &lt;= INET6_ATON(#{resource})
+				ORDER BY start_ip_binary DESC
+				limit 1
+			) AS t
+		where t.end_ip_binary &gt;= INET6_ATON(#{resource})
 	</select>
 </mapper>

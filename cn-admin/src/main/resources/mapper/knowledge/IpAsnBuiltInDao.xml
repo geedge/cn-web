@@ -28,9 +28,14 @@
 
     <select id="queryEntityDetail" resultType="java.util.Map">
         select id as id, asn as asn, organization as organization from
-        cn_ip_asn_built_in
-        where INET6_ATON(#{resource}) between start_ip_binary and end_ip_binary
-        limit 1
+            (   select id, asn, organization,
+                     start_ip_binary, end_ip_binary from
+                cn_ip_asn_built_in
+                where start_ip_binary &lt;= INET6_ATON(#{resource})
+                ORDER BY start_ip_binary DESC
+                limit 1
+            ) AS t
+        where t.end_ip_binary &gt;= INET6_ATON(#{resource})
     </select>
     
     <insert id="insertBatchForBinary">
