@@ -2,11 +2,17 @@ package net.geedge.modules.entity.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.net.InetAddresses;
 import net.geedge.common.utils.*;
 import net.geedge.modules.entity.service.EntityService;
+import net.geedge.modules.galaxy.entity.GalaxyProxy;
+import net.geedge.modules.knowledge.entity.AppCategoryBuiltIn;
+import net.geedge.modules.knowledge.entity.FqdnCategoryBuiltIn;
+import net.geedge.modules.knowledge.entity.FqdnWhoIsBuiltIn;
+import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import net.geedge.modules.knowledge.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +28,8 @@ import java.util.*;
  */
 @Service("EntityService")
 public class EntityServiceImpl implements EntityService {
+    @Autowired
+    private KnowledgeBaseService knowledgeBaseService;
 
     @Autowired
     private FqdnWhoIsBuiltInService fqdnWhoIsBuiltInService;
@@ -61,13 +69,13 @@ public class EntityServiceImpl implements EntityService {
         Map<String, Object> data = new HashMap<>();
         if ("app".equals(entityType)){
             Map<String, Object> category = appCategoryBuiltInService.queryEntityDetail(resource);
-            data.put("category", category);
+            addValidDataToMap(data, "category", category);
         } else if ("domain".equals(entityType)){
             Map<String, Object> whois = fqdnWhoIsBuiltInService.queryEntityDetail(resource);
             dateToTimestamp(whois);
             Map<String, Object> category = fqdnCategoryBuiltInService.queryEntityDetail(resource);
-            data.put("whois", whois);
-            data.put("category", category);
+            addValidDataToMap(data, "whois", whois);
+            addValidDataToMap(data, "category", category);
         } else if ("ip".equals(entityType)){
             Map<String, Object> asn = ipAsnBuiltInService.queryEntityDetail(resource);
             String ipNumber = null;
@@ -77,10 +85,20 @@ public class EntityServiceImpl implements EntityService {
                 return R.error(400,"ip "+e.getMessage()+"is not ipv4 or ipv6");
             }
             Map<String, Object> location = ipLocationBuiltInService.queryEntityDetail(ipNumber);
-            data.put("asn", asn);
-            data.put("location", location);
+            addValidDataToMap(data, "asn", asn);
+            addValidDataToMap(data, "location", location);
         }
         return R.ok(data);
+    }
+
+    private void addValidDataToMap(Map<String, Object> map, String key, Map<String, Object> value) {
+        map.put(key, null);
+        if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get("knowledgeId"))) {
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get("knowledgeId")));
+            if (knowledgeBase.getStatus() == 1 && (Integer) value.get("isValid") == 1) {
+                map.put(key, value);
+            }
+        }
     }
 
     private void dateToTimestamp(Map<String, Object> whois){
@@ -107,25 +125,41 @@ public class EntityServiceImpl implements EntityService {
         Map<String, Object> data = new HashMap<>();
         if ("app".equals(entityType)){
             List<Map> userDefinedTags = appTagUserDefinedService.queryAppEntityTag(resource);
-            data.put("userDefinedTags", userDefinedTags);
+            addValidListToMap(data, "userDefinedTags", userDefinedTags);
         } else if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource);
             List<Map> userDefinedTags = domainTagUserDefinedService.queryDomainEntityTag(resource);
-            data.put("malware", malware);
-            data.put("darkweb", darkweb);
-            data.put("userDefinedTags", userDefinedTags);
+            addValidDataToMap(data, "malware", malware);
+            addValidDataToMap(data, "darkweb", darkweb);
+            addValidListToMap(data, "userDefinedTags", userDefinedTags);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryIpEntityTag(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryIpEntityTag(resource);
             Map<String, Object> psiphon3Ip = psiphon3IpService.queryIpEntityTag(resource);
             List<Map> userDefinedTags = ipTagUserDefinedService.queryIpEntityTag(resource);
-            data.put("malware", malware);
-            data.put("darkweb", darkweb);
-            data.put("psiphon3Ip", psiphon3Ip);
-            data.put("userDefinedTags", userDefinedTags);
+            addValidDataToMap(data, "malware", malware);
+            addValidDataToMap(data, "darkweb", darkweb);
+            addValidDataToMap(data, "psiphon3Ip", psiphon3Ip);
+            addValidListToMap(data, "userDefinedTags", userDefinedTags);
         }
         return R.ok(data);
+    }
+
+    private void addValidListToMap(Map<String, Object> map, String key, List<Map> value) {
+        map.put(key, null);
+        List<Map> list = new ArrayList<>();
+        if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get(0).get("knowledgeId"))) {
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get(0).get("knowledgeId")));
+            for (int i = 0; i<value.size(); i++) {
+                if ((Integer) value.get(i).get("isValid") == 1) {
+                    list.add(value.get(i));
+                }
+            }
+            if (knowledgeBase.getStatus() == 1) {
+                map.put(key, list);
+            }
+        }
     }
 
     @Override
@@ -167,21 +201,16 @@ public class EntityServiceImpl implements EntityService {
         List<Map<String,Object>> entityList = new ArrayList<>();
         List<Map> userDefinedTags = new ArrayList<>();
         if ("app".equals(entityType)){
-            Map<String, Object> category = new HashMap<>();
-            category.put("category",appCategoryBuiltInService.queryEntityDetail(resource));
-            userDefinedTags = appTagUserDefinedService.queryAppEntityTag(resource);
+            Map<String, Object> category = createEnableMap("category",appCategoryBuiltInService.queryEntityDetail(resource));
+            userDefinedTags = createEnableList(appTagUserDefinedService.queryAppEntityTag(resource));
             mapChangeTimestamp(category);
             addEntityList(entityList, category);
         } else if ("domain".equals(entityType)){
-            Map<String, Object> whois = new HashMap<>();
-            Map<String, Object> category = new HashMap<>();
-            Map<String, Object> malware = new HashMap<>();
-            Map<String, Object> darkweb = new HashMap<>();
-            whois.put("whois", fqdnWhoIsBuiltInService.queryEntityDetail(resource));
-            category.put("category", fqdnCategoryBuiltInService.queryEntityDetail(resource));
-            malware.put("malware", iocMalwareService.queryDomainEntityTag(resource));
-            darkweb.put("darkweb", iocDarkwebService.queryDomainEntityTag(resource));
-            userDefinedTags = domainTagUserDefinedService.queryDomainEntityTag(resource);
+            Map<String, Object> whois = createEnableMap("whois", fqdnWhoIsBuiltInService.queryEntityDetail(resource));
+            Map<String, Object> category = createEnableMap("category", fqdnCategoryBuiltInService.queryEntityDetail(resource));
+            Map<String, Object> malware = createEnableMap("malware", iocMalwareService.queryDomainEntityTag(resource));
+            Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryDomainEntityTag(resource));
+            userDefinedTags = createEnableList(domainTagUserDefinedService.queryDomainEntityTag(resource));
             mapChangeTimestamp(whois);
             mapChangeTimestamp(category);
             mapChangeTimestamp(malware);
@@ -191,13 +220,10 @@ public class EntityServiceImpl implements EntityService {
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
         } else if ("ip".equals(entityType)){
-            Map<String, Object> malware = new HashMap<>();
-            Map<String, Object> darkweb = new HashMap<>();
-            Map<String, Object> psiphon3Ip = new HashMap<>();
-            malware.put("malware", iocMalwareService.queryIpEntityTag(resource));
-            darkweb.put("darkweb", iocDarkwebService.queryIpEntityTag(resource));
-            psiphon3Ip.put("psiphon3Ip", psiphon3IpService.queryIpEntityTag(resource));
-            userDefinedTags = ipTagUserDefinedService.queryIpEntityTag(resource);
+            Map<String, Object> malware = createEnableMap("malware", iocMalwareService.queryIpEntityTag(resource));
+            Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryIpEntityTag(resource));
+            Map<String, Object> psiphon3Ip = createEnableMap("psiphon3Ip", psiphon3IpService.queryIpEntityTag(resource));
+            userDefinedTags = createEnableList(ipTagUserDefinedService.queryIpEntityTag(resource));
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             mapChangeTimestamp(psiphon3Ip);
@@ -209,6 +235,28 @@ public class EntityServiceImpl implements EntityService {
         addUserDefinedTag(entityList, userDefinedTags);
         sortByUpdateTime(entityList);
         return entityList;
+    }
+
+    private Map<String, Object> createEnableMap(String key, Map<String, Object> value) {
+        Map<String, Object> map = new HashMap<>();
+        if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get("knowledgeId"))) {
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get("knowledgeId")));
+            if (knowledgeBase.getStatus() == 1) {
+                map.put(key, value);
+            }
+        }
+        return map;
+    }
+
+    private List<Map> createEnableList(List<Map> value) {
+        List<Map> list = null;
+        if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get(0).get("knowledgeId"))) {
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get(0).get("knowledgeId")));
+            if (knowledgeBase.getStatus() == 1) {
+                list = value;
+            }
+        }
+        return list;
     }
 
     private void addEntityList(List<Map<String,Object>> entityList, Map<String, Object> tagMap) {
@@ -268,18 +316,20 @@ public class EntityServiceImpl implements EntityService {
 
     private List<Map> listChangeTimestamp(List<Map> tagsList) {
         List<Map> newList = new ArrayList<>();
-        for (Map tagMap: tagsList) {
-            if (ObjectUtil.isNotEmpty(tagMap)) {
-                if (ObjectUtil.isNotEmpty(tagMap.get("updateTime"))) {
-                    Date updateTime = (Date) tagMap.get("updateTime");
-                    tagMap.put("updateTime", updateTime.getTime()/1000);
+        if (ObjectUtil.isNotEmpty(tagsList)) {
+            for (Map tagMap : tagsList) {
+                if (ObjectUtil.isNotEmpty(tagMap)) {
+                    if (ObjectUtil.isNotEmpty(tagMap.get("updateTime"))) {
+                        Date updateTime = (Date) tagMap.get("updateTime");
+                        tagMap.put("updateTime", updateTime.getTime() / 1000);
+                    }
+                    if (ObjectUtil.isNotEmpty(tagMap.get("createTime"))) {
+                        Date createTime = (Date) tagMap.get("createTime");
+                        tagMap.put("createTime", createTime.getTime() / 1000);
+                    }
                 }
-                if (ObjectUtil.isNotEmpty(tagMap.get("createTime"))) {
-                    Date createTime = (Date) tagMap.get("createTime");
-                    tagMap.put("createTime", createTime.getTime()/1000);
-                }
+                newList.add(tagMap);
             }
-            newList.add(tagMap);
         }
         return newList;
     }

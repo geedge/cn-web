@@ -37,10 +37,10 @@
     <select id="queryEntityDetail" resultType="java.util.Map">
         select t.continent as continent, t.country as country, t.province as province,
                t.city as city, t.lngwgs as lngwgs, t.latwgs as latwgs, t.isp as isp,
-               t.owner as owner from
+               t.owner as owner, t.knowledge_id as knowledgeId, t.is_valid as isValid from
             (   select continent, country, province,
                        city, lngwgs, latwgs, isp,
-                       owner, minip, maxip from
+                       owner, knowledge_id, is_valid, minip, maxip from
                     cn_ip_location_built_in
                 where minip &lt;= #{resource}
                 ORDER BY minip DESC

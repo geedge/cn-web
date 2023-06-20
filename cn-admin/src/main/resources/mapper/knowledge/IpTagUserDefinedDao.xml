@@ -75,9 +75,9 @@
 
     <select id="queryIpEntityTag" resultType="java.util.Map">
         select t.id as id, t.tag_value as tagValue, t.op_time as updateTime,
-               t.c_time as createTime, t.is_valid as isValid from
+               t.c_time as createTime, t.is_valid as isValid, t.knowledge_id as knowledgeId from
             (   select id, tag_value, op_time,
-                       c_time, is_valid, start_ip_binary,
+                       c_time, is_valid, knowledge_id, start_ip_binary,
                        end_ip_binary from
                 cn_ip_tag_user_defined
                 where start_ip_binary &lt;= INET6_ATON(#{resource})
