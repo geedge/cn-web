@@ -12,7 +12,7 @@
   },
   "------------------ GET  /v1/knowledgeBase/{id} data---------------------": "note",
   "knowledgeBaseItem_success": {
-    "knowledgeId": 2,
+    "knowledgeId": 100002,
     "pageSize": 10,
     "pageNo": 1
   },
@@ -24,11 +24,11 @@
   "------------------ PATCH  /v1/knowledgeBase/status data---------------------": "note",
   "knowledgeBaseStatus_success": {
     "list": [{
-      "knowledgeId": 2,
+      "knowledgeId": 100002,
       "isPublished": 1,
       "status": 1
     },{
-      "knowledgeId": 3,
+      "knowledgeId": 100003,
       "isPublished": 1,
       "status": 1
     }]
@@ -37,7 +37,7 @@
   },
   "------------------ DELETE  /v1/knowledgeBase data---------------------": "note",
   "deleteKnowledgeBase_success": {
-    "knowledgeIds": ["1","4"]
+    "knowledgeIds": ["100001","100004"]
   },
   "deleteKnowledgeBase_error": {
   },
@@ -70,7 +70,7 @@
   },
   "------------------ PUT  /v1/knowledgeBase data---------------------": "note",
   "modifyKnowledgeBase_success": {
-    "knowledgeId":2,
+    "knowledgeId":100002,
     "name":"IP移动网类别",
     "category":"user_defined",
     "description":"this is description",
@@ -115,7 +115,7 @@
   },
   "------------------ POST /v1/knowledgeBase/items/batch data---------------------": "note",
   "importKnowledgeBaseBatch_success": {
-    "knowledgeId": 3,
+    "knowledgeId": 100003,
     "action": "append"
   },
   "importKnowledgeBaseBatch_idIsNull": {
