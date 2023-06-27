@@ -8,10 +8,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.net.InetAddresses;
 import net.geedge.common.utils.*;
 import net.geedge.modules.entity.service.EntityService;
-import net.geedge.modules.galaxy.entity.GalaxyProxy;
-import net.geedge.modules.knowledge.entity.AppCategoryBuiltIn;
-import net.geedge.modules.knowledge.entity.FqdnCategoryBuiltIn;
-import net.geedge.modules.knowledge.entity.FqdnWhoIsBuiltIn;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import net.geedge.modules.knowledge.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +91,7 @@ public class EntityServiceImpl implements EntityService {
         map.put(key, null);
         if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get("knowledgeId"))) {
             KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get("knowledgeId")));
-            if (knowledgeBase.getStatus() == 1 && (Integer) value.get("isValid") == 1) {
+            if (knowledgeBase.getStatus() == 1 && "1".equals(value.get("isValid").toString())) {
                 map.put(key, value);
             }
         }
@@ -152,7 +148,7 @@ public class EntityServiceImpl implements EntityService {
         if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get(0).get("knowledgeId"))) {
             KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get(0).get("knowledgeId")));
             for (int i = 0; i<value.size(); i++) {
-                if ((Integer) value.get(i).get("isValid") == 1) {
+                if ("1".equals(value.get(i).get("isValid").toString())) {
                     list.add(value.get(i));
                 }
             }

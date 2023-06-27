@@ -5,6 +5,7 @@
     <resultMap id="AppCategoryBuiltIn" type="net.geedge.modules.knowledge.entity.AppCategoryBuiltIn">
         <result property="id" column="id"></result>
         <result property="appName" column="app_name"></result>
+        <result property="appId" column="app_id"></result>
         <result property="appCategory" column="app_category"></result>
         <result property="appSubcategory" column="app_subcategory"></result>
         <result property="appRisk" column="app_risk"></result>
@@ -30,7 +31,7 @@
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        select app_name as appName, id as appId, app_category as appCategory,
+        select app_name as appName, app_id as appId, app_category as appCategory,
                app_subcategory as appSubcategory, app_risk as appRisk,
                app_description as appDescription, app_longname as appLongname,
                app_technology as appTechnology, app_company as appCompany,
