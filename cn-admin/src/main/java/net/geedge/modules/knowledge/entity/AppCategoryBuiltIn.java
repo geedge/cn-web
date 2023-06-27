@@ -18,6 +18,8 @@ public class AppCategoryBuiltIn {
 
     private String appName;
 
+    private String ç;
+
     private String appCategory;
 
     private String appSubcategory;
