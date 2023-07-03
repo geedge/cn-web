@@ -65,7 +65,9 @@
     		start_ip_binary = INET6_ATON(#{ip.startIpBinary}),
     		end_ip_binary = INET6_ATON(#{ip.endIpBinary}),
     		op_time = #{ip.opTime},
-    		c_time = #{ip.cTime},
+            <if test="ip.cTime != null and ip.cTime != ''">
+    		    c_time = #{ip.cTime},
+            </if>
     		op_user = #{ip.opUser},
     		is_valid = #{ip.isValid},
     		knowledge_id = #{ip.knowledgeId}
