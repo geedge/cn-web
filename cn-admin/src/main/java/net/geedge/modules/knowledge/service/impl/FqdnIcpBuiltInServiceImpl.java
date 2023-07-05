@@ -27,4 +27,9 @@ public class FqdnIcpBuiltInServiceImpl extends ServiceImpl<FqdnIcpBuiltInDao, Fq
         page.setRecords(fqdnIcpBuiltIns);
         return new PageUtils(page);
     }
+
+    @Override
+    public Map<String, Object> queryEntityDetail(String resource) {
+        return this.baseMapper.queryEntityDetail(resource);
+    }
 }

@@ -31,6 +31,9 @@ public class EntityServiceImpl implements EntityService {
     private FqdnWhoIsBuiltInService fqdnWhoIsBuiltInService;
 
     @Autowired
+    private FqdnIcpBuiltInService fqdnIcpBuiltInService;
+
+    @Autowired
     private FqdnCategoryBuiltInService fqdnCategoryBuiltInService;
 
     @Autowired
@@ -69,8 +72,10 @@ public class EntityServiceImpl implements EntityService {
         } else if ("domain".equals(entityType)){
             Map<String, Object> whois = fqdnWhoIsBuiltInService.queryEntityDetail(resource);
             dateToTimestamp(whois);
+            Map<String, Object> icp = fqdnIcpBuiltInService.queryEntityDetail(resource);
             Map<String, Object> category = fqdnCategoryBuiltInService.queryEntityDetail(resource);
             addValidDataToMap(data, "whois", whois);
+            addValidDataToMap(data, "icp", icp);
             addValidDataToMap(data, "category", category);
         } else if ("ip".equals(entityType)){
             Map<String, Object> asn = ipAsnBuiltInService.queryEntityDetail(resource);

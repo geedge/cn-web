@@ -18,4 +18,6 @@ import java.util.Map;
 public interface FqdnIcpBuiltInDao extends BaseMapper<FqdnIcpBuiltIn> {
 
     List<FqdnIcpBuiltIn> queryPageByKnowledgeId(IPage<FqdnIcpBuiltIn> page, @Param("params") Map<String, Object> params);
+
+    Map<String, Object> queryEntityDetail(@Param("resource") String resource);
 }
