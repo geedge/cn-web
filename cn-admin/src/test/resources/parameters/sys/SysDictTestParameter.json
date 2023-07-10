@@ -9,8 +9,7 @@
   "------------------ GET  /sys/dict data---------------------": "note",
   "querySysDictList_exist": {
     "pageNo": null,
-    "pageSize": null,
-    "orderBy": "name"
+    "pageSize": null
   },
   "querySysDictList_notexist": {
     "pageNo": null,
