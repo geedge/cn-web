@@ -44,6 +44,6 @@
                 ORDER BY maxip
                 limit 1
             ) AS t
-        where t.minip &lt;= #{resource}
+        where t.minip &lt;= #{resource}+0
     </select>
 </mapper>
