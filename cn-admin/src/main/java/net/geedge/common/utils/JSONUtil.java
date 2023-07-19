@@ -761,10 +761,10 @@ public class JSONUtil {
 	 * @param jsonStr JSON字符串
 	 * @return 格式化后的字符串
 	 * @since 3.1.2
-	 */
+	 
 	public static String formatJsonStr(String jsonStr) {
 		return JSONStrFormater.format(jsonStr);
-	}
+	}*/
 
 	/**
 	 * 是否为JSON字符串，首尾都为大括号或中括号判定为JSON字符串

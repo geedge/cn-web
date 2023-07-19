@@ -542,8 +542,8 @@ public class Tool {
 	 *
 	 * @author xiaoleilu
 	 * @deprecated 使用TemplateUtil替代
-	 */
-	public static class VelocityUtil extends cn.hutool.extra.template.engine.velocity.VelocityUtil {}
+	 
+	public static class VelocityUtil extends cn.hutool.extra.template.engine.velocity.VelocityUtil {}*/
 	/**
 	 * {@link ByteBuffer} 工具类<br>
 	 * 此工具来自于 t-io 项目以及其它项目的相关部分收集<br>

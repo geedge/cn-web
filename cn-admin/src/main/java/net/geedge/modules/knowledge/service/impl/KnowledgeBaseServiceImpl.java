@@ -30,6 +30,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import cn.hutool.core.io.CharsetDetector;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.text.csv.CsvData;
@@ -183,7 +184,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		try{
 			tempFile = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".csv");
 			FileUtils.copyInputStreamToFile(file.getInputStream(),tempFile);
-			CsvData datas = CsvUtil.getReader().read(ResourceUtil.getReader(tempFile.getPath(), CharsetUtil.CHARSET_UTF_8));
+			CsvData datas = CsvUtil.getReader().read(ResourceUtil.getReader(tempFile.getPath(), CharsetDetector.detect(tempFile)));
 			
 			Map<String,Object> result = new HashMap<String,Object>();
 			List<Map<String,Object>> handlerData = new ArrayList<Map<String,Object>>();
@@ -225,8 +226,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		        		ip2 = StrUtil.split(s, StrUtil.C_SLASH).get(1);
 		        	}else if(StrUtil.contains(s, StrUtil.DASHED)) {
 		        		ipType = Constant.IpFormatType.RANGE.getValue();
-		        		ip1 = StrUtil.split(s, StrUtil.DASHED)[0];
-		        		ip2 = StrUtil.split(s, StrUtil.DASHED)[1];
+		        		ip1 = StrUtil.split(s, StrUtil.DASHED).get(0);
+		        		ip2 = StrUtil.split(s, StrUtil.DASHED).get(1);
 		        	}else {
 		        		ipType = Constant.IpFormatType.SINGLE.getValue();
 		        		ip1 = s;

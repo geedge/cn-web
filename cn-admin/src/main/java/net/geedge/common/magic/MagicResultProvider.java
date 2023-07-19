@@ -36,7 +36,7 @@ public class MagicResultProvider implements ResultProvider {
     
     private String nullHandler(String msg) {
     	String param = "";
-    	param = StrUtil.split(msg, "[")[1].split("]")[0];
+    	param = (StrUtil.split(msg, "[")).get(1).split("]")[0];
     	return String.format("param %s can not be empty",param);
     }
 }
