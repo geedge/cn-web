@@ -151,15 +151,13 @@ public class EntityServiceImpl implements EntityService {
         map.put(key, null);
         List<Map> list = new ArrayList<>();
         if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get(0).get("knowledgeId"))) {
-            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get(0).get("knowledgeId")));
             for (int i = 0; i<value.size(); i++) {
-                if ("1".equals(value.get(i).get("isValid").toString())) {
+                KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get(i).get("knowledgeId")));
+                if (knowledgeBase.getStatus() == 1 && "1".equals(value.get(i).get("isValid").toString())) {
                     list.add(value.get(i));
                 }
             }
-            if (knowledgeBase.getStatus() == 1) {
-                map.put(key, list);
-            }
+            map.put(key, list);
         }
     }
 
