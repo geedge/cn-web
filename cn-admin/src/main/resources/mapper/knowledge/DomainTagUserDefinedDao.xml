@@ -34,6 +34,6 @@
         select id as id, tag_value as tagValue, op_time as updateTime,
                c_time as createTime, is_valid as isValid, knowledge_id as knowledgeId from
             cn_domain_tag_user_defined
-        where domain like concat ('%', #{resource}) or domain = concat ('*.', substring_index(#{resource}, '.', -2))
+        where domain = concat ('$', #{resource}) or LOCATE(substring_index(domain, '*', -1), #{resource}) > 0 or LOCATE(substring_index(domain, '*.', -1), #{resource}) > 0
     </select>
 </mapper>
