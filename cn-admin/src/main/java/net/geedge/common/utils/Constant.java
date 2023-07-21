@@ -263,4 +263,7 @@ public class Constant {
 			this.value = value;
 		}
 	}
+
+	//实体关系表别名（clickhouse.cyber_narrator_galaxy.cn_entity_relation） e
+	public static final String ENTITY_RELATION_TABLE_ALIAS = "e";
 }
