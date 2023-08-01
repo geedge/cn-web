@@ -943,8 +943,14 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Integer importBatch(MultipartFile file, Integer knowledgeId, String action) {
+	public Integer importBatch(MultipartFile file, Integer knowledgeId, String action,Integer status,String description) {
 		KnowledgeBase knowledgeBase = this.baseMapper.selectById(knowledgeId);
+		if(StrUtil.isNotEmpty(description)) {
+			knowledgeBase.setDescription(description);
+		}
+		if(ObjectUtil.isNotEmpty(status)) {
+			knowledgeBase.setStatus(status);
+		}
 		if (ObjectUtil.isEmpty(knowledgeBase)) {
 			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
@@ -961,6 +967,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		this.saveOrUpdateBatch(saveOrUpdateList, knowledgeBase);
 		knowledgeBaseSyncVersionService.syncVersion(knowledgeBase.getKnowledgeId());
+		this.updateById(knowledgeBase);
 		return knowledgeId;
 	}
 

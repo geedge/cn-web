@@ -74,12 +74,13 @@ public class KnowledgeBaseController {
 	}
 	
 	@PostMapping("/items/batch")
-	public R importBatch(@Param("file") MultipartFile file,@Param("knowledgeId")Integer knowledgeId,@Param("action")String action) {
+	public R importBatch(@Param("file") MultipartFile file,@Param("knowledgeId")Integer knowledgeId,@Param("action")String action
+			,@Param("status")Integer status,@Param("description")String description) {
 		ValidateUtils.is(file).notNull(RCode.KNOWLEDGE_FILE_ISNULL);
 		ValidateUtils.is(knowledgeId).notNull(RCode.KNOWLEDGE_ID_ISNULL);
 		ValidateUtils.is(action).notNull(RCode.KNOWLEDGE_IMPORT_ACTION_ISNULL);
 		ValidateUtils.is(action).regex("(overwrite|append|update)", RCode.KNOWLEDGE_IMPORT_ACTION_VALUE_ERROR);
-		knowledgeBaseService.importBatch(file,knowledgeId,action);
+		knowledgeBaseService.importBatch(file,knowledgeId,action,status,description);
 		return R.ok().putData("knowledgeId",knowledgeId);
 	}
 }
