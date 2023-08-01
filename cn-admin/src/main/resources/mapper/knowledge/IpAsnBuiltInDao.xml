@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.IpAsnBuiltInDao">
+
+    <resultMap id="IpAsnBuiltIn" type="net.geedge.modules.knowledge.entity.IpAsnBuiltIn">
+        <result property="id" column="id"></result>
+        <result property="addrType" column="addr_type"></result>
+        <result property="ip1" column="ip1"></result>
+        <result property="ip2" column="ip2"></result>
+        <result property="startIpBinary" column="start_ip_binary"></result>
+        <result property="endIpBinary" column="end_ip_binary"></result>
+        <result property="addrFormat" column="addr_format"></result>
+        <result property="asn" column="asn"></result>
+        <result property="organization" column="organization"></result>
+        <result property="isValid" column="is_valid"></result>
+        <result property="opTime" column="op_time"></result>
+        <result property="opUser" column="op_user"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+    <select id="queryPageByKnowledgeId" resultMap="IpAsnBuiltIn">
+        select * from
+        cn_ip_asn_built_in
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
+
+    <select id="queryEntityDetail" resultType="java.util.Map">
+        select t.id as id, t.asn as asn, t.organization as organization, t.knowledge_id as knowledgeId, t.is_valid as isValid from
+            (   select * from
+                cn_ip_asn_built_in
+                where start_ip_binary &lt;= INET6_ATON(#{resource})
+                ORDER BY start_ip_binary DESC
+                limit 1
+            ) AS t
+        where t.end_ip_binary &gt;= INET6_ATON(#{resource})
+    </select>
+    
+    <insert id="insertBatchForBinary">
+    	insert into cn_ip_asn_built_in (addr_type,addr_format,ip1,ip2,start_ip_binary,
+    	end_ip_binary,asn,organization,op_user,is_valid,knowledge_id,op_time)
+    	values
+    	<foreach collection="ipAsnBuiltIns" item="ip" separator=",">
+    		(
+    		#{ip.addrType},
+    		#{ip.addrFormat},
+    		#{ip.ip1},
+    		#{ip.ip2},
+    		INET6_ATON(#{ip.startIpBinary}),
+    		INET6_ATON(#{ip.endIpBinary}),
+    		#{ip.asn},
+    		#{ip.organization},
+    		#{ip.opUser},
+    		#{ip.isValid},
+    		#{ip.knowledgeId},
+    		#{ip.opTime}
+    		)
+    	</foreach>
+    </insert>
+    
+    <update id="updateBatchForBinary">
+    	<foreach collection="ipAsnBuiltIns" item="ip" separator=";">
+    	 update cn_ip_asn_built_in  set
+    		addr_type = #{ip.addrType},
+    		addr_format = #{ip.addrFormat},
+            ip1 = #{ip.ip1},
+            ip2 = #{ip.ip2},
+    		start_ip_binary = INET6_ATON(#{ip.startIpBinary}),
+    		end_ip_binary = INET6_ATON(#{ip.endIpBinary}),
+    		asn = #{asn},
+    		organization= #{organization},
+    		op_time = #{ip.opTime},
+    		op_user = #{ip.opUser},
+    		is_valid = #{ip.isValid},
+    		knowledge_id = #{ip.knowledgeId}
+    		where id = #{ip.asnId}
+    	</foreach>
+    </update>
+</mapper>

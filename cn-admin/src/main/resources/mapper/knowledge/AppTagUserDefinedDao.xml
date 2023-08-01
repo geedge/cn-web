@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.AppTagUserDefinedDao">
+
+    <resultMap id="AppTagUserDefined" type="net.geedge.modules.knowledge.entity.AppTagUserDefined">
+        <result property="id" column="id"></result>
+        <result property="tagValue" column="tag_value"></result>
+        <result property="appName" column="app_name"></result>
+        <result property="opTime" column="op_time"></result>
+        <result property="cTime" column="c_time"></result>
+        <result property="opUser" column="op_user"></result>
+        <result property="isValid" column="is_valid"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+        <association property="user" column="op_user" select="queryUserById"></association>
+    </resultMap>
+
+    <select id="queryPageByKnowledgeId" resultMap="AppTagUserDefined">
+        select * from
+        cn_app_tag_user_defined
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
+
+    <select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
+        select id, name
+        from sys_user
+        where id = #{id}
+          and status = 1
+    </select>
+
+    <select id="queryAppEntityTag" resultType="java.util.Map">
+        select id as id, tag_value as tagValue, op_time as updateTime,
+               c_time as createTime, is_valid as isValid, knowledge_id as knowledgeId from
+        cn_app_tag_user_defined
+        where app_name = #{resource}
+    </select>
+</mapper>

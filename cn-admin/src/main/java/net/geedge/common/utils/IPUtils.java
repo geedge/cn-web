@@ -8,8 +8,15 @@
 
 package net.geedge.common.utils;
 
+import cn.hutool.core.net.Ipv4Util;
 import cn.hutool.log.Log;
 import org.apache.commons.lang.StringUtils;
+
+import com.googlecode.ipv6.IPv6Address;
+import com.googlecode.ipv6.IPv6Network;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -59,5 +66,42 @@ public class IPUtils {
         
         return ip;
     }
+	
+	/**
+	 * ipv4 通过cidr获取起始网络段地址
+	 * @param cidr
+	 * @return
+	 */
+	public static Map<String,String> getIpsV4ByCidr(String cidr) {
+        Map<String,String> map = new HashMap<>();
+        String ip = cidr.split("/")[0];
+        int mask = Integer.parseInt(cidr.split("/")[1]);
+        String ipFrom = Ipv4Util.getBeginIpStr(ip, mask);
+        String ipTo = Ipv4Util.getEndIpStr(ip, mask);
+        map.put("startIpStr",ipFrom);
+        map.put("endIpStr",ipTo);
+        return map;
+    }
+	
+	/**
+	 * ipv6 通过cidr获取起始网络段地址
+	 * @param cidr
+	 * @return
+	 */
+	public static Map<String,String>  getIpsV6ByCidr(String cidr) {
+        String ip = cidr.split("/")[0];
+        int maskNum = Integer.parseInt(cidr.split("/")[1]);
+        if (ip.contains("%")){
+            ip = ip.substring(0,ip.indexOf("%"));
+        }
+        Map<String,String> map = new HashMap<>();
+        IPv6Network network = IPv6Network.fromString(ip+"/"+maskNum);
+        IPv6Address b = network.getLast();
+        IPv6Address a = network.getFirst();
+        map.put("startIpStr",a.toLongString());
+        map.put("endIpStr",b.toLongString());
+        return map;
+    }
+	
 	
 }

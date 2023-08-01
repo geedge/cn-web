@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.DnsServerInfoBuiltInDao">
+
+    <resultMap id="dnsServerInfoBuiltIn" type="net.geedge.modules.knowledge.entity.DnsServerInfoBuiltIn">
+        <result property="id" column="id"></result>
+        <result property="ipAddr" column="ip_addr"></result>
+        <result property="locationCountry" column="location_country"></result>
+        <result property="locationProvince" column="location_province"></result>
+        <result property="locationRegion" column="location_region"></result>
+        <result property="asn" column="asn"></result>
+        <result property="dnsServerRolr" column="dns_server_role"></result>
+        <result property="orgnization" column="orgnization"></result>
+        <result property="operationSystem" column="operation_system"></result>
+        <result property="dnsSoftware" column="dns_software"></result>
+        <result property="dnssecSupport" column="dnssec_support"></result>
+        <result property="dotSupport" column="dot_support"></result>
+        <result property="dohSupport" column="doh_support"></result>
+        <result property="rootMirrorLocations" column="root_mirror_locations"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+    
+</mapper>

@@ -1,27 +1,37 @@
 package net.geedge.modules.knowledge.service;
 
-import java.util.Map;
 
+import net.geedge.common.utils.PageUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
+
+import java.util.List;
+import java.util.Map;
 
 
 public interface KnowledgeBaseService extends IService<KnowledgeBase> {
 	
-	PageUtils base(Map<String,Object> params);
+	Object remove(String ids);
 	
-	String add(Map<String,Object> params);
-	
-	Integer modify(Map<String,Object> params);
-	
-	R importData(MultipartFile file,String type);
-	
-	R removeKnowledgeBase(String ids);
-	
-	KnowledgeBase info(Integer id);
+	R importData(MultipartFile file,String source);
+
+    PageUtils queryKnowledgeBaseList(Map<String,Object> params);
+
+    R enableKnowledgeBase(Map<String,Object> params);
+
+    Map<String,Object> statisticsKnowledgeBase(Map<String,Object> params);
+
+    Map<String, Object> queryKnowledgeBaseItem(Integer knowledgeId, Map<String,Object> params);
+    
+    Integer addOrModifyKnowledgeBase(Map<String,Object> params);
+        
+    Map<String,Object> validateParam(Map<String,Object> params);
+    
+    Integer importBatch(MultipartFile file,Integer knowledgeId, String action);
+
+    void validAndBuildDatasets(MultipartFile file, KnowledgeBase knowledgeBase, String action, List<Map<String, String>> importDataList, List<Integer> deleteDataIds);
 }

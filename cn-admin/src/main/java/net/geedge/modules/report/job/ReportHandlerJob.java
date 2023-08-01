@@ -68,8 +68,8 @@ public class ReportHandlerJob extends QuartzJobBean {
         sw.start();        
 
         JobKey key = context.getJobDetail().getKey();
-        String[] split = StrUtil.split(key.getName(),StrUtil.DASHED);
-        Integer tempId = Integer.valueOf(split[1]);
+        List<String> split = StrUtil.split(key.getName(),StrUtil.DASHED);
+        Integer tempId = Integer.valueOf(split.get(1));
         ReportTemp temp = reportTempService.getById(tempId);
         if(ObjectUtil.isNotEmpty(temp)) {
         	reportTempService.createJobTasks(temp,null,null);

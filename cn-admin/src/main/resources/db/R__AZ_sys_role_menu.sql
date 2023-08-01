@@ -29,4 +29,8 @@ INSERT INTO `sys_role_menu`(`id`, `role_id`, `menu_id`) VALUES (null, 1, 25);
 INSERT INTO `sys_role_menu`(`id`, `role_id`, `menu_id`) VALUES (null, 1, 26);
 INSERT INTO `sys_role_menu`(`id`, `role_id`, `menu_id`) VALUES (null, 1, 27);
 INSERT INTO `sys_role_menu`(`id`, `role_id`, `menu_id`) VALUES (null, 1, 28);
+INSERT INTO `sys_role_menu`(`id`, `role_id`, `menu_id`) VALUES (null, 1, 29);
+INSERT INTO `sys_role_menu`(`id`, `role_id`, `menu_id`) VALUES (null, 1, 30);
+INSERT INTO `sys_role_menu`(`id`, `role_id`, `menu_id`) VALUES (null, 2, 2);
+INSERT INTO `sys_role_menu`(`id`, `role_id`, `menu_id`) VALUES (null, 2, 18);
 

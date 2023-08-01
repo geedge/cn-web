@@ -40,14 +40,16 @@ INSERT INTO `sys_menu` VALUES (13, 'Security events', 'securityEvents', 'entitie
 INSERT INTO `sys_menu` VALUES (14, 'Performance events', 'performanceEvents', 'overall.performanceEvents', 12, NULL, 1, '/detection/performanceEvent', '', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (15, 'Galaxy proxy', 'galaxyProxy', 'galaxyProxy.galaxyProxy', 26, NULL, 1, '/administration/galaxyProxy', '', NULL, 41, 0);
 INSERT INTO `sys_menu` VALUES (16, 'Crypto currency', 'cryptocurrency', 'overall.cryptocurrency', 1, NULL, 1, '/panel/cryptocurrency', '', NULL, 41, 0);
-INSERT INTO `sys_menu` VALUES (17, 'Temp', 'temp', 'temp', 0, NULL, 1, '/test', '', NULL, 1, 0);
+INSERT INTO `sys_menu` VALUES (17, 'Temp', 'temp', 'temp', 0, NULL, 1, '/test', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (18, 'Chart', 'chart', 'overall.chart', 0, NULL, 1, '/chart', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (19, 'Report', 'report', 'overall.report', 0, NULL, 1, '/report/builtIn', 'cn-icon cn-icon-report1', NULL, 26, 1);
 INSERT INTO `sys_menu` VALUES (20, 'Built-in report', 'builtInReport', 'report.builtInReport', 19, 'report:job:add,report:job:delete,report:temp:add,report:temp:update,report:temp:delete', 1, '/report/builtIn', '', NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (21, 'Appearance', 'appearance', 'appearance.appearance', 26, 'sys:appearance:update', 1, '/administration/appearance', '', NULL, 28, 0);
+INSERT INTO `sys_menu` VALUES (21, 'Appearance', 'appearance', 'appearance.appearance', 26, 'sys:appearance:update', 1, '/administration/appearance', 'cn-icon cn-icon-preview', NULL, 28, 1);
 INSERT INTO `sys_menu` VALUES (25, 'Link monitor', 'linkMonitor', 'overall.linkMonitor', 1, NULL, 1, '/panel/linkMonitor', '', NULL, 41, 1);
 INSERT INTO `sys_menu` VALUES (26, 'Administration', 'administration', 'overall.administration', 0, NULL, 1, '/administration', 'cn-icon cn-icon-administrations', NULL, 61, 1);
 INSERT INTO `sys_menu` VALUES (27, 'Knowledge base', 'knowledgeBase', 'overall.knowledgeBase', 0, NULL, 1, '/knowledgeBase', 'cn-icon cn-icon-knowledge-base', NULL, 41, 1);
-INSERT INTO `sys_menu` VALUES (28, 'Create knowledge base', 'createKnowledgeBase', 'overall.create', 27, NULL, 2, '/knowledgeBase/form', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (28, 'Create knowledge base', 'createKnowledgeBase', 'overall.create', 27, NULL, 2, '/knowledgeBase/create', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (29, 'Edit knowledge base', 'editKnowledgeBase', 'overall.edit', 27, NULL, 2, '/knowledgeBase/edit', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (30, 'Entity detail', 'entityDetail', 'overall.detail', 0, NULL, 1, '/entityDetail', '', NULL, 30, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

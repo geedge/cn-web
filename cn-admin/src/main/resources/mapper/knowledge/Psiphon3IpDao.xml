@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.Psiphon3IpDao">
+
+    <resultMap id="Psiphon3Ip" type="net.geedge.modules.knowledge.entity.Psiphon3Ip">
+        <result property="id" column="id"></result>
+        <result property="addrFormat" column="addr_format"></result>
+        <result property="ip1" column="ip1"></result>
+        <result property="ip2" column="ip2"></result>
+        <result property="startIpBinary" column="start_ip_binary"></result>
+        <result property="endIpBinary" column="end_ip_binary"></result>
+        <result property="opTime" column="op_time"></result>
+        <result property="cTime" column="c_time"></result>
+        <result property="opUser" column="op_user"></result>
+        <result property="isValid" column="is_valid"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+        <result property="type" column="type"></result>
+        <result property="method" column="method"></result>
+        <result property="confidence" column="confidence"></result>
+        <result property="confidenceLevel" column="confidence_level"></result>
+    </resultMap>
+
+    <select id="queryPageByKnowledgeId" resultMap="Psiphon3Ip">
+        select * from
+        cn_psiphon3_ip
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
+    
+    <insert id="insertBatchForBinary">
+    	insert into cn_psiphon3_ip (addr_format,ip1,ip2,start_ip_binary,
+    	end_ip_binary,op_time,c_time,op_user,is_valid,knowledge_id,type,method,confidence,confidence_level)
+    	values
+    	<foreach collection="psiphon3Ips" item="psiphon3Ip" separator=",">
+    		(
+    		#{psiphon3Ip.addrFormat},
+    		#{psiphon3Ip.ip1},
+    		#{psiphon3Ip.ip2},
+    		INET6_ATON(#{psiphon3Ip.startIpBinary}),
+    		INET6_ATON(#{psiphon3Ip.endIpBinary}),
+    		#{psiphon3Ip.opTime},
+    		#{psiphon3Ip.cTime},
+    		#{psiphon3Ip.opUser},
+    		#{psiphon3Ip.isValid},
+    		#{psiphon3Ip.knowledgeId},
+    		#{psiphon3Ip.type},
+    		#{psiphon3Ip.method},
+    		#{psiphon3Ip.confidence},
+    		#{psiphon3Ip.confidenceLevel}
+    		)
+    	</foreach>
+    </insert>
+    
+    <update id="updateBatchForBinary">
+    	<foreach collection="psiphon3Ips" item="psiphon3Ip" separator=";">
+    	 update cn_psiphon3_ip  set
+    		addr_format = #{psiphon3Ip.addrFormat},
+            ip1 = #{psiphon3Ip.ip1},
+            ip2 = #{psiphon3Ip.ip2},
+    		start_ip_binary = INET6_ATON(#{psiphon3Ip.startIpBinary}),
+    		end_ip_binary = INET6_ATON(#{psiphon3Ip.endIpBinary}),
+    		op_time = #{psiphon3Ip.opTime},
+			<if test="psiphon3Ip.cTime != null and psiphon3Ip.cTime != ''">
+				c_time = #{psiphon3Ip.cTime},
+			</if>
+    		op_user = #{psiphon3Ip.opUser},
+    		is_valid = #{psiphon3Ip.isValid},
+    		knowledge_id = #{psiphon3Ip.knowledgeId},
+    		type = #{psiphon3Ip.type},
+    		method = #{psiphon3Ip.method},
+    		confidence = #{psiphon3Ip.confidence},
+    		confidence_level = #{psiphon3Ip.confidenceLevel}
+    		where id = #{psiphon3Ip.id}
+    	</foreach>
+    </update>
+
+	<select id="queryIpEntityTag" resultType="java.util.Map">
+		select t.type as type, t.method as method, t.confidence as confidence,
+		       t.confidence_level as confidenceLevel, t.op_time as updateTime,
+		       t.c_time as createTime, t.is_valid as isValid, t.knowledge_id as knowledgeId from
+			(   select * from
+				cn_psiphon3_ip
+				where start_ip_binary &lt;= INET6_ATON(#{resource})
+				ORDER BY start_ip_binary DESC
+				limit 1
+			) AS t
+		where t.end_ip_binary &gt;= INET6_ATON(#{resource})
+	</select>
+</mapper>

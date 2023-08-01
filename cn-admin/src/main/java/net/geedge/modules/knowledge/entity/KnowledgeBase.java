@@ -10,46 +10,31 @@ import lombok.Data;
 import net.geedge.modules.sys.entity.SysUserEntity;
 
 @Data
-@TableName("knowledge_base")
+@TableName("cn_knowledge_base")
 public class KnowledgeBase {
 	@TableId
-	private Integer id;
-	
-	private String tagName;
-	
-	private String tagType;
-	
-	private String remark;
-	
-	private Long cby;
-	
-	private Date ctime;
-	
-	private Long uby;
-	
-	private Date utime;
-	
-	private String knowledgeId;
-	
-	private Integer builtIn;
-	
-	private Integer enable;
-	
-	@TableField(exist = false)
-	private String version;
-	
-	@TableField(exist = false)
-	private String path;
-	
-	@TableField(exist = false)
-	private String format;
+	private Integer knowledgeId;
+
+	private String name;
+
+	private String category;
+
+	private String source;
+
+	private String description;
+
+	private Date opTime;
+
+	private Date cTime;
+
+	private Long opUser;
+
+	private Integer isBuiltIn;
+
+	private Integer isPublished;
+
+	private Integer status;
 
 	@TableField(exist = false)
-	private SysUserEntity cuser;
-
-	@TableField(exist = false)
-	private SysUserEntity uuser;
-	
-	@TableField(exist = false)
-	private Object data;
+	private SysUserEntity user;
 }

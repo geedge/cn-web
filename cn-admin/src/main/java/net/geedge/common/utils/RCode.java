@@ -316,10 +316,25 @@ public enum RCode {
     KNOWLEDGE_TYPE_ISNULL(591005,"KnowledgeBase type is required"),
     KNOWLEDGE_FILE_TYPE_ERROR(591006,"KnowledgeBase file type only supports csv"),
     KNOWLEDGE_FILE_ISNULL(591007,"KnowledgeBase file is required"),
-    KNOWLEDGE_IDS_ISNULL(591008,"KnowledgeBase ids is required"),
+    KNOWLEDGE_IDS_ISNULL(591008,"KnowledgeBase knowledgeIds is required"),
     KNOWLEDGE_ID_ISNULL(591009,"KnowledgeBase id is required"),
     KNOWLEDGE_QGW_SERVICE_ERROR(591010,"Gateway service interface response error"),
     KNOWLEDGE_HOS_ERROR(591011,"HOS service response error"),
+    KNOWLEDGE_BUILTIN_ERROR(591012,"KnowledgeBase built-in data can not be removed"),
+    KNOWLEDGE_BASE_ITEM_NOT_EXIST(591013,"KnowledgeBase item not exist"),
+    KNOWLEDGE_BASE_SYNC_VERSION_NOT_EXIST(591014,"KnowledgeBaseSyncVersion does not exist"),
+    KNOWLEDGE_BASE_ENABLE_PARAMS_INVALID(591015,"KnowledgeBase enable params is invalid"),
+    KNOWLEDGE_BASE_NAME_DUPLICATE(591016,"KnowledgeBase name already exists"),
+    KNOWLEDGE_BASE_PARAM_FORMAT_ERROR(591017,"KnowledgeBase data format error, please check"),
+    KNOWLEDGE_SOURCE_ISNULL(591018,"KnowledgeBase source is required"),
+    KNOWLEDGE_CATEGORY_ISNULL(591019,"KnowledgeBase category is required"),
+    KNOWLEDGE_SOURCE_ERROR(591020,"The source is inconsistent with the system template"),
+    KNOWLEDGE_IMPORT_ACTION_ISNULL(591021,"KnowledgeBase import action is required"),
+    KNOWLEDGE_IMPORT_ACTION_VALUE_ERROR(591022,"KnowledgeBase import action must be one of overwrite,append,update"),
+
+    ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
+    ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
+    ENTITY_TAG_NOT_EXIST(601003,"Entity tag not exist"),
     /**
      * stat相关
      */
@@ -365,6 +380,16 @@ public enum RCode {
 	REPORT_BUILD_IN_ERROR(311014,"Report build_in data cannot remove"),
 	REPORT_CRON_MONTH_WEEK_DATE_ERROR(311015,"Report cron month week date error must in (1-5)"),
 	
+	/**
+	 * 导入相关错误提示
+	 */
+	EXCELFILE_TYPE_ERROR(800, "The type can only be xlsx, json, csv"),
+    EXCELFILE_PARSE_ERROR(801, "Import file resolution failed"),
+    EXCELFILE_HEADER_TEMPLATE_ERROR(802,"The header row of the import template is inconsistent with the system template"),
+    IMPORT_FIELD_DUPLICATE(803, "Import data duplicate"),
+    IMPORT_FIELD_REQUIRED(804, "Import data is required"),
+    IMPORT_IGNORE(805, "Duplicate data, ignore the data in this row"),
+    IMPORT_ERROR(806, "Import data error"),
     ERROR(999, "error"); //通用错误/未知错误
 
 	

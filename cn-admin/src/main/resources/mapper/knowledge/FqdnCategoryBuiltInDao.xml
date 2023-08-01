@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.FqdnCategoryBuiltInDao">
+
+    <resultMap id="FqdnCategoryBuiltIn" type="net.geedge.modules.knowledge.entity.FqdnCategoryBuiltIn">
+        <result property="id" column="id"></result>
+        <result property="fqdn" column="fqdn"></result>
+        <result property="source" column="source"></result>
+        <result property="querySuccess" column="query_success"></result>
+        <result property="matchPattern" column="match_pattern"></result>
+        <result property="reputationScore" column="reputation_score"></result>
+        <result property="reputationLevel" column="reputation_level"></result>
+        <result property="categoryId" column="category_id"></result>
+        <result property="categoryName" column="category_name"></result>
+        <result property="categoryGroup" column="category_group"></result>
+        <result property="categoryConf" column="category_conf"></result>
+        <result property="isA1Cat" column="is_a1_cat"></result>
+        <result property="statusCode" column="status_code"></result>
+        <result property="submitUser" column="submit_user"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+    <select id="queryPageByKnowledgeId" resultMap="FqdnCategoryBuiltIn">
+        select * from
+        cn_fqdn_category_built_in
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
+
+    <select id="queryEntityDetail" resultType="java.util.Map">
+        select category_name as categoryName, category_group as categoryGroup,
+               reputation_level as reputationLevel, update_time as updateTime,
+               create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+        cn_fqdn_category_built_in
+        where fqdn = #{resource}
+        limit 1
+    </select>
+</mapper>
