@@ -117,7 +117,7 @@ public class SysLoginController extends AbstractController {
             // 获取request
             HttpServletRequest request = HttpContextUtils.getHttpServletRequest();            
             SysUserEntity userEntity = ShiroUtils.getUserEntity();
-            obj.put("userId", userEntity.getId());
+            obj.put("user", userEntity);
             userEntity.setLastLoginTime(new Date());
             // 设置IP地址
             userEntity.setLastLoginIp(IPUtils.getIpAddr(request));
