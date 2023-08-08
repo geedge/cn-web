@@ -17,5 +17,5 @@ public interface KnowledgeBaseSyncVersionService extends IService<KnowledgeBaseS
      * @created by wWei
      * @date 2023/6/14 18:34
      */
-    void syncVersion(Integer knowledgeId);
+	KnowledgeBaseSyncVersion syncVersion(Integer knowledgeId);
 }

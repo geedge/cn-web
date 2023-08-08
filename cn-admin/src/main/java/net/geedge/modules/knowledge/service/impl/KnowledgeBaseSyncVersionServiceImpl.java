@@ -16,7 +16,7 @@ import java.util.Date;
 @Service("KnowledgeBaseSyncVersionService")
 public class KnowledgeBaseSyncVersionServiceImpl extends ServiceImpl<KnowledgeBaseSyncVersionDao, KnowledgeBaseSyncVersion> implements KnowledgeBaseSyncVersionService {
     @Override
-    public void syncVersion(Integer id) {
+    public KnowledgeBaseSyncVersion syncVersion(Integer id) {
         KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = getById(id);
         if (ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
             Integer version = knowledgeBaseSyncVersion.getVersion();
@@ -28,5 +28,6 @@ public class KnowledgeBaseSyncVersionServiceImpl extends ServiceImpl<KnowledgeBa
         knowledgeBaseSyncVersion.setKnowledgeId(id);
         knowledgeBaseSyncVersion.setOpTime(new Date());
         saveOrUpdate(knowledgeBaseSyncVersion);
+        return knowledgeBaseSyncVersion;
     }
 }
