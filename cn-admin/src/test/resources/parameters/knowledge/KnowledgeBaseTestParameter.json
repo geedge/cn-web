@@ -37,7 +37,7 @@
   },
   "------------------ DELETE  /v1/knowledgeBase data---------------------": "note",
   "deleteKnowledgeBase_success": {
-    "knowledgeIds": ["100001","100004"]
+    "knowledgeIds": "100001,100004"
   },
   "deleteKnowledgeBase_error": {
   },

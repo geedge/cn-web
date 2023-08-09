@@ -30,7 +30,8 @@
   "------------------ GET  /interface/dns/overview/drilldown/trafficAnalysis data---------------------": "note",
   "trafficAnalysis_success": {
   		"startTime": "1680846402",
-		"endTime": "1680850002"
+		"endTime": "1680850002",
+	  	"type": "dnsServer"
   },
   "------------------ GET  /interface/dns/overview/drilldown/dimensionAnalysis data---------------------": "note",
   "drilldownDimensionAnalysis_success": {
