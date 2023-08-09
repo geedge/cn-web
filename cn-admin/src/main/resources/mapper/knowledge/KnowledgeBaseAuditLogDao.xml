@@ -13,6 +13,13 @@
         <result property="opTime" column="op_time"></result>
         <association property="user" column="op_user" select="queryUserById"></association>
     </resultMap>
+	
+	<select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
+        select id, name
+        from sys_user
+        where id = #{id}
+          and status = 1
+    </select>
 
     <select id="queryList" resultMap="knowledgeBaseAuditLog">
              select 
