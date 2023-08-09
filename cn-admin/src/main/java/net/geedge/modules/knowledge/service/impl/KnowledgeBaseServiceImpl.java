@@ -1032,6 +1032,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		log.setOpUser(ShiroUtils.getUserId().intValue());
 		log.setStatus(knowledgeBase.getStatus());
 		log.setOpType(OperationEnum.UPDATE.getValue());		
+		log.setCommitVersion(syncVersion.getVersion());
 		knowledgeBaseAuditLogService.save(log);
 		this.updateById(knowledgeBase);
 		return knowledgeId;
