@@ -45,7 +45,6 @@ public class KnowledgeBaseController {
 	}
 
 	@PatchMapping("/status")
-	@Transactional(rollbackFor = Exception.class)
 	public R enableKnowledgeBase(@RequestBody Map<String,Object> params) {
 		return knowledgeBaseService.enableKnowledgeBase(params);
 	}

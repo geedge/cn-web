@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.compress.utils.Lists;
@@ -334,6 +335,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		List<Map<String,Object>> list = (List)params.get("list");
 		List<KnowledgeBase> KnowledgeBases = new ArrayList<>();
 		List<Integer> knowledgeIds = new ArrayList<>();
+		List<KnowledgeBaseAuditLog> knowledgeBaseAuditLogs = new ArrayList<KnowledgeBaseAuditLog>();
 		for (Map<String,Object> param: list) {
 			Integer knowledgeId = (Integer) param.get("knowledgeId");
 			Integer isPublished = (Integer) param.get("isPublished");
@@ -351,7 +353,24 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			knowledgeIds.add(knowledgeId);
 		}
 		this.saveOrUpdateBatch(KnowledgeBases);
-		knowledgeBaseSyncVersionService.syncVersionBatch(knowledgeIds);
+		List<KnowledgeBaseSyncVersion> syncVersionBatchs = knowledgeBaseSyncVersionService.syncVersionBatch(knowledgeIds);
+		// 记录审计日志
+		Map<Integer, KnowledgeBase> idKnowledgeBase = KnowledgeBases.stream().collect(Collectors.toMap(KnowledgeBase::getKnowledgeId, Function.identity()));
+		Map<Integer, KnowledgeBaseSyncVersion> idVersion = syncVersionBatchs.stream().collect(Collectors.toMap(KnowledgeBaseSyncVersion::getKnowledgeId, Function.identity()));
+		for(Integer knowledgeId : knowledgeIds) {
+			KnowledgeBaseAuditLog log = new KnowledgeBaseAuditLog();
+			KnowledgeBase knowledgeBase = idKnowledgeBase.get(knowledgeId);
+			log.setCommitVersion(idVersion.get(knowledgeId).getVersion());
+			log.setDescription(knowledgeBase.getDescription());
+			log.setIsPublished(knowledgeBase.getIsPublished());
+			log.setKnowledgeId(knowledgeId);
+			log.setOpTime(new Date());
+			log.setOpType(OperationEnum.UPDATE.getValue());
+			log.setOpUser(ShiroUtils.getUserId().intValue());
+			log.setStatus(knowledgeBase.getStatus());
+			knowledgeBaseAuditLogs.add(log);
+		}
+		knowledgeBaseAuditLogService.saveOrUpdateBatch(knowledgeBaseAuditLogs);
 		return R.ok();
 	}
 
@@ -394,9 +413,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			params.put("status", Arrays.asList(String.valueOf(params.get("status")).split(StringPool.COMMA)));
 		} else {
 			params.put("status", new ArrayList<>());
-		}
-		if (ObjectUtil.isNotEmpty(params.get("orderBy"))) {
-			params.put("orderBy", StrUtil.toUnderlineCase((String)params.get("orderBy")));
 		}
 	}
 

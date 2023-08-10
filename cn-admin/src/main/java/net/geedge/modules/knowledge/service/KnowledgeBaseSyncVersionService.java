@@ -21,5 +21,5 @@ public interface KnowledgeBaseSyncVersionService extends IService<KnowledgeBaseS
      */
 	KnowledgeBaseSyncVersion syncVersion(Integer knowledgeId);
 
-    List<Integer> syncVersionBatch(List<Integer> knowledgeIds);
+    List<KnowledgeBaseSyncVersion> syncVersionBatch(List<Integer> knowledgeIds);
 }

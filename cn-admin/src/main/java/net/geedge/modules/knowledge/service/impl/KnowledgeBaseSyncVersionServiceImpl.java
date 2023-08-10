@@ -25,14 +25,14 @@ public class KnowledgeBaseSyncVersionServiceImpl extends ServiceImpl<KnowledgeBa
     }
 
     @Override
-    public List<Integer> syncVersionBatch(List<Integer> knowledgeIds) {
+    public List<KnowledgeBaseSyncVersion> syncVersionBatch(List<Integer> knowledgeIds) {
         List<KnowledgeBaseSyncVersion> knowledgeBaseSyncVersionList = new ArrayList<>();
         for (Integer id : knowledgeIds) {
             KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = getSyncVersion(id);
             knowledgeBaseSyncVersionList.add(knowledgeBaseSyncVersion);
         }
         saveOrUpdateBatch(knowledgeBaseSyncVersionList);
-        return knowledgeIds;
+        return knowledgeBaseSyncVersionList;
     }
 
     private KnowledgeBaseSyncVersion getSyncVersion(Integer id){
