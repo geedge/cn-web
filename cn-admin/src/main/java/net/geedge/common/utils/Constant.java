@@ -173,7 +173,8 @@ public class Constant {
 		knowledgeBaseAuditLogOrderFieldMap.put("opTime", "op_time");
 		
 		Map<String, String> knowledgeOrderFieldMap = new HashMap<>();
-		knowledgeOrderFieldMap.put("name", "tag_name");
+		knowledgeOrderFieldMap.put("opTime", "op_time");
+		knowledgeOrderFieldMap.put("knowledgeId", "knowledge_id");
 		TABLE_NAME_ORDER_FIELD_MAPPING.put("cn_knowledge_base", knowledgeOrderFieldMap);
 		TABLE_NAME_ORDER_FIELD_MAPPING.put("cn_knowledge_base_audit_log", knowledgeBaseAuditLogOrderFieldMap);
 		TABLE_NAME_ORDER_FIELD_MAPPING.put("report_job", reportOrderFieldMap);

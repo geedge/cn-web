@@ -43,6 +43,9 @@
                     #{status}
                 </foreach>
             </if>
+            <if test="params.orderBy == null or params.orderBy == ''">
+                ORDER BY knowledge_id desc
+            </if>
         </where>
     </select>
 

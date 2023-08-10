@@ -328,9 +328,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public R enableKnowledgeBase(Map<String,Object> params) {
 		validateEnableParams(params);
 		List<Map<String,Object>> list = (List)params.get("list");
+		List<KnowledgeBase> KnowledgeBases = new ArrayList<>();
+		List<Integer> knowledgeIds = new ArrayList<>();
 		for (Map<String,Object> param: list) {
 			Integer knowledgeId = (Integer) param.get("knowledgeId");
 			Integer isPublished = (Integer) param.get("isPublished");
@@ -344,9 +347,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			knowledgeBase.setOpTime(new Date());
 			knowledgeBase.setIsPublished(isPublished);
 			knowledgeBase.setStatus(status);
-			this.getBaseMapper().updateById(knowledgeBase);
-			knowledgeBaseSyncVersionService.syncVersion(knowledgeId);
+			KnowledgeBases.add(knowledgeBase);
+			knowledgeIds.add(knowledgeId);
 		}
+		this.saveOrUpdateBatch(KnowledgeBases);
+		knowledgeBaseSyncVersionService.syncVersionBatch(knowledgeIds);
 		return R.ok();
 	}
 
