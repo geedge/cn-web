@@ -8,6 +8,7 @@ import net.geedge.modules.knowledge.dao.FqdnIcpBuiltInDao;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.FqdnIcpBuiltIn;
 import net.geedge.modules.knowledge.service.FqdnIcpBuiltInService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class FqdnIcpBuiltInServiceImpl extends ServiceImpl<FqdnIcpBuiltInDao, Fq
     }
 
     @Override
-    public Map<String, Object> queryEntityDetail(String resource) {
-        return this.baseMapper.queryEntityDetail(resource);
+    public Map<String, Object> queryEntityDetail(String resource, Boolean isFuzzyQuery) {
+        return this.baseMapper.queryEntityDetail(resource, isFuzzyQuery);
     }
 }

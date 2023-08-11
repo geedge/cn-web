@@ -34,7 +34,16 @@
         select icp_site_license as icpSiteLicense, icp_company_name as icpCompanyName,
                icp_company_type as icpCompanyType, 1 as isValid, knowledge_id as knowledgeId from
         cn_fqdn_icp_built_in
-        where fqdn = #{resource}
+        <where>
+            <choose>
+                <when test="!isFuzzyQuery">
+                    fqdn = #{resource}
+                </when>
+                <otherwise>
+                    #{resource} like concat ( '%','.',fqdn)
+                </otherwise>
+            </choose>
+        </where>
         limit 1
     </select>
 </mapper>

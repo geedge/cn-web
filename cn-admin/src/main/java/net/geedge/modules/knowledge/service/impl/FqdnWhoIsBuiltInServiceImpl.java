@@ -29,7 +29,7 @@ public class FqdnWhoIsBuiltInServiceImpl extends ServiceImpl<FqdnWhoIsBuiltInDao
     }
 
     @Override
-    public Map<String, Object> queryEntityDetail(String resource) {
-        return this.baseMapper.queryEntityDetail(resource);
+    public Map<String, Object> queryEntityDetail(String resource, Boolean isFuzzyQuery) {
+        return this.baseMapper.queryEntityDetail(resource, isFuzzyQuery);
     }
 }
