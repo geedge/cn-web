@@ -1023,7 +1023,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@Transactional(rollbackFor = Exception.class)
 	public Integer importBatch(MultipartFile file, Integer knowledgeId, String action,Integer status,String description) {
 		KnowledgeBase knowledgeBase = this.baseMapper.selectById(knowledgeId);
-		if(StrUtil.isNotEmpty(description)) {
+		// 参数不为null 空串也默认为有值 进行置空处理 null代表无任何操作
+		if(description!=null) {
 			knowledgeBase.setDescription(description);
 		}
 		if(ObjectUtil.isNotEmpty(status)) {

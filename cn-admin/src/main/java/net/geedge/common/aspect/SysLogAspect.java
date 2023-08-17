@@ -266,7 +266,7 @@ public class SysLogAspect {
 	 * @param paramResult
 	 */
 	private String handleLogParam(String requestURI, String paramResult) {
-		if (!requestURI.endsWith("project/topo") && !requestURI.endsWith("sysConfig")) {
+		if (!requestURI.endsWith("sysConfig")) {
 			return paramResult;
 		}
 		if (Tool.StrUtil.isNotEmpty(paramResult)) {
