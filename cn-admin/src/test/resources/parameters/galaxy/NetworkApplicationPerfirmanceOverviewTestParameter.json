@@ -379,7 +379,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "q": "client_country='China'",
+    "q": "client_country_region='China'",
     "limit": 10
   },
   "applicationPerformanceOverviewDrilldownDimensionTrafficAnalysis_error": {
@@ -400,7 +400,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "q": "client_country='China'",
+    "q": "client_country_region='China'",
     "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
   },
   "applicationPerformanceOverviewDrilldownDimensionCycleDimensionHttpResponseDelay_error": {
@@ -410,7 +410,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "q": "client_country='China'",
+    "q": "client_country_region='China'",
     "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
   },
   "applicationPerformanceOverviewDrilldownDimensionCycleDimensionSslConDelay_error": {
@@ -420,7 +420,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "q": "client_country='China'",
+    "q": "client_country_region='China'",
     "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
   },
   "applicationPerformanceOverviewDrilldownDimensionCycleDimensionTcpSessionDelay_error": {
@@ -429,8 +429,8 @@
   "applicationPerformanceOverviewDrilldownDrilldownDimensionTrafficGraph_success": {
     "startTime": "1671761197",
     "endTime": "1671764797",
-    "type": "country",
-    "q": "country='China'"
+    "type": "appSubcategory",
+    "q": "app_subcategory='multimedia-streaming'"
   },
   "applicationPerformanceOverviewDrilldownDrilldownDimensionTrafficGraph_error": {
   },
