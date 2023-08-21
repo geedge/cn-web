@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import com.alibaba.fastjson.JSONObject;
 import net.geedge.common.utils.Constant;
-import net.geedge.common.utils.TrinoConnectionPool;
 import net.geedge.modules.entity.service.EntityExplorerService;
 import net.geedge.modules.sys.service.SysConfigService;
 import net.sf.jsqlparser.JSQLParserException;
@@ -16,16 +15,11 @@ import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,9 +31,6 @@ import java.util.Map;
  */
 @Service("EntityExplorerService")
 public class EntityExplorerServiceImpl implements EntityExplorerService {
-
-    @Autowired
-    private TrinoConnectionPool trinoConnectionPool;
 
     @Autowired
     private SysConfigService sysConfigService;
@@ -160,70 +151,8 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
     private List<Map<String, Object>> getSearchColumns(){
         String entityExploreConfigJson = sysConfigService.getValue("schema_entity_explore");
         HashMap entityExploreConfigs = JSONObject.parseObject(entityExploreConfigJson, HashMap.class);
-        Map<String, Object> enityMetadata = (Map<String, Object>)entityExploreConfigs.get("enityMetadata");
-        List<Map<String, Object>> searchColumns = (List<Map<String, Object>>) enityMetadata.get("searchColumns");
+        Map<String, Object> entityMetadata = (Map<String, Object>)entityExploreConfigs.get("entityMetadata");
+        List<Map<String, Object>> searchColumns = (List<Map<String, Object>>) entityMetadata.get("searchColumns");
         return searchColumns;
-    }
-
-    @Override
-    public List<Map<String, Object>> gatTrinoResponseResult(String sql){
-        List<Map<String, Object>> data = new ArrayList<>();
-        List<String> column = null;
-        try {
-            column = getColumnList(sql);
-        } catch (JSQLParserException e) {
-            e.printStackTrace();
-        }
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            conn = trinoConnectionPool.getConnection();
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
-            int columnNum = rs.getMetaData().getColumnCount();
-            while (rs.next()) {
-                Map<String, Object> obj = new HashMap<>();
-                for(int i = 0; i < columnNum; i++) {
-                    obj.put(column.get(i),rs.getObject(i+1));
-                }
-                data.add(obj);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs!=null) {
-                    rs.close();
-                }
-                if (stmt!=null) {
-                    stmt.close();
-                }
-                if (conn!=null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return data;
-    }
-
-
-    private List<String> getColumnList(String sql) throws JSQLParserException {
-        List<String> column = new ArrayList<>();
-        net.sf.jsqlparser.statement.Statement statement = CCJSqlParserUtil.parse(sql);
-        Select selectStatement = (Select) statement;
-        PlainSelect selectBody = (PlainSelect) selectStatement.getSelectBody();
-        List<SelectItem> selectItems = selectBody.getSelectItems();
-        for (SelectItem selectItem: selectItems) {
-            selectItem.accept(new SelectItemVisitorAdapter(){
-                @Override
-                public void visit(SelectExpressionItem item){
-                    column.add(item.getAlias().getName());
-                }
-            });
-        }
-        return column;
     }
 }
