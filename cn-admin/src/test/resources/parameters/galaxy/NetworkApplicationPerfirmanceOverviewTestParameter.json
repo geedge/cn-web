@@ -388,7 +388,7 @@
   "applicationPerformanceOverviewDrilldownDimensionCycleTrafficAnalysis_success": {
     "startTime": "1671761197",
     "endTime": "1671764797",
-    "type": "country",
+    "type": "countryRegion",
     "q": "common_server_ip='116.178.236.216'",
     "params": "'China'",
     "limit": 10
