@@ -16,14 +16,10 @@ import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Auther: lijinyang
@@ -48,14 +44,17 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
                     @Override
                     public void visit(Column column) {
                         for (Map<String, Object> map : searchColumns) {
-                            if (ObjectUtil.isNotEmpty(column.getTable()) && map.get("label").equals(StrUtil.concat(true,column.getTable().toString(),".",column.getColumnName()))) {
-                                String table = StringUtils.substringBefore(map.get("name").toString(),".");
-                                String columnName = StringUtils.substringAfter(map.get("name").toString(),".");
+                            if(column.getColumnName().contains("\"")) {
+                                String newColumn = column.getColumnName().replace("\"", "");
+                                column.setColumnName(newColumn);
+                            }
+                            if (map.get("label").equals(column.getColumnName())){
+                                Map<String, Object> connector =(Map<String, Object>) map.get("connector");
+                                String table = (String)connector.get("alias");
                                 Table newTable = new Table(table);
                                 column.setTable(newTable);
-                                column.setColumnName(columnName);
-                            } else if(ObjectUtil.isEmpty(column.getTable()) && map.get("label").equals(column.getColumnName())){
                                 column.setColumnName((String) map.get("name"));
+                                break;
                             }
                         }
                     }
@@ -72,19 +71,24 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
     @Override
     public Boolean isAssociationQuery(String resource) {
         if(ObjectUtil.isNotEmpty(resource)) {
-            List<String> fields = new ArrayList<>();
+            List<Map<String, Object>> searchColumns = getSearchColumns();
+            Set<String> catalogs = new TreeSet<>();
             try {
                 Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
                 ExpressionDeParser expressionDeParser =  new ExpressionDeParser() {
                     @Override
                     public void visit(Column column) {
-                        if (ObjectUtil.isNotEmpty(column.getTable())) {
-                            fields.add(StrUtil.concat(false,column.getTable().toString(),".",column.getColumnName()));
+                        for (Map<String, Object> map : searchColumns) {
+                            if (map.get("name").equals(column.getColumnName())){
+                                Map<String, Object> connector =(Map<String, Object>) map.get("connector");
+                                String catalog = (String) connector.get("catalog");
+                                catalogs.add(catalog);
+                            }
                         }
                     }
                 };
                 expr.accept(expressionDeParser);
-                if(ObjectUtil.isNotEmpty(fields)) {
+                if(catalogs.size() > 1) {
                     return true;
                 }
             } catch (JSQLParserException e) {
