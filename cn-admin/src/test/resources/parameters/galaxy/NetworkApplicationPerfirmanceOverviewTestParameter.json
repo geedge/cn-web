@@ -504,7 +504,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "country": "China",
+    "countryRegion": "China",
     "typeVal": "116.178.236.216"
   },
   "applicationPerformanceOverviewDrilldownDimensionClientLocationsCountryTrafficAnalysis_error": {
@@ -514,7 +514,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "country": "China",
+    "countryRegion": "China",
     "typeVal": "116.178.236.216",
     "params": "'Xinjiang'"
   },
@@ -525,7 +525,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "country": "China",
+    "countryRegion": "China",
     "typeVal": "116.178.236.216",
     "params": "'Xinjiang'"
   },
@@ -536,7 +536,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "country": "China",
+    "countryRegion": "China",
     "typeVal": "116.178.236.216",
     "params": "'Xinjiang'"
   },
@@ -547,8 +547,8 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "country": "China",
-    "province": "Beijing",
+    "countryRegion": "China",
+    "superAdminArea": "Beijing",
     "typeVal": "116.178.236.216"
   },
   "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceTrafficAnalysis_error": {
@@ -558,8 +558,8 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "country": "China",
-    "province": "Xinjiang",
+    "countryRegion": "China",
+    "superAdminArea": "Xinjiang",
     "typeVal": "116.178.236.216",
     "params": "'Xinjiang','Beijing'"
   },
@@ -570,8 +570,8 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "country": "China",
-    "province": "Xinjiang",
+    "countryRegion": "China",
+    "superAdminArea": "Xinjiang",
     "typeVal": "116.178.236.216",
     "params": "'Xinjiang','Beijing'"
   },
@@ -582,8 +582,8 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "country": "China",
-    "province": "Xinjiang",
+    "countryRegion": "China",
+    "superAdminArea": "Xinjiang",
     "typeVal": "116.178.236.216"
   },
   "applicationPerformanceOverviewDrilldownDimensionClientLocationsProvinceTcpSessionDelay_error": {
