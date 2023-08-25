@@ -2,10 +2,13 @@ package net.geedge.common.magic;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 import org.ssssssss.magicapi.core.context.RequestEntity;
 import org.ssssssss.magicapi.core.interceptor.ResultProvider;
+
+import com.alibaba.fastjson.JSON;
 
 import cn.hutool.core.util.StrUtil;
 
@@ -30,6 +33,9 @@ public class MagicResultProvider implements ResultProvider {
             result.put("message",message);
             result.put("time",new Date());	
             return result;
+        }else {
+        	int status = (int) ((Map)data).get("status");
+        	code = status;
         }
         return data;
     }
