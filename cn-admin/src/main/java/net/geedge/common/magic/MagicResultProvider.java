@@ -32,6 +32,7 @@ public class MagicResultProvider implements ResultProvider {
             result.put("code",code);
             result.put("message",message);
             result.put("time",new Date());	
+            requestEntity.getResponse().setStatus(code);
             return result;
         }else {
         	int status = (int) ((Map)data).get("status");
