@@ -45,10 +45,14 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
                     public void visit(Column column) {
                         for (Map<String, Object> map : searchColumns) {
                             if(column.getColumnName().contains("\"")) {
-                                String newColumn = column.getColumnName().replace("\"", "");
+                                String newColumn = column.getColumnName().replace("\"", "").trim().replace(" ",".");
                                 column.setColumnName(newColumn);
                             }
-                            if (map.get("label").equals(column.getColumnName())){
+                            String columnName = "";
+                            if(ObjectUtil.isNotEmpty(column.getTable())) {
+                                columnName = column.getTable() + "." + column.getColumnName();
+                            }
+                            if (column.getColumnName().equals((String)map.get("label")) || columnName.equals((String)map.get("label"))){
                                 Map<String, Object> connector =(Map<String, Object>) map.get("connector");
                                 String table = (String)connector.get("alias");
                                 Table newTable = new Table(table);
