@@ -115,6 +115,6 @@ magic-api:
     readonly: false # 是否是只读模式
   response-code:
     success: 200 #执行成功的code值
-    invalid: 999 #参数验证未通过的code值
+    invalid: 400 #参数验证未通过的code值
     exception: 500 #执行出现异常的code值
   throw-exception: true #执行出错时，异常将抛出处理
