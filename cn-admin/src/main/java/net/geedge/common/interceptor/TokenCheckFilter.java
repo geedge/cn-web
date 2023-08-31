@@ -85,7 +85,7 @@ public class TokenCheckFilter extends AccessControlFilter {
             requestToken = request.getParameter(Constant.AUTH_TOKEN_CODE);
         }
         if (StringUtils.isBlank(requestToken)) {
-        	response.setStatus(999);
+        	response.setStatus(500);
             response.getWriter().write(JSON.toJSON(R.error(RCode.SYS_LOGIN_REQUIRED)).toString());
             return false;
         }
@@ -100,7 +100,7 @@ public class TokenCheckFilter extends AccessControlFilter {
             // 重新查询数据库
             SysUserEntity entity = this.sysUserDao.selectById(ShiroUtils.getUserEntity().getId());
             if (entity.getStatus() == 0) {
-            	response.setStatus(999);
+            	response.setStatus(500);
                 response.getWriter().write(JSON.toJSON(R.error(RCode.SYS_LOGIN_LOCK)).toString());
                 return false;
             }
@@ -116,7 +116,7 @@ public class TokenCheckFilter extends AccessControlFilter {
         	// 如果有的话则认证通过  同时将该值存放到redis里
         	if(Tool.ObjectUtil.isEmpty(apiKey)) {
         		// 如果没有则 返回响应值
-        		response.setStatus(999);
+        		response.setStatus(500);
                 response.getWriter().write(JSON.toJSON(R.error(RCode.SYS_LOGIN_REQUIRED)).toString());
                 return false;
         	}else {
