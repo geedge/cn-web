@@ -11,8 +11,6 @@ public interface EntityExplorerService {
 
     String parseExpression(String resource);
 
-    List<Map<String, Object>> gatTrinoResponseResult(String sql);
-
     Boolean isAssociationQuery(String resource);
 
     Map<String, Object> getAssociationQueryParam(String resource);

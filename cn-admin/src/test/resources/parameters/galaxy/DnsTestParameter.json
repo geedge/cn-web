@@ -30,11 +30,12 @@
   "------------------ GET  /interface/dns/overview/drilldown/trafficAnalysis data---------------------": "note",
   "trafficAnalysis_success": {
   		"startTime": "1680846402",
-		"endTime": "1680850002"
+		"endTime": "1680850002",
+	  	"type": "dnsServer"
   },
   "------------------ GET  /interface/dns/overview/drilldown/dimensionAnalysis data---------------------": "note",
   "drilldownDimensionAnalysis_success": {
-  		"type": "country",
+  		"type": "countryRegion",
 		"orderBy": "totalBytes",
 		"limit": "50",
 		"q": "common_server_ip='223.6.6.6'",
@@ -43,7 +44,7 @@
   },
   "------------------ GET  /interface/dns/overview/drilldown/dimensionCycleAnalysis data---------------------": "note",
   "drilldownDimensionCycleAnalysis_success": {
-  		"type": "country",
+  		"type": "countryRegion",
 		"params": "'China'",
 		"q": "common_server_ip='223.6.6.6'",
 		"startTime": "1680846822",

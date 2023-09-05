@@ -39,30 +39,30 @@
   "linkOverviewDrilldownTotalTrafficAnalysis_success": {
     "startTime": "1671761197",
     "endTime": "1671764797",
-    "egressParam": "common_egress_link_id = 1280",
-    "ingressParam": "common_ingress_link_id = 1281"
+    "outParam": "common_out_link_id = 1280",
+    "inParam": "common_in_link_id = 1281"
   },
   
   "------------------ GET  /interface/link/overview/drilldown/networkAnalysis data---------------------": "note",
   "linkOverviewDrilldownNetworkAnalysis_success": {
     "startTime": "1671761197",
     "endTime": "1671764797",
-    "egressParam": "common_egress_link_id = 1280",
-    "ingressParam": "common_ingress_link_id = 1281"
+    "outParam": "common_out_link_id = 1280",
+    "inParam": "common_in_link_id = 1281"
   },
   
   "------------------ GET  /interface/link/overview/drilldown/quadrupleEgressAnalysis data---------------------": "note",
   "linkOverviewDrilldownQuadrupleEgressAnalysis_success": {
     "startTime": "1671761197",
     "endTime": "1671764797",
-    "q": "common_egress_link_id = 1280"
+    "q": "common_out_link_id = 1280"
   },
   
   "------------------ GET  /interface/link/overview/drilldown/quadrupleIngressAnalysis data---------------------": "note",
   "linkOverviewDrilldownQuadrupleIngressAnalysis_success": {
     "startTime": "1671761197",
     "endTime": "1671764797",
-    "q": "common_egress_link_id = 1280"
+    "q": "common_out_link_id = 1280"
   },
   
   "------------------ GET  /interface/link/overview/drilldown/dimension/analysis data---------------------": "note",
@@ -78,7 +78,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.79.27'",
-    "q": "common_egress_link_id = 2048 or common_ingress_link_id = 2049",
+    "q": "common_out_link_id = 2048 or common_in_link_id = 2049",
     "type": "ip"
   },
   
@@ -87,7 +87,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.79.27'",
-    "q": "common_egress_link_id = 2048 or common_ingress_link_id = 2049",
+    "q": "common_out_link_id = 2048 or common_in_link_id = 2049",
     "type": "ip"
   },
  
@@ -96,7 +96,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.79.27'",
-    "q": "common_egress_link_id = 2048 or common_ingress_link_id = 2049",
+    "q": "common_out_link_id = 2048 or common_in_link_id = 2049",
     "type": "ip"
   },
   
@@ -105,7 +105,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "params": "'116.178.236.216','2408:877a:2000:3:4000:0:b00:100','116.178.79.27'",
-    "q": "common_egress_link_id = 2048 or common_ingress_link_id = 2049",
+    "q": "common_out_link_id = 2048 or common_in_link_id = 2049",
     "type": "ip"
   }
 }

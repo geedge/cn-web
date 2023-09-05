@@ -29,7 +29,7 @@ public class FqdnCategoryBuiltInServiceImpl extends ServiceImpl<FqdnCategoryBuil
     }
 
     @Override
-    public Map<String, Object> queryEntityDetail(String resource) {
-        return this.baseMapper.queryEntityDetail(resource);
+    public Map<String, Object> queryEntityDetail(String resource,Boolean isFuzzyQuery) {
+        return this.baseMapper.queryEntityDetail(resource,isFuzzyQuery);
     }
 }

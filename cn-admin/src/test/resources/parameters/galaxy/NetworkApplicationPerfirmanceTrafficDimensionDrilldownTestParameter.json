@@ -3,8 +3,8 @@
   "applicationPerformanceOverviewDrilldownDrilldownDimensionTrafficGraph_success": {
     "startTime": "1671761197",
     "endTime": "1671764797",
-    "type": "country",
-    "q": "country='China'"
+    "type": "appSubcategory",
+    "q": "app_subcategory='multimedia-streaming'"
   },
   
   "------------------ GET  /interface/application/performance/overview/drilldown/dimensionTrafficAnalysis data---------------------": "note",
@@ -12,7 +12,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "q": "client_country='China'",
+    "q": "client_country_region='China'",
     "limit": 10
   },  
   
@@ -20,7 +20,7 @@
   "applicationPerformanceOverviewDrilldownDimensionCycleTrafficAnalysis_success": {
     "startTime": "1671761197",
     "endTime": "1671764797",
-    "type": "country",
+    "type": "countryRegion",
     "q": "common_server_ip='116.178.236.216'",
     "params": "'China'",
     "limit": 10
@@ -31,7 +31,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "q": "client_country='China'",
+    "q": "client_country_region='China'",
     "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
   },  
   
@@ -40,7 +40,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "q": "client_country='China'",
+    "q": "client_country_region='China'",
     "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
   },  
   
@@ -49,7 +49,7 @@
     "startTime": "1671761197",
     "endTime": "1671764797",
     "type": "ip",
-    "q": "client_country='China'",
+    "q": "client_country_region='China'",
     "params": "'116.178.236.216','116.178.236.217','116.178.78.195'"
   }
 }

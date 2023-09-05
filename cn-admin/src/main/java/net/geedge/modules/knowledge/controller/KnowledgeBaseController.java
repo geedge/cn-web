@@ -1,19 +1,28 @@
 package net.geedge.modules.knowledge.controller;
 
 
-import net.geedge.common.utils.PageUtils;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.service.KnowledgeBaseService;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/knowledgeBase")
@@ -24,7 +33,7 @@ public class KnowledgeBaseController {
 	@DeleteMapping
 	public R remove(@RequestParam("knowledgeIds") String knowledgeIds) {
 		ValidateUtils.is(knowledgeIds).notNull(RCode.KNOWLEDGE_IDS_ISNULL);
-		Object result = knowledgeBaseService.remove(knowledgeIds);
+		List<Integer> result = knowledgeBaseService.remove(knowledgeIds);
 		return R.ok(result);
 	}
 	
@@ -36,7 +45,6 @@ public class KnowledgeBaseController {
 	}
 
 	@PatchMapping("/status")
-	@Transactional(rollbackFor = Exception.class)
 	public R enableKnowledgeBase(@RequestBody Map<String,Object> params) {
 		return knowledgeBaseService.enableKnowledgeBase(params);
 	}

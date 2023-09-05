@@ -16,5 +16,5 @@ public interface IocDarkwebService extends IService<IocDarkweb> {
 
     Map<String, Object> queryIpEntityTag(String resource);
 
-    Map<String, Object> queryDomainEntityTag(String resource);
+    Map<String, Object> queryDomainEntityTag(String resource, Boolean isFuzzyQuery);
 }

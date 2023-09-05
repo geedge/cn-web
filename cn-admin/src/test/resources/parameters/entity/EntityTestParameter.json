@@ -1,0 +1,86 @@
+{
+  "------------------ GET  /v1/entity/detail/basic/{entityType} data---------------------": "note",
+  "entityDetailBasic_success": {
+    "entityType": "app",
+    "resource": "aim"
+  },
+  "entityDetailBasic_error": {
+  },
+  "------------------ GET  /v1/entity/detail/kb/intelligence/tag/{entityType} data---------------------": "note",
+  "entityDetailKbIntelligenceTag_success": {
+    "entityType": "app",
+    "resource": "aim"
+  },
+  "entityDetailKbIntelligenceTag_error": {
+  },
+  "------------------ GET  /v1/entity/detail/traffic/throughput/{entityType} data---------------------": "note",
+  "entityDetailTrafficThroughput_success": {
+    "entityType": "app",
+    "resource": "douyin",
+    "startTime": 1691113075,
+    "endTime": 1691116675
+  },
+  "entityDetailTrafficThroughput_error": {
+  },
+  "------------------ GET  /v1/entity/detail/kb/intelligence/list/{entityType} data---------------------": "note",
+  "entityDetailKbIntelligenceList_success": {
+    "entityType": "app",
+    "resource": "aim"
+  },
+  "entityDetailKbIntelligenceList_error": {
+  },
+  "------------------ GET  /v1/entity/detail/event/security/{entityType} data---------------------": "note",
+  "entityDetailEventSecurity_success": {
+    "entityType": "app",
+    "resource": "aim"
+  },
+  "entityDetailEventSecurity_error": {
+  },
+  "------------------ GET  /v1/entity/detail/event/performance/{entityType} data---------------------": "note",
+  "entityDetailEventPerformance_success": {
+    "entityType": "app",
+    "resource": "aim"
+  },
+  "entityDetailEventPerformance_error": {
+  },
+  "------------------ GET  /v1/entity/detail/ip/relate/ports data---------------------": "note",
+  "entityDetailIpRelatePorts_success": {
+    "resource": "116.178.75.205"
+  },
+  "------------------ GET  /v1/entity/detail/ip/relate/domains data---------------------": "note",
+  "entityDetailIpRelateDomains_success": {
+    "resource": "8.8.8.8"
+  },
+  "------------------ GET  /v1/entity/detail/ip/relate/apps data---------------------": "note",
+  "entityDetailIpRelateApps_success": {
+    "resource": "8.8.8.8"
+  },
+  "------------------ GET  /v1/entity/detail/app/relate/ports data---------------------": "note",
+  "entityDetailAppRelatePorts_success": {
+    "resource": "qq_web"
+  },
+  "------------------ GET  /v1/entity/detail/app/relate/domains data---------------------": "note",
+  "entityDetailAppRelateDomains_success": {
+    "resource": "alibaba_cloud"
+  },
+  "------------------ GET  /v1/entity/detail/app/relate/ips data---------------------": "note",
+  "entityDetailAppRelateIps_success": {
+    "resource": "qq_web"
+  },
+  "------------------ GET  /v1/entity/detail/domain/relate/ports data---------------------": "note",
+  "entityDetailDomainRelatePorts_success": {
+    "resource": "alicdn.com"
+  },
+  "------------------ GET  /v1/entity/detail/domain/relate/apps data---------------------": "note",
+  "entityDetailDomainRelateApps_success": {
+    "resource": "alicdn.com"
+  },
+  "------------------ GET  /v1/entity/detail/domain/relate/fqdns data---------------------": "note",
+  "entityDetailDomainRelateFqdns_success": {
+    "resource": "126.net"
+  },
+  "------------------ GET  /v1/entity/detail/domain/relate/ips data---------------------": "note",
+  "entityDetailDomainRelateIps_success": {
+    "resource": "126.net"
+  }
+}

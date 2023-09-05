@@ -35,7 +35,7 @@ INSERT INTO `sys_menu` VALUES (8, 'Operation log', 'operationLog', 'overall.oper
 INSERT INTO `sys_menu` VALUES (9, 'Entity', 'entity', 'overall.entity', 0, NULL, 1, '/entityExplorer', 'cn-icon cn-icon-entity', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (10, 'Entity explorer', 'entityExplorer', 'overall.entityExplorer', 9, NULL, 1, '/entityExplorer', '', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (11, 'I18n', 'I18N', 'I18N', 0, NULL, 1, '/i18n', 'cn-icon cn-icon-i18n', NULL, 31, 1);
-INSERT INTO `sys_menu` VALUES (12, 'Detections', 'detections', 'overall.detections', 0, '', 1, '/detection/securityEvent', 'cn-icon cn-icon-detection1', NULL, 21, 1);
+INSERT INTO `sys_menu` VALUES (12, 'Detections', 'detections', 'overall.detections', 0, '', 1, '/detection', 'cn-icon cn-icon-detection1', NULL, 21, 1);
 INSERT INTO `sys_menu` VALUES (13, 'Security events', 'securityEvents', 'entities.securityEvents', 12, NULL, 1, '/detection/securityEvent', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (14, 'Performance events', 'performanceEvents', 'overall.performanceEvents', 12, NULL, 1, '/detection/performanceEvent', '', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (15, 'Galaxy proxy', 'galaxyProxy', 'galaxyProxy.galaxyProxy', 26, NULL, 1, '/administration/galaxyProxy', '', NULL, 41, 0);
@@ -48,8 +48,11 @@ INSERT INTO `sys_menu` VALUES (21, 'Appearance', 'appearance', 'appearance.appea
 INSERT INTO `sys_menu` VALUES (25, 'Link monitor', 'linkMonitor', 'overall.linkMonitor', 1, NULL, 1, '/panel/linkMonitor', '', NULL, 41, 1);
 INSERT INTO `sys_menu` VALUES (26, 'Administration', 'administration', 'overall.administration', 0, NULL, 1, '/administration', 'cn-icon cn-icon-administrations', NULL, 61, 1);
 INSERT INTO `sys_menu` VALUES (27, 'Knowledge base', 'knowledgeBase', 'overall.knowledgeBase', 0, NULL, 1, '/knowledgeBase', 'cn-icon cn-icon-knowledge-base', NULL, 41, 1);
-INSERT INTO `sys_menu` VALUES (28, 'Create knowledge base', 'createKnowledgeBase', 'overall.create', 27, NULL, 2, '/knowledgeBase/create', '', NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (29, 'Edit knowledge base', 'editKnowledgeBase', 'overall.edit', 27, NULL, 2, '/knowledgeBase/edit', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (28, 'Create knowledge base', 'createKnowledgeBase', 'overall.create', 31, NULL, 2, '/knowledgeBase/userDefinedLibrary/create', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (29, 'Edit knowledge base', 'editKnowledgeBase', 'overall.edit', 31, NULL, 2, '/knowledgeBase/userDefinedLibrary/edit', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (30, 'Entity detail', 'entityDetail', 'overall.detail', 0, NULL, 1, '/entityDetail', '', NULL, 30, 1);
+INSERT INTO `sys_menu` VALUES (31, 'User-defined Library', 'userDefinedLibrary', 'knowledgeBase.userDefinedLibrary', 27, NULL, 1, '/knowledgeBase/userDefinedLibrary', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (32, 'Entity graph', 'entityGraph', 'entities.graph', 0, NULL, 1, '/entityGraph', '', NULL, 32, 1);
+INSERT INTO `sys_menu` VALUES (33, 'Detection policy', 'detectionPolicy', 'overall.policies', 0, NULL, 1, '/detectionsNew', '', NULL, 21, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

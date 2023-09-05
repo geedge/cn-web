@@ -7,6 +7,7 @@ import net.geedge.common.utils.Query;
 import net.geedge.modules.knowledge.dao.IocDarkwebDao;
 import net.geedge.modules.knowledge.entity.IocDarkweb;
 import net.geedge.modules.knowledge.service.IocDarkwebService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +34,8 @@ public class IocDarkwebServiceImpl extends ServiceImpl<IocDarkwebDao, IocDarkweb
     }
 
     @Override
-    public Map<String, Object> queryDomainEntityTag(String resource) {
-        return this.baseMapper.queryDomainEntityTag(resource);
+    public Map<String, Object> queryDomainEntityTag(String resource, Boolean isFuzzyQuery) {
+        return this.baseMapper.queryDomainEntityTag(resource, isFuzzyQuery);
     }
 
 }

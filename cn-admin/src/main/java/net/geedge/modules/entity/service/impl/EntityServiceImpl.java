@@ -70,10 +70,19 @@ public class EntityServiceImpl implements EntityService {
             Map<String, Object> category = appCategoryBuiltInService.queryEntityDetail(resource);
             addValidDataToMap(data, "category", category);
         } else if ("domain".equals(entityType)){
-            Map<String, Object> whois = fqdnWhoIsBuiltInService.queryEntityDetail(resource);
+            Map<String, Object> whois = fqdnWhoIsBuiltInService.queryEntityDetail(resource, false);
+            Map<String, Object> icp = fqdnIcpBuiltInService.queryEntityDetail(resource, false);
+            Map<String, Object> category = fqdnCategoryBuiltInService.queryEntityDetail(resource,false);
+            if (ObjectUtil.isEmpty(whois)) {
+                whois = fqdnWhoIsBuiltInService.queryEntityDetail(resource, true);
+            }
+            if (ObjectUtil.isEmpty(icp)) {
+                icp = fqdnIcpBuiltInService.queryEntityDetail(resource, true);
+            }
+            if (ObjectUtil.isEmpty(category)) {
+                category = fqdnCategoryBuiltInService.queryEntityDetail(resource, true);
+            }
             dateToTimestamp(whois);
-            Map<String, Object> icp = fqdnIcpBuiltInService.queryEntityDetail(resource);
-            Map<String, Object> category = fqdnCategoryBuiltInService.queryEntityDetail(resource);
             addValidDataToMap(data, "whois", whois);
             addValidDataToMap(data, "icp", icp);
             addValidDataToMap(data, "category", category);
@@ -128,8 +137,14 @@ public class EntityServiceImpl implements EntityService {
             List<Map> userDefinedTags = appTagUserDefinedService.queryAppEntityTag(resource);
             addValidListToMap(data, "userDefinedTags", userDefinedTags);
         } else if ("domain".equals(entityType)){
-            Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource);
-            Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource);
+            Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource, false);
+            Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
+            if (ObjectUtil.isEmpty(malware)) {
+                malware = iocMalwareService.queryDomainEntityTag(resource, true);
+            }
+            if (ObjectUtil.isEmpty(darkweb)) {
+                darkweb = iocDarkwebService.queryDomainEntityTag(resource, true);
+            }
             List<Map> userDefinedTags = domainTagUserDefinedService.queryDomainEntityTag(resource);
             addValidDataToMap(data, "malware", malware);
             addValidDataToMap(data, "darkweb", darkweb);
@@ -205,11 +220,27 @@ public class EntityServiceImpl implements EntityService {
             mapChangeTimestamp(category);
             addEntityList(entityList, category);
         } else if ("domain".equals(entityType)){
-            Map<String, Object> whois = createEnableMap("whois", fqdnWhoIsBuiltInService.queryEntityDetail(resource));
-            Map<String, Object> category = createEnableMap("category", fqdnCategoryBuiltInService.queryEntityDetail(resource));
-            Map<String, Object> malware = createEnableMap("malware", iocMalwareService.queryDomainEntityTag(resource));
-            Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryDomainEntityTag(resource));
+            Map<String, Object> whois = fqdnWhoIsBuiltInService.queryEntityDetail(resource, false);
+            Map<String, Object> category = fqdnCategoryBuiltInService.queryEntityDetail(resource, false);
+            Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource,false);
+            Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
+            if (ObjectUtil.isEmpty(whois)) {
+                whois = fqdnWhoIsBuiltInService.queryEntityDetail(resource, true);
+            }
+            if (ObjectUtil.isEmpty(category)) {
+                category = fqdnCategoryBuiltInService.queryEntityDetail(resource, true);
+            }
+            if (ObjectUtil.isEmpty(malware)) {
+                malware = iocMalwareService.queryDomainEntityTag(resource, true);
+            }
+            if (ObjectUtil.isEmpty(whois)) {
+                darkweb = iocDarkwebService.queryDomainEntityTag(resource, true);
+            }
             userDefinedTags = createEnableList(domainTagUserDefinedService.queryDomainEntityTag(resource));
+            whois = createEnableMap("whois", whois);
+            category = createEnableMap("category", category);
+            malware = createEnableMap("malware", malware);
+            darkweb = createEnableMap("darkweb", darkweb);
             mapChangeTimestamp(whois);
             mapChangeTimestamp(category);
             mapChangeTimestamp(malware);

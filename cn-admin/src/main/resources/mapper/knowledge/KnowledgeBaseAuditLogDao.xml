@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.KnowledgeBaseAuditLogDao">
+
+    <resultMap id="knowledgeBaseAuditLog" type="net.geedge.modules.knowledge.entity.KnowledgeBaseAuditLog">
+        <result property="logId" column="log_id"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+        <result property="opType" column="op_type"></result>
+        <result property="description" column="description"></result>
+        <result property="commitVersion" column="commit_version"></result>
+        <result property="status" column="status"></result>
+        <result property="isPublished" column="is_published"></result>
+        <result property="opTime" column="op_time"></result>
+        <association property="user" column="op_user" select="queryUserById"></association>
+    </resultMap>
+	
+	<select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
+        select id, name
+        from sys_user
+        where id = #{id}
+          and status = 1
+    </select>
+
+    <select id="queryList" resultMap="knowledgeBaseAuditLog">
+             select 
+             	kbal.* 
+             from cn_knowledge_base_audit_log kbal 
+             where knowledge_id = ${params.knowledgeId}
+            <if test="params.orderBy == null or params.orderBy == ''">
+                ORDER BY kbal.op_time DESC
+            </if>
+        </select>
+</mapper>

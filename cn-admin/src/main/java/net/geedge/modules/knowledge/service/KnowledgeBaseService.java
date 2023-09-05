@@ -15,7 +15,7 @@ import java.util.Map;
 
 public interface KnowledgeBaseService extends IService<KnowledgeBase> {
 	
-	Object remove(String ids);
+	List<Integer> remove(String ids);
 	
 	R importData(MultipartFile file,String source);
 

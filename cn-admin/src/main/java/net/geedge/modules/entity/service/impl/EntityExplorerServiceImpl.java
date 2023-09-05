@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import com.alibaba.fastjson.JSONObject;
 import net.geedge.common.utils.Constant;
-import net.geedge.common.utils.TrinoConnectionPool;
 import net.geedge.modules.entity.service.EntityExplorerService;
 import net.geedge.modules.sys.service.SysConfigService;
 import net.sf.jsqlparser.JSQLParserException;
@@ -16,20 +15,11 @@ import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.util.deparser.ExpressionDeParser;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Auther: lijinyang
@@ -37,9 +27,6 @@ import java.util.Map;
  */
 @Service("EntityExplorerService")
 public class EntityExplorerServiceImpl implements EntityExplorerService {
-
-    @Autowired
-    private TrinoConnectionPool trinoConnectionPool;
 
     @Autowired
     private SysConfigService sysConfigService;
@@ -57,14 +44,21 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
                     @Override
                     public void visit(Column column) {
                         for (Map<String, Object> map : searchColumns) {
-                            if (ObjectUtil.isNotEmpty(column.getTable()) && map.get("label").equals(StrUtil.concat(true,column.getTable().toString(),".",column.getColumnName()))) {
-                                String table = StringUtils.substringBefore(map.get("name").toString(),".");
-                                String columnName = StringUtils.substringAfter(map.get("name").toString(),".");
+                            if(column.getColumnName().contains("\"")) {
+                                String newColumn = column.getColumnName().replace("\"", "").trim().replace(" ",".");
+                                column.setColumnName(newColumn);
+                            }
+                            String columnName = "";
+                            if(ObjectUtil.isNotEmpty(column.getTable())) {
+                                columnName = column.getTable() + "." + column.getColumnName();
+                            }
+                            if (column.getColumnName().equals((String)map.get("label")) || columnName.equals((String)map.get("label"))){
+                                Map<String, Object> connector =(Map<String, Object>) map.get("connector");
+                                String table = (String)connector.get("alias");
                                 Table newTable = new Table(table);
                                 column.setTable(newTable);
-                                column.setColumnName(columnName);
-                            } else if(ObjectUtil.isEmpty(column.getTable()) && map.get("label").equals(column.getColumnName())){
                                 column.setColumnName((String) map.get("name"));
+                                break;
                             }
                         }
                     }
@@ -81,19 +75,24 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
     @Override
     public Boolean isAssociationQuery(String resource) {
         if(ObjectUtil.isNotEmpty(resource)) {
-            List<String> fields = new ArrayList<>();
+            List<Map<String, Object>> searchColumns = getSearchColumns();
+            Set<String> catalogs = new TreeSet<>();
             try {
                 Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
                 ExpressionDeParser expressionDeParser =  new ExpressionDeParser() {
                     @Override
                     public void visit(Column column) {
-                        if (ObjectUtil.isNotEmpty(column.getTable())) {
-                            fields.add(StrUtil.concat(false,column.getTable().toString(),".",column.getColumnName()));
+                        for (Map<String, Object> map : searchColumns) {
+                            if (map.get("name").equals(column.getColumnName())){
+                                Map<String, Object> connector =(Map<String, Object>) map.get("connector");
+                                String catalog = (String) connector.get("catalog");
+                                catalogs.add(catalog);
+                            }
                         }
                     }
                 };
                 expr.accept(expressionDeParser);
-                if(ObjectUtil.isNotEmpty(fields)) {
+                if(catalogs.size() > 1) {
                     return true;
                 }
             } catch (JSQLParserException e) {
@@ -160,70 +159,8 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
     private List<Map<String, Object>> getSearchColumns(){
         String entityExploreConfigJson = sysConfigService.getValue("schema_entity_explore");
         HashMap entityExploreConfigs = JSONObject.parseObject(entityExploreConfigJson, HashMap.class);
-        Map<String, Object> enityMetadata = (Map<String, Object>)entityExploreConfigs.get("enityMetadata");
-        List<Map<String, Object>> searchColumns = (List<Map<String, Object>>) enityMetadata.get("searchColumns");
+        Map<String, Object> entityMetadata = (Map<String, Object>)entityExploreConfigs.get("entityMetadata");
+        List<Map<String, Object>> searchColumns = (List<Map<String, Object>>) entityMetadata.get("searchColumns");
         return searchColumns;
-    }
-
-    @Override
-    public List<Map<String, Object>> gatTrinoResponseResult(String sql){
-        List<Map<String, Object>> data = new ArrayList<>();
-        List<String> column = null;
-        try {
-            column = getColumnList(sql);
-        } catch (JSQLParserException e) {
-            e.printStackTrace();
-        }
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            conn = trinoConnectionPool.getConnection();
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
-            int columnNum = rs.getMetaData().getColumnCount();
-            while (rs.next()) {
-                Map<String, Object> obj = new HashMap<>();
-                for(int i = 0; i < columnNum; i++) {
-                    obj.put(column.get(i),rs.getObject(i+1));
-                }
-                data.add(obj);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs!=null) {
-                    rs.close();
-                }
-                if (stmt!=null) {
-                    stmt.close();
-                }
-                if (conn!=null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return data;
-    }
-
-
-    private List<String> getColumnList(String sql) throws JSQLParserException {
-        List<String> column = new ArrayList<>();
-        net.sf.jsqlparser.statement.Statement statement = CCJSqlParserUtil.parse(sql);
-        Select selectStatement = (Select) statement;
-        PlainSelect selectBody = (PlainSelect) selectStatement.getSelectBody();
-        List<SelectItem> selectItems = selectBody.getSelectItems();
-        for (SelectItem selectItem: selectItems) {
-            selectItem.accept(new SelectItemVisitorAdapter(){
-                @Override
-                public void visit(SelectExpressionItem item){
-                    column.add(item.getAlias().getName());
-                }
-            });
-        }
-        return column;
     }
 }

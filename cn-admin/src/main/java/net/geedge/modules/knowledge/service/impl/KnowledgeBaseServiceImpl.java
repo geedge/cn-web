@@ -1,7 +1,23 @@
 package net.geedge.modules.knowledge.service.impl;
 
 
-import static net.geedge.common.utils.Constant.*;
+import static net.geedge.common.utils.Constant.APP_CATEGORY_BUILT_IN;
+import static net.geedge.common.utils.Constant.APP_TAG_USER_DEFINED;
+import static net.geedge.common.utils.Constant.DNS_SERVER_INFO_BUILT_IN;
+import static net.geedge.common.utils.Constant.DOMAIN_TAG_USER_DEFINED;
+import static net.geedge.common.utils.Constant.FQDN_CATEGORY_BUILT_IN;
+import static net.geedge.common.utils.Constant.FQDN_ICP_BUILT_IN;
+import static net.geedge.common.utils.Constant.FQDN_WHO_IS_BUILT_IN;
+import static net.geedge.common.utils.Constant.IDC_RENTER_BUILT_IN;
+import static net.geedge.common.utils.Constant.INTERNAL_IP_BUILT_IN;
+import static net.geedge.common.utils.Constant.IOC_DARKWEB;
+import static net.geedge.common.utils.Constant.IOC_MALWARE;
+import static net.geedge.common.utils.Constant.IP_ASN_BUILT_IN;
+import static net.geedge.common.utils.Constant.IP_LOCATION_BUILT_IN;
+import static net.geedge.common.utils.Constant.IP_TAG_USER_DEFINED;
+import static net.geedge.common.utils.Constant.LINK_DIRECTION_BUILT_IN;
+import static net.geedge.common.utils.Constant.PSIPHON3_IP;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.compress.utils.Lists;
@@ -36,7 +53,6 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.text.csv.CsvData;
 import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.text.csv.CsvUtil;
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
@@ -46,6 +62,7 @@ import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.IPUtils;
 import net.geedge.common.utils.JSONUtil;
 import net.geedge.common.utils.KnowledgeCheckUtil;
+import net.geedge.common.utils.OperationEnum;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.R;
@@ -67,6 +84,7 @@ import net.geedge.modules.knowledge.entity.IpAsnBuiltIn;
 import net.geedge.modules.knowledge.entity.IpLocationBuiltIn;
 import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
+import net.geedge.modules.knowledge.entity.KnowledgeBaseAuditLog;
 import net.geedge.modules.knowledge.entity.KnowledgeBaseSyncVersion;
 import net.geedge.modules.knowledge.entity.LinkDirectionBuiltIn;
 import net.geedge.modules.knowledge.entity.Psiphon3Ip;
@@ -84,6 +102,7 @@ import net.geedge.modules.knowledge.service.IocMalwareService;
 import net.geedge.modules.knowledge.service.IpAsnBuiltInService;
 import net.geedge.modules.knowledge.service.IpLocationBuiltInService;
 import net.geedge.modules.knowledge.service.IpTagUserDefinedService;
+import net.geedge.modules.knowledge.service.KnowledgeBaseAuditLogService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
 import net.geedge.modules.knowledge.service.LinkDirectionBuiltInService;
@@ -151,9 +170,13 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	
 	@Autowired
 	private InternalIpBuiltInService internalIpBuiltInService;
+	
+	@Autowired
+	private KnowledgeBaseAuditLogService knowledgeBaseAuditLogService;
 
 	@Override
-	public Object remove(String knowledgeIds) {
+	@Transactional(rollbackFor = Exception.class)
+	public List<Integer> remove(String knowledgeIds) {
 		// 内置数据不可删除
 		List<String> knowlegeIds = StrUtil.split(knowledgeIds, StrUtil.C_COMMA);
 		List<KnowledgeBase> knowledgeBases = this.baseMapper.selectBatchIds(knowlegeIds);
@@ -162,17 +185,40 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		if(ObjectUtils.isNotEmpty(builtInIds)) {
 			throw new CNException(RCode.KNOWLEDGE_BUILTIN_ERROR);
 		}
-
+		// 判断传入数据是否都存在 不存在返回错误提示
+		if(knowledgeBases.size()!=knowlegeIds.size()) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
+		}
+		List<Integer> ids = knowledgeBases.stream().map(KnowledgeBase::getKnowledgeId).collect(Collectors.toList());
 		// 删除版本数据信息
-		knowledgeBaseSyncVersionService.remove(new QueryWrapper<KnowledgeBaseSyncVersion>().lambda().in(KnowledgeBaseSyncVersion::getKnowledgeId, knowlegeIds));
+		List<KnowledgeBaseSyncVersion> syncVersions = knowledgeBaseSyncVersionService.list(new QueryWrapper<KnowledgeBaseSyncVersion>().lambda().in(KnowledgeBaseSyncVersion::getKnowledgeId, knowlegeIds));
+		// 审计日志表数据填充
+		List<KnowledgeBaseAuditLog> knowledgeBaseAuditLogs = new ArrayList<KnowledgeBaseAuditLog>();
+		for(KnowledgeBaseSyncVersion syncVersion : syncVersions) {
+			Integer version = syncVersion.getVersion();
+			syncVersion.setVersion(version+1);
+			syncVersion.setOpTime(new Date());
+			KnowledgeBaseAuditLog log = new KnowledgeBaseAuditLog();
+			log.setCommitVersion(version+1);
+			log.setDescription("Deleted");
+			log.setIsPublished(0);
+			log.setKnowledgeId(syncVersion.getKnowledgeId());
+			log.setStatus(0);
+			log.setOpTime(new Date());
+			log.setOpType(OperationEnum.DELETE.getValue());
+			log.setOpUser(ShiroUtils.getUserId().intValue());
+			knowledgeBaseAuditLogs.add(log);
+		}
+		knowledgeBaseSyncVersionService.updateBatchById(syncVersions);
 		// 根据类型进行分组 删除对应表中条目数据
 		Map<String, List<Integer>> sourceKnowledgeBaseIds = knowledgeBases.stream().collect(Collectors.groupingBy(KnowledgeBase::getSource,Collectors.mapping(KnowledgeBase::getKnowledgeId, Collectors.toList())));
 		for(String source : sourceKnowledgeBaseIds.keySet()) {
 			// 根据source 去对应的表删除数据
 			this.baseMapper.deleteBySource(source,sourceKnowledgeBaseIds.get(source));
 		}
+		knowledgeBaseAuditLogService.saveBatch(knowledgeBaseAuditLogs);
 		this.remove(new QueryWrapper<KnowledgeBase>().lambda().in(KnowledgeBase::getKnowledgeId,knowlegeIds));
-		return knowlegeIds;
+		return ids;
 	}
 
 	@Override
@@ -283,9 +329,13 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public R enableKnowledgeBase(Map<String,Object> params) {
 		validateEnableParams(params);
 		List<Map<String,Object>> list = (List)params.get("list");
+		List<KnowledgeBase> KnowledgeBases = new ArrayList<>();
+		List<Integer> knowledgeIds = new ArrayList<>();
+		List<KnowledgeBaseAuditLog> knowledgeBaseAuditLogs = new ArrayList<KnowledgeBaseAuditLog>();
 		for (Map<String,Object> param: list) {
 			Integer knowledgeId = (Integer) param.get("knowledgeId");
 			Integer isPublished = (Integer) param.get("isPublished");
@@ -299,9 +349,28 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			knowledgeBase.setOpTime(new Date());
 			knowledgeBase.setIsPublished(isPublished);
 			knowledgeBase.setStatus(status);
-			this.getBaseMapper().updateById(knowledgeBase);
-			knowledgeBaseSyncVersionService.syncVersion(knowledgeId);
+			KnowledgeBases.add(knowledgeBase);
+			knowledgeIds.add(knowledgeId);
 		}
+		this.saveOrUpdateBatch(KnowledgeBases);
+		List<KnowledgeBaseSyncVersion> syncVersionBatchs = knowledgeBaseSyncVersionService.syncVersionBatch(knowledgeIds);
+		// 记录审计日志
+		Map<Integer, KnowledgeBase> idKnowledgeBase = KnowledgeBases.stream().collect(Collectors.toMap(KnowledgeBase::getKnowledgeId, Function.identity()));
+		Map<Integer, KnowledgeBaseSyncVersion> idVersion = syncVersionBatchs.stream().collect(Collectors.toMap(KnowledgeBaseSyncVersion::getKnowledgeId, Function.identity()));
+		for(Integer knowledgeId : knowledgeIds) {
+			KnowledgeBaseAuditLog log = new KnowledgeBaseAuditLog();
+			KnowledgeBase knowledgeBase = idKnowledgeBase.get(knowledgeId);
+			log.setCommitVersion(idVersion.get(knowledgeId).getVersion());
+			log.setDescription(knowledgeBase.getDescription());
+			log.setIsPublished(knowledgeBase.getIsPublished());
+			log.setKnowledgeId(knowledgeId);
+			log.setOpTime(new Date());
+			log.setOpType(OperationEnum.UPDATE.getValue());
+			log.setOpUser(ShiroUtils.getUserId().intValue());
+			log.setStatus(knowledgeBase.getStatus());
+			knowledgeBaseAuditLogs.add(log);
+		}
+		knowledgeBaseAuditLogService.saveOrUpdateBatch(knowledgeBaseAuditLogs);
 		return R.ok();
 	}
 
@@ -344,9 +413,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			params.put("status", Arrays.asList(String.valueOf(params.get("status")).split(StringPool.COMMA)));
 		} else {
 			params.put("status", new ArrayList<>());
-		}
-		if (ObjectUtil.isNotEmpty(params.get("orderBy"))) {
-			params.put("orderBy", StrUtil.toUnderlineCase((String)params.get("orderBy")));
 		}
 	}
 
@@ -704,16 +770,28 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				break;
 		}
 		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getById(knowledgeBase.getKnowledgeId());
+		KnowledgeBaseAuditLog knowledgeBaseAuditLog = new KnowledgeBaseAuditLog();
+		knowledgeBaseAuditLog.setDescription(knowledgeBase.getDescription());
+		knowledgeBaseAuditLog.setIsPublished(knowledgeBase.getIsPublished());
+		knowledgeBaseAuditLog.setKnowledgeId(knowledgeBase.getKnowledgeId());
+		knowledgeBaseAuditLog.setOpTime(new Date());
+		knowledgeBaseAuditLog.setOpUser(ShiroUtils.getUserId().intValue());
+		knowledgeBaseAuditLog.setStatus(knowledgeBase.getStatus());
 		if(ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
 			Integer version = knowledgeBaseSyncVersion.getVersion();
 			knowledgeBaseSyncVersion.setVersion(version+1);
+			knowledgeBaseAuditLog.setCommitVersion(version+1);
+			knowledgeBaseAuditLog.setOpType(OperationEnum.UPDATE.getValue());
 		}else {
 			knowledgeBaseSyncVersion = new KnowledgeBaseSyncVersion();
 			knowledgeBaseSyncVersion.setVersion(1);
+			knowledgeBaseAuditLog.setCommitVersion(1);
+			knowledgeBaseAuditLog.setOpType(OperationEnum.ADD.getValue());
 		}
 		knowledgeBaseSyncVersion.setKnowledgeId(knowledgeBase.getKnowledgeId());
 		knowledgeBaseSyncVersion.setOpTime(new Date());
 		knowledgeBaseSyncVersionService.saveOrUpdate(knowledgeBaseSyncVersion);
+		knowledgeBaseAuditLogService.saveOrUpdate(knowledgeBaseAuditLog);
 		return knowledgeBase.getKnowledgeId();
 	}
 	
@@ -945,7 +1023,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@Transactional(rollbackFor = Exception.class)
 	public Integer importBatch(MultipartFile file, Integer knowledgeId, String action,Integer status,String description) {
 		KnowledgeBase knowledgeBase = this.baseMapper.selectById(knowledgeId);
-		if(StrUtil.isNotEmpty(description)) {
+		// 参数不为null 空串也默认为有值 进行置空处理 null代表无任何操作
+		if(description!=null) {
 			knowledgeBase.setDescription(description);
 		}
 		if(ObjectUtil.isNotEmpty(status)) {
@@ -966,7 +1045,17 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			basicImportAndExportService.removeList(knowledgeBase.getSource(), knowledgeBase.getKnowledgeId());
 		}
 		this.saveOrUpdateBatch(saveOrUpdateList, knowledgeBase);
-		knowledgeBaseSyncVersionService.syncVersion(knowledgeBase.getKnowledgeId());
+		KnowledgeBaseSyncVersion syncVersion = knowledgeBaseSyncVersionService.syncVersion(knowledgeBase.getKnowledgeId());
+		KnowledgeBaseAuditLog log = new KnowledgeBaseAuditLog();
+		log.setDescription(knowledgeBase.getDescription());
+		log.setIsPublished(knowledgeBase.getIsPublished());
+		log.setKnowledgeId(knowledgeBase.getKnowledgeId());
+		log.setOpTime(new Date());
+		log.setOpUser(ShiroUtils.getUserId().intValue());
+		log.setStatus(knowledgeBase.getStatus());
+		log.setOpType(OperationEnum.UPDATE.getValue());		
+		log.setCommitVersion(syncVersion.getVersion());
+		knowledgeBaseAuditLogService.save(log);
 		this.updateById(knowledgeBase);
 		return knowledgeId;
 	}
