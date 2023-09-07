@@ -35,6 +35,7 @@ import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -777,6 +778,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		knowledgeBaseAuditLog.setOpTime(new Date());
 		knowledgeBaseAuditLog.setOpUser(ShiroUtils.getUserId().intValue());
 		knowledgeBaseAuditLog.setStatus(knowledgeBase.getStatus());
+		knowledgeBaseAuditLog.setColor(knowledgeBase.getColor());
 		if(ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
 			Integer version = knowledgeBaseSyncVersion.getVersion();
 			knowledgeBaseSyncVersion.setVersion(version+1);
@@ -804,6 +806,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		String category = (String) params.get("category");
 		String description = (String) params.get("description");
 		Integer status = (Integer) params.get("status");
+		String color = (String) params.get("color");
 		List<KnowledgeBase> queryByName = this.baseMapper.selectList(new QueryWrapper<KnowledgeBase>().lambda()
 				.eq(KnowledgeBase::getName, name)
 				.ne(ObjectUtil.isNotEmpty(knowledgeId),KnowledgeBase::getKnowledgeId,knowledgeId));
@@ -831,6 +834,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		knowledgeBase.setOpTime(new Date());
 		knowledgeBase.setOpUser(ShiroUtils.getUserId());
 		knowledgeBase.setStatus(status==null ? 1 : status);
+		knowledgeBase.setColor(color);
 		result.put("knowledgeBase", knowledgeBase);		
 		List<Map<String,Object>> addDatas  = (List<Map<String, Object>>) params.get("addItemList");
 		List<Map<String,Object>> modifyDatas  = (List<Map<String, Object>>) params.get("updateItemList");
@@ -1021,9 +1025,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Integer importBatch(MultipartFile file, Integer knowledgeId, String action,Integer status,String description) {
+	public Integer importBatch(MultipartFile file, Integer knowledgeId, String action, Integer status, String color, String description) {
 		KnowledgeBase knowledgeBase = this.baseMapper.selectById(knowledgeId);
 		// 参数不为null 空串也默认为有值 进行置空处理 null代表无任何操作
+		if(color!=null) {
+			knowledgeBase.setColor(color);
+		}
 		if(description!=null) {
 			knowledgeBase.setDescription(description);
 		}
@@ -1053,6 +1060,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		log.setOpTime(new Date());
 		log.setOpUser(ShiroUtils.getUserId().intValue());
 		log.setStatus(knowledgeBase.getStatus());
+		log.setColor(knowledgeBase.getColor());
 		log.setOpType(OperationEnum.UPDATE.getValue());		
 		log.setCommitVersion(syncVersion.getVersion());
 		knowledgeBaseAuditLogService.save(log);

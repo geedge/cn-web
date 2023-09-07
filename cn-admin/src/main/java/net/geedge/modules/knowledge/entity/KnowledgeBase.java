@@ -35,6 +35,8 @@ public class KnowledgeBase {
 
 	private Integer status;
 
+	private String color;
+
 	@TableField(exist = false)
 	private SysUserEntity user;
 }

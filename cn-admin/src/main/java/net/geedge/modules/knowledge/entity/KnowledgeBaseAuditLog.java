@@ -30,6 +30,8 @@ public class KnowledgeBaseAuditLog {
 	private Integer opUser;
 	
 	private Date opTime;
+
+	private String color;
 	
 	@TableField(exist = false)
 	private SysUserEntity user;
