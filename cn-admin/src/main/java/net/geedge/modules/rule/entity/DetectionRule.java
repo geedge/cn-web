@@ -24,6 +24,8 @@ public class DetectionRule {
 	
 	private String description;
 	
+	private Integer isBuiltIn;
+	
 	private Integer status;
 	
 	private String ruleConfig;

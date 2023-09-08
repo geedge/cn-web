@@ -175,9 +175,15 @@ public class Constant {
 		Map<String, String> knowledgeOrderFieldMap = new HashMap<>();
 		knowledgeOrderFieldMap.put("opTime", "op_time");
 		knowledgeOrderFieldMap.put("knowledgeId", "knowledge_id");
+		
+		Map<String, String> ruleOrderFieldMap = new HashMap<>();
+		ruleOrderFieldMap.put("opTime", "op_time");
+		ruleOrderFieldMap.put("ruleId", "rule_id");
+		
 		TABLE_NAME_ORDER_FIELD_MAPPING.put("cn_knowledge_base", knowledgeOrderFieldMap);
 		TABLE_NAME_ORDER_FIELD_MAPPING.put("cn_knowledge_base_audit_log", knowledgeBaseAuditLogOrderFieldMap);
 		TABLE_NAME_ORDER_FIELD_MAPPING.put("report_job", reportOrderFieldMap);
+		TABLE_NAME_ORDER_FIELD_MAPPING.put("detection_rule", ruleOrderFieldMap);
 	}
 
 	/**

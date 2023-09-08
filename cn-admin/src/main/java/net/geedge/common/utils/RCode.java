@@ -335,6 +335,10 @@ public enum RCode {
     ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
     ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
     ENTITY_TAG_NOT_EXIST(601003,"Entity tag not exist"),
+    
+    RULE_ID_ISNULL(611001,"Rule id is required"),
+    RULE_NOT_EXIST(611002,"Rule does not exist"),
+    RULE_BUILTIN_ERROR(611003,"Rule built-in data can not be removed"),
     /**
      * stat相关
      */

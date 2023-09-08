@@ -2,13 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.geedge.modules.rule.dao.DetectionRuleDao">
 
-    <resultMap id="DetectionRule" type="net.geedge.modules.rule.entity.DetectionRule">
-        <result property="opSeq" column="op_seq"></result>
+    <resultMap id="detectionRule" type="net.geedge.modules.rule.entity.DetectionRule">
         <result property="ruleId" column="rule_id"></result>
-        <result property="opType" column="op_type"></result>
-        <result property="opVersion" column="op_version"></result>
+        <result property="ruleType" column="rule_type"></result>
+        <result property="name" column="name"></result>
+        <result property="category" column="category"></result>
+        <result property="eventType" column="event_type"></result>
+        <result property="description" column="description"></result>
+        <result property="isBuiltIn" column="is_built_in"></result>
+        <result property="status" column="status"></result>
+        <result property="ruleConfig" column="rule_config"></result>
+        <result property="trigger" column="trigger"></result>
+        <result property="cUser" column="c_user"></result>
+        <result property="cTime" column="c_time"></result>
         <result property="opUser" column="op_user"></result>
         <result property="opTime" column="op_time"></result>
     </resultMap>
+   
+   <select id="queryPage" resultMap="detectionRule">
+        select * from
+        detection_rule
+        <where>
+            1 = 1
+            <if test=" params.name !=null and params.name !='' ">
+                and name like concat ( '%', #{params.name}, '%')
+            </if>
+            <if test="params.category != null and params.category.size > 0">
+                and category in
+                <foreach item="category" collection="params.category" separator="," open="(" close=")" index="">
+                    #{category}
+                </foreach>
+            </if>
+            <if test="params.eventType != null and params.eventType.size > 0">
+                and event_type in
+                <foreach item="type" collection="params.eventType" separator="," open="(" close=")" index="">
+                    #{type}
+                </foreach>
+            </if>
+            <if test="params.orderBy == null or params.orderBy == ''">
+                ORDER BY rule_id desc
+            </if>
+        </where>
+    </select>
    
 </mapper>

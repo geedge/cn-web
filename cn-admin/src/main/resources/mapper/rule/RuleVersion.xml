@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.geedge.modules.rule.dao.RuleVersionDao">
 
-    <resultMap id="RuleVersion" type="net.geedge.modules.rule.entity.RuleVersion">
+    <resultMap id="ruleVersion" type="net.geedge.modules.rule.entity.RuleVersion">
         <result property="ruleId" column="rule_id"></result>
         <result property="version" column="version"></result>
         <result property="opTime" column="op_time"></result>
