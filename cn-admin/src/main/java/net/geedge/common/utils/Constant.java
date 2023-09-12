@@ -278,4 +278,24 @@ public class Constant {
 
 	//实体关系表别名（clickhouse.cyber_narrator_galaxy.cn_entity_relation） e
 	public static final String ENTITY_RELATION_TABLE_ALIAS = "e";
+	
+	/**
+	 * 规则类型
+	 */
+	public enum RuleType {
+		
+		INDICATOR_MATHCH("indicator_match"),
+		
+		THRESHOLD("threshold");
+
+		private String value;
+
+		RuleType(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
+	}
 }

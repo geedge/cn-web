@@ -35,7 +35,6 @@ import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,6 +68,7 @@ import net.geedge.common.utils.Query;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool;
+import net.geedge.common.utils.Constant.RuleType;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.AppCategoryBuiltIn;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
@@ -108,6 +108,8 @@ import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
 import net.geedge.modules.knowledge.service.LinkDirectionBuiltInService;
 import net.geedge.modules.knowledge.service.Psiphon3IpService;
+import net.geedge.modules.rule.entity.DetectionRule;
+import net.geedge.modules.rule.service.DetectionRuleService;
 import net.geedge.modules.sys.service.BasicImportAndExportService;
 import net.geedge.modules.sys.service.SysConfigService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
@@ -174,6 +176,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	
 	@Autowired
 	private KnowledgeBaseAuditLogService knowledgeBaseAuditLogService;
+	
+	@Autowired
+	private DetectionRuleService detectionRuleService;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -314,21 +319,34 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		preHandleParams(params);
 		IPage page = this.page(new Query(KnowledgeBase.class).getPage(params));
 		List<KnowledgeBase> knowledgeBases = this.baseMapper.queryPage(page, params);
-		List<Map<String, Object>> list = knowledgeBaseToMap(knowledgeBases);
-		list.stream().forEach(m -> mapDateToTimestamp(m));
-		page.setRecords(list);
+		//获取知识库关联规则相关条目
+		if(ObjectUtils.isNotEmpty(knowledgeBases)) {
+			getRuleInfo(knowledgeBases);
+		}
+		page.setRecords(knowledgeBases);
 		return new PageUtils(page);
 	}
 
-	private List<Map<String, Object>> knowledgeBaseToMap(List<KnowledgeBase> knowledgeBases) {
-		List<Map<String, Object>> list = new ArrayList<>();
-		for (KnowledgeBase knowledgeBase: knowledgeBases) {
-			Map<String, Object> knowledgeMap = JSONObject.parseObject(JSONObject.toJSONString(knowledgeBase));
-			list.add(knowledgeMap);
+	private void getRuleInfo(List<KnowledgeBase> knowledgeBases) {
+		List<DetectionRule> rules = detectionRuleService.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getRuleType,RuleType.INDICATOR_MATHCH));
+		Map<Integer, KnowledgeBase> idKnowledge = knowledgeBases.stream().collect(Collectors.toMap(KnowledgeBase::getKnowledgeId, Function.identity()));
+		if(ObjectUtils.isNotEmpty(rules)) {
+			for(DetectionRule rule : rules) {
+				String ruleConfig = rule.getRuleConfig();
+				Map<String,Object> ruleConfigObj = (Map<String, Object>) JSONObject.parse(ruleConfig);
+				Integer knowledgeId = (Integer) ruleConfigObj.get("knowledgeId");
+				KnowledgeBase knowledge = idKnowledge.get(knowledgeId);
+				if(ObjectUtil.isNotEmpty(knowledge)) {
+					List<DetectionRule> refRule = knowledge.getRefRule();
+					if(ObjectUtil.isEmpty(refRule)) {
+						refRule = new ArrayList<DetectionRule>();
+					}
+					refRule.add(rule);
+				}
+			}
 		}
-		return list;
 	}
-
+	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public R enableKnowledgeBase(Map<String,Object> params) {
@@ -532,35 +550,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	private Map<String, Object> addKnowledgeBaseMessage(PageUtils pageUtils, KnowledgeBase knowledgeBase){
 		Map<String, Object> pageMap = JSONUtil.parseObj(JSONUtil.toJsonStr(pageUtils));
 		Map<String, Object> knowledge = JSONUtil.parseObj(JSONUtil.toJsonStr(knowledgeBase));
-		mapDateToTimestamp(knowledge);
 		pageMap.putAll(knowledge);
 		return pageMap;
 	}
 
-	private void mapDateToTimestamp(Map<String, Object> map) {
-		if(ObjectUtil.isNotEmpty(map.get("opTime"))) {
-			if (map.get("opTime") instanceof Date) {
-				Date opTime = (Date) map.get("opTime");
-				map.put("opTime", opTime.getTime()/1000);
-			} else {
-				long opTime = Long.valueOf(map.get("opTime").toString())/1000;
-				map.put("opTime", opTime);
-			}
-		}
-		if (ObjectUtil.isNotEmpty(map.get("cTime"))) {
-			if (map.get("cTime") instanceof Date) {
-				Date cTime = (Date) map.get("cTime");
-				map.put("cTime", cTime.getTime()/1000);
-			} else {
-				long cTime = Long.valueOf(map.get("cTime").toString())/1000;
-				map.put("cTime", cTime);
-			}
-		}
-	}
-
 	private Map<String, Object> updateItemList(Map<String, Object> pageMap) {
 		List<Map<String, Object>> list = (List<Map<String, Object>>)pageMap.get("list");
-		list.stream().forEach(m -> mapDateToTimestamp(m));
 		pageMap.put("itemList",pageMap.get("list"));
 		pageMap.remove("list");
 		return pageMap;

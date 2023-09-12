@@ -1,12 +1,14 @@
 package net.geedge.modules.knowledge.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
+import net.geedge.modules.rule.entity.DetectionRule;
 import net.geedge.modules.sys.entity.SysUserEntity;
 
 @Data
@@ -39,4 +41,7 @@ public class KnowledgeBase {
 
 	@TableField(exist = false)
 	private SysUserEntity user;
+	
+	@TableField(exist = false)
+	private List<DetectionRule> refRule;
 }
