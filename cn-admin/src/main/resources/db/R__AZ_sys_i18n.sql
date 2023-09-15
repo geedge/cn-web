@@ -179,7 +179,7 @@ INSERT INTO `sys_i18n` VALUES (161, 'name', 'zh', 'config.i18n.name', '名称', 
 INSERT INTO `sys_i18n` VALUES (162, '名称', 'zh', 'config.user.name', '名称', '', '2021-07-21 06:29:48', 1);
 INSERT INTO `sys_i18n` VALUES (163, 'Name', 'en', 'config.user.name', 'Name', '', '2021-07-21 07:01:40', 1);
 INSERT INTO `sys_i18n` VALUES (164, '登录名', 'zh', 'config.user.username', '登录名', '', '2021-07-21 07:04:55', 1);
-INSERT INTO `sys_i18n` VALUES (165, '登录名', 'en', 'config.user.username', 'Username', '', '2021-08-12 13:29:17', 1);
+INSERT INTO `sys_i18n` VALUES (165, '登录名', 'en', 'config.user.username', 'Login name', '', '2023-09-14 07:17:23', 1);
 INSERT INTO `sys_i18n` VALUES (168, '角色', 'zh', 'config.user.roles', '角色', '', '2021-07-21 07:10:26', 1);
 INSERT INTO `sys_i18n` VALUES (169, '角色', 'en', 'config.user.roles', 'Roles', '', '2021-07-22 09:42:12', 1);
 INSERT INTO `sys_i18n` VALUES (170, 'Email', 'zh', 'config.user.email', '邮箱', '', '2021-07-21 07:12:36', 1);
@@ -1801,5 +1801,19 @@ INSERT INTO `sys_i18n` VALUES (1847, '客户端地区', 'zh', 'network.clientReg
 INSERT INTO `sys_i18n` VALUES (1848, '客户端地区', 'en', 'network.clientRegion', 'Client Region', '', '2023-09-01 01:20:44', 1);
 INSERT INTO `sys_i18n` VALUES (1849, '不支持全文检索', 'en', 'entity.fullTextSearchIsNotSupported', 'Full text search is not supported', '', '2023-09-08 03:01:10', 1);
 INSERT INTO `sys_i18n` VALUES (1850, '不支持全文检索', 'zh', 'entity.fullTextSearchIsNotSupported', '不支持全文检索', '', '2023-09-08 03:01:30', 1);
+INSERT INTO `sys_i18n` VALUES (1851, '放大', 'en', 'overall.zoomOut', 'zoom out', '', '2023-09-14 10:25:41', 1);
+INSERT INTO `sys_i18n` VALUES (1852, '放大', 'zh', 'overall.zoomOut', '放大', '', '2023-09-14 10:25:49', 1);
+INSERT INTO `sys_i18n` VALUES (1853, '缩小', 'zh', 'overall.zoomIn', '缩小', '', '2023-09-14 10:26:28', 1);
+INSERT INTO `sys_i18n` VALUES (1854, '缩小', 'en', 'overall.zoomIn', 'zoom in', '', '2023-09-14 10:26:37', 1);
+INSERT INTO `sys_i18n` VALUES (1855, '重置', 'zh', 'overall.reset', '重置', '', '2023-09-14 10:29:12', 1);
+INSERT INTO `sys_i18n` VALUES (1856, '重置', 'en', 'overall.reset', 'reset', '', '2023-09-14 10:29:04', 1);
+INSERT INTO `sys_i18n` VALUES (1857, '自适应', 'zh', 'overall.autoZoom', '自适应', '', '2023-09-14 10:38:36', 1);
+INSERT INTO `sys_i18n` VALUES (1858, '自适应', 'en', 'overall.autoZoom', 'auto zoom', '', '2023-09-14 10:38:46', 1);
+INSERT INTO `sys_i18n` VALUES (1859, '上一步', 'zh', 'overall.preStep', '上一步', '', '2023-09-14 10:39:04', 1);
+INSERT INTO `sys_i18n` VALUES (1860, '上一步', 'en', 'overall.preStep', 'pre step', '', '2023-09-14 10:39:16', 1);
+INSERT INTO `sys_i18n` VALUES (1861, '下一步', 'zh', 'overall.nextStep', '下一步', '', '2023-09-14 10:39:28', 1);
+INSERT INTO `sys_i18n` VALUES (1862, '下一步', 'en', 'overall.nextStep', 'next step', '', '2023-09-14 10:39:40', 1);
+INSERT INTO `sys_i18n` VALUES (1863, '标签', 'zh', 'overall.tag', '标签', '', '2023-09-15 02:18:56', 1);
+INSERT INTO `sys_i18n` VALUES (1864, '标签', 'en', 'overall.tag', 'Tag', '', '2023-09-15 02:19:05', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
