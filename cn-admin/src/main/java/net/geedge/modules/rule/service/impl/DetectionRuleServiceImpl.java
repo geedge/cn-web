@@ -3,13 +3,19 @@ package net.geedge.modules.rule.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
@@ -17,10 +23,15 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import net.geedge.common.exception.CNException;
+import net.geedge.common.utils.Constant;
+import net.geedge.common.utils.Constant.RuleType;
 import net.geedge.common.utils.OperationEnum;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
+import net.geedge.modules.knowledge.entity.KnowledgeBase;
+import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 import net.geedge.modules.rule.dao.DetectionRuleDao;
 import net.geedge.modules.rule.entity.DetectionRule;
 import net.geedge.modules.rule.entity.RuleCommitHistory;
@@ -39,7 +50,11 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 	@Autowired
 	private RuleVersionService  ruleVersionService;
 	
+	@Autowired
+	private KnowledgeBaseService knowledgeBaseService;
+	
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public List<Integer> removeRules(List<Integer> ids) {
 		// 内置数据不可删除
 		List<DetectionRule> detectionRules = this.baseMapper.selectBatchIds(ids);
@@ -52,10 +67,10 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		if(detectionRules.size()!=ids.size()) {
 			throw new CNException(RCode.RULE_NOT_EXIST);
 		}
-		List<RuleVersion> ruleVersions = ruleVersionService.list(new QueryWrapper<RuleVersion>().lambda().in(RuleVersion::getRuleId, ids));
+		RuleVersion ruleVersion = ruleVersionService.list().get(0);
 		// 历史记录表数据填充
 		List<RuleCommitHistory> ruleCommitHistories = new ArrayList<RuleCommitHistory>();
-		for(RuleVersion ruleVersion : ruleVersions) {
+		for(DetectionRule rule : detectionRules) {
 			Integer version = ruleVersion.getVersion();
 			ruleVersion.setVersion(version+1);
 			ruleVersion.setOpTime(new Date());
@@ -64,12 +79,13 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 			ruleCommitHistory.setOpTime(new Date());
 			ruleCommitHistory.setOpType(OperationEnum.DELETE.getValue());
 			ruleCommitHistory.setOpVersion(version+1);
-			ruleCommitHistory.setRuleId(ruleVersion.getRuleId());
+			ruleCommitHistory.setRuleId(rule.getRuleId());
 			ruleCommitHistories.add(ruleCommitHistory);
 		}
-		ruleVersionService.updateBatchById(ruleVersions);
+		ruleVersionService.update(new QueryWrapper<RuleVersion>().lambda().setEntity(ruleVersion));
 		ruleCommitHistoryService.saveBatch(ruleCommitHistories);
-		this.remove(new QueryWrapper<DetectionRule>().lambda().in(DetectionRule::getRuleId,ids));
+		detectionRules.stream().forEach(rule -> rule.setIsValid(1));
+		this.updateBatchById(detectionRules);
 		return ids;
 	}
 
@@ -91,4 +107,168 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		return detectionRules;
 	}
 
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public DetectionRule saveDetectionRule(DetectionRule detectionRule) {
+		this.validateDetectionRule(detectionRule);
+		detectionRule.setCTime(new Date());
+		detectionRule.setCUser(ShiroUtils.getUserId().intValue());
+		detectionRule.setOpTime(new Date());
+		detectionRule.setOpUser(ShiroUtils.getUserId().intValue());
+		this.save(detectionRule);
+		
+		//创建版本表数据
+		RuleVersion ruleVersion = new RuleVersion();
+		ruleVersion.setOpTime(new Date());
+		ruleVersion.setVersion(1);
+		ruleVersionService.save(ruleVersion);
+		
+		//创建记录表数据
+		RuleCommitHistory ruleCommitHistory = new RuleCommitHistory();
+		ruleCommitHistory.setOpVersion(1);
+		ruleCommitHistory.setOpTime(new Date());
+		ruleCommitHistory.setOpUser(ShiroUtils.getUserId().intValue());
+		ruleCommitHistory.setOpType(OperationEnum.ADD.getValue());
+		ruleCommitHistory.setRuleId(detectionRule.getRuleId());
+		ruleCommitHistory.setOpVersion(1);
+		ruleCommitHistoryService.save(ruleCommitHistory);
+		return detectionRule;
+	}
+
+	private void validateDetectionRule(DetectionRule detectionRule) {
+		if(ObjectUtil.isEmpty(detectionRule.getRuleType())) {
+			throw new CNException(RCode.RULE_TYPE_ISNULL);
+		}
+		if(ObjectUtil.isEmpty(detectionRule.getName())) {
+			throw new CNException(RCode.RULE_NAME_ISNULL);
+		}
+		if(ObjectUtil.isEmpty(detectionRule.getCategory())) {
+			throw new CNException(RCode.RULE_CATEGORY_ISNULL);
+		}
+		if(ObjectUtil.isEmpty(detectionRule.getEventType())) {
+			throw new CNException(RCode.RULE_EVENT_TYPE_ISNULL);
+		}
+		if(ObjectUtil.isEmpty(detectionRule.getTrigger())) {
+			throw new CNException(RCode.RULE_TRIGGER_ISNULL);
+		}
+		
+		List<String> ruleTypes = Arrays.asList(Constant.RuleType.values()).stream().map(RuleType::getValue).collect(Collectors.toList());
+        if (!ruleTypes.contains(detectionRule.getRuleType())) {
+            throw new CNException(RCode.RULE_TYPE_INVALID);
+        }
+        
+		// config 格式校验
+        String configStr = (String) detectionRule.getRuleConfig();
+        if (StrUtil.isNotEmpty(configStr)) {
+            Map configMap;
+            try {
+                configMap = JSONObject.parseObject(configStr, Map.class);
+            } catch (JSONException e) {
+                throw new CNException(RCode.RULE_CONFIG_FORMAT_ERROR);
+            }
+            String dataSource = (String) configMap.get("dataSource");
+            if(StrUtil.isEmpty(dataSource)) {
+            	throw new CNException(RCode.RULE_CONFIG_DB_ISNULL);
+            }
+            Integer knowledgeId = (Integer) configMap.get("dataSource");
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getById(knowledgeId);
+            if(ObjectUtil.isEmpty(knowledgeBase)) {
+            	throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
+            }
+        }
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public DetectionRule modifyDetectionRule(DetectionRule detectionRule) {
+		this.validateDetectionRule(detectionRule);
+		detectionRule.setOpTime(new Date());
+		detectionRule.setOpUser(ShiroUtils.getUserId().intValue());
+		this.updateById(detectionRule);
+		
+		//创建版本表数据
+		RuleVersion ruleVersion = ruleVersionService.list().get(0);	
+		ruleVersion.setOpTime(new Date());
+		Integer version = ruleVersion.getVersion();
+		ruleVersion.setVersion(version+1);
+		ruleVersionService.update(new QueryWrapper<RuleVersion>().lambda().setEntity(ruleVersion));
+		
+		//创建记录表数据
+		RuleCommitHistory ruleCommitHistory = new RuleCommitHistory();
+		ruleCommitHistory.setOpVersion(version+1);
+		ruleCommitHistory.setOpTime(new Date());
+		ruleCommitHistory.setOpUser(ShiroUtils.getUserId().intValue());
+		ruleCommitHistory.setOpType(OperationEnum.UPDATE.getValue());
+		ruleCommitHistory.setRuleId(detectionRule.getRuleId());
+		ruleCommitHistory.setOpVersion(1);
+		ruleCommitHistoryService.save(ruleCommitHistory);
+		return detectionRule;
+	}
+
+	@Override
+	public Map queryDetection(Integer queryDetection) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		RuleVersion ruleVersion = ruleVersionService.list().get(0);
+		if(ObjectUtil.isEmpty(ruleVersion)) {
+			return result;
+		}
+		result.put("version", ruleVersion.getVersion());
+		List<DetectionRule> rules = this.list();
+		if(ObjectUtil.isNotEmpty(queryDetection)) {
+			List<RuleCommitHistory> histories = ruleCommitHistoryService.list(new QueryWrapper<RuleCommitHistory>().lambda().eq(RuleCommitHistory::getOpVersion, ruleVersion)
+					.ne(RuleCommitHistory::getOpType, OperationEnum.DELETE));
+			List<Integer> historiesRuleId = histories.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
+			List<Integer> ruleIds = rules.stream().map(DetectionRule::getRuleId).collect(Collectors.toList());
+			//获取增量的规则信息
+			List<Integer> addRuleIds = ruleIds.stream().filter(ruleId -> !historiesRuleId.contains(ruleId)).collect(Collectors.toList());
+			//判断修改、删除的规则信息
+			List<Integer> drRuleIds = ruleIds.stream().filter(ruleId -> historiesRuleId.contains(ruleId)).collect(Collectors.toList());
+			
+			if(ObjectUtil.isNotEmpty(addRuleIds)) {
+				List<DetectionRule> addRules = rules.stream().filter(rule -> addRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
+				Map<String, List<DetectionRule>> typeAddRules = addRules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
+				for(String key : typeAddRules.keySet()) {
+					Map<String,Object> data = new HashMap<String,Object>();
+					data.put("addList", typeAddRules.get(key));
+					result.put(key, data);
+				}
+			}
+			
+			if(ObjectUtil.isNotEmpty(drRuleIds)) {
+				// 删除的规则信息
+				List<DetectionRule> deleteRules = rules.stream().filter(rule -> rule.getIsValid().equals(1)&&drRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
+				if(ObjectUtil.isNotEmpty(deleteRules)) {
+					Map<String, List<DetectionRule>> typeDeleteRules = deleteRules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
+					for(String key : typeDeleteRules.keySet()) {
+						Map<String,Object> data = new HashMap<String,Object>();
+						data.put("deleteList", typeDeleteRules.get(key));
+						result.put(key, data);
+					}
+				}
+				// 修改的规则信息
+				List<DetectionRule> updateRules = rules.stream().filter(rule -> rule.getIsValid().equals(0)&&drRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
+				// 同历史操作表对比获取修改数据信息
+				List<Integer> updateIds = updateRules.stream().map(DetectionRule::getRuleId).collect(Collectors.toList());
+				List<RuleCommitHistory> realUpdateRules = ruleCommitHistoryService.list(new QueryWrapper<RuleCommitHistory>().lambda().in(RuleCommitHistory::getRuleId, updateIds)
+						.gt(RuleCommitHistory::getOpVersion, queryDetection));
+				List<DetectionRule> updateRealRules = updateRules.stream().filter(rule -> realUpdateRules.contains(rule.getRuleId())).collect(Collectors.toList());
+				if(ObjectUtil.isNotEmpty(updateRealRules)) {
+					Map<String, List<DetectionRule>> typeUpdateRules = updateRealRules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
+					for(String key : typeUpdateRules.keySet()) {
+						Map<String,Object> data = new HashMap<String,Object>();
+						data.put("updateList", typeUpdateRules.get(key));
+						result.put(key, data);
+					}
+				}
+			}
+		}else {
+			Map<String, List<DetectionRule>> typeRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
+			for(String key : typeRules.keySet()) {
+				Map<String,Object> data = new HashMap<String,Object>();
+				data.put("addList", typeRules.get(key));
+				result.put(key, data);
+			}
+		}
+		return result;
+	}
 }

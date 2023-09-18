@@ -39,4 +39,6 @@ public class DetectionRule {
 	private Integer opUser;
 	
 	private Date opTime;
+	
+	private Integer isValid;
 }

@@ -339,6 +339,14 @@ public enum RCode {
     RULE_ID_ISNULL(611001,"Rule id is required"),
     RULE_NOT_EXIST(611002,"Rule does not exist"),
     RULE_BUILTIN_ERROR(611003,"Rule built-in data can not be removed"),
+    RULE_CONFIG_FORMAT_ERROR(611004,"Rule config format error"),
+    RULE_CONFIG_DB_ISNULL(611005,"Rule config info datasource is required"),
+    RULE_TYPE_ISNULL(611006,"Rule type is required"),
+    RULE_EVENT_TYPE_ISNULL(611007,"Rule event-type is required"),
+    RULE_NAME_ISNULL(611008,"Rule name is required"),
+    RULE_CATEGORY_ISNULL(611009,"Rule category is required"),
+    RULE_TRIGGER_ISNULL(611010,"Rule trigger is required"),
+    RULE_TYPE_INVALID(611011,"Rule type is not in the enum range"),
     /**
      * stat相关
      */

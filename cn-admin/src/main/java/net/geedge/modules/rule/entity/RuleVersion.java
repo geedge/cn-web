@@ -10,8 +10,6 @@ import lombok.Data;
 @Data
 @TableName("rule_version")
 public class RuleVersion {
-	@TableId
-	private Integer ruleId;
 	
 	private Integer version;
 	

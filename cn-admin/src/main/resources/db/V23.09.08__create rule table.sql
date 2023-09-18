@@ -22,8 +22,9 @@ CREATE TABLE `detection_rule` (
   `op_user` int(10) NOT NULL,
   `op_time` datetime NOT NULL,
   `is_built_in` int(11) NOT NULL DEFAULT 0,
+  `is_valid` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`rule_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 DROP TABLE IF EXISTS `rule_commit_history`;
 CREATE TABLE `rule_commit_history`  (
@@ -38,10 +39,8 @@ CREATE TABLE `rule_commit_history`  (
 
 DROP TABLE IF EXISTS `rule_version`;
 CREATE TABLE `rule_version`  (
-  `rule_id` int(11) NOT NULL,
   `version` int(10) NOT NULL,
-  `op_time` datetime(0) NOT NULL,
-  PRIMARY KEY (`rule_id`) USING BTREE
+  `op_time` datetime(0) NOT NULL
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

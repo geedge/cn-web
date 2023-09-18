@@ -14,4 +14,10 @@ public interface DetectionRuleService extends IService<DetectionRule>{
 	List<DetectionRule> getList(Map<String,Object> params);
 	
 	List<Integer> removeRules(List<Integer> ids);
+	
+	DetectionRule saveDetectionRule(DetectionRule detectionRule);
+	
+	DetectionRule modifyDetectionRule(DetectionRule detectionRule);
+	
+	Map queryDetection(Integer queryDetection);
 }
