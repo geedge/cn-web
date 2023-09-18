@@ -308,6 +308,7 @@ public enum RCode {
     SYS_ROLE_MENUID_ISNULL(581005, "Role related menu id is required"),
     SYS_ROLE_NAME_CANNOT_MODIFY(587006, "The name of the built-in role cannot be modified"),
     SYS_ROLE_CANNOT_DELETE(587007, "Built-in roles cannot be deleted"),
+    SYS_ROLE_IS_RELATED_CANNOT_DELETE(587008, "Roles is related and cannot be deleted"),
     
     KNOWLEDGE_BASE_PARAM_DUPLICATE(591001,"KnowledgeBase names and types are guaranteed to be unique"),
     KNOWLEDGE_BASE_PARAM_NOTNULL(591002,"KnowledgeBase data is required"),

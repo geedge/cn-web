@@ -14,10 +14,7 @@ import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.*;
 import net.geedge.modules.sys.dao.SysMenuDao;
 import net.geedge.modules.sys.dao.SysRoleDao;
-import net.geedge.modules.sys.entity.SysMenuEntity;
-import net.geedge.modules.sys.entity.SysRoleEntity;
-import net.geedge.modules.sys.entity.SysRoleMenuEntity;
-import net.geedge.modules.sys.entity.SysUserEntity;
+import net.geedge.modules.sys.entity.*;
 import net.geedge.modules.sys.service.*;
 import net.geedge.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -28,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static net.geedge.common.utils.RCode.SYS_ROLE_IS_RELATED_CANNOT_DELETE;
 
 @Service("sysRoleService")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {
@@ -217,13 +216,23 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteBatch(Integer[] roleIds) {
+    public R deleteBatch(Integer[] roleIds, Map<String, Object> params) {
+        Integer force = 0;
+        if(ObjectUtil.isNotEmpty(params.get("force"))){
+            force = Integer.parseInt((String)params.get("force"));
+        }
         // 内置角色不允许删除
         List<SysRoleEntity> buildInList = this.list(new LambdaQueryWrapper<SysRoleEntity>().eq(SysRoleEntity::getBuildIn, 1));
         List<Integer> buildInRoleIdList = buildInList.stream().map(SysRoleEntity::getId).collect(Collectors.toList());
         for (Integer roleId : roleIds) {
             if (buildInRoleIdList.contains(roleId))
                 throw new CNException(RCode.SYS_ROLE_CANNOT_DELETE);
+        }
+        if(force == 0){
+            List<Map<String, Object>> list = creatUserRoleList(roleIds);
+            if(isAssociatedUser(list)){
+                return R.error(SYS_ROLE_IS_RELATED_CANNOT_DELETE).put("list",list);
+            }
         }
 
         // 删除角色
@@ -234,5 +243,44 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 
         // 删除角色与用户关联
         sysUserRoleService.deleteBatch(roleIds);
+
+        return R.ok();
+    }
+
+    private List<Map<String, Object>> creatUserRoleList(Integer[] roleIds) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Integer roleId : roleIds) {
+            Map<String, Object> roleMap = new HashMap<>();
+            List<Map<String, Object>> relates = new ArrayList<>();
+            SysRoleEntity role = this.getById(roleId);
+            roleMap.put("id", roleId);
+            roleMap.put("name", role.getName());
+            QueryWrapper<SysUserRoleEntity> query = new QueryWrapper<SysUserRoleEntity>()
+                    .eq("role_id", roleId);
+            List<SysUserRoleEntity> sysUserRoleList = sysUserRoleService.getBaseMapper().selectList(query);
+            if(ObjectUtil.isNotEmpty(sysUserRoleList)) {
+                List<Integer> userIds = sysUserRoleList.stream().map(SysUserRoleEntity::getUserId).collect(Collectors.toList());
+                for (Integer userId : userIds) {
+                    Map<String, Object> userMap = new HashMap<>();
+                    SysUserEntity user = sysUserService.getById(userId);
+                    userMap.put("type", "user");
+                    userMap.put("id", userId);
+                    userMap.put("name", user.getName());
+                    relates.add(userMap);
+                }
+                roleMap.put("relates", relates);
+            }
+            list.add(roleMap);
+        }
+        return list;
+    }
+
+    private boolean isAssociatedUser(List<Map<String, Object>> list){
+        for (Map<String,Object> map : list) {
+            if(ObjectUtil.isNotEmpty(map.get("relates"))) {
+                return true;
+            }
+        }
+        return false;
     }
 }
