@@ -1168,7 +1168,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				break;
 			}
             default: {
-                throw new CNException(RCode.EXCELFILE_TYPE_ERROR);
+                throw new CNException(RCode.KNOWLEDGE_EXCELFILE_TYPE_ERROR);
             }
         }
 	}
