@@ -106,4 +106,17 @@ public class SysI18nServiceImpl extends ServiceImpl<SysI18nDao, SysI18nEntity> i
 		}
 		return result;
 	}
+
+	@Override
+	public Long addAndReturnId(SysI18nEntity sysI18n) {
+		this.saveOrUpdate(sysI18n);
+		SysI18nEntity i18n = this.getOne(new QueryWrapper<SysI18nEntity>().lambda()
+				.eq(true, SysI18nEntity::getCode, sysI18n.getCode())
+				.eq(true, SysI18nEntity::getLang, sysI18n.getLang()));
+		Long id = null;
+		if (ObjectUtil.isNotEmpty(i18n)) {
+			id = i18n.getId();
+		}
+		return id;
+	}
 }

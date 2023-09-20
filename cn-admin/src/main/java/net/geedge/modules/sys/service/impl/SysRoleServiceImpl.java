@@ -249,17 +249,23 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 
     private List<Map<String, Object>> creatUserRoleList(Integer[] roleIds) {
         List<Map<String, Object>> list = new ArrayList<>();
+        List<SysRoleEntity> roleList = this.list(new LambdaQueryWrapper<SysRoleEntity>().eq(SysRoleEntity::getBuildIn, 0));
+        List<SysUserRoleEntity> sysUserRoleList = sysUserRoleService.getBaseMapper().selectList(new QueryWrapper<>());
         for (Integer roleId : roleIds) {
             Map<String, Object> roleMap = new HashMap<>();
             List<Map<String, Object>> relates = new ArrayList<>();
-            SysRoleEntity role = this.getById(roleId);
+            SysRoleEntity role = null;
+            for (SysRoleEntity r :roleList) {
+                if (r.getId()==roleId) {
+                    role = r;
+                    break;
+                }
+            }
             roleMap.put("id", roleId);
             roleMap.put("name", role.getName());
-            QueryWrapper<SysUserRoleEntity> query = new QueryWrapper<SysUserRoleEntity>()
-                    .eq("role_id", roleId);
-            List<SysUserRoleEntity> sysUserRoleList = sysUserRoleService.getBaseMapper().selectList(query);
-            if(ObjectUtil.isNotEmpty(sysUserRoleList)) {
-                List<Integer> userIds = sysUserRoleList.stream().map(SysUserRoleEntity::getUserId).collect(Collectors.toList());
+            List<SysUserRoleEntity> part = sysUserRoleList.stream().filter(o -> o.getRoleId() == roleId).collect(Collectors.toList());
+            if(ObjectUtil.isNotEmpty(part)) {
+                List<Integer> userIds = part.stream().map(SysUserRoleEntity::getUserId).collect(Collectors.toList());
                 for (Integer userId : userIds) {
                     Map<String, Object> userMap = new HashMap<>();
                     SysUserEntity user = sysUserService.getById(userId);

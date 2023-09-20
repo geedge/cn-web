@@ -74,8 +74,8 @@ public class SysI18nController {
     	} else {
     		sysI18n.setUtime(new Date());
     		sysI18n.setUby(ShiroUtils.getUserId());
-    		sysI18nService.save(sysI18n);
-    		return R.ok();
+			Long id = sysI18nService.addAndReturnId(sysI18n);
+			return R.ok().put("id",id);
     	}
     }
 
