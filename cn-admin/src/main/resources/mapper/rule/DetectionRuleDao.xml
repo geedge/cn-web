@@ -12,7 +12,7 @@
         <result property="isBuiltIn" column="is_built_in"></result>
         <result property="status" column="status"></result>
         <result property="ruleConfig" column="rule_config"></result>
-        <result property="trigger" column="trigger"></result>
+        <result property="ruleTrigger" column="rule_trigger"></result>
         <result property="cUser" column="c_user"></result>
         <result property="cTime" column="c_time"></result>
         <result property="opUser" column="op_user"></result>

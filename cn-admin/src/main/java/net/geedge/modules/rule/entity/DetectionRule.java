@@ -30,7 +30,7 @@ public class DetectionRule {
 	
 	private String ruleConfig;
 	
-	private String trigger;
+	private String ruleTrigger;
 	
 	private Integer cUser;
 	

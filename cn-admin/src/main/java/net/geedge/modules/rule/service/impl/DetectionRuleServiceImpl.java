@@ -82,7 +82,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 			ruleCommitHistory.setRuleId(rule.getRuleId());
 			ruleCommitHistories.add(ruleCommitHistory);
 		}
-		ruleVersionService.update(new QueryWrapper<RuleVersion>().lambda().setEntity(ruleVersion));
+		ruleVersionService.update(ruleVersion,null);
 		ruleCommitHistoryService.saveBatch(ruleCommitHistories);
 		detectionRules.stream().forEach(rule -> rule.setIsValid(1));
 		this.updateBatchById(detectionRules);
@@ -100,7 +100,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 			params.put("category", Arrays.asList(String.valueOf(params.get("category")).split(StringPool.COMMA)));
 		}
 		if (ObjectUtil.isNotEmpty(params.get("eventType"))) {
-			params.put("source", Arrays.asList(String.valueOf(params.get("source")).split(StringPool.COMMA)));
+			params.put("eventType", Arrays.asList(String.valueOf(params.get("eventType")).split(StringPool.COMMA)));
 		}
 		IPage page = this.page(new Query(DetectionRule.class).getPage(params));
 		List<DetectionRule> detectionRules = this.baseMapper.queryPage(page, params);
@@ -118,10 +118,20 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		this.save(detectionRule);
 		
 		//创建版本表数据
-		RuleVersion ruleVersion = new RuleVersion();
-		ruleVersion.setOpTime(new Date());
-		ruleVersion.setVersion(1);
-		ruleVersionService.save(ruleVersion);
+		List<RuleVersion> versions = ruleVersionService.list();	
+		RuleVersion ruleVersion;
+		if(ObjectUtils.isEmpty(versions)) {
+			ruleVersion = new RuleVersion();
+			ruleVersion.setVersion(1);
+			ruleVersion.setOpTime(new Date());
+			ruleVersionService.save(ruleVersion);
+		}else {
+			ruleVersion = versions.get(0);
+			Integer version = ruleVersion.getVersion();
+			ruleVersion.setVersion(version+1);
+			ruleVersion.setOpTime(new Date());
+			ruleVersionService.update(ruleVersion,null);
+		}
 		
 		//创建记录表数据
 		RuleCommitHistory ruleCommitHistory = new RuleCommitHistory();
@@ -130,7 +140,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		ruleCommitHistory.setOpUser(ShiroUtils.getUserId().intValue());
 		ruleCommitHistory.setOpType(OperationEnum.ADD.getValue());
 		ruleCommitHistory.setRuleId(detectionRule.getRuleId());
-		ruleCommitHistory.setOpVersion(1);
+		ruleCommitHistory.setOpVersion(ruleVersion.getVersion());
 		ruleCommitHistoryService.save(ruleCommitHistory);
 		return detectionRule;
 	}
@@ -148,7 +158,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		if(ObjectUtil.isEmpty(detectionRule.getEventType())) {
 			throw new CNException(RCode.RULE_EVENT_TYPE_ISNULL);
 		}
-		if(ObjectUtil.isEmpty(detectionRule.getTrigger())) {
+		if(ObjectUtil.isEmpty(detectionRule.getRuleTrigger())) {
 			throw new CNException(RCode.RULE_TRIGGER_ISNULL);
 		}
 		
@@ -156,6 +166,12 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
         if (!ruleTypes.contains(detectionRule.getRuleType())) {
             throw new CNException(RCode.RULE_TYPE_INVALID);
         }
+        // rule name 不能重复
+        DetectionRule rule = this.getOne(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getName, detectionRule.getName())
+        		.ne(ObjectUtil.isNotEmpty(detectionRule.getRuleId()),DetectionRule::getRuleId,detectionRule.getRuleId()));
+        if(ObjectUtils.isNotEmpty(rule)) {
+        	throw new CNException(RCode.RULE_NAME_DUPLICATE);
+        } 
         
 		// config 格式校验
         String configStr = (String) detectionRule.getRuleConfig();
@@ -170,7 +186,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
             if(StrUtil.isEmpty(dataSource)) {
             	throw new CNException(RCode.RULE_CONFIG_DB_ISNULL);
             }
-            Integer knowledgeId = (Integer) configMap.get("dataSource");
+            Integer knowledgeId = (Integer) configMap.get("knowledgeId");
             KnowledgeBase knowledgeBase = knowledgeBaseService.getById(knowledgeId);
             if(ObjectUtil.isEmpty(knowledgeBase)) {
             	throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
@@ -191,7 +207,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		ruleVersion.setOpTime(new Date());
 		Integer version = ruleVersion.getVersion();
 		ruleVersion.setVersion(version+1);
-		ruleVersionService.update(new QueryWrapper<RuleVersion>().lambda().setEntity(ruleVersion));
+		ruleVersionService.update(ruleVersion, null);
 		
 		//创建记录表数据
 		RuleCommitHistory ruleCommitHistory = new RuleCommitHistory();
@@ -200,7 +216,6 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		ruleCommitHistory.setOpUser(ShiroUtils.getUserId().intValue());
 		ruleCommitHistory.setOpType(OperationEnum.UPDATE.getValue());
 		ruleCommitHistory.setRuleId(detectionRule.getRuleId());
-		ruleCommitHistory.setOpVersion(1);
 		ruleCommitHistoryService.save(ruleCommitHistory);
 		return detectionRule;
 	}
@@ -215,17 +230,15 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		result.put("version", ruleVersion.getVersion());
 		List<DetectionRule> rules = this.list();
 		if(ObjectUtil.isNotEmpty(queryDetection)) {
-			List<RuleCommitHistory> histories = ruleCommitHistoryService.list(new QueryWrapper<RuleCommitHistory>().lambda().eq(RuleCommitHistory::getOpVersion, ruleVersion)
-					.ne(RuleCommitHistory::getOpType, OperationEnum.DELETE));
+			List<RuleCommitHistory> histories = ruleCommitHistoryService.list(new QueryWrapper<RuleCommitHistory>().lambda().le(RuleCommitHistory::getOpVersion, queryDetection));
 			List<Integer> historiesRuleId = histories.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
 			List<Integer> ruleIds = rules.stream().map(DetectionRule::getRuleId).collect(Collectors.toList());
 			//获取增量的规则信息
 			List<Integer> addRuleIds = ruleIds.stream().filter(ruleId -> !historiesRuleId.contains(ruleId)).collect(Collectors.toList());
 			//判断修改、删除的规则信息
 			List<Integer> drRuleIds = ruleIds.stream().filter(ruleId -> historiesRuleId.contains(ruleId)).collect(Collectors.toList());
-			
 			if(ObjectUtil.isNotEmpty(addRuleIds)) {
-				List<DetectionRule> addRules = rules.stream().filter(rule -> addRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
+				List<DetectionRule> addRules = rules.stream().filter(rule -> addRuleIds.contains(rule.getRuleId())).filter(rule -> rule.getIsValid() != 1).collect(Collectors.toList());
 				Map<String, List<DetectionRule>> typeAddRules = addRules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
 				for(String key : typeAddRules.keySet()) {
 					Map<String,Object> data = new HashMap<String,Object>();
@@ -240,7 +253,12 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 				if(ObjectUtil.isNotEmpty(deleteRules)) {
 					Map<String, List<DetectionRule>> typeDeleteRules = deleteRules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
 					for(String key : typeDeleteRules.keySet()) {
-						Map<String,Object> data = new HashMap<String,Object>();
+						Map<String,Object> data = null;
+						if(ObjectUtils.isNotEmpty(result.get(key))) {
+							data = (Map<String, Object>) result.get(key);
+						}else {
+							data = new HashMap<String,Object>();
+						}
 						data.put("deleteList", typeDeleteRules.get(key));
 						result.put(key, data);
 					}
@@ -251,11 +269,17 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 				List<Integer> updateIds = updateRules.stream().map(DetectionRule::getRuleId).collect(Collectors.toList());
 				List<RuleCommitHistory> realUpdateRules = ruleCommitHistoryService.list(new QueryWrapper<RuleCommitHistory>().lambda().in(RuleCommitHistory::getRuleId, updateIds)
 						.gt(RuleCommitHistory::getOpVersion, queryDetection));
-				List<DetectionRule> updateRealRules = updateRules.stream().filter(rule -> realUpdateRules.contains(rule.getRuleId())).collect(Collectors.toList());
+				List<Integer> realUpdateIds = realUpdateRules.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
+				List<DetectionRule> updateRealRules = updateRules.stream().filter(rule -> realUpdateIds.contains(rule.getRuleId())).collect(Collectors.toList());
 				if(ObjectUtil.isNotEmpty(updateRealRules)) {
 					Map<String, List<DetectionRule>> typeUpdateRules = updateRealRules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
 					for(String key : typeUpdateRules.keySet()) {
-						Map<String,Object> data = new HashMap<String,Object>();
+						Map<String,Object> data = null;
+						if(ObjectUtils.isNotEmpty(result.get(key))) {
+							data = (Map<String, Object>) result.get(key);
+						}else {
+							data = new HashMap<String,Object>();
+						}
 						data.put("updateList", typeUpdateRules.get(key));
 						result.put(key, data);
 					}

@@ -16,7 +16,7 @@ CREATE TABLE `detection_rule` (
   `description` varchar(255) DEFAULT NULL,
   `status` int(1) NOT NULL DEFAULT 1,
   `rule_config` varchar(1024) NOT NULL,
-  `trigger` varchar(512) NOT NULL,
+  `rule_trigger` varchar(512) NOT NULL,
   `c_user` int(10) NOT NULL,
   `c_time` datetime NOT NULL,
   `op_user` int(10) NOT NULL,

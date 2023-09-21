@@ -25,7 +25,7 @@ public class DetectionRuleController {
 	@Autowired
 	private DetectionRuleService detectionRuleService;
 	
-	@GetMapping
+	@GetMapping("/list")
 	public R detectionRuleList(@RequestParam Map<String,Object> params) {
 		List<DetectionRule> detectionRules = detectionRuleService.getList(params);
 		return R.ok(detectionRules);
@@ -57,14 +57,14 @@ public class DetectionRuleController {
 		return R.ok(rule.getRuleId());
 	}
 	
-	@GetMapping
-	public R detectionIncrease(@RequestParam Integer usedVersion) {
+	@GetMapping("/increase/{usedVersion}")
+	public R detectionIncrease(@PathVariable Integer usedVersion) {
 		Map<String,Object> datas = detectionRuleService.queryDetection(usedVersion);
 		return R.ok(datas);
 	}
 	
 	@GetMapping
-	public R detection(@RequestParam Integer usedVersion) {
+	public R detectionFull() {
 		Map<String,Object> datas = detectionRuleService.queryDetection(null);
 		return R.ok(datas);
 	}

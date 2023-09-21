@@ -347,6 +347,7 @@ public enum RCode {
     RULE_CATEGORY_ISNULL(611009,"Rule category is required"),
     RULE_TRIGGER_ISNULL(611010,"Rule trigger is required"),
     RULE_TYPE_INVALID(611011,"Rule type is not in the enum range"),
+    RULE_NAME_DUPLICATE(611012,"Rule name duplicate"),
     /**
      * stat相关
      */
