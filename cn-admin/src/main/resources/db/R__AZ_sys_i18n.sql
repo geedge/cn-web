@@ -936,7 +936,7 @@ INSERT INTO `sys_i18n` VALUES (972, '拒绝查询率', 'en', 'dns.queryRefusedRa
 INSERT INTO `sys_i18n` VALUES (973, '缺包率', 'zh', 'entity.ip.sequenceGapLossPercent', '缺包率', '', '2022-05-09 03:14:48', 1);
 INSERT INTO `sys_i18n` VALUES (974, '缺包率', 'en', 'entity.ip.sequenceGapLossPercent', 'sequence gap loss percent', '', '2022-05-09 03:15:15', 1);
 INSERT INTO `sys_i18n` VALUES (975, 'TCP连接建立延迟', 'en', 'entity.ip.establishLatency', 'establish latency', '', '2023-08-08 07:45:35', 1);
-INSERT INTO `sys_i18n` VALUES (976, 'TCP连接建立延迟', 'zh', 'entity.ip.establishLatency', 'TCP连接建立延迟', '', '2023-08-08 07:45:16', 1);
+INSERT INTO `sys_i18n` VALUES (976, 'TCP会话创建延迟', 'zh', 'entity.ip.establishLatency', 'TCP会话创建延迟', '', '2023-09-22 07:20:23', 9);
 INSERT INTO `sys_i18n` VALUES (977, '重传率', 'zh', 'entity.ip.pktRetransPercent', '重传率', '', '2022-05-09 03:19:10', 1);
 INSERT INTO `sys_i18n` VALUES (978, '重传率', 'en', 'entity.ip.pktRetransPercent', 'packet retrans', '', '2022-05-09 03:25:23', 1);
 INSERT INTO `sys_i18n` VALUES (979, '时间', 'zh', 'entity.ip.time', '时间', '', '2022-05-09 03:20:53', 1);
@@ -1183,7 +1183,7 @@ INSERT INTO `sys_i18n` VALUES (1223, '实体', 'zh', 'overall.entity', '实体',
 INSERT INTO `sys_i18n` VALUES (1224, '实体', 'en', 'overall.entity', 'Entity', '', '2022-07-15 07:41:25', 1);
 INSERT INTO `sys_i18n` VALUES (1225, '租用方', 'zh', 'report.Tenant', '租用方', '', '2022-07-15 08:39:58', 5);
 INSERT INTO `sys_i18n` VALUES (1226, '租用方', 'en', 'report.Tenant', 'Tenant', '', '2022-07-15 08:40:44', 5);
-INSERT INTO `sys_i18n` VALUES (1227, 'TCP连接建立延迟', 'zh', 'networkAppPerformance.tcpConnectionEstablishLatency', 'TCP连接建立延迟', '', '2022-07-19 01:48:53', 5);
+INSERT INTO `sys_i18n` VALUES (1227, 'TCP会话创建延迟', 'zh', 'networkAppPerformance.tcpConnectionEstablishLatency', 'TCP会话创建延迟', '', '2023-09-22 07:20:34', 9);
 INSERT INTO `sys_i18n` VALUES (1228, 'TCP 连接建立延迟', 'en', 'networkAppPerformance.tcpConnectionEstablishLatency', 'TCP connection establish latency', '', '2022-07-19 01:40:09', 5);
 INSERT INTO `sys_i18n` VALUES (1229, 'SSL响应延迟', 'zh', 'networkAppPerformance.sslResponseLatency', 'SSL响应延迟', '', '2022-07-19 01:48:59', 5);
 INSERT INTO `sys_i18n` VALUES (1230, 'SSL 响应延迟', 'en', 'networkAppPerformance.sslResponseLatency', 'SSL response latency', '', '2022-07-19 01:41:38', 5);
@@ -1576,7 +1576,7 @@ INSERT INTO `sys_i18n` VALUES (1620, '相关IP', 'en', 'entities.tab.relatedIp',
 INSERT INTO `sys_i18n` VALUES (1621, '相关域名', 'zh', 'entities.tab.relatedDomain', '相关域名', '', '2023-05-06 03:25:13', 1);
 INSERT INTO `sys_i18n` VALUES (1622, '相关域名', 'en', 'entities.tab.relatedDomain', 'Related Domain', '', '2023-05-06 03:25:31', 1);
 INSERT INTO `sys_i18n` VALUES (1623, '当前开发端口及服务', 'zh', 'entities.tab.currentDevelopmentPortsAndServices', '当前开发端口及服务', '', '2023-05-06 03:30:15', 1);
-INSERT INTO `sys_i18n` VALUES (1624, '当前开发端口及服务', 'en', 'entities.tab.currentDevelopmentPortsAndServices', 'Current Development Ports And Services', '', '2023-05-06 03:30:37', 1);
+INSERT INTO `sys_i18n` VALUES (1624, '当前开发端口及服务', 'en', 'entities.tab.currentDevelopmentPortsAndServices', 'Current Development Ports and Services', '', '2023-09-22 07:16:19', 9);
 INSERT INTO `sys_i18n` VALUES (1625, '快速入口', 'en', 'entities.fastEntry', 'Fast entry', '', '2023-05-06 07:11:27', 1);
 INSERT INTO `sys_i18n` VALUES (1626, '快速入口', 'zh', 'entities.fastEntry', '快速入口', '', '2023-05-06 07:11:38', 1);
 INSERT INTO `sys_i18n` VALUES (1627, '网络性能', 'zh', 'entities.networkPerformance', '网络性能', '', '2023-05-06 07:39:55', 1);
@@ -1716,7 +1716,7 @@ INSERT INTO `sys_i18n` VALUES (1760, '切换到基础搜索', 'zh', 'entity.swit
 INSERT INTO `sys_i18n` VALUES (1761, '切换到高级搜索', 'en', 'entity.switchToAdvancedSearch', 'Switch to advanced  search', '', '2023-07-10 08:25:01', 1);
 INSERT INTO `sys_i18n` VALUES (1762, '切换到高级搜索', 'zh', 'entity.switchToAdvancedSearch', '切换到高级搜索', '', '2023-07-10 08:25:38', 1);
 INSERT INTO `sys_i18n` VALUES (1763, '仅允许中文、英文、日文、俄文、数字及空格', 'zh', 'validate.name', '仅允许中文、英文、日文、俄文、数字及空格', '', '2023-07-11 10:02:04', 1);
-INSERT INTO `sys_i18n` VALUES (1764, '仅允许中文、英文、日文、俄文、数字及空格', 'en', 'validate.name', 'Only letters, numbers and spaces are allowed', '', '2023-07-11 10:10:42', 1);
+INSERT INTO `sys_i18n` VALUES (1764, '仅允许中文、英文、日文、俄文、数字及空格', 'en', 'validate.name', 'Only Chinese, English, Japanese, Russian, numbers and spaces allowed', '', '2023-09-18 06:14:30', 1);
 INSERT INTO `sys_i18n` VALUES (1765, '更多', 'zh', 'overall.more', 'More', '', '2023-07-13 06:32:07', 1);
 INSERT INTO `sys_i18n` VALUES (1766, '更多', 'en', 'overall.more', 'More', '', '2023-07-13 06:26:34', 1);
 INSERT INTO `sys_i18n` VALUES (1768, '拓展已达上限', 'zh', 'entities.graph.expandedNumberMaxLimit', '拓展数已达上限', '', '2023-07-13 06:43:39', 1);
@@ -1773,8 +1773,8 @@ INSERT INTO `sys_i18n` VALUES (1819, '无效的查询字段', 'zh', 'tip.invalid
 INSERT INTO `sys_i18n` VALUES (1820, '无效的查询字段', 'en', 'tip.invalidQueryField', 'Invalid query field', '', '2023-08-09 07:03:57', 1);
 INSERT INTO `sys_i18n` VALUES (1821, '不可用', 'en', 'tip.notAvailable', 'not available', '', '2023-08-15 07:08:23', 1);
 INSERT INTO `sys_i18n` VALUES (1822, '不可用', 'zh', 'tip.notAvailable', '不可用', '', '2023-08-15 07:08:30', 1);
-INSERT INTO `sys_i18n` VALUES (1823, '在最后一小时', 'en', 'entity.inLastHour', 'in last hour', '', '2023-08-11 09:18:09', 1);
-INSERT INTO `sys_i18n` VALUES (1824, '在最后一小时', 'zh', 'entity.inLastHour', '在最后一小时', '', '2023-08-11 09:18:26', 1);
+INSERT INTO `sys_i18n` VALUES (1823, '最近一小时', 'en', 'entity.inLastHour', 'in last hour', '', '2023-09-22 07:10:32', 9);
+INSERT INTO `sys_i18n` VALUES (1824, '最近一小时', 'zh', 'entity.inLastHour', '最近一小时', '', '2023-09-22 07:10:18', 9);
 INSERT INTO `sys_i18n` VALUES (1825, '活跃', 'zh', 'entity.active', '活跃', '', '2023-08-11 09:49:35', 1);
 INSERT INTO `sys_i18n` VALUES (1826, '活跃', 'en', 'entity.active', 'Active', '', '2023-08-11 09:49:51', 1);
 INSERT INTO `sys_i18n` VALUES (1827, '过滤条件', 'zh', 'filter.options', '过滤条件', '', '2023-08-22 03:13:07', 1);
@@ -1815,5 +1815,23 @@ INSERT INTO `sys_i18n` VALUES (1861, '下一步', 'zh', 'overall.nextStep', '下
 INSERT INTO `sys_i18n` VALUES (1862, '下一步', 'en', 'overall.nextStep', 'next step', '', '2023-09-14 10:39:40', 1);
 INSERT INTO `sys_i18n` VALUES (1863, '标签', 'zh', 'overall.tag', '标签', '', '2023-09-15 02:18:56', 1);
 INSERT INTO `sys_i18n` VALUES (1864, '标签', 'en', 'overall.tag', 'Tag', '', '2023-09-15 02:19:05', 1);
+INSERT INTO `sys_i18n` VALUES (1865, '查看更多', 'zh', 'entity.showMore', '查看更多', '', '2023-09-18 03:34:24', 1);
+INSERT INTO `sys_i18n` VALUES (1866, '查看更多', 'en', 'entity.showMore', 'Show More', '', '2023-09-18 03:34:50', 1);
+INSERT INTO `sys_i18n` VALUES (1867, 'Top Countries', 'zh', 'entity.topCountries', 'Top国家', '', '2023-09-22 02:42:42', 1);
+INSERT INTO `sys_i18n` VALUES (1868, 'Top Countries', 'en', 'entity.topCountries', 'Top Countries', '', '2023-09-22 02:37:30', 1);
+INSERT INTO `sys_i18n` VALUES (1869, 'Top Cities', 'zh', 'entity.topCities', 'Top城市', '', '2023-09-22 02:49:03', 1);
+INSERT INTO `sys_i18n` VALUES (1870, 'Top Cities', 'en', 'entity.topCities', 'Top Cities', '', '2023-09-22 02:43:19', 1);
+INSERT INTO `sys_i18n` VALUES (1871, 'Top Ports', 'zh', 'entity.topPorts', 'Top端口', '', '2023-09-22 02:42:27', 1);
+INSERT INTO `sys_i18n` VALUES (1872, 'Top Ports', 'en', 'entity.topPorts', 'Top Ports', '', '2023-09-22 02:39:59', 1);
+INSERT INTO `sys_i18n` VALUES (1873, 'Top FQDN Categories', 'zh', 'entity.topFQDNCategories', 'Top FQDN类别', '', '2023-09-22 02:42:16', 1);
+INSERT INTO `sys_i18n` VALUES (1874, 'Top FQDN Categories', 'en', 'entity.topFQDNCategories', 'Top FQDN Categories', '', '2023-09-22 02:42:05', 1);
+INSERT INTO `sys_i18n` VALUES (1875, 'Top App Categories', 'zh', 'entity.topAppCategories', 'Top App类别', '', '2023-09-22 02:44:22', 1);
+INSERT INTO `sys_i18n` VALUES (1876, 'Top App Categories', 'en', 'entity.topAppCategories', 'Top App Categories', '', '2023-09-22 02:44:43', 1);
+INSERT INTO `sys_i18n` VALUES (1877, 'Top Tags', 'zh', 'entity.topTags', 'Top标签', '', '2023-09-22 02:45:35', 1);
+INSERT INTO `sys_i18n` VALUES (1878, 'Top Tags', 'en', 'entity.topTags', 'Top Tags', '', '2023-09-22 02:45:53', 1);
+INSERT INTO `sys_i18n` VALUES (1879, 'Top ASNs', 'zh', 'entity.topASNs', 'Top ASNs', '', '2023-09-22 02:55:32', 1);
+INSERT INTO `sys_i18n` VALUES (1880, 'Top ASNs', 'en', 'entity.topASNs', 'Top ASNs', '', '2023-09-22 02:55:03', 1);
+INSERT INTO `sys_i18n` VALUES (1881, 'Top ISPs', 'zh', 'entity.topISPs', 'Top ISPs', '', '2023-09-22 02:53:02', 1);
+INSERT INTO `sys_i18n` VALUES (1882, 'Top ISPs', 'en', 'entity.topISPs', 'Top ISPs', '', '2023-09-22 02:53:31', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
