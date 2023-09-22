@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import net.geedge.common.exception.CNException;
@@ -224,10 +225,13 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 	public Map queryDetection(Integer queryDetection) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		RuleVersion ruleVersion = ruleVersionService.list().get(0);
-		if(ObjectUtil.isEmpty(ruleVersion)) {
+		result.put("version", ruleVersion.getVersion());
+		if(ObjectUtil.isEmpty(ruleVersion) || (ObjectUtil.isNotEmpty(queryDetection) && queryDetection >= ruleVersion.getVersion())) {
+			result.put("addList", ListUtil.list(true));
+			result.put("deleteList", ListUtil.list(true));
+			result.put("updateList", ListUtil.list(true));
 			return result;
 		}
-		result.put("version", ruleVersion.getVersion());
 		List<DetectionRule> rules = this.list();
 		if(ObjectUtil.isNotEmpty(queryDetection)) {
 			List<RuleCommitHistory> histories = ruleCommitHistoryService.list(new QueryWrapper<RuleCommitHistory>().lambda().le(RuleCommitHistory::getOpVersion, queryDetection));
@@ -237,32 +241,14 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 			List<Integer> addRuleIds = ruleIds.stream().filter(ruleId -> !historiesRuleId.contains(ruleId)).collect(Collectors.toList());
 			//判断修改、删除的规则信息
 			List<Integer> drRuleIds = ruleIds.stream().filter(ruleId -> historiesRuleId.contains(ruleId)).collect(Collectors.toList());
-			if(ObjectUtil.isNotEmpty(addRuleIds)) {
-				List<DetectionRule> addRules = rules.stream().filter(rule -> addRuleIds.contains(rule.getRuleId())).filter(rule -> rule.getIsValid() != 1).collect(Collectors.toList());
-				Map<String, List<DetectionRule>> typeAddRules = addRules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
-				for(String key : typeAddRules.keySet()) {
-					Map<String,Object> data = new HashMap<String,Object>();
-					data.put("addList", typeAddRules.get(key));
-					result.put(key, data);
-				}
-			}
+			List<DetectionRule> addRules = rules.stream().filter(rule -> addRuleIds.contains(rule.getRuleId())).filter(rule -> rule.getIsValid() != 1).collect(Collectors.toList());
+			result.put("addList", addRules);
 			
 			if(ObjectUtil.isNotEmpty(drRuleIds)) {
 				// 删除的规则信息
-				List<DetectionRule> deleteRules = rules.stream().filter(rule -> rule.getIsValid().equals(1)&&drRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
-				if(ObjectUtil.isNotEmpty(deleteRules)) {
-					Map<String, List<DetectionRule>> typeDeleteRules = deleteRules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
-					for(String key : typeDeleteRules.keySet()) {
-						Map<String,Object> data = null;
-						if(ObjectUtils.isNotEmpty(result.get(key))) {
-							data = (Map<String, Object>) result.get(key);
-						}else {
-							data = new HashMap<String,Object>();
-						}
-						data.put("deleteList", typeDeleteRules.get(key));
-						result.put(key, data);
-					}
-				}
+				List<DetectionRule> deleteRules = rules.stream().filter(rule -> rule.getIsValid().equals(1) && drRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
+				result.put("deleteList", deleteRules);
+				
 				// 修改的规则信息
 				List<DetectionRule> updateRules = rules.stream().filter(rule -> rule.getIsValid().equals(0)&&drRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
 				// 同历史操作表对比获取修改数据信息
@@ -271,27 +257,11 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 						.gt(RuleCommitHistory::getOpVersion, queryDetection));
 				List<Integer> realUpdateIds = realUpdateRules.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
 				List<DetectionRule> updateRealRules = updateRules.stream().filter(rule -> realUpdateIds.contains(rule.getRuleId())).collect(Collectors.toList());
-				if(ObjectUtil.isNotEmpty(updateRealRules)) {
-					Map<String, List<DetectionRule>> typeUpdateRules = updateRealRules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
-					for(String key : typeUpdateRules.keySet()) {
-						Map<String,Object> data = null;
-						if(ObjectUtils.isNotEmpty(result.get(key))) {
-							data = (Map<String, Object>) result.get(key);
-						}else {
-							data = new HashMap<String,Object>();
-						}
-						data.put("updateList", typeUpdateRules.get(key));
-						result.put(key, data);
-					}
-				}
+				result.put("updateList", updateRealRules);
 			}
 		}else {
-			Map<String, List<DetectionRule>> typeRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getRuleType));
-			for(String key : typeRules.keySet()) {
-				Map<String,Object> data = new HashMap<String,Object>();
-				data.put("addList", typeRules.get(key));
-				result.put(key, data);
-			}
+			List<DetectionRule> addRules = rules.stream().filter(rule -> rule.getIsValid() == 0).collect(Collectors.toList());
+			result.put("addList", addRules);
 		}
 		return result;
 	}
