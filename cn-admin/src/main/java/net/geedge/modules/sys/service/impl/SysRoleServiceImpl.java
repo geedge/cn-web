@@ -231,7 +231,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
         if(force == 0){
             List<Map<String, Object>> list = creatUserRoleList(roleIds);
             if(isAssociatedUser(list)){
-                return R.error(SYS_ROLE_IS_RELATED_CANNOT_DELETE).put("list",list);
+                throw new CNException(RCode.SYS_ROLE_IS_RELATED_CANNOT_DELETE);
             }
         }
 
