@@ -2,6 +2,7 @@ package net.geedge.common.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import org.apache.commons.io.FileUtils;
@@ -34,12 +35,12 @@ public class CSVUtils {
         return data;
     }
 
-    public static boolean validateCSVHeader(CsvRow headers, List<String> headerInfos) {
+    public static boolean validateCSVHeader(List<String> headers, List<String> headerInfos) {
     	// 先判断表头数量是否一致  再循环判断每个表头是否存在 表头位置不用一一对应 存在即可
     	if(headers.size() == headerInfos.size()) {
     		for (int i = 0; i < headerInfos.size(); i++) {
                 String header = headers.get(i);
-                if(header.indexOf("\uFEFF") >= 0)
+                if(header.indexOf("\uFEFF")>= 0)
                     headers.set(i,header.substring(1)); //去除BOM头
                 if (!headerInfos.contains(header)) {
                     return false;
