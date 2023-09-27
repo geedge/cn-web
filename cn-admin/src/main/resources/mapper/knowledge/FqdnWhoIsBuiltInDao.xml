@@ -38,21 +38,24 @@
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        select whois_registrar_name as registrarName, whois_registrant_org as registrantOrg,
-               whois_registrant_country as registrantCountry, whois_email as email,
-               whois_create_date as createDate, whois_expire_date as expireDate,
-               update_time as updateTime, create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
-        cn_fqdn_who_is_built_in
-        <where>
-            <choose>
-                <when test="!isFuzzyQuery">
-                    fqdn = #{resource}
-                </when>
-                <otherwise>
-                    #{resource} like concat ( '%','.',fqdn)
-                </otherwise>
-            </choose>
-        </where>
-        limit 1
+        <choose>
+            <when test="!isFuzzyQuery">
+                select whois_registrar_name as registrarName, whois_registrant_org as registrantOrg,
+                whois_registrant_country as registrantCountry, whois_email as email,
+                whois_create_date as createDate, whois_expire_date as expireDate,
+                update_time as updateTime, create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+                cn_fqdn_who_is_built_in
+                where fqdn = #{resource}
+            </when>
+            <otherwise>
+                select whois_registrar_name as registrarName, whois_registrant_org as registrantOrg,
+                whois_registrant_country as registrantCountry, whois_email as email,
+                whois_create_date as createDate, whois_expire_date as expireDate,
+                update_time as updateTime, create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+                (select * from cn_fqdn_who_is_built_in
+                where fqdn = SUBSTRING_INDEX(#{resource},'.',-4) or fqdn = SUBSTRING_INDEX(#{resource},'.',-3) or fqdn = SUBSTRING_INDEX(#{resource},'.',-2)) a
+                where #{resource} like CONCAT('%','.',fqdn)
+            </otherwise>
+        </choose>
     </select>
 </mapper>
