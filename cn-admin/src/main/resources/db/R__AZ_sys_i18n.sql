@@ -1833,5 +1833,7 @@ INSERT INTO `sys_i18n` VALUES (1879, 'Top ASNs', 'zh', 'entity.topASNs', 'Top AS
 INSERT INTO `sys_i18n` VALUES (1880, 'Top ASNs', 'en', 'entity.topASNs', 'Top ASNs', '', '2023-09-22 02:55:03', 1);
 INSERT INTO `sys_i18n` VALUES (1881, 'Top ISPs', 'zh', 'entity.topISPs', 'Top ISPs', '', '2023-09-22 02:53:02', 1);
 INSERT INTO `sys_i18n` VALUES (1882, 'Top ISPs', 'en', 'entity.topISPs', 'Top ISPs', '', '2023-09-22 02:53:31', 1);
+INSERT INTO `sys_i18n` VALUES (1885, '颜色', 'zh', 'overall.color', '颜色', '', '2023-09-26 02:49:14', 1);
+INSERT INTO `sys_i18n` VALUES (1886, '颜色', 'en', 'overall.color', 'Color', '', '2023-09-26 02:49:27', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
