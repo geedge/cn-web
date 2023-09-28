@@ -1,6 +1,7 @@
 package net.geedge.modules.knowledge.service.impl;
 
 
+import static com.alibaba.fastjson.JSON.parseObject;
 import static net.geedge.common.utils.Constant.APP_CATEGORY_BUILT_IN;
 import static net.geedge.common.utils.Constant.APP_TAG_USER_DEFINED;
 import static net.geedge.common.utils.Constant.DNS_SERVER_INFO_BUILT_IN;
@@ -19,24 +20,25 @@ import static net.geedge.common.utils.Constant.LINK_DIRECTION_BUILT_IN;
 import static net.geedge.common.utils.Constant.PSIPHON3_IP;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.net.URI;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import net.geedge.common.utils.*;
+import net.geedge.modules.sys.entity.SysConfigEntity;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.ss.formula.functions.T;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
@@ -57,17 +59,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
-import net.geedge.common.utils.CSVUtils;
-import net.geedge.common.utils.Constant;
-import net.geedge.common.utils.IPUtils;
-import net.geedge.common.utils.JSONUtil;
-import net.geedge.common.utils.KnowledgeCheckUtil;
-import net.geedge.common.utils.OperationEnum;
-import net.geedge.common.utils.PageUtils;
-import net.geedge.common.utils.Query;
-import net.geedge.common.utils.R;
-import net.geedge.common.utils.RCode;
-import net.geedge.common.utils.Tool;
 import net.geedge.common.utils.Constant.RuleType;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.AppCategoryBuiltIn;
@@ -179,6 +170,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	
 	@Autowired
 	private DetectionRuleService detectionRuleService;
+
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -1067,7 +1061,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	public void validAndBuildDatasets(MultipartFile file, KnowledgeBase knowledgeBase, String action, List<Map<String, String>> importDataList, List<Integer> deleteDataIds) {
 		// 根据source获取对应的表头信息
 		String knowledgeImportConfigJson = sysConfigService.getValue("knowledge_import_config_json");
-		HashMap knowledgeConfigs = JSONObject.parseObject(knowledgeImportConfigJson, HashMap.class);
+		HashMap knowledgeConfigs = parseObject(knowledgeImportConfigJson, HashMap.class);
 		Map<String,Object> sourceConfig = (Map<String, Object>) knowledgeConfigs.get(knowledgeBase.getSource());
 		List<String> headerInfos = StrUtil.split((String)sourceConfig.get("headers"), StrUtil.C_COMMA);
 		if(ObjectUtils.isEmpty(headerInfos)) {
@@ -1401,5 +1395,58 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			result.put("end_ip_binary",endIp);
 		}
 		return result;
+	}
+
+	@Override
+	public void intelligenceLearningStatus(String type, Integer knowledgeId) {
+		String value = sysConfigService.getValue("schedule_task");
+		Map<String, Object> scheduleTask = JSONObject.parseObject(value);
+		Map<String, Object> config = (Map<String, Object>)scheduleTask.get("config");
+		String url = (String)config.get("url");
+		String path = url+"/xxl-job-admin/jobinfo/"+type;
+		HttpHeaders requestHeaders = new HttpHeaders();
+		requestHeaders.add("Cookie", getCookie(config));
+		List<Map<String, Object>> jobIdMapping = (List<Map<String, Object>>)scheduleTask.get("jobIdMapping");
+		MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+		param.add("id",getJobId(jobIdMapping,knowledgeId));
+		ResponseEntity<HashMap> response = restTemplate.postForEntity(path,new HttpEntity<MultiValueMap>(param, requestHeaders),HashMap.class);
+		Map<String, Object> body = response.getBody();
+		int code = response.getStatusCodeValue();
+		if((Integer)body.get("code") != 200){
+			if(ObjectUtil.isNotEmpty(body.get("msg"))) {
+				throw new CNException((String) body.get("msg"), code);
+			}
+			throw new CNException(RCode.ERROR);
+		}
+	}
+
+	private Integer getJobId(List<Map<String, Object>> jobIdMapping, Integer knowledgeId){
+		Integer jobId = null;
+		if(ObjectUtil.isNotEmpty(jobIdMapping)){
+			for(Map<String, Object> map : jobIdMapping){
+				if(ObjectUtil.isNotEmpty(map.get("knowledgeId")) && (Integer)map.get("knowledgeId") == knowledgeId){
+					jobId = (Integer)map.get("jobId");
+				}
+			}
+		}
+		return jobId;
+	}
+
+	private String getCookie(Map<String, Object> config){
+		String url = (String)config.get("url");
+		String userName = (String)config.get("userName");
+		String pin = (String)config.get("pin");
+		pin = Tool.AesUtil.decrypt(pin, Constant.AES_SECRET_KEY);
+		String loginPath = url+"/xxl-job-admin/login";
+		MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+		param.add("userName",userName);
+		param.add("pin",pin);
+		ResponseEntity<HashMap> response = restTemplate.postForEntity(loginPath,new HttpEntity<MultiValueMap>(param),HashMap.class);
+		Map<String, Object> body = response.getBody();
+		if((Integer) body.get("code") != 200){
+			throw new CNException(RCode.ERROR);
+		}
+		HttpHeaders headers = response.getHeaders();
+		return headers.get("Set-Cookie").get(0);
 	}
 }

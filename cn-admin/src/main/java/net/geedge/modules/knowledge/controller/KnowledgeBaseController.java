@@ -4,6 +4,7 @@ package net.geedge.modules.knowledge.controller;
 import java.util.List;
 import java.util.Map;
 
+import net.geedge.modules.knowledge.enums.IntelligenceLearningStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,6 +90,12 @@ public class KnowledgeBaseController {
 		ValidateUtils.is(action).notNull(RCode.KNOWLEDGE_IMPORT_ACTION_ISNULL);
 		ValidateUtils.is(action).regex("(overwrite|append|update)", RCode.KNOWLEDGE_IMPORT_ACTION_VALUE_ERROR);
 		knowledgeBaseService.importBatch(file,knowledgeId,action,status,color,description);
+		return R.ok().putData("knowledgeId",knowledgeId);
+	}
+
+	@PostMapping("/intelligence-learning/{type}")
+	public R intelligenceLearningStatus(@PathVariable(value = "type") IntelligenceLearningStatus type, @Param("knowledgeId")Integer knowledgeId){
+		knowledgeBaseService.intelligenceLearningStatus(type.getValue(), knowledgeId);
 		return R.ok().putData("knowledgeId",knowledgeId);
 	}
 }

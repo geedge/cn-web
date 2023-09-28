@@ -35,4 +35,6 @@ public interface KnowledgeBaseService extends IService<KnowledgeBase> {
     Integer importBatch(MultipartFile file, Integer knowledgeId, String action, Integer status, String color, String description);
 
     void validAndBuildDatasets(MultipartFile file, KnowledgeBase knowledgeBase, String action, List<Map<String, String>> importDataList, List<Integer> deleteDataIds);
+
+    void intelligenceLearningStatus(String type, Integer knowledgeId);
 }
