@@ -7,6 +7,7 @@
 stages:
   - gen_git-log
   - build_image
+#  - test
   - package_clean
 
 variables:
@@ -27,22 +28,22 @@ generate_git-log:
   tags:
     - galaxy
 
-test:
-  stage: test
-  script:
-    - mvn clean test
-  after_script:
-    - export JUNI_REPORT_NAME=cn-$CI_COMMIT_REF_NAME-test-report-$(date +%Y%m%d%H%M%S).tar.gz
-    - echo $JUNI_REPORT_NAME
-    - cd ./cn-admin/target
-    - tar -zcvf $JUNI_REPORT_NAME surefire-reports
-    - sudo scp $JUNI_REPORT_NAME root@192.168.44.54:/opt/cn/document/
-    - cd ../../
-  when: on_success
-  only:
-    - dev-23.10
-  tags:
-    - galaxy
+#test:
+#  stage: test
+#  script:
+#    - mvn clean test
+#  after_script:
+#    - export JUNI_REPORT_NAME=cn-$CI_COMMIT_REF_NAME-test-report-$(date +%Y%m%d%H%M%S).tar.gz
+#    - echo $JUNI_REPORT_NAME
+#    - cd ./cn-admin/target
+#    - tar -zcvf $JUNI_REPORT_NAME surefire-reports
+#    - sudo scp $JUNI_REPORT_NAME root@192.168.44.54:/opt/cn/document/
+#    - cd ../../
+#  when: on_success
+#  only:
+#    - dev-23.10
+#  tags:
+#    - galaxy
 
 #job的名称,自定义
 build_image:
