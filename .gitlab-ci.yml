@@ -6,7 +6,6 @@
 #这里定义三个阶段（stages），install,install_clean和build_image,stages中的阶段按写的顺序进行，先执行install,然后执行install_clean,然后在执行build_image
 stages:
   - gen_git-log
-#  - test
   - build_image
   - package_clean
 
