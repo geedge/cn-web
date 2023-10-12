@@ -223,7 +223,7 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				file.delete();
 			}
 			FileUtil.writeBytes(html.getBytes(), file);
-			log.info("pdf command--> node "+Constant.CONFIG_PATH+File.separator+"report.js "+Constant.TEMP_PATH+File.separator+StrUtil.C_SPACE+htmlName+StrUtil.C_SPACE+Constant.TEMP_PATH+File.separator+fileName);
+			log.info("pdf command--> node "+Constant.CONFIG_PATH+File.separator+"report.js "+Constant.TEMP_PATH+File.separator+htmlName+StrUtil.C_SPACE+Constant.TEMP_PATH+File.separator+fileName);
 			RuntimeUtil.exec("node "+Constant.CONFIG_PATH+File.separator+"report.js "+Constant.TEMP_PATH+File.separator+htmlName+StrUtil.C_SPACE+Constant.TEMP_PATH+File.separator+fileName);
 		}catch(Exception e) {
 			html="";
