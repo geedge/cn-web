@@ -41,4 +41,13 @@
     		where id = #{internalIpBuiltIn.id}
     	</foreach>
     </update>
+
+	<select id="queryPageByKnowledgeId" resultMap="internalIpBuiltIn">
+		select * from
+		cn_internal_ip_built_in
+		where knowledge_id = #{params.knowledgeId}
+		<if test="params.orderBy == null or params.orderBy == ''">
+			ORDER BY id
+		</if>
+	</select>
 </mapper>

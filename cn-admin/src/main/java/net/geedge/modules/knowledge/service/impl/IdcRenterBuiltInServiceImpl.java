@@ -1,7 +1,11 @@
 package net.geedge.modules.knowledge.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.Query;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -26,6 +30,14 @@ public class IdcRenterBuiltInServiceImpl extends ServiceImpl<IdcRenterBuiltInDao
 		if(ObjectUtil.isNotEmpty(idcRenterBuiltIns)) {
 			this.baseMapper.updateBatchForBinary(idcRenterBuiltIns);
 		}
+	}
+
+	@Override
+	public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+		IPage page = this.page(new Query(IdcRenterBuiltIn.class).getPage(params));
+		List<IdcRenterBuiltIn> idcRenterBuiltIns = this.baseMapper.queryPageByKnowledgeId(page, params);
+		page.setRecords(idcRenterBuiltIns);
+		return new PageUtils(page);
 	}
 
 }

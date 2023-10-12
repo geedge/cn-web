@@ -11,5 +11,13 @@
      	<result property="linkId" column="link_id"></result>
         <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
-    
+
+    <select id="queryPageByKnowledgeId" resultMap="linkDirectionBuiltIn">
+        select * from
+        cn_link_direction_built_in
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
 </mapper>

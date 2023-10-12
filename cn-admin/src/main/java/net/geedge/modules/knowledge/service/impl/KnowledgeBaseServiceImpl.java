@@ -18,20 +18,18 @@ import static net.geedge.common.utils.Constant.IP_LOCATION_BUILT_IN;
 import static net.geedge.common.utils.Constant.IP_TAG_USER_DEFINED;
 import static net.geedge.common.utils.Constant.LINK_DIRECTION_BUILT_IN;
 import static net.geedge.common.utils.Constant.PSIPHON3_IP;
+import static net.geedge.common.utils.RCode.KNOWLEDGE_BASE_NOT_EXIST;
+import static net.geedge.common.utils.RCode.KNOWLEDGE_SOURCE_ERROR;
 
 import java.io.File;
-import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import net.geedge.common.utils.*;
-import net.geedge.modules.sys.entity.SysConfigEntity;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.poi.ss.formula.functions.T;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -187,7 +185,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		// 判断传入数据是否都存在 不存在返回错误提示
 		if(knowledgeBases.size()!=knowlegeIds.size()) {
-			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
+			throw new CNException(KNOWLEDGE_BASE_NOT_EXIST);
 		}
 		List<Integer> ids = knowledgeBases.stream().map(KnowledgeBase::getKnowledgeId).collect(Collectors.toList());
 		// 删除版本数据信息
@@ -356,7 +354,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getKnowledgeId, knowledgeId));
 			if(ObjectUtil.isEmpty(knowledgeBase)) {
 				log.debug("local data not exist : {}",knowledgeId);
-				throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
+				throw new CNException(KNOWLEDGE_BASE_NOT_EXIST);
 			}
 			knowledgeBase.setOpUser(ShiroUtils.getUserId());
 			knowledgeBase.setOpTime(new Date());
@@ -535,8 +533,17 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			case IP_LOCATION_BUILT_IN:
 				pageUtils = ipLocationBuiltInService.queryListByKnowledgeId(params);
 				break;
-			default:
+			case IDC_RENTER_BUILT_IN:
+				pageUtils = idcRenterBuiltInService.queryListByKnowledgeId(params);
 				break;
+			case INTERNAL_IP_BUILT_IN:
+				pageUtils = internalIpBuiltInService.queryListByKnowledgeId(params);
+				break;
+			case LINK_DIRECTION_BUILT_IN:
+				pageUtils = linkDirectionBuiltInService.queryListByKnowledgeId(params);
+				break;
+			default:
+				throw new CNException(KNOWLEDGE_SOURCE_ERROR);
 		}
 		return pageUtils;
 	}
@@ -557,7 +564,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	private void validateKnowledgeBase(KnowledgeBase knowledgeBase) {
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
-			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
+			throw new CNException(KNOWLEDGE_BASE_NOT_EXIST);
 		}
 	}
 
@@ -1004,7 +1011,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					result.put(source, dnsServerInfoBuiltIns);
 					break;
 				default:{
-					throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);
+					throw new CNException(KNOWLEDGE_SOURCE_ERROR);
 				}
 			}
 		}
@@ -1027,7 +1034,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			knowledgeBase.setStatus(status);
 		}
 		if (ObjectUtil.isEmpty(knowledgeBase)) {
-			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
+			throw new CNException(KNOWLEDGE_BASE_NOT_EXIST);
 		}
 		List<Integer> deleteDataIds = Lists.newArrayList();
 		List<Map<String, String>> saveOrUpdateList = Lists.newArrayList();
@@ -1342,7 +1349,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				dnsServerInfoBuiltInService.saveOrUpdateBatch(dnsServerInfoBuiltIns);
 				break;
 			default:{
-				throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);
+				throw new CNException(KNOWLEDGE_SOURCE_ERROR);
 			}
 		}
 	}
