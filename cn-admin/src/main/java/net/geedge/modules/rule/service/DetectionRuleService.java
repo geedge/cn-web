@@ -5,13 +5,14 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import net.geedge.common.utils.PageUtils;
 import net.geedge.modules.rule.entity.DetectionRule;
 
 public interface DetectionRuleService extends IService<DetectionRule>{
 	
 	DetectionRule getInfoById(Integer id);
 	
-	List<DetectionRule> getList(Map<String,Object> params);
+	PageUtils getList(Map<String,Object> params);
 	
 	List<Integer> removeRules(List<Integer> ids);
 	

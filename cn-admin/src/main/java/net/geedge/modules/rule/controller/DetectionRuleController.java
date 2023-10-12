@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
 import net.geedge.modules.rule.entity.DetectionRule;
@@ -27,8 +28,8 @@ public class DetectionRuleController {
 	
 	@GetMapping("/list")
 	public R detectionRuleList(@RequestParam Map<String,Object> params) {
-		List<DetectionRule> detectionRules = detectionRuleService.getList(params);
-		return R.ok(detectionRules);
+		PageUtils page = detectionRuleService.getList(params);
+		return R.ok(page);
 	}
 	
 	@GetMapping("/{ruleId}")

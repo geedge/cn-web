@@ -33,6 +33,7 @@ import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.Constant.RuleType;
 import net.geedge.common.utils.OperationEnum;
+import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
@@ -104,7 +105,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 	}
 
 	@Override
-	public List<DetectionRule> getList(Map<String, Object> params) {
+	public PageUtils getList(Map<String, Object> params) {
 		if (ObjectUtil.isNotEmpty(params.get("category"))) {
 			params.put("category", Arrays.asList(String.valueOf(params.get("category")).split(StringPool.COMMA)));
 		}
@@ -114,7 +115,8 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		IPage page = this.page(new Query(DetectionRule.class).getPage(params));
 		List<DetectionRule> detectionRules = this.baseMapper.queryPage(page, params);
 		handlerRuleData(detectionRules);
-		return detectionRules;
+		page.setRecords(detectionRules);
+		return new PageUtils(page);
 	}
 
 	@Override
