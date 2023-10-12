@@ -2,10 +2,13 @@ package net.geedge.modules.rule.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -92,7 +96,11 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 
 	@Override
 	public DetectionRule getInfoById(Integer id) {
-		return this.getById(id);
+		DetectionRule rule = this.getById(id);
+		List<DetectionRule> rules = new ArrayList<DetectionRule>();
+		rules.add(rule);
+		handlerRuleData(rules);
+		return rule;
 	}
 
 	@Override
@@ -105,6 +113,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		}
 		IPage page = this.page(new Query(DetectionRule.class).getPage(params));
 		List<DetectionRule> detectionRules = this.baseMapper.queryPage(page, params);
+		handlerRuleData(detectionRules);
 		return detectionRules;
 	}
 
@@ -222,7 +231,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 	}
 
 	@Override
-	public Map queryDetection(Integer queryDetection) {
+	public Map<String,Object> queryDetection(Integer queryDetection) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		RuleVersion ruleVersion = ruleVersionService.list().get(0);
 		result.put("version", ruleVersion.getVersion());
@@ -242,6 +251,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 			//判断修改、删除的规则信息
 			List<Integer> drRuleIds = ruleIds.stream().filter(ruleId -> historiesRuleId.contains(ruleId)).collect(Collectors.toList());
 			List<DetectionRule> addRules = rules.stream().filter(rule -> addRuleIds.contains(rule.getRuleId())).filter(rule -> rule.getIsValid() != 1).collect(Collectors.toList());
+			handlerRuleData(addRules);
 			result.put("addList", addRules);
 			
 			if(ObjectUtil.isNotEmpty(drRuleIds)) {
@@ -257,12 +267,71 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 						.gt(RuleCommitHistory::getOpVersion, queryDetection));
 				List<Integer> realUpdateIds = realUpdateRules.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
 				List<DetectionRule> updateRealRules = updateRules.stream().filter(rule -> realUpdateIds.contains(rule.getRuleId())).collect(Collectors.toList());
+				handlerRuleData(updateRealRules);
 				result.put("updateList", updateRealRules);
 			}
 		}else {
 			List<DetectionRule> addRules = rules.stream().filter(rule -> rule.getIsValid() == 0).collect(Collectors.toList());
+			handlerRuleData(addRules);
 			result.put("addList", addRules);
 		}
 		return result;
+	}
+
+	@Override
+	public Map<String, Object> statistics() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("statusList", new ArrayList<Map<String,Object>>());
+		result.put("eventTypeList", new ArrayList<Map<String,Object>>());
+		result.put("categoryList", new ArrayList<Map<String,Object>>());
+		List<DetectionRule> rules = this.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getIsValid, 0));
+		if(ObjectUtil.isNotEmpty(rules)) {
+			// 各状态以及个数的统计信息
+			Map<Integer, List<DetectionRule>> statusRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getStatus));
+			for(Integer status : statusRules.keySet()) {
+				Map<String,Object> sr = new HashMap<String,Object>();
+				sr.put(status.toString(), statusRules.get(status).size());
+				((List<Map<String,Object>>)result.get("statusList")).add(sr);
+			}
+			// 各类型以及个数的统计信息
+			Map<String, List<DetectionRule>> typeRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getEventType));
+			for(String type : typeRules.keySet()) {
+				Map<String,Object> tr = new HashMap<String,Object>();
+				tr.put(type, typeRules.get(type).size());
+				((List<Map<String,Object>>)result.get("eventTypeList")).add(tr);
+			}
+			// 各分类以及个数的统计信息
+			Map<String, List<DetectionRule>> categoryRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getCategory));
+			for(String category : categoryRules.keySet()) {
+				Map<String,Object> cr = new HashMap<String,Object>();
+				cr.put(category, categoryRules.get(category).size());
+				((List<Map<String,Object>>)result.get("categoryList")).add(cr);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public void handlerRuleData(List<DetectionRule> detectionRules) {
+		Set<Integer> knowledgeBaseIds = new HashSet<Integer>();
+		detectionRules.stream().forEach(rule -> {
+			String ruleConfig = rule.getRuleConfig();
+			Map<String,Object> ruleConfigObj = (Map<String, Object>) JSONObject.parse(ruleConfig);
+			rule.setRuleConfigObj(ruleConfigObj);
+			String ruleTrigger = rule.getRuleTrigger();
+			Map<String,Object> ruleTriggerObj = (Map<String, Object>) JSONObject.parse(ruleTrigger);
+			rule.setRuleTriggerObj(ruleTriggerObj);
+			Integer knowledgeId = (Integer) ruleConfigObj.get("knowledgeId");
+			knowledgeBaseIds.add(knowledgeId);
+			rule.setKnowledgeId(knowledgeId);
+		});
+		if(ObjectUtil.isNotEmpty(knowledgeBaseIds)) {
+			Collection<KnowledgeBase> knowledgeBases = knowledgeBaseService.listByIds(knowledgeBaseIds);
+			Map<Integer, KnowledgeBase> idKnowledge = knowledgeBases.stream().collect(Collectors.toMap(KnowledgeBase::getKnowledgeId, Function.identity()));
+			detectionRules.stream().forEach(rule -> {
+				Map<String,Object> ruleConfigObj = (Map<String, Object>) rule.getRuleConfigObj();
+				ruleConfigObj.put("knowledgeBase", idKnowledge.get(rule.getKnowledgeId()));
+			});
+		}
 	}
 }

@@ -19,5 +19,9 @@ public interface DetectionRuleService extends IService<DetectionRule>{
 	
 	DetectionRule modifyDetectionRule(DetectionRule detectionRule);
 	
-	Map queryDetection(Integer queryDetection);
+	Map<String,Object> queryDetection(Integer queryDetection);
+	
+	Map<String,Object> statistics();
+	
+	void handlerRuleData(List<DetectionRule> detectionRules);
 }

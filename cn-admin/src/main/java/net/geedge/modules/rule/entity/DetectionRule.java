@@ -2,6 +2,7 @@ package net.geedge.modules.rule.entity;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -41,4 +42,10 @@ public class DetectionRule {
 	private Date opTime;
 	
 	private Integer isValid;
+	@TableField(exist = false)
+	private Integer knowledgeId;
+	@TableField(exist = false)
+	private Object ruleConfigObj;
+	@TableField(exist = false)
+	private Object ruleTriggerObj;
 }
