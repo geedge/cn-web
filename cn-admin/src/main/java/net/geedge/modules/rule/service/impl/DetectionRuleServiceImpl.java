@@ -292,21 +292,24 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 			Map<Integer, List<DetectionRule>> statusRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getStatus));
 			for(Integer status : statusRules.keySet()) {
 				Map<String,Object> sr = new HashMap<String,Object>();
-				sr.put(status.toString(), statusRules.get(status).size());
+				sr.put("status", status);
+				sr.put("count", statusRules.get(status).size());
 				((List<Map<String,Object>>)result.get("statusList")).add(sr);
 			}
 			// 各类型以及个数的统计信息
 			Map<String, List<DetectionRule>> typeRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getEventType));
 			for(String type : typeRules.keySet()) {
 				Map<String,Object> tr = new HashMap<String,Object>();
-				tr.put(type, typeRules.get(type).size());
+				tr.put("name", type);
+				tr.put("count", typeRules.get(type).size());
 				((List<Map<String,Object>>)result.get("eventTypeList")).add(tr);
 			}
 			// 各分类以及个数的统计信息
 			Map<String, List<DetectionRule>> categoryRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getCategory));
 			for(String category : categoryRules.keySet()) {
 				Map<String,Object> cr = new HashMap<String,Object>();
-				cr.put(category, categoryRules.get(category).size());
+				cr.put("name", category);
+				cr.put("count", categoryRules.get(category).size());
 				((List<Map<String,Object>>)result.get("categoryList")).add(cr);
 			}
 		}
