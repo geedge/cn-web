@@ -49,11 +49,6 @@
     "remark": "xinzeng3",
     "menuIds": [1,2]
   },
-  "saveSysRole_checkRemark": {
-    "name": "xinzeng4",
-    "remark": "",
-    "menuIds": [1,2]
-  },
   "saveSysRole_checkMenuIds": {
     "name": "xinzeng5",
     "remark": "xinzeng5"
@@ -80,12 +75,6 @@
     "id": 2,
     "name": "admin",
     "remark": "xiugai4",
-    "menuIds": "3,4"
-  },
-  "updateSysRole_checkRemark": {
-    "id": 2,
-    "name": "xiugai5",
-    "remark": "",
     "menuIds": "3,4"
   },
   "updateSysRole_checkMenuIds": {

@@ -22,6 +22,7 @@ import static net.geedge.common.utils.RCode.KNOWLEDGE_BASE_NOT_EXIST;
 import static net.geedge.common.utils.RCode.KNOWLEDGE_SOURCE_ERROR;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -47,12 +48,15 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.io.CharsetDetector;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.text.csv.CsvData;
+import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.text.csv.CsvUtil;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
@@ -185,7 +189,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		// 判断传入数据是否都存在 不存在返回错误提示
 		if(knowledgeBases.size()!=knowlegeIds.size()) {
-			throw new CNException(KNOWLEDGE_BASE_NOT_EXIST);
+			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
 		List<Integer> ids = knowledgeBases.stream().map(KnowledgeBase::getKnowledgeId).collect(Collectors.toList());
 		// 删除版本数据信息
@@ -354,7 +358,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			KnowledgeBase knowledgeBase = this.getBaseMapper().selectOne(new LambdaQueryWrapper<KnowledgeBase>().eq(KnowledgeBase::getKnowledgeId, knowledgeId));
 			if(ObjectUtil.isEmpty(knowledgeBase)) {
 				log.debug("local data not exist : {}",knowledgeId);
-				throw new CNException(KNOWLEDGE_BASE_NOT_EXIST);
+				throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 			}
 			knowledgeBase.setOpUser(ShiroUtils.getUserId());
 			knowledgeBase.setOpTime(new Date());
@@ -564,7 +568,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	private void validateKnowledgeBase(KnowledgeBase knowledgeBase) {
 		if(ObjectUtil.isEmpty(knowledgeBase)) {
-			throw new CNException(KNOWLEDGE_BASE_NOT_EXIST);
+			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
 	}
 
@@ -1011,7 +1015,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					result.put(source, dnsServerInfoBuiltIns);
 					break;
 				default:{
-					throw new CNException(KNOWLEDGE_SOURCE_ERROR);
+					throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);
 				}
 			}
 		}
@@ -1034,20 +1038,20 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			knowledgeBase.setStatus(status);
 		}
 		if (ObjectUtil.isEmpty(knowledgeBase)) {
-			throw new CNException(KNOWLEDGE_BASE_NOT_EXIST);
+			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
 		}
 		List<Integer> deleteDataIds = Lists.newArrayList();
 		List<Map<String, String>> saveOrUpdateList = Lists.newArrayList();
+		//覆盖操作时 将对应表中数据删除清空
+		if (StrUtil.equals(action, "overwrite")) {
+			basicImportAndExportService.removeList(knowledgeBase.getSource(), knowledgeBase.getKnowledgeId());
+		}
 		this.validAndBuildDatasets(file, knowledgeBase, action, saveOrUpdateList, deleteDataIds);
 		//更新操作时 删除多余重复数据
 		if (StrUtil.equals(action, "update") && !deleteDataIds.isEmpty()) {
 			basicImportAndExportService.removeList(knowledgeBase.getSource(), deleteDataIds);
 		}
-		//覆盖操作时 将对应表中数据删除清空
-		if (StrUtil.equals(action, "overwrite")) {
-			basicImportAndExportService.removeList(knowledgeBase.getSource(), knowledgeBase.getKnowledgeId());
-		}
-		this.saveOrUpdateBatch(saveOrUpdateList, knowledgeBase);
+//		this.saveOrUpdateBatch(saveOrUpdateList, knowledgeBase);
 		KnowledgeBaseSyncVersion syncVersion = knowledgeBaseSyncVersionService.syncVersion(knowledgeBase.getKnowledgeId());
 		KnowledgeBaseAuditLog log = new KnowledgeBaseAuditLog();
 		log.setDescription(knowledgeBase.getDescription());
@@ -1085,60 +1089,61 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
         switch (fileType) {
             case "csv": {
-                CsvData csvData = CSVUtils.getCsvDataFromMultipartFile(file);
-                List<CsvRow> rows = csvData.getRows();
-                CsvRow headers = rows.get(0);
-                // 表头校验
-                if (!CSVUtils.validateCSVHeader(headers, headerInfos)) {
+            	File tempCsvFile = new File(Constant.TEMP_PATH + File.separator + "csv_" + UUID.randomUUID());
+            	try {
+					FileUtils.copyInputStreamToFile(file.getInputStream(), tempCsvFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+    		    CsvReader reader = CsvUtil.getReader(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetUtil.CHARSET_UTF_8));
+    		    reader.setContainsHeader(true);
+    		    Set<String> header = reader.stream().findFirst().get().getFieldMap().keySet();
+    		    ArrayList<String> headerInfo = ListUtil.toList(header);
+    		    // 表头校验
+                if (!CSVUtils.validateCSVHeader(headerInfo, headerInfos)) {
                     throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
                 }
-                // 表头以及下标信息整理
-                Map<Integer,String> indexHeader = new HashMap<Integer,String>();
-                for(int i = 0;i<headers.size();i++) {
-                	indexHeader.put(i, headers.get(i));
-                }
-                for (int i = 1; i < rows.size(); i++) {
-                	boolean ipHandler = false;
-                    CsvRow csvRow = rows.get(i);
-                    Map<String, String> tmpMap = Tool.MapUtil.newHashMap();
-                    for (int j = 0; j < headerInfos.size(); j++) {
-                        String cellStr = StrUtil.trim(csvRow.get(j));
-                        if ((StrUtil.startWith(cellStr, "[") && StrUtil.endWith(cellStr, "]")) ||
-                                (StrUtil.startWith(cellStr, "{") && StrUtil.endWith(cellStr, "}"))) { // csv文件中json格式双引号会变成两个
-                            cellStr = StrUtil.replace(cellStr, "\"\"", "\"");
-                        }
-						String valName = indexHeader.get(j);
-						Map<String, Object> info = configs.get(valName);
+                CsvReader reader2 = CsvUtil.getReader(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetUtil.CHARSET_UTF_8));
+    		    reader2.setContainsHeader(true);
+    			reader2.stream().forEach(row -> {
+    				// 当前行号
+    				Map<String, String> tmpMap = Tool.MapUtil.newHashMap();
+    				long originalLineNumber = row.getOriginalLineNumber();
+    				boolean ipHandler = false;
+    				Map<String, String> fieldMap = row.getFieldMap();
+    				for(String headerName : fieldMap.keySet()) {
+    					String value = fieldMap.get(headerName);
+    					Map<String, Object> info = configs.get(headerName);
 						String checkType = (String) info.get("checkType");
 						List<String> validateVal = (List<String>) info.get("validateVal");
-						if(StrUtil.equals(valName, "addr_format")) {
+						if(StrUtil.equals(headerName, "addr_format")) {
 							ipHandler = true;
 						}
 						if(StrUtil.equals(checkType, "in")) {
-							if(!validateVal.contains(cellStr)) {
-								log.error("knowledgeBase import data error , line is {},columnName is {}",i,valName);
+							if(!validateVal.contains(value)) {
+								log.error("knowledgeBase import data error , line is {},columnName is {}",originalLineNumber,headerName);
 								throw new CNException(RCode.IMPORT_ERROR);
 							}
 						}else if(StrUtil.equals(checkType, "range")) {
-							if(!(Integer.valueOf(validateVal.get(0))<=Integer.valueOf(cellStr) && Integer.valueOf(validateVal.get(1))>=Integer.valueOf(cellStr))) {
-								log.error("knowledgeBase import data error , line is {},columnName is {}",i,valName);
+							if(!(Integer.valueOf(validateVal.get(0))<=Integer.valueOf(value) && Integer.valueOf(validateVal.get(1))>=Integer.valueOf(value))) {
+								log.error("knowledgeBase import data error , line is {},columnName is {}",originalLineNumber,headerName);
 								throw new CNException(RCode.IMPORT_ERROR);
 							}
 						}else if(StrUtil.equals(checkType, "ip")) {
-							boolean validIpFormat = KnowledgeCheckUtil.validIpFormat(cellStr);
+							boolean validIpFormat = KnowledgeCheckUtil.validIpFormat(value);
 							if(!validIpFormat) {
-								log.error("knowledgeBase import data error , line is {},columnName is {}",i,valName);
+								log.error("knowledgeBase import data error , line is {},columnName is {}",originalLineNumber,headerName);
 								throw new CNException(RCode.IMPORT_ERROR);
 							}
 						}else if(StrUtil.equals(checkType, "notNull")) {
-							if(ObjectUtil.isEmpty(cellStr)) {
-								log.error("knowledgeBase import data error , line is {},columnName is {}",i,valName);
+							if(ObjectUtil.isEmpty(value)) {
+								log.error("knowledgeBase import data error , line is {},columnName is {}",originalLineNumber,headerName);
 								throw new CNException(RCode.IMPORT_ERROR);
 							}
 						}
-                        tmpMap.put(valName, cellStr);
-                    }
-                    // 进行ip1 ip2相关数据内容处理
+                        tmpMap.put(headerName, value);
+    				}
+    				// 进行ip1 ip2相关数据内容处理
                     if(ipHandler) {
                     	String addrFormat = tmpMap.get("addr_format");
                     	String ip1 = tmpMap.get("ip1");
@@ -1168,11 +1173,19 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					if (ObjectUtil.isNotEmpty(tmpMap)) {
 						importDataList.add(tmpMap);
 					}
-				}
+					if(importDataList.size() == 2000) {
+						saveOrUpdateBatch(importDataList,knowledgeBase);
+						importDataList.clear();
+					}
+    			});     
+    			if(ObjectUtil.isNotEmpty(importDataList)) {
+    				saveOrUpdateBatch(importDataList,knowledgeBase);
+    				importDataList.clear();
+    			}
 				break;
 			}
             default: {
-                throw new CNException(RCode.EXCELFILE_TYPE_ERROR);
+                throw new CNException(RCode.KNOWLEDGE_EXCELFILE_TYPE_ERROR);
             }
         }
 	}
@@ -1349,7 +1362,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				dnsServerInfoBuiltInService.saveOrUpdateBatch(dnsServerInfoBuiltIns);
 				break;
 			default:{
-				throw new CNException(KNOWLEDGE_SOURCE_ERROR);
+				throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);
 			}
 		}
 	}
