@@ -21,10 +21,7 @@
         <result property="createTime" column="createTime"></result>
         <result property="isValid" column="isValid"></result>
         <result property="knowledgeId" column="knowledgeId"></result>
-        <association property="knowledgeBase" column="knowledgeId" select="queryKnowledgeById">
-            <result property="knowledgeId" column="knowledgeId"></result>
-            <result property="color" column="color"></result>
-        </association>
+        <association property="knowledgeBase" column="knowledgeId" select="queryKnowledgeById" javaType="java.util.Map"></association>
     </resultMap>
 
     <select id="queryPageByKnowledgeId" resultMap="DomainTagUserDefined">
