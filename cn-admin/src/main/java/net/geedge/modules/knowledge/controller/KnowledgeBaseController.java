@@ -4,6 +4,8 @@ package net.geedge.modules.knowledge.controller;
 import java.util.List;
 import java.util.Map;
 
+import net.geedge.common.annotation.SysLog;
+import net.geedge.common.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.geedge.common.smartvalidate.ValidateUtils;
-import net.geedge.common.utils.PageUtils;
-import net.geedge.common.utils.R;
-import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 
 @RestController
@@ -31,6 +30,7 @@ public class KnowledgeBaseController {
 	private KnowledgeBaseService knowledgeBaseService;
 
 	@DeleteMapping
+	@SysLog(operation = OperationEnum.DELETE, type = TypeEnum.KNOWLEDGEBASE)
 	public R remove(@RequestParam("knowledgeIds") String knowledgeIds) {
 		ValidateUtils.is(knowledgeIds).notNull(RCode.KNOWLEDGE_IDS_ISNULL);
 		List<Integer> result = knowledgeBaseService.remove(knowledgeIds);
@@ -68,12 +68,14 @@ public class KnowledgeBaseController {
 	}
 	
 	@PostMapping
+	@SysLog(operation = OperationEnum.ADD, type = TypeEnum.KNOWLEDGEBASE)
 	public R addKnowledgeBase(@RequestBody Map<String,Object> params) {
 		Integer id = knowledgeBaseService.addOrModifyKnowledgeBase(params);
 		return R.ok().put("knowledgeId", id);
 	}
 	
 	@PutMapping
+	@SysLog(operation = OperationEnum.UPDATE, type = TypeEnum.KNOWLEDGEBASE)
 	public R modifyKnowledgeBase(@RequestBody Map<String,Object> params) {
 		Integer knowledgeId = (Integer) params.get("knowledgeId");
 		ValidateUtils.is(knowledgeId).notNull(RCode.KNOWLEDGE_ID_ISNULL);

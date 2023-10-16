@@ -28,6 +28,7 @@ public interface SysI18nService extends IService<SysI18nEntity> {
 	SysI18nEntity queryInfo(Long id);
 	
 	Map selectLang(String l);
-	
+
+	Long addAndReturnId(SysI18nEntity sysI18n);
 }
 

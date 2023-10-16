@@ -214,8 +214,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				driver.navigate().to("data:text/html;charset=utf-8," + html);
 				html = (String) driver.executeScript("return document.documentElement.innerHTML;");
 			}*/
-			String htmlName = reportJob.getName()+reportJob.getCtime().getTime()+".html ";
-			String fileName = reportJob.getName()+reportJob.getCtime().getTime()+".pdf ";
+			String htmlName = reportJob.getName()+reportJob.getCtime().getTime()+".html";
+			String fileName = reportJob.getName()+reportJob.getCtime().getTime()+".pdf";
 			File file = FileUtil.file(Constant.TEMP_PATH + File.separator +htmlName);
 			File pdfFile = FileUtil.file(Constant.TEMP_PATH + File.separator +fileName);
 			// 删除废弃文件
@@ -223,7 +223,8 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				file.delete();
 			}
 			FileUtil.writeBytes(html.getBytes(), file);
-			RuntimeUtil.exec("node "+Constant.CONFIG_PATH+File.separator+"report.js "+Constant.TEMP_PATH+File.separator+htmlName+Constant.TEMP_PATH+File.separator+fileName);
+			log.info("pdf command--> node "+Constant.CONFIG_PATH+File.separator+"report.js "+Constant.TEMP_PATH+File.separator+htmlName+StrUtil.C_SPACE+Constant.TEMP_PATH+File.separator+fileName);
+			RuntimeUtil.exec("node "+Constant.CONFIG_PATH+File.separator+"report.js "+Constant.TEMP_PATH+File.separator+htmlName+StrUtil.C_SPACE+Constant.TEMP_PATH+File.separator+fileName);
 		}catch(Exception e) {
 			html="";
 			log.error("render report html error : {}",e.getMessage());
