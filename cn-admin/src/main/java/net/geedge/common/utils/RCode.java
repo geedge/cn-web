@@ -308,6 +308,7 @@ public enum RCode {
     SYS_ROLE_MENUID_ISNULL(581005, "Role related menu id is required"),
     SYS_ROLE_NAME_CANNOT_MODIFY(587006, "The name of the built-in role cannot be modified"),
     SYS_ROLE_CANNOT_DELETE(587007, "Built-in roles cannot be deleted"),
+    SYS_ROLE_IS_RELATED_CANNOT_DELETE(587008, "Roles is related and cannot be deleted"),
     
     KNOWLEDGE_BASE_PARAM_DUPLICATE(591001,"KnowledgeBase names and types are guaranteed to be unique"),
     KNOWLEDGE_BASE_PARAM_NOTNULL(591002,"KnowledgeBase data is required"),
@@ -331,7 +332,8 @@ public enum RCode {
     KNOWLEDGE_SOURCE_ERROR(591020,"The source is inconsistent with the system template"),
     KNOWLEDGE_IMPORT_ACTION_ISNULL(591021,"KnowledgeBase import action is required"),
     KNOWLEDGE_IMPORT_ACTION_VALUE_ERROR(591022,"KnowledgeBase import action must be one of overwrite,append,update"),
-
+    KNOWLEDGE_EXCELFILE_TYPE_ERROR(591023, "The type can only be csv"),
+    
     ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
     ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
     ENTITY_TAG_NOT_EXIST(601003,"Entity tag not exist"),

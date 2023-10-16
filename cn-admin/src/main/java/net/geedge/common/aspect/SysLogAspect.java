@@ -15,6 +15,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -218,6 +220,10 @@ public class SysLogAspect {
 		String oepraId = "";
 		if ("add".equals(operationType) || "update".equals(operationType)) {
 			oepraId = getOpId(params);
+			if(StrUtil.isEmpty(oepraId)) {
+				params.add(ObjectUtil.isNotEmpty(r.get("data"))?r.get("data"):r);
+				oepraId = getOpId(params);
+			}
 		}
 		if ("delete".equals(operationType)) {
 			oepraId = JSON.toJSONString(params.get(0)).replace("\"", "");

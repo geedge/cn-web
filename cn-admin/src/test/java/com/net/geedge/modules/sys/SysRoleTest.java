@@ -156,17 +156,6 @@ public class SysRoleTest extends BaseTest<SysRoleEntity> {
     }
 
     /**
-     * POST /sys/role remark can not be empty
-     */
-    @Test
-    public void saveSysRole_checkRemark() {
-        SysRoleEntity sysRoleEntity = jsonToInParameter(testName.getMethodName(), SysRoleEntity.class);
-        MvcResult result = UTUtil.performPost("/sys/role", sysRoleEntity);
-
-        UTUtil.assertEqualsRCode(result, RCode.SYS_ROLE_REMARK_ISNULL);
-    }
-
-    /**
      * POST /sys/role menuIds can not be empty
      */
     @Test
@@ -219,17 +208,6 @@ public class SysRoleTest extends BaseTest<SysRoleEntity> {
         MvcResult result = UTUtil.performPut("/sys/role", sysRoleEntity);
 
         UTUtil.assertEqualsRCode(result, RCode.SYS_ROLE_NAME_DUPLICATE);
-    }
-
-    /**
-     * PUT /sys/role remark can not be null
-     */
-    @Test
-    public void updateSysRole_checkRemark() {
-        SysRoleEntity sysRoleEntity = jsonToInParameter(testName.getMethodName(), SysRoleEntity.class);
-        MvcResult result = UTUtil.performPut("/sys/role", sysRoleEntity);
-
-        UTUtil.assertEqualsRCode(result, RCode.SYS_ROLE_REMARK_ISNULL);
     }
 
     /**

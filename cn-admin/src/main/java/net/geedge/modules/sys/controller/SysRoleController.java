@@ -88,16 +88,15 @@ public class SysRoleController extends AbstractController {
 
 	/**
 	 * 删除角色
-	 * @param ids
+	 * @param ids,params
 	 * @return
 	 */
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE,type = TypeEnum.SYSTEM)
 	/*@RequiresPermissions("sys:role:delete")*/
-	public R delete(@RequestParam Integer... ids) {
+	public R delete(@RequestParam Integer[] ids, @RequestParam Map<String, Object> params) {
 		ValidateUtils.is(ids).notNull(RCode.SYS_ROLE_ID_ISNULL);
 
-		sysRoleService.deleteBatch(ids);
-		return R.ok();
+		return sysRoleService.deleteBatch(ids,params);
 	}
 }
