@@ -3,6 +3,7 @@ package net.geedge;
 
 import java.util.TimeZone;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 //import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableTransactionManagement
 //@Import(SetupAutoConfiguration.class)
 @PropertySource(value = { "file:./config/cn.properties","classpath:./config/cn.properties" }, encoding = "utf-8", ignoreResourceNotFound = true)
+@MapperScan("net.geedge.modules.*.dao")
 public class AdminApplication {
 
 	public static void main(String[] args) {
