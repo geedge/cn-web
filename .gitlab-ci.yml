@@ -4,14 +4,20 @@
 #install,install_clean和build_imag三个阶段,如果未定义stage，则默认test阶段
 
 #这里定义三个阶段（stages），install,install_clean和build_image,stages中的阶段按写的顺序进行，先执行install,然后执行install_clean,然后在执行build_image
+variables:
+  XJAR_PIN: 111111
+  # sys_i18n 数据源信息
+  CN_DB_HOST: "192.168.44.53"
+  CN_DB_USER: "root"
+  CN_DB_PASSWORD: "111111"
+  CN_DB_NAME: "cn_api"
+
 stages:
   - gen_git-log
+  - update_i18n
   - build_image
 #  - test
   - package_clean
-
-variables:
-  XJAR_PIN: 111111
 
 before_script:
   - export CNWEB_TAG=$(date +%Y%m%d%H%M%S)
@@ -25,6 +31,27 @@ generate_git-log:
       - ./cn-admin/src/main/resources/git.log
   only:
     - dev-23.10
+  tags:
+    - galaxy
+
+# ci 更新 sys_i18n sql
+ci_update_i18n_sql:
+  stage: update_i18n
+  script:
+    - env | sort
+    - pwd
+    - chmod +x ./ci-scripts/replaceI18nsql.sh
+    - ./ci-scripts/replaceI18nsql.sh
+  artifacts:
+    name: "R__AZ_sys_i18n.sql"
+    when: on_success
+    paths:
+      - ./cn-admin/src/main/resources/db/R__AZ_sys_i18n.sql
+    expire_in: 1 day
+  # 在哪个分支上可用
+  only:
+    - dev-23.10
+  # 指定哪个ci runner跑该工作
   tags:
     - galaxy
 
@@ -51,12 +78,21 @@ build_image:
   stage: build_image
   #执行的脚本内容
   script:
+    - env | sort
+    - pwd
+    - export FILE_NAME=$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA.tar.gz
+    - chmod +x ./ci-scripts/replaceI18nsql.sh
+    - ./ci-scripts/replaceI18nsql.sh
+    - mvn clean install -Dxjar.password=$XJAR_PIN -Dxjar.excludes=/db/*,/static/**/*,/install/* -Dmaven.test.skip=true
+    - cd ./cn-admin/target
+    - go build xjar.go
+    - chmod +x xjar
     - echo '提交的分支是'
     - echo $CI_COMMIT_REF_NAME
     - echo 'XJAR_PIN :' $XJAR_PIN
     - echo 'CNWEB_TAG:' $CNWEB_TAG
     - echo 'exec build_image'
-    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN -Dmaven.test.skip=true docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web-$CI_COMMIT_REF_NAME:$CNWEB_TAG
+    - cd ../ && mvn package -Dxjar.password=$XJAR_PIN -Dmaven.test.skip=true docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web-$CI_COMMIT_REF_NAME:$CNWEB_TAG
   #when用于当前一阶段任务故障或者忽略故障的job任务，主要用于清理发生故障时的后续措施。
   #可选项
   #on_success - 默认参数，前一阶段任务成功时才执行
@@ -72,12 +108,21 @@ build_image:
 build_release_image:
   stage: build_image
   script:
+    - env | sort
+    - pwd
+    - export FILE_NAME=$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA.tar.gz
+    - chmod +x ./ci-scripts/replaceI18nsql.sh
+    - ./ci-scripts/replaceI18nsql.sh
+    - mvn clean install -Dxjar.password=$XJAR_PIN -Dxjar.excludes=/db/*,/static/**/*,/install/* -Dmaven.test.skip=true
+    - cd ./cn-admin/target
+    - go build xjar.go
+    - chmod +x xjar
     - echo 'tag名称是'
     - echo $CI_COMMIT_TAG
     - echo '提交的版本是'
     - echo $CI_COMMIT_REF_NAME
     - echo 'exec build_image'
-    - cd cn-admin && mvn package -Dxjar.password=$XJAR_PIN -Dmaven.test.skip=true docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web:$CI_COMMIT_TAG
+    - cd ../ && mvn package -Dxjar.password=$XJAR_PIN -Dmaven.test.skip=true docker:build -DpushImage -DdockerImageTags=$CNWEB_TAG -DdockerImageName=192.168.40.153:9080/cyber-narrator/cn-web:$CI_COMMIT_TAG
   only:
     - tags
   tags:
