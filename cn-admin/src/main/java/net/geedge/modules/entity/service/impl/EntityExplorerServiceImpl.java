@@ -157,7 +157,7 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
     }
 
     private List<Map<String, Object>> getSearchColumns(String dataName){
-        String entityExploreConfigJson = sysConfigService.getValue("schema_entity_explore");
+        String entityExploreConfigJson = sysConfigService.getValue("schema_explore");
         HashMap entityExploreConfigs = JSONObject.parseObject(entityExploreConfigJson, HashMap.class);
         Map<String, Object> entityMetadata = (Map<String, Object>)entityExploreConfigs.get(dataName);
         List<Map<String, Object>> searchColumns = (List<Map<String, Object>>) entityMetadata.get("searchColumns");
