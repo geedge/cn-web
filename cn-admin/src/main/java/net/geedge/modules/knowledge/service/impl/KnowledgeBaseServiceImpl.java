@@ -23,6 +23,8 @@ import static net.geedge.common.utils.RCode.KNOWLEDGE_SOURCE_ERROR;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -31,6 +33,9 @@ import net.geedge.common.utils.*;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -40,6 +45,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -47,10 +53,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import java.sql.Connection;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.io.CharsetDetector;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.text.csv.CsvData;
 import cn.hutool.core.text.csv.CsvReader;
@@ -62,6 +70,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.Constant.RuleType;
+import net.geedge.modules.knowledge.dao.DnsServerInfoBuiltInDao;
+import net.geedge.modules.knowledge.dao.IpTagUserDefinedDao;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.AppCategoryBuiltIn;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
@@ -175,6 +185,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private SqlSessionFactory sqlSessionFactory;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -1051,7 +1064,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		if (StrUtil.equals(action, "update") && !deleteDataIds.isEmpty()) {
 			basicImportAndExportService.removeList(knowledgeBase.getSource(), deleteDataIds);
 		}
-//		this.saveOrUpdateBatch(saveOrUpdateList, knowledgeBase);
 		KnowledgeBaseSyncVersion syncVersion = knowledgeBaseSyncVersionService.syncVersion(knowledgeBase.getKnowledgeId());
 		KnowledgeBaseAuditLog log = new KnowledgeBaseAuditLog();
 		log.setDescription(knowledgeBase.getDescription());
@@ -1086,7 +1098,13 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			configs.put((String)m.get("name"), m);
 		}
 		String validateColumn = (String)sourceConfig.get("validateColumn");
-
+		// 根据配置校验数据是否重复
+		List<String> validateColumns = StrUtil.split(validateColumn, StrUtil.C_COMMA);
+		if(ObjectUtil.isEmpty(validateColumns)) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_NOTNULL);
+		}
+		SqlSession openSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+		Connection conn = openSession.getConnection();
         switch (fileType) {
             case "csv": {
             	File tempCsvFile = new File(Constant.TEMP_PATH + File.separator + "csv_" + UUID.randomUUID());
@@ -1095,7 +1113,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-    		    CsvReader reader = CsvUtil.getReader(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetUtil.CHARSET_UTF_8));
+    		    CsvReader reader = CsvUtil.getReader(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetDetector.detect(tempCsvFile)));
     		    reader.setContainsHeader(true);
     		    Set<String> header = reader.stream().findFirst().get().getFieldMap().keySet();
     		    ArrayList<String> headerInfo = ListUtil.toList(header);
@@ -1103,7 +1121,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                 if (!CSVUtils.validateCSVHeader(headerInfo, headerInfos)) {
                     throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
                 }
-                CsvReader reader2 = CsvUtil.getReader(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetUtil.CHARSET_UTF_8));
+                CsvReader reader2 = CsvUtil.getReader(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetDetector.detect(tempCsvFile)));
     		    reader2.setContainsHeader(true);
     			reader2.stream().forEach(row -> {
     				// 当前行号
@@ -1113,6 +1131,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
     				Map<String, String> fieldMap = row.getFieldMap();
     				for(String headerName : fieldMap.keySet()) {
     					String value = fieldMap.get(headerName);
+    					if(headerName.indexOf("\uFEFF")>= 0) {
+    						headerName = headerName.substring(1);
+    					}
     					Map<String, Object> info = configs.get(headerName);
 						String checkType = (String) info.get("checkType");
 						List<String> validateVal = (List<String>) info.get("validateVal");
@@ -1151,36 +1172,26 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
                     	Map<String, String> ipHandlerResult = ipHandler(addrFormat, ip1, ip2);
                     	tmpMap.putAll(ipHandlerResult);
                     }
-                    // 根据配置校验数据是否重复
-					List<String> validateColumns = StrUtil.split(validateColumn, StrUtil.C_COMMA);
-					if(ObjectUtil.isEmpty(validateColumns)) {
-						throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_NOTNULL);
-					}
-					HashMap<String, String> checkDataMap = Tool.MapUtil.newHashMap();
-					for (String validateCol : validateColumns) {
-						checkDataMap.put(validateCol, tmpMap.get(validateCol));
-					}
-					// 更新操作 更新最早创建数据、删除其余冗余数据
-					if (StrUtil.equals(action, "update")) {
-						List<Integer> dbDataIds = basicImportAndExportService.queryDataIds(knowledgeBase.getSource(), checkDataMap, knowledgeBase.getKnowledgeId(), null);
-						if (ObjectUtil.isNotEmpty(dbDataIds)) {
-							tmpMap.put("id", dbDataIds.get(0).toString());
-							if (dbDataIds.size() > 1) {
-								deleteDataIds.addAll(dbDataIds.subList(1, dbDataIds.size()));
-							}
-						}
-					}
 					if (ObjectUtil.isNotEmpty(tmpMap)) {
 						importDataList.add(tmpMap);
 					}
-					if(importDataList.size() == 2000) {
-						saveOrUpdateBatch(importDataList,knowledgeBase);
+					if(importDataList.size() == 50) {
+						if (StrUtil.equals(action, "update")) {
+							this.updateDataHandler(importDataList,knowledgeBase,validateColumns);
+						}
+						saveOrUpdateBatch(importDataList,knowledgeBase,conn);
 						importDataList.clear();
 					}
     			});     
     			if(ObjectUtil.isNotEmpty(importDataList)) {
-    				saveOrUpdateBatch(importDataList,knowledgeBase);
+    				if (StrUtil.equals(action, "update")) {
+						this.updateDataHandler(importDataList,knowledgeBase,validateColumns);
+					}
+    				saveOrUpdateBatch(importDataList,knowledgeBase,conn);
     				importDataList.clear();
+    			}
+    			if(FileUtil.exist(tempCsvFile)) {
+    				tempCsvFile.delete();
     			}
 				break;
 			}
@@ -1190,14 +1201,39 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
         }
 	}
 
-	private void saveOrUpdateBatch(List importDataList, KnowledgeBase knowledgeBase) {
+	private void updateDataHandler(List<Map<String, String>> importDataList,KnowledgeBase knowledgeBase,List<String> condition) {
+		// 更新操作 更新最早创建数据、删除其余冗余数据
+		List<Map<String, Object>> results = basicImportAndExportService.queryDataIds(knowledgeBase.getSource(), condition, knowledgeBase.getKnowledgeId(), importDataList);
+		if(ObjectUtil.isNotEmpty(results)) {
+			Map<String,Object> conId = new HashMap<String,Object>();
+			results.stream().forEach(result->{
+				String key = "";
+				for(String con : condition) {
+					key += result.get(con).toString();
+				}
+				conId.put(key,result.get("id"));
+			});
+			for(Map<String,String> data : importDataList) {
+				String val = "";
+				for(String con : condition) {
+					val += data.get(con).toString();
+				}
+				Object id = conId.get(val);
+				data.put("id",ObjectUtil.isNotEmpty(id)?id.toString():null);
+			}
+		}
+	}
+	
+	private void saveOrUpdateBatch(List importDataList, KnowledgeBase knowledgeBase,Connection conn) {
 		String source = knowledgeBase.getSource();
 		// 根据类型不同 生成对应实体 保存入库
 		switch(source) {
 			case IP_TAG_USER_DEFINED:
 				List<IpTagUserDefined> ipTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpTagUserDefined.class);
 				ipTagUserDefineds.stream().forEach(data->{
-					data.setCTime(new Date());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCTime(new Date());
+					}
 					data.setOpUser(ShiroUtils.getUserId().intValue());
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
@@ -1205,83 +1241,131 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				Map<Boolean, List<IpTagUserDefined>> ipTagUserDefinedMap = ipTagUserDefineds.stream().collect(Collectors.groupingBy(ipTagUserDefined-> ObjectUtil.isNotEmpty(ipTagUserDefined.getId())));
 				List<IpTagUserDefined> updateIps = ipTagUserDefinedMap.get(true);
 				List<IpTagUserDefined> insertIps = ipTagUserDefinedMap.get(false);
-				ipTagUserDefinedService.saveBatchForBinary(insertIps);
-				ipTagUserDefinedService.modifyBatchForBinary(updateIps);
+				ipTagUserDefinedService.saveBatchJDBC(conn,insertIps);
+				ipTagUserDefinedService.modifyBatchJDBC(conn,updateIps);
 				break;
 			case APP_TAG_USER_DEFINED:
 				List<AppTagUserDefined> appTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),AppTagUserDefined.class);
 				appTagUserDefineds.stream().forEach(data->{
-					data.setCTime(new Date());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCTime(new Date());
+					}
 					data.setOpUser(ShiroUtils.getUserId().intValue());
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				appTagUserDefinedService.saveOrUpdateBatch(appTagUserDefineds);
+				Map<Boolean, List<AppTagUserDefined>> appTagUserDefinedMap = appTagUserDefineds.stream().collect(Collectors.groupingBy(appTagUserDefined-> ObjectUtil.isNotEmpty(appTagUserDefined.getId())));
+				List<AppTagUserDefined> updateAppTagUserDefineds = appTagUserDefinedMap.get(true);
+				List<AppTagUserDefined> insertAppTagUserDefineds = appTagUserDefinedMap.get(false);
+				appTagUserDefinedService.saveBatchJDBC(conn,insertAppTagUserDefineds);
+				appTagUserDefinedService.modifyBatchJDBC(conn,updateAppTagUserDefineds);
 				break;
 			case DOMAIN_TAG_USER_DEFINED:
 				List<DomainTagUserDefined> domainTagUserDefineds = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),DomainTagUserDefined.class);
 				domainTagUserDefineds.stream().forEach(data->{
-					data.setCTime(new Date());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCTime(new Date());
+					}
 					data.setOpUser(ShiroUtils.getUserId().intValue());
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				domainTagUserDefinedService.saveOrUpdateBatch(domainTagUserDefineds);
+				Map<Boolean, List<DomainTagUserDefined>> domainTagUserDefinedMap = domainTagUserDefineds.stream().collect(Collectors.groupingBy(domainTagUserDefined-> ObjectUtil.isNotEmpty(domainTagUserDefined.getId())));
+				List<DomainTagUserDefined> updateDomainTagUserDefineds = domainTagUserDefinedMap.get(true);
+				List<DomainTagUserDefined> insertDomainTagUserDefineds = domainTagUserDefinedMap.get(false);
+				domainTagUserDefinedService.saveBatchJDBC(conn,insertDomainTagUserDefineds);
+				domainTagUserDefinedService.modifyBatchJDBC(conn,updateDomainTagUserDefineds);
 				break;
 			case IOC_DARKWEB:
 				List<IocDarkweb> iocDarkwebs = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IocDarkweb.class);
 				iocDarkwebs.stream().forEach(data->{
-					data.setCreateTime(new Date().getTime());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCreateTime(new Date().getTime());
+					}
 					data.setUpdateTime(new Date().getTime());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				iocDarkwebService.saveOrUpdateBatch(iocDarkwebs);
+				Map<Boolean, List<IocDarkweb>> iocDarkwebMap = iocDarkwebs.stream().collect(Collectors.groupingBy(iocDarkweb-> ObjectUtil.isNotEmpty(iocDarkweb.getId())));
+				List<IocDarkweb> updateIocDarkwebs = iocDarkwebMap.get(true);
+				List<IocDarkweb> insertIocDarkwebs = iocDarkwebMap.get(false);
+				iocDarkwebService.saveBatchJDBC(conn,insertIocDarkwebs);
+				iocDarkwebService.modifyBatchJDBC(conn,updateIocDarkwebs);
 				break;
 			case IOC_MALWARE:
 				List<IocMalware> iocMalwares = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IocMalware.class);
 				iocMalwares.stream().forEach(data->{
-					data.setCreateTime(new Date().getTime());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCreateTime(new Date().getTime());
+					}
 					data.setUpdateTime(new Date().getTime());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				iocMalwareService.saveOrUpdateBatch(iocMalwares);
+				Map<Boolean, List<IocMalware>> iocMalwareMap = iocMalwares.stream().collect(Collectors.groupingBy(iocMalware-> ObjectUtil.isNotEmpty(iocMalware.getId())));
+				List<IocMalware> updateIocMalwares = iocMalwareMap.get(true);
+				List<IocMalware> insertIocMalwares = iocMalwareMap.get(false);
+				iocMalwareService.saveBatchJDBC(conn,insertIocMalwares);
+				iocMalwareService.modifyBatchJDBC(conn,updateIocMalwares);
 				break;
 			case APP_CATEGORY_BUILT_IN:
 				List<AppCategoryBuiltIn> appCategoryBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),AppCategoryBuiltIn.class);
 				appCategoryBuiltIns.stream().forEach(data->{
-					data.setCTime(new Date());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCTime(new Date());
+					}
 					data.setOpUser(ShiroUtils.getUserId().intValue());
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				appCategoryBuiltInService.saveOrUpdateBatch(appCategoryBuiltIns);
+				Map<Boolean, List<AppCategoryBuiltIn>> appCategoryBuiltInMap = appCategoryBuiltIns.stream().collect(Collectors.groupingBy(appCategoryBuiltIn-> ObjectUtil.isNotEmpty(appCategoryBuiltIn.getId())));
+				List<AppCategoryBuiltIn> updateAppCategoryBuiltIns = appCategoryBuiltInMap.get(true);
+				List<AppCategoryBuiltIn> insertAppCategoryBuiltIns = appCategoryBuiltInMap.get(false);
+				appCategoryBuiltInService.saveBatchJDBC(conn,insertAppCategoryBuiltIns);
+				appCategoryBuiltInService.modifyBatchJDBC(conn,updateAppCategoryBuiltIns);
 				break;
 			case FQDN_ICP_BUILT_IN:
 				List<FqdnIcpBuiltIn> fqdnIcpBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),FqdnIcpBuiltIn.class);
 				fqdnIcpBuiltIns.stream().forEach(data->{
-					data.setCreateTime(new Date());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCreateTime(new Date());
+					}
 					data.setUpdateTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				fqdnIcpBuiltInService.saveOrUpdateBatch(fqdnIcpBuiltIns);
+				Map<Boolean, List<FqdnIcpBuiltIn>> fqdnIcpBuiltInMap = fqdnIcpBuiltIns.stream().collect(Collectors.groupingBy(fqdnIcpBuiltIn-> ObjectUtil.isNotEmpty(fqdnIcpBuiltIn.getId())));
+				List<FqdnIcpBuiltIn> updateFqdnIcpBuiltIns = fqdnIcpBuiltInMap.get(true);
+				List<FqdnIcpBuiltIn> insertFqdnIcpBuiltIns = fqdnIcpBuiltInMap.get(false);
+				fqdnIcpBuiltInService.saveBatchJDBC(conn,insertFqdnIcpBuiltIns);
+				fqdnIcpBuiltInService.modifyBatchJDBC(conn,updateFqdnIcpBuiltIns);
 				break;
 			case FQDN_WHO_IS_BUILT_IN:
 				List<FqdnWhoIsBuiltIn> fqdnWhoIsBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),FqdnWhoIsBuiltIn.class);
 				fqdnWhoIsBuiltIns.stream().forEach(data->{
-					data.setCreateTime(new Date());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCreateTime(new Date());
+					}
 					data.setUpdateTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				fqdnWhoIsBuiltInService.saveOrUpdateBatch(fqdnWhoIsBuiltIns);
+				Map<Boolean, List<FqdnWhoIsBuiltIn>> fqdnWhoIsBuiltInMap = fqdnWhoIsBuiltIns.stream().collect(Collectors.groupingBy(fqdnWhoIsBuiltIn-> ObjectUtil.isNotEmpty(fqdnWhoIsBuiltIn.getId())));
+				List<FqdnWhoIsBuiltIn> updateFqdnWhoIsBuiltIns = fqdnWhoIsBuiltInMap.get(true);
+				List<FqdnWhoIsBuiltIn> insertFqdnWhoIsBuiltIns = fqdnWhoIsBuiltInMap.get(false);
+				fqdnWhoIsBuiltInService.saveBatchJDBC(conn,insertFqdnWhoIsBuiltIns);
+				fqdnWhoIsBuiltInService.modifyBatchJDBC(conn,updateFqdnWhoIsBuiltIns);
 				break;
 			case FQDN_CATEGORY_BUILT_IN:
 				List<FqdnCategoryBuiltIn> fqdnCategoryBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),FqdnCategoryBuiltIn.class);
 				fqdnCategoryBuiltIns.stream().forEach(data->{
-					data.setCreateTime(new Date());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCreateTime(new Date());
+					}
 					data.setUpdateTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				fqdnCategoryBuiltInService.saveOrUpdateBatch(fqdnCategoryBuiltIns);
+				Map<Boolean, List<FqdnCategoryBuiltIn>> fqdnCategoryBuiltInMap = fqdnCategoryBuiltIns.stream().collect(Collectors.groupingBy(fqdnCategoryBuiltIn-> ObjectUtil.isNotEmpty(fqdnCategoryBuiltIn.getId())));
+				List<FqdnCategoryBuiltIn> updateFqdnCategoryBuiltIns = fqdnCategoryBuiltInMap.get(true);
+				List<FqdnCategoryBuiltIn> insertFqdnCategoryBuiltIns = fqdnCategoryBuiltInMap.get(false);
+				fqdnCategoryBuiltInService.saveBatchJDBC(conn,insertFqdnCategoryBuiltIns);
+				fqdnCategoryBuiltInService.modifyBatchJDBC(conn,updateFqdnCategoryBuiltIns);
 				break;
 			case IP_ASN_BUILT_IN:
 				List<IpAsnBuiltIn> ipAsnBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpAsnBuiltIn.class);
@@ -1293,8 +1377,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				Map<Boolean, List<IpAsnBuiltIn>> ipAsnBuiltInMap = ipAsnBuiltIns.stream().collect(Collectors.groupingBy(ipAsnBuiltIn-> ObjectUtil.isNotEmpty(ipAsnBuiltIn.getId())));
 				List<IpAsnBuiltIn> updateIpAsnBuiltIns = ipAsnBuiltInMap.get(true);
 				List<IpAsnBuiltIn> insertIpAsnBuiltIns = ipAsnBuiltInMap.get(false);
-				ipAsnBuiltInService.saveBatchForBinary(insertIpAsnBuiltIns);
-				ipAsnBuiltInService.modifyBatchForBinary(updateIpAsnBuiltIns);
+				ipAsnBuiltInService.saveBatchJDBC(conn,insertIpAsnBuiltIns);
+				ipAsnBuiltInService.modifyBatchJDBC(conn,updateIpAsnBuiltIns);
 				break;
 			case IP_LOCATION_BUILT_IN:
 				List<IpLocationBuiltIn> ipLocationBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IpLocationBuiltIn.class);
@@ -1303,7 +1387,11 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					data.setOpTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				ipLocationBuiltInService.saveOrUpdateBatch(ipLocationBuiltIns);
+				Map<Boolean, List<IpLocationBuiltIn>> ipLocationBuiltInMap = ipLocationBuiltIns.stream().collect(Collectors.groupingBy(ipLocationBuiltIn-> ObjectUtil.isNotEmpty(ipLocationBuiltIn.getId())));
+				List<IpLocationBuiltIn> updateIpLocationBuiltIns = ipLocationBuiltInMap.get(true);
+				List<IpLocationBuiltIn> insertIpLocationBuiltIns = ipLocationBuiltInMap.get(false);
+				ipLocationBuiltInService.saveBatchJDBC(conn,insertIpLocationBuiltIns);
+				ipLocationBuiltInService.modifyBatchJDBC(conn,updateIpLocationBuiltIns);
 				break;
 			case PSIPHON3_IP:
 				List<Psiphon3Ip> insertPsiphon3Ips = Lists.newArrayList();
@@ -1320,8 +1408,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 						updatePsiphon3Ips.add(data);
 					}
 				});
-				psiphon3IpService.saveBatchForBinary(insertPsiphon3Ips);
-				psiphon3IpService.modifyBatchForBinary(updatePsiphon3Ips);
+				psiphon3IpService.saveBatchJDBC(conn,insertPsiphon3Ips);
+				psiphon3IpService.modifyBatchJDBC(conn,updatePsiphon3Ips);
 				break;
 			case IDC_RENTER_BUILT_IN:
 				List<IdcRenterBuiltIn> idcRenterBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),IdcRenterBuiltIn.class);
@@ -1331,8 +1419,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				Map<Boolean, List<IdcRenterBuiltIn>> idcRenterBuiltInMap = idcRenterBuiltIns.stream().collect(Collectors.groupingBy(idcRenterBuiltIn-> ObjectUtil.isNotEmpty(idcRenterBuiltIn.getId())));
 				List<IdcRenterBuiltIn> updateIdcRenterBuiltIns = idcRenterBuiltInMap.get(true);
 				List<IdcRenterBuiltIn> insertIdcRenterBuiltIns = idcRenterBuiltInMap.get(false);
-				idcRenterBuiltInService.saveBatchForBinary(insertIdcRenterBuiltIns);
-				idcRenterBuiltInService.modifyBatchForBinary(updateIdcRenterBuiltIns);
+				idcRenterBuiltInService.saveBatchJDBC(conn,insertIdcRenterBuiltIns);
+				idcRenterBuiltInService.modifyBatchJDBC(conn,updateIdcRenterBuiltIns);
 				break;
 			case INTERNAL_IP_BUILT_IN:
 				List<InternalIpBuiltIn> internalIpBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),InternalIpBuiltIn.class);
@@ -1342,24 +1430,34 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				Map<Boolean, List<InternalIpBuiltIn>> internalIpBuiltInMap = internalIpBuiltIns.stream().collect(Collectors.groupingBy(internalIpBuiltIn-> ObjectUtil.isNotEmpty(internalIpBuiltIn.getId())));
 				List<InternalIpBuiltIn> updateInternalIpBuiltIns = internalIpBuiltInMap.get(true);
 				List<InternalIpBuiltIn> insertInternalIpBuiltIns = internalIpBuiltInMap.get(false);
-				internalIpBuiltInService.saveBatchForBinary(insertInternalIpBuiltIns);
-				internalIpBuiltInService.modifyBatchForBinary(updateInternalIpBuiltIns);
+				internalIpBuiltInService.saveBatchJDBC(conn,insertInternalIpBuiltIns);
+				internalIpBuiltInService.modifyBatchJDBC(conn,updateInternalIpBuiltIns);
 				break;
 			case LINK_DIRECTION_BUILT_IN:
 				List<LinkDirectionBuiltIn> linkDirectionBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),LinkDirectionBuiltIn.class);
 				linkDirectionBuiltIns.stream().forEach(data->{
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				linkDirectionBuiltInService.saveOrUpdateBatch(linkDirectionBuiltIns);
+				Map<Boolean, List<LinkDirectionBuiltIn>> linkDirectionBuiltInMap = linkDirectionBuiltIns.stream().collect(Collectors.groupingBy(linkDirectionBuiltIn-> ObjectUtil.isNotEmpty(linkDirectionBuiltIn.getId())));
+				List<LinkDirectionBuiltIn> updateLinkDirectionBuiltInIns = linkDirectionBuiltInMap.get(true);
+				List<LinkDirectionBuiltIn> insertLinkDirectionBuiltInIns = linkDirectionBuiltInMap.get(false);
+				linkDirectionBuiltInService.saveBatchJDBC(conn,insertLinkDirectionBuiltInIns);
+				linkDirectionBuiltInService.modifyBatchJDBC(conn,updateLinkDirectionBuiltInIns);
 				break;
 			case DNS_SERVER_INFO_BUILT_IN:
 				List<DnsServerInfoBuiltIn> dnsServerInfoBuiltIns = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),DnsServerInfoBuiltIn.class);
 				dnsServerInfoBuiltIns.stream().forEach(data->{
-					data.setCreateTime(new Date());
+					if(ObjectUtil.isEmpty(data.getId())) {
+						data.setCreateTime(new Date());
+					}
 					data.setUpdateTime(new Date());
 					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
 				});
-				dnsServerInfoBuiltInService.saveOrUpdateBatch(dnsServerInfoBuiltIns);
+				Map<Boolean, List<DnsServerInfoBuiltIn>> dnsServerInfoBuiltInMap = dnsServerInfoBuiltIns.stream().collect(Collectors.groupingBy(dnsServerInfoBuiltIn-> ObjectUtil.isNotEmpty(dnsServerInfoBuiltIn.getId())));
+				List<DnsServerInfoBuiltIn> updateDnsServerInfoBuiltIns = dnsServerInfoBuiltInMap.get(true);
+				List<DnsServerInfoBuiltIn> insertDnsServerInfoBuiltIns = dnsServerInfoBuiltInMap.get(false);
+				dnsServerInfoBuiltInService.saveBatchJDBC(conn,insertDnsServerInfoBuiltIns);
+				dnsServerInfoBuiltInService.modifyBatchJDBC(conn, updateDnsServerInfoBuiltIns);
 				break;
 			default:{
 				throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);

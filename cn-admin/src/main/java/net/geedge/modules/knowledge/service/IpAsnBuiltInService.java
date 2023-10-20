@@ -1,5 +1,6 @@
 package net.geedge.modules.knowledge.service;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -21,4 +22,8 @@ public interface IpAsnBuiltInService extends IService<IpAsnBuiltIn> {
 	void modifyBatchForBinary(List<IpAsnBuiltIn> ipAsnBuiltIns);
 
 	void saveBatchForBinary(List<IpAsnBuiltIn> ipAsnBuiltIns);
+	
+	void saveBatchJDBC(Connection conn,List<IpAsnBuiltIn> ipAsnBuiltIns);
+	
+	void modifyBatchJDBC(Connection conn,List<IpAsnBuiltIn> ipAsnBuiltIns);
 }

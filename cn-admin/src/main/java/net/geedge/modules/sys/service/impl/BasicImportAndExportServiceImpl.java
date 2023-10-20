@@ -16,8 +16,8 @@ public class BasicImportAndExportServiceImpl implements BasicImportAndExportServ
 	private BasicImportAndExportDao basicImportAndExportDao;
 	
 	@Override
-	public List<Integer> queryDataIds(String tableName, Map<String, String> columnVal, Integer knowledgeId, Long id) {
-		return basicImportAndExportDao.selectDataId(tableName,columnVal,knowledgeId,id);
+	public List<Map<String,Object>> queryDataIds(String tableName, List<String> columnVal, Integer knowledgeId, List<Map<String, String>> importDataList) {
+		return basicImportAndExportDao.selectDataId(tableName,columnVal,knowledgeId,importDataList);
 	}
 
 	@Override

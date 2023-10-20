@@ -41,7 +41,7 @@ public class CSVUtils {
     		for (int i = 0; i < headerInfos.size(); i++) {
                 String header = headers.get(i);
                 if(header.indexOf("\uFEFF")>= 0)
-                    headers.set(i,header.substring(1)); //去除BOM头
+                    header = header.substring(1); //去除BOM头
                 if (!headerInfos.contains(header)) {
                     return false;
                 }

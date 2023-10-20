@@ -3,15 +3,18 @@
 <mapper namespace="net.geedge.modules.sys.dao.BasicImportAndExportDao">
 
     <!--执行自定义SQL将返回结果保存到Map中-->
-    <select id="selectDataId" resultType="java.lang.Integer">
-        SELECT id FROM ${tableName} WHERE knowledge_id = #{knowledgeId} and
-		<foreach collection="params.entrySet()" item="value" index="key" separator="and">
-			${key} = #{value}
+    <select id="selectDataId" resultType="java.util.Map">
+        SELECT
+        	id,
+			<foreach collection="params" item="param" separator=",">
+				${param}
+			</foreach>
+		FROM ${tableName} WHERE knowledge_id = #{knowledgeId} and
+        <foreach collection="datas" item="data" separator="or" open="(" close=")">
+			<foreach collection="params" item="param" open="(" close=")" separator="and">
+				${param} = '${data[param]}'
+			</foreach>
 		</foreach>
-		<if test="id != null">
-            and id != #{id}
-        </if>
-        ORDER BY id ASC
     </select>
 
 	<delete id="deleteList">

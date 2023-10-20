@@ -1,5 +1,6 @@
 package net.geedge.modules.knowledge.service;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -15,4 +16,8 @@ public interface IdcRenterBuiltInService extends IService<IdcRenterBuiltIn>{
     void modifyBatchForBinary(List<IdcRenterBuiltIn> idcRenterBuiltIns);
 
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
+    
+    void saveBatchJDBC(Connection conn,List<IdcRenterBuiltIn> idcRenterBuiltIns);
+    
+    void modifyBatchJDBC(Connection conn,List<IdcRenterBuiltIn> idcRenterBuiltIns);
 }
