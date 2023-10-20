@@ -9,9 +9,9 @@ import java.util.Map;
  */
 public interface EntityExplorerService {
 
-    String parseExpression(String resource);
+    String parseExpression(String resource, String dataName);
 
-    Boolean isAssociationQuery(String resource);
+    Boolean isAssociationQuery(String resource, String dataName);
 
     Map<String, Object> getAssociationQueryParam(String resource);
 

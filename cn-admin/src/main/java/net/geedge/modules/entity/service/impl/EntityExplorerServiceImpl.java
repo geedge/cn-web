@@ -34,10 +34,10 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
     private Log log = Log.get();
 
     @Override
-    public String parseExpression(String resource){
+    public String parseExpression(String resource, String dataName){
         String expression = "";
         if(ObjectUtil.isNotEmpty(resource)) {
-            List<Map<String, Object>> searchColumns = getSearchColumns();
+            List<Map<String, Object>> searchColumns = getSearchColumns(dataName);
             try {
                 Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
                 ExpressionDeParser expressionDeParser =  new ExpressionDeParser() {
@@ -73,9 +73,9 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
     }
 
     @Override
-    public Boolean isAssociationQuery(String resource) {
+    public Boolean isAssociationQuery(String resource, String dataName) {
         if(ObjectUtil.isNotEmpty(resource)) {
-            List<Map<String, Object>> searchColumns = getSearchColumns();
+            List<Map<String, Object>> searchColumns = getSearchColumns(dataName);
             Set<String> catalogs = new TreeSet<>();
             try {
                 Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
@@ -156,10 +156,10 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
         return stringBuffer.toString();
     }
 
-    private List<Map<String, Object>> getSearchColumns(){
+    private List<Map<String, Object>> getSearchColumns(String dataName){
         String entityExploreConfigJson = sysConfigService.getValue("schema_entity_explore");
         HashMap entityExploreConfigs = JSONObject.parseObject(entityExploreConfigJson, HashMap.class);
-        Map<String, Object> entityMetadata = (Map<String, Object>)entityExploreConfigs.get("entityMetadata");
+        Map<String, Object> entityMetadata = (Map<String, Object>)entityExploreConfigs.get(dataName);
         List<Map<String, Object>> searchColumns = (List<Map<String, Object>>) entityMetadata.get("searchColumns");
         return searchColumns;
     }
