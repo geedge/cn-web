@@ -40,29 +40,12 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
             List<Map<String, Object>> searchColumns = getSearchColumns(dataName);
             try {
                 Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
-                ExpressionDeParser expressionDeParser =  new ExpressionDeParser() {
-                    @Override
-                    public void visit(Column column) {
-                        for (Map<String, Object> map : searchColumns) {
-                            if(column.getColumnName().contains("\"")) {
-                                String newColumn = column.getColumnName().replace("\"", "").trim().replace(" ",".");
-                                column.setColumnName(newColumn);
-                            }
-                            String columnName = "";
-                            if(ObjectUtil.isNotEmpty(column.getTable())) {
-                                columnName = column.getTable() + "." + column.getColumnName();
-                            }
-                            if (column.getColumnName().equals((String)map.get("label")) || columnName.equals((String)map.get("label"))){
-                                Map<String, Object> connector =(Map<String, Object>) map.get("connector");
-                                String table = (String)connector.get("alias");
-                                Table newTable = new Table(table);
-                                column.setTable(newTable);
-                                column.setColumnName((String) map.get("name"));
-                                break;
-                            }
-                        }
-                    }
-                };
+                ExpressionDeParser expressionDeParser = null;
+                if("entityMetadata".equals(dataName)) {
+                    expressionDeParser = parseEntityMetadata(searchColumns);
+                } else if("securityEventMetadata".equals(dataName)) {
+                    expressionDeParser = parseSecurityEventMetadata(searchColumns);
+                }
                 expr.accept(expressionDeParser);
                 expression = expr.toString();
             } catch (JSQLParserException e) {
@@ -70,6 +53,53 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
             }
         }
         return expression;
+    }
+
+    private ExpressionDeParser parseEntityMetadata(List<Map<String, Object>> searchColumns) {
+        ExpressionDeParser result =  new ExpressionDeParser() {
+            @Override
+            public void visit(Column column) {
+                for (Map<String, Object> map : searchColumns) {
+                    if(column.getColumnName().contains("\"")) {
+                        String newColumn = column.getColumnName().replace("\"", "").trim().replace(" ",".");
+                        column.setColumnName(newColumn);
+                    }
+                    String columnName = "";
+                    if(ObjectUtil.isNotEmpty(column.getTable())) {
+                        columnName = column.getTable() + "." + column.getColumnName();
+                    }
+                    if (column.getColumnName().equals((String)map.get("label")) || columnName.equals((String)map.get("label"))){
+                        Map<String, Object> connector =(Map<String, Object>) map.get("connector");
+                        String table = (String)connector.get("alias");
+                        Table newTable = new Table(table);
+                        column.setTable(newTable);
+                        column.setColumnName((String) map.get("name"));
+                        break;
+                    }
+                }
+            }
+        };
+        return result;
+    }
+
+    private ExpressionDeParser parseSecurityEventMetadata(List<Map<String, Object>> searchColumns) {
+        ExpressionDeParser result =  new ExpressionDeParser() {
+            @Override
+            public void visit(Column column) {
+                for (Map<String, Object> map : searchColumns) {
+                    if(column.getColumnName().contains("\"")) {
+                        String newColumn = column.getColumnName().replace("\"", "").trim().replace(" ",".");
+                        column.setColumnName(newColumn);
+                    }
+                    String columnName = "";
+                    if (column.getColumnName().equals((String)map.get("label")) || columnName.equals((String)map.get("label"))){
+                        column.setColumnName((String) map.get("name"));
+                        break;
+                    }
+                }
+            }
+        };
+        return result;
     }
 
     @Override
