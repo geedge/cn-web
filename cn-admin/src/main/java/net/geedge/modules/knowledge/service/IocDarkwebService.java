@@ -23,4 +23,8 @@ public interface IocDarkwebService extends IService<IocDarkweb> {
 	void saveBatchJDBC(Connection conn,List<IocDarkweb> iocDarkwebs);
     
 	void modifyBatchJDBC(Connection conn,List<IocDarkweb> iocDarkwebs);
+
+    Map<String, Object> queryDomainDetectionEntityDetail(String resource);
+
+    Map<String, Object> queryIpDetectionEntityDetail(String resource);
 }

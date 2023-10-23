@@ -53,6 +53,8 @@ INSERT INTO `sys_menu` VALUES (29, 'Edit knowledge base', 'editKnowledgeBase', '
 INSERT INTO `sys_menu` VALUES (30, 'Entity detail', 'entityDetail', 'overall.detail', 0, NULL, 1, '/entityDetail', '', NULL, 30, 1);
 INSERT INTO `sys_menu` VALUES (31, 'User-defined Library', 'userDefinedLibrary', 'knowledgeBase.userDefinedLibrary', 27, NULL, 1, '/knowledgeBase/userDefinedLibrary', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (32, 'Entity graph', 'entityGraph', 'entities.graph', 0, NULL, 1, '/entityGraph', '', NULL, 32, 1);
-INSERT INTO `sys_menu` VALUES (33, 'Detection policy', 'detectionPolicy', 'overall.policies', 0, NULL, 1, '/detectionsNew', '', NULL, 21, 1);
+INSERT INTO `sys_menu` VALUES (33, 'Detection policy', 'detectionPolicy', 'overall.policies', 12, NULL, 1, '/detectionPolicy', '', NULL, 21, 1);
+INSERT INTO `sys_menu` VALUES (34, 'Create detection policy', 'createDetectionPolicy', 'detection.createEventPolicies', 33, NULL, 1, '/detectionPolicy/create', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (35, 'Edit detection policy', 'editDetectionPolicy', 'detection.editEventPolicies', 33, NULL, 1, '/detectionPolicy/edit', '', NULL, 1, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

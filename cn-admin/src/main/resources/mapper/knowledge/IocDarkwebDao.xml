@@ -77,4 +77,30 @@
         </where>
         limit 1
     </select>
+
+    <select id="queryDomainDetectionEntityDetail" resultType="java.util.Map">
+        select node_type as nodeType, tor_fingerprint as torFingerprint, tor_dir_port as torDirPort, tor_or_port as torOrPort,
+               tor_flags as torFlags, tor_version as torVersion, tor_nickname as torNickname, tor_exit_policy as torExitPolicy,
+               i2p_hash as i2pHash, i2p_method as i2pMethod,i2p_version as i2pVersion,i2p_is_floodfill as i2pIsFloodfill,
+               i2p_bandwidth as i2pBandwidth,i2p_is_hidden as i2pIsHidden,i2p_is_reachable as i2pIsReachable,i2p_publish_time as i2pPublishTime,
+               mtproxy_port as mtproxyPort,mtproxy_secret as mtproxySecret,obfs4_port as obfs4Port,obfs4_fingerprint as obfs4Fingerprint,
+               obfs4_cert as obfs4Cert,obfs4_iat_mode as obfs4IatMode,snowflake_port as snowflakePort,update_time as updateTime,
+               create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+            cn_ioc_darkweb
+        where ioc_type = 'domain' and ioc_value = #{resource}
+        limit 1
+    </select>
+
+    <select id="queryIpDetectionEntityDetail" resultType="java.util.Map">
+        select node_type as nodeType, tor_fingerprint as torFingerprint, tor_dir_port as torDirPort, tor_or_port as torOrPort,
+               tor_flags as torFlags, tor_version as torVersion, tor_nickname as torNickname, tor_exit_policy as torExitPolicy,
+               i2p_hash as i2pHash, i2p_method as i2pMethod,i2p_version as i2pVersion,i2p_is_floodfill as i2pIsFloodfill,
+               i2p_bandwidth as i2pBandwidth,i2p_is_hidden as i2pIsHidden,i2p_is_reachable as i2pIsReachable,i2p_publish_time as i2pPublishTime,
+               mtproxy_port as mtproxyPort,mtproxy_secret as mtproxySecret,obfs4_port as obfs4Port,obfs4_fingerprint as obfs4Fingerprint,
+               obfs4_cert as obfs4Cert,obfs4_iat_mode as obfs4IatMode,snowflake_port as snowflakePort,update_time as updateTime,
+               create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+            cn_ioc_darkweb
+        where ioc_type = 'ip' and ioc_value = #{resource}
+        limit 1
+    </select>
 </mapper>

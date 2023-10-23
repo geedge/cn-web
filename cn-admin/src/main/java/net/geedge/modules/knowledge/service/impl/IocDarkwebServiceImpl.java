@@ -239,4 +239,13 @@ public class IocDarkwebServiceImpl extends ServiceImpl<IocDarkwebDao, IocDarkweb
 		}
 	}
 
+	@Override
+	public Map<String, Object> queryDomainDetectionEntityDetail(String resource) {
+		return this.baseMapper.queryDomainDetectionEntityDetail(resource);
+	}
+
+	@Override
+	public Map<String, Object> queryIpDetectionEntityDetail(String resource) {
+		return this.baseMapper.queryIpDetectionEntityDetail(resource);
+	}
 }

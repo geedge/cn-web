@@ -32,6 +32,9 @@ public class DetectionServiceImpl implements DetectionService {
     private IocMalwareService iocMalwareService;
 
     @Autowired
+    private IocDarkwebService iocDarkwebService;
+
+    @Autowired
     private IpAsnBuiltInService ipAsnBuiltInService;
 
     @Autowired
@@ -48,12 +51,15 @@ public class DetectionServiceImpl implements DetectionService {
             addValidDataToMap(data, "category", category);
         } else if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainDetectionEntityDetail(resource);
+            Map<String, Object> darkweb = iocDarkwebService.queryDomainDetectionEntityDetail(resource);
             Map<String, Object> category = fqdnCategoryBuiltInService.queryEntityDetail(resource,false);
             addValidDataToMap(data, "category", category);
             addValidDataToMap(data, "malware", malware);
+            addValidDataToMap(data, "darkweb", darkweb);
         } else if ("ip".equals(entityType)){
             Map<String, Object> asn = ipAsnBuiltInService.queryEntityDetail(resource);
             Map<String, Object> malware = iocMalwareService.queryIpDetectionEntityDetail(resource);
+            Map<String, Object> darkweb = iocDarkwebService.queryIpDetectionEntityDetail(resource);
             String ipNumber = null;
             try {
                 ipNumber = toIpNumber(resource);
@@ -63,6 +69,7 @@ public class DetectionServiceImpl implements DetectionService {
             Map<String, Object> location = ipLocationBuiltInService.queryEntityDetail(ipNumber);
             addValidDataToMap(data, "asn", asn);
             addValidDataToMap(data, "malware", malware);
+            addValidDataToMap(data, "darkweb", darkweb);
             addValidDataToMap(data, "location", location);
         }
         return R.ok(data);
