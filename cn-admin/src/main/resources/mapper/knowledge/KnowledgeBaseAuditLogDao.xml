@@ -12,6 +12,7 @@
         <result property="isPublished" column="is_published"></result>
         <result property="opTime" column="op_time"></result>
         <result property="color" column="color"></result>
+        <result property="api_key_id" column="apiKeyId"></result>
         <association property="user" column="op_user" select="queryUserById"></association>
     </resultMap>
 	

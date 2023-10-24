@@ -33,6 +33,8 @@ public class KnowledgeBaseAuditLog {
 
 	private String color;
 	
+	private Integer apiKeyId;
+	
 	@TableField(exist = false)
 	private SysUserEntity user;
 }

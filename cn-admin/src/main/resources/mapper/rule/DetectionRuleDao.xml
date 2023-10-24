@@ -23,7 +23,7 @@
         select * from
         detection_rule
         <where>
-            1 = 1 and is_valid = 0
+            1 = 1 and is_valid = 0 and is_built_in !=1 
             <if test=" params.name !=null and params.name !='' ">
                 and name like concat ( '%', #{params.name}, '%')
             </if>

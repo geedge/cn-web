@@ -222,6 +222,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			log.setOpTime(new Date());
 			log.setOpType(OperationEnum.DELETE.getValue());
 			log.setOpUser(ShiroUtils.getUserId().intValue());
+			log.setApiKeyId(ShiroUtils.getUserEntity().getApiKeyId());
 			knowledgeBaseAuditLogs.add(log);
 		}
 		knowledgeBaseSyncVersionService.updateBatchById(syncVersions);
@@ -395,6 +396,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			log.setOpTime(new Date());
 			log.setOpType(OperationEnum.UPDATE.getValue());
 			log.setOpUser(ShiroUtils.getUserId().intValue());
+			log.setApiKeyId(ShiroUtils.getUserEntity().getApiKeyId());
 			log.setStatus(knowledgeBase.getStatus());
 			knowledgeBaseAuditLogs.add(log);
 		}
@@ -790,6 +792,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		knowledgeBaseAuditLog.setKnowledgeId(knowledgeBase.getKnowledgeId());
 		knowledgeBaseAuditLog.setOpTime(new Date());
 		knowledgeBaseAuditLog.setOpUser(ShiroUtils.getUserId().intValue());
+		knowledgeBaseAuditLog.setApiKeyId(ShiroUtils.getUserEntity().getApiKeyId());
 		knowledgeBaseAuditLog.setStatus(knowledgeBase.getStatus());
 		knowledgeBaseAuditLog.setColor(knowledgeBase.getColor());
 		if(ObjectUtil.isNotEmpty(knowledgeBaseSyncVersion)) {
@@ -1071,6 +1074,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		log.setKnowledgeId(knowledgeBase.getKnowledgeId());
 		log.setOpTime(new Date());
 		log.setOpUser(ShiroUtils.getUserId().intValue());
+		log.setApiKeyId(ShiroUtils.getUserEntity().getApiKeyId());
 		log.setStatus(knowledgeBase.getStatus());
 		log.setColor(knowledgeBase.getColor());
 		log.setOpType(OperationEnum.UPDATE.getValue());		
