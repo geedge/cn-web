@@ -201,6 +201,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		List<KnowledgeBase> knowledgeBases = this.baseMapper.selectBatchIds(knowlegeIds);
 		List<Integer> builtInIds = knowledgeBases.stream().filter(knowledgeBase-> knowledgeBase.getIsBuiltIn()
 				.equals(1)).map(KnowledgeBase::getKnowledgeId).collect(Collectors.toList());
+		this.getRuleInfo(knowledgeBases);
+		knowledgeBases.stream().forEach(base -> {
+			if(ObjectUtil.isNotEmpty(base.getRefRule())) {
+				throw new CNException(RCode.KNOWLEDGE_RULE_USE_ERROR);
+			}
+		});
 		if(ObjectUtils.isNotEmpty(builtInIds)) {
 			throw new CNException(RCode.KNOWLEDGE_BUILTIN_ERROR);
 		}
@@ -342,7 +348,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 
 	private void getRuleInfo(List<KnowledgeBase> knowledgeBases) {
-		List<DetectionRule> rules = detectionRuleService.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getRuleType,RuleType.INDICATOR_MATHCH));
+		List<DetectionRule> rules = detectionRuleService.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getRuleType,RuleType.INDICATOR_MATHCH.getValue()));
 		Map<Integer, KnowledgeBase> idKnowledge = knowledgeBases.stream().collect(Collectors.toMap(KnowledgeBase::getKnowledgeId, Function.identity()));
 		if(ObjectUtils.isNotEmpty(rules)) {
 			for(DetectionRule rule : rules) {
@@ -356,6 +362,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 						refRule = new ArrayList<DetectionRule>();
 					}
 					refRule.add(rule);
+					knowledge.setRefRule(refRule);
 				}
 			}
 		}

@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import net.geedge.common.annotation.SysLog;
 import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.OperationEnum;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.TypeEnum;
 import net.geedge.modules.rule.entity.DetectionRule;
 import net.geedge.modules.rule.service.DetectionRuleService;
 
@@ -39,6 +43,7 @@ public class DetectionRuleController {
 	}
 	
 	@DeleteMapping
+	@SysLog(operation = OperationEnum.DELETE,type = TypeEnum.DETECTIONRULE)
 	public R removeRule(@RequestParam Integer... ruleIds) {
 		ValidateUtils.is(ruleIds).notNull(RCode.RULE_ID_ISNULL);
 		List<Integer> removeRuleIds = detectionRuleService.removeRules(Arrays.asList(ruleIds));
@@ -46,12 +51,14 @@ public class DetectionRuleController {
 	}
 	
 	@PostMapping
+	@SysLog(operation = OperationEnum.ADD,type = TypeEnum.DETECTIONRULE)
 	public R saveDetectionRule(@RequestBody DetectionRule detectionRule) {
 		DetectionRule rule = detectionRuleService.saveDetectionRule(detectionRule);
 		return R.ok(rule.getRuleId());
 	}
 	
 	@PutMapping
+	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.DETECTIONRULE)
 	public R modifyDetectionRule(@RequestBody DetectionRule detectionRule) {
 		ValidateUtils.is(detectionRule.getRuleId()).notNull(RCode.RULE_ID_ISNULL);
 		DetectionRule rule = detectionRuleService.modifyDetectionRule(detectionRule);

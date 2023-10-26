@@ -1,5 +1,6 @@
 package net.geedge.modules.rule.service.impl;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -186,7 +187,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
         } 
         
 		// config 格式校验
-        String configStr = (String) detectionRule.getRuleConfig();
+        String configStr = detectionRule.getRuleConfig();
         if (StrUtil.isNotEmpty(configStr)) {
             Map configMap;
             try {
@@ -202,6 +203,35 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
             KnowledgeBase knowledgeBase = knowledgeBaseService.getById(knowledgeId);
             if(ObjectUtil.isEmpty(knowledgeBase)) {
             	throw new CNException(RCode.KNOWLEDGE_BASE_ITEM_NOT_EXIST);
+            }
+        }
+        
+        // trigger 格式校验
+        String ruleTrigger = detectionRule.getRuleTrigger();
+        if (StrUtil.isNotEmpty(ruleTrigger)) {
+            Map triggerMap;
+            try {
+            	triggerMap = JSONObject.parseObject(ruleTrigger, Map.class);
+            } catch (JSONException e) {
+                throw new CNException(RCode.RULE_TRIGGER_FORMAT_ERROR);
+            }
+            String interval = (String) triggerMap.get("interval");
+            if(StrUtil.isEmpty(interval)) {
+            	throw new CNException(RCode.RULE_TRIGGER_INTERVAL_ISNULL);
+            }
+            try {
+            	java.time.Duration.parse(interval);
+            }catch(Exception e) {
+            	throw new CNException(RCode.RULE_TRIGGER_INTERVAL_FORMAT_ERROR);
+            }
+            String resetInterval = (String) triggerMap.get("resetInterval");
+            if(StrUtil.isEmpty(resetInterval)) {
+            	throw new CNException(RCode.RULE_TRIGGER_RESET_INTERVAL_ISNULL);
+            }
+            try {
+            	java.time.Duration.parse(resetInterval);
+            }catch(Exception e) {
+            	throw new CNException(RCode.RULE_TRIGGER_RESET_INTERVAL_FORMAT_ERROR);
             }
         }
 	}
