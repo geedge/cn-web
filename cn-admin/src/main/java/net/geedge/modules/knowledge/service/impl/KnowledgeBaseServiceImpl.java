@@ -55,7 +55,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.sql.Connection;
 
+import cn.hutool.Hutool;
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.io.CharsetDetector;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
@@ -68,7 +70,9 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
+import freemarker.template.utility.DateUtil;
 import net.geedge.common.exception.CNException;
+import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.Constant.RuleType;
 import net.geedge.modules.knowledge.dao.DnsServerInfoBuiltInDao;
 import net.geedge.modules.knowledge.dao.IpTagUserDefinedDao;
@@ -1570,5 +1574,44 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		HttpHeaders headers = response.getHeaders();
 		return headers.get("Set-Cookie").get(0);
+	}
+
+	@Override
+	public Map<String,Object> timedistribution(Integer knowledgeBaseId, String type, Map<String, Object> params) {
+		if(ObjectUtil.isEmpty(params.get("startTime")) || ObjectUtil.isEmpty(params.get("endTime"))){
+			throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_NOTNULL);
+		}
+		Long startTime = Long.valueOf((String)params.get("startTime"));
+		Long endTime = Long.valueOf((String)params.get("endTime"));
+		// 计算粒度
+		Integer step = this.handlerStep(startTime, endTime);
+		params.put("startTime",cn.hutool.core.date.DateUtil.date(startTime*1000));
+		params.put("endTime",cn.hutool.core.date.DateUtil.date(endTime*1000));
+		params.put("step", step);
+		params.put("knowledgeBaseId",knowledgeBaseId);
+		params.put("type", type);
+		List<Map<String, Object>> datas = this.baseMapper.timedistribution(params);
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("resultType", "table");
+		result.put("result", datas);
+		
+		return result;
+	}
+	
+	private Integer handlerStep(Long startTime,Long endTime) {
+		Integer step = 1;
+		Long diffTime = endTime-startTime;
+		if(diffTime <= 86400) {
+			step = 1;
+		}else if(diffTime > 86400 && diffTime <= 2 * 86400) {
+			step = 2;
+		}else if(diffTime > 2 * 86400 && diffTime <= 7 * 86400) {
+			step = 6;
+		}else if(diffTime > 7 * 86400 && diffTime <= 15 * 86400) {
+			step = 12;
+		}else if(diffTime > 15 * 86400 && diffTime <= 30 * 86400) {
+			step = 24;
+		}
+		return step;
 	}
 }

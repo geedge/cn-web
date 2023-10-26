@@ -37,4 +37,6 @@ public interface KnowledgeBaseService extends IService<KnowledgeBase> {
     void validAndBuildDatasets(MultipartFile file, KnowledgeBase knowledgeBase, String action, List<Map<String, String>> importDataList, List<Integer> deleteDataIds);
 
     void intelligenceLearningStatus(String type, Integer knowledgeId);
+    
+    Map<String,Object> timedistribution(Integer knowledgeBaseId,String type,Map<String,Object> params);
 }

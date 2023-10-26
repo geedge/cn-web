@@ -21,4 +21,6 @@ public interface KnowledgeBaseDao extends BaseMapper<KnowledgeBase> {
 	List<KnowledgeBase> queryList(@Param("params")Map<String, Object> params);
 	
 	void deleteBySource(@Param("source")String source,@Param("knowledgeIds")List<Integer> knowledgeIds);
+	
+	List<Map<String,Object>> timedistribution(@Param("params")Map<String, Object> params);
 }

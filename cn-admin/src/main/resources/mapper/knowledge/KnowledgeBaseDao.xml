@@ -98,4 +98,31 @@
             #{knowledgeId}
         </foreach>
     </delete>
+    
+    <select id="timedistribution" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT time, COUNT( * ) AS num 
+		FROM
+			(
+			SELECT 
+				DATE_FORMAT(
+					concat(date( op_time ), ' ', floor(HOUR(DATE_ADD(op_time,INTERVAL 1 HOUR))/ #{params.step}) * #{params.step}),
+					'%Y-%m-%d %H:00:00' 
+				) AS time 
+			FROM cn_knowledge_base_audit_log
+			WHERE knowledge_id = #{params.knowledgeBaseId} and op_time >= #{params.startTime} and op_time &lt; #{params.endTime}
+			<choose>
+	            <when test="params.type == 'active'">
+	                and op_type ="update"
+	            </when>
+	            <when test="params.type == 'new'">
+	                and op_type ="add"
+	            </when>
+	            <otherwise>
+	            	and op_type != "delete"
+	            </otherwise>
+	        </choose>
+			) log
+		GROUP BY DATE_FORMAT( time, '%Y-%m-%d %H:00:00' ) 
+		ORDER BY time
+    </select>
 </mapper>

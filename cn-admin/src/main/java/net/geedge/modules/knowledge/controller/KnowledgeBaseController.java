@@ -99,5 +99,11 @@ public class KnowledgeBaseController {
 		knowledgeBaseService.intelligenceLearningStatus(type.getValue(), knowledgeId);
 		return R.ok().putData("knowledgeId",knowledgeId);
 	}
+	
+	@RequestMapping("/{knowledgeId}/{type}/timedistribution")
+	public R timedistribution(@PathVariable("knowledgeId")Integer knowledgeId,@PathVariable("type")String type,@RequestParam Map<String,Object> params) {
+		Map result = knowledgeBaseService.timedistribution(knowledgeId,type,params);
+		return R.ok(result);
+	}
 }
 
