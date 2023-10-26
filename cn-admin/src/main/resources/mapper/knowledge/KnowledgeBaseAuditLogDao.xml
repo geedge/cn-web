@@ -19,7 +19,7 @@
 	<select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
         select id, name
         from sys_user
-        where id = #{id}
+        where  id = #{id}
           and status = 1
     </select>
 
@@ -28,6 +28,14 @@
              	kbal.* 
              from cn_knowledge_base_audit_log kbal 
              where knowledge_id = ${params.knowledgeId}
+             <choose>
+				<when test="params.opUser != null and params.opUser == -1">
+					and op_user != 0
+				</when>
+				<when test="params.opUser != null and params.opUser != -1">
+					and op_user = #{params.opUser}
+				</when>
+			</choose>
             <if test="params.orderBy == null or params.orderBy == ''">
                 ORDER BY kbal.op_time DESC
             </if>
