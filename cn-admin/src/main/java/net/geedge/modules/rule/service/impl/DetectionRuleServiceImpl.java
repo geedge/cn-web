@@ -269,7 +269,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		result.put("version", ruleVersion.getVersion());
 		if(ObjectUtil.isEmpty(ruleVersion) || (ObjectUtil.isNotEmpty(queryDetection) && queryDetection >= ruleVersion.getVersion())) {
 			result.put("addList", ListUtil.list(true));
-			result.put("deleteList", ListUtil.list(true));
+			result.put("deleteIds", ListUtil.list(true));
 			result.put("updateList", ListUtil.list(true));
 			return result;
 		}
@@ -289,7 +289,8 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 			if(ObjectUtil.isNotEmpty(drRuleIds)) {
 				// 删除的规则信息
 				List<DetectionRule> deleteRules = rules.stream().filter(rule -> rule.getIsValid().equals(1) && drRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
-				result.put("deleteList", deleteRules);
+				List<Integer> deleteListIds = deleteRules.stream().map(DetectionRule::getRuleId).collect(Collectors.toList());
+				result.put("deleteIds", deleteListIds);
 				
 				// 修改的规则信息
 				List<DetectionRule> updateRules = rules.stream().filter(rule -> rule.getIsValid().equals(0)&&drRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
