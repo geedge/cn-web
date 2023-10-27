@@ -302,10 +302,12 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 			List<Integer> handlerAddIds = addIds.stream().filter(aId -> !deleteIds.contains(aId)).collect(Collectors.toList());
 			if(ObjectUtil.isNotEmpty(handlerUpdateIds)) {
 				List<DetectionRule> updateRules = this.baseMapper.selectBatchIds(handlerUpdateIds);
+				handlerRuleData(updateRules);
 				result.put("updateList", updateRules);
 			}
 			if(ObjectUtil.isNotEmpty(handlerAddIds)) {
 				List<DetectionRule> addRules = this.baseMapper.selectBatchIds(handlerAddIds);
+				handlerRuleData(addRules);
 				result.put("addList", addRules);
 			}
 		}else {
