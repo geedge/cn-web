@@ -47,6 +47,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.amazonaws.util.DateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -1598,6 +1599,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		params.put("knowledgeBaseId",knowledgeBaseId);
 		params.put("type", type);
 		List<Map<String, Object>> datas = this.baseMapper.timedistribution(params);
+		datas.forEach(data ->{
+			String timeStr = (String) data.get("statTime");
+			data.put("statTime", cn.hutool.core.date.DateUtil.parse(timeStr).getTime()/1000);
+		});
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("resultType", "table");
 		result.put("result", datas);

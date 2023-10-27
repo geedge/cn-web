@@ -100,14 +100,14 @@
     </delete>
     
     <select id="timedistribution" parameterType="java.util.Map" resultType="java.util.Map">
-    	SELECT time, COUNT( * ) AS num 
+    	SELECT statTime, COUNT( * ) AS count 
 		FROM
 			(
 			SELECT 
 				DATE_FORMAT(
 					concat(date( op_time ), ' ', floor(HOUR(DATE_ADD(op_time,INTERVAL 1 HOUR))/ #{params.step}) * #{params.step}),
 					'%Y-%m-%d %H:00:00' 
-				) AS time 
+				) AS statTime 
 			FROM cn_knowledge_base_audit_log
 			WHERE knowledge_id = #{params.knowledgeBaseId} and op_time >= #{params.startTime} and op_time &lt; #{params.endTime}
 			<choose>
@@ -122,7 +122,7 @@
 	            </otherwise>
 	        </choose>
 			) log
-		GROUP BY DATE_FORMAT( time, '%Y-%m-%d %H:00:00' ) 
-		ORDER BY time
+		GROUP BY DATE_FORMAT( statTime, '%Y-%m-%d %H:00:00' ) 
+		ORDER BY statTime
     </select>
 </mapper>
