@@ -267,43 +267,50 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		Map<String,Object> result = new HashMap<String,Object>();
 		RuleVersion ruleVersion = ruleVersionService.list().get(0);
 		result.put("version", ruleVersion.getVersion());
+		result.put("addList", ListUtil.list(true));
+		result.put("deleteIds", ListUtil.list(true));
+		result.put("updateList", ListUtil.list(true));
 		if(ObjectUtil.isEmpty(ruleVersion) || (ObjectUtil.isNotEmpty(queryDetection) && queryDetection >= ruleVersion.getVersion())) {
-			result.put("addList", ListUtil.list(true));
-			result.put("deleteIds", ListUtil.list(true));
-			result.put("updateList", ListUtil.list(true));
 			return result;
 		}
-		List<DetectionRule> rules = this.list();
 		if(ObjectUtil.isNotEmpty(queryDetection)) {
-			List<RuleCommitHistory> histories = ruleCommitHistoryService.list(new QueryWrapper<RuleCommitHistory>().lambda().le(RuleCommitHistory::getOpVersion, queryDetection));
-			List<Integer> historiesRuleId = histories.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
-			List<Integer> ruleIds = rules.stream().map(DetectionRule::getRuleId).collect(Collectors.toList());
-			//获取增量的规则信息
-			List<Integer> addRuleIds = ruleIds.stream().filter(ruleId -> !historiesRuleId.contains(ruleId)).collect(Collectors.toList());
-			//判断修改、删除的规则信息
-			List<Integer> drRuleIds = ruleIds.stream().filter(ruleId -> historiesRuleId.contains(ruleId)).collect(Collectors.toList());
-			List<DetectionRule> addRules = rules.stream().filter(rule -> addRuleIds.contains(rule.getRuleId())).filter(rule -> rule.getIsValid() != 1).collect(Collectors.toList());
-			handlerRuleData(addRules);
-			result.put("addList", addRules);
-			
-			if(ObjectUtil.isNotEmpty(drRuleIds)) {
-				// 删除的规则信息
-				List<DetectionRule> deleteRules = rules.stream().filter(rule -> rule.getIsValid().equals(1) && drRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
-				List<Integer> deleteListIds = deleteRules.stream().map(DetectionRule::getRuleId).collect(Collectors.toList());
-				result.put("deleteIds", deleteListIds);
-				
-				// 修改的规则信息
-				List<DetectionRule> updateRules = rules.stream().filter(rule -> rule.getIsValid().equals(0)&&drRuleIds.contains(rule.getRuleId())).collect(Collectors.toList());
-				// 同历史操作表对比获取修改数据信息
-				List<Integer> updateIds = updateRules.stream().map(DetectionRule::getRuleId).collect(Collectors.toList());
-				List<RuleCommitHistory> realUpdateRules = ruleCommitHistoryService.list(new QueryWrapper<RuleCommitHistory>().lambda().in(RuleCommitHistory::getRuleId, updateIds)
-						.gt(RuleCommitHistory::getOpVersion, queryDetection));
-				List<Integer> realUpdateIds = realUpdateRules.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
-				List<DetectionRule> updateRealRules = updateRules.stream().filter(rule -> realUpdateIds.contains(rule.getRuleId())).collect(Collectors.toList());
-				handlerRuleData(updateRealRules);
-				result.put("updateList", updateRealRules);
+			// 查询比当前版本打的操作记录
+			List<RuleCommitHistory> changeLists = ruleCommitHistoryService.list(new QueryWrapper<RuleCommitHistory>().lambda()
+					.gt(RuleCommitHistory::getOpVersion, queryDetection));
+			// 对操作数据进行分类 
+			Map<String, List<RuleCommitHistory>> typeLists = changeLists.stream().collect(Collectors.groupingBy(RuleCommitHistory::getOpType));
+			List<RuleCommitHistory> addRuleHistories = typeLists.get(OperationEnum.ADD.getValue());
+			List<RuleCommitHistory> updateRuleHistories = typeLists.get(OperationEnum.UPDATE.getValue());
+			List<RuleCommitHistory> deleteRuleHistories = typeLists.get(OperationEnum.DELETE.getValue());
+			if(ObjectUtil.isEmpty(deleteRuleHistories)) {
+				deleteRuleHistories = ListUtil.list(true);
+			}
+			if(ObjectUtil.isEmpty(addRuleHistories)) {
+				addRuleHistories = ListUtil.list(true);
+			}
+			if(ObjectUtil.isEmpty(updateRuleHistories)) {
+				updateRuleHistories = ListUtil.list(true);
+			}
+			// 删除规则的ID信息
+			List<Integer> deleteIds = deleteRuleHistories.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
+			result.put("deleteIds", deleteIds);
+			List<Integer> addIds = addRuleHistories.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
+			List<Integer> updateIds = updateRuleHistories.stream().map(RuleCommitHistory::getRuleId).collect(Collectors.toList());
+			// 修改操作仅限修改
+			List<Integer> handlerUpdateIds = updateIds.stream().filter(uId -> !addIds.contains(uId)).filter(uId -> !deleteIds.contains(uId)).collect(Collectors.toList());
+			// 新增去除已删除
+			List<Integer> handlerAddIds = addIds.stream().filter(aId -> !deleteIds.contains(aId)).collect(Collectors.toList());
+			if(ObjectUtil.isNotEmpty(handlerUpdateIds)) {
+				List<DetectionRule> updateRules = this.baseMapper.selectBatchIds(handlerUpdateIds);
+				result.put("updateList", updateRules);
+			}
+			if(ObjectUtil.isNotEmpty(handlerAddIds)) {
+				List<DetectionRule> addRules = this.baseMapper.selectBatchIds(handlerAddIds);
+				result.put("addList", addRules);
 			}
 		}else {
+			// 未传入版本信息时 返回所有未被删除规则数据
+			List<DetectionRule> rules = this.list();
 			List<DetectionRule> addRules = rules.stream().filter(rule -> rule.getIsValid() == 0).collect(Collectors.toList());
 			handlerRuleData(addRules);
 			result.put("addList", addRules);
