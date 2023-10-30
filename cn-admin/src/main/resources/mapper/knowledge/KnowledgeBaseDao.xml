@@ -108,20 +108,20 @@
 					concat(date( op_time ), ' ', floor(HOUR(DATE_ADD(op_time,INTERVAL 1 HOUR))/ #{params.step}) * #{params.step}),
 					'%Y-%m-%d %H:00:00' 
 				) AS statTime 
-			FROM cn_knowledge_base_audit_log
-			WHERE knowledge_id = #{params.knowledgeBaseId} and op_time >= #{params.startTime} and op_time &lt; #{params.endTime}
+			FROM ${params.tableName}
+			WHERE 
 			<choose>
 	            <when test="params.type == 'active'">
-	                and op_type ="update"
+	                 op_time >= #{params.startTime} and op_time &lt; #{params.endTime}
 	            </when>
 	            <when test="params.type == 'new'">
-	                and op_type ="add"
+	                 c_time >= #{params.startTime} and c_time &lt; #{params.endTime}
 	            </when>
 	            <otherwise>
-	            	and op_type != "delete"
+	            	 (op_time >= #{params.startTime} and op_time &lt; #{params.endTime}) or (c_time >= #{params.startTime} and c_time &lt; #{params.endTime})
 	            </otherwise>
 	        </choose>
-			) log
+			) cn_knowledge_table
 		GROUP BY DATE_FORMAT( statTime, '%Y-%m-%d %H:00:00' ) 
 		ORDER BY statTime
     </select>

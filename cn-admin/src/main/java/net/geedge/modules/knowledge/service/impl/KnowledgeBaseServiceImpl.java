@@ -1589,6 +1589,10 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		if(ObjectUtil.isEmpty(params.get("startTime")) || ObjectUtil.isEmpty(params.get("endTime"))){
 			throw new CNException(RCode.KNOWLEDGE_BASE_PARAM_NOTNULL);
 		}
+		KnowledgeBase knowledgeBase = this.getById(knowledgeBaseId);
+		if(ObjectUtil.isEmpty(knowledgeBase)) {
+			throw new CNException(RCode.KNOWLEDGE_BASE_NOT_EXIST);
+		}
 		Long startTime = Long.valueOf((String)params.get("startTime"));
 		Long endTime = Long.valueOf((String)params.get("endTime"));
 		// 计算粒度
@@ -1596,8 +1600,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		params.put("startTime",cn.hutool.core.date.DateUtil.date(startTime*1000));
 		params.put("endTime",cn.hutool.core.date.DateUtil.date(endTime*1000));
 		params.put("step", step);
-		params.put("knowledgeBaseId",knowledgeBaseId);
 		params.put("type", type);
+		params.put("tableName", knowledgeBase.getSource());
 		List<Map<String, Object>> datas = this.baseMapper.timedistribution(params);
 		datas.forEach(data ->{
 			String timeStr = (String) data.get("statTime");
