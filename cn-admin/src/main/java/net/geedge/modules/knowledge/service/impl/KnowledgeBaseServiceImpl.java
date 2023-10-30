@@ -349,7 +349,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	}
 
 	private void getRuleInfo(List<KnowledgeBase> knowledgeBases) {
-		List<DetectionRule> rules = detectionRuleService.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getRuleType,RuleType.INDICATOR_MATHCH.getValue()));
+		List<DetectionRule> rules = detectionRuleService.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getRuleType,RuleType.INDICATOR_MATHCH.getValue()).eq(DetectionRule::getIsValid, 1));
 		Map<Integer, KnowledgeBase> idKnowledge = knowledgeBases.stream().collect(Collectors.toMap(KnowledgeBase::getKnowledgeId, Function.identity()));
 		if(ObjectUtils.isNotEmpty(rules)) {
 			for(DetectionRule rule : rules) {
