@@ -22,7 +22,7 @@ CREATE TABLE `detection_rule` (
   `op_user` int(10) NOT NULL,
   `op_time` datetime NOT NULL,
   `is_built_in` int(11) NOT NULL DEFAULT 0,
-  `is_valid` int(11) NOT NULL DEFAULT 0,
+  `is_valid` int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY (`rule_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 

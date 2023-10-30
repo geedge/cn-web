@@ -91,7 +91,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		}
 		ruleVersionService.update(ruleVersion,null);
 		ruleCommitHistoryService.saveBatch(ruleCommitHistories);
-		detectionRules.stream().forEach(rule -> rule.setIsValid(1));
+		detectionRules.stream().forEach(rule -> rule.setIsValid(0));
 		this.updateBatchById(detectionRules);
 		return ids;
 	}
@@ -313,7 +313,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		}else {
 			// 未传入版本信息时 返回所有未被删除规则数据
 			List<DetectionRule> rules = this.list();
-			List<DetectionRule> addRules = rules.stream().filter(rule -> rule.getIsValid() == 0).collect(Collectors.toList());
+			List<DetectionRule> addRules = rules.stream().filter(rule -> rule.getIsValid() == 1).collect(Collectors.toList());
 			handlerRuleData(addRules);
 			result.put("addList", addRules);
 		}
@@ -326,7 +326,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 		result.put("statusList", new ArrayList<Map<String,Object>>());
 		result.put("eventTypeList", new ArrayList<Map<String,Object>>());
 		result.put("categoryList", new ArrayList<Map<String,Object>>());
-		List<DetectionRule> rules = this.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getIsValid, 0));
+		List<DetectionRule> rules = this.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getIsValid, 1));
 		if(ObjectUtil.isNotEmpty(rules)) {
 			// 各状态以及个数的统计信息
 			Map<Integer, List<DetectionRule>> statusRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getStatus));
