@@ -180,7 +180,7 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
             throw new CNException(RCode.RULE_TYPE_INVALID);
         }
         // rule name 不能重复
-        DetectionRule rule = this.getOne(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getName, detectionRule.getName())
+        DetectionRule rule = this.getOne(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getName, detectionRule.getName()).eq(DetectionRule::getIsValid, 1)
         		.ne(ObjectUtil.isNotEmpty(detectionRule.getRuleId()),DetectionRule::getRuleId,detectionRule.getRuleId()));
         if(ObjectUtils.isNotEmpty(rule)) {
         	throw new CNException(RCode.RULE_NAME_DUPLICATE);
