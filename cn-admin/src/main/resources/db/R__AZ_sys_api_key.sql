@@ -22,5 +22,6 @@ CREATE TABLE `sys_api_key`  (
 -- Records of sys_api_key
 -- ----------------------------
 INSERT INTO `sys_api_key` VALUES (1, 'ETL', '1a653ea0-d39b-4246-94b0-1ba95db4b6a7', 1, 1, '2023-10-16 10:01:21', NULL);
+INSERT INTO `sys_api_key` VALUES (2, 'Learning Engine', 'a2857bc21b01421b85953fc2c65b4d4c', 1, 1, '2023-10-30 18:10:15', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

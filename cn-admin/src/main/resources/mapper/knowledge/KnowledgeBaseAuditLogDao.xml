@@ -36,6 +36,9 @@
 					and op_user = #{params.opUser}
 				</when>
 			</choose>
+			<if test="params.apiKeyId != null ">
+				and api_key_id = #{params.apiKeyId}
+			</if>
             <if test="params.orderBy == null or params.orderBy == ''">
                 ORDER BY kbal.op_time DESC
             </if>
