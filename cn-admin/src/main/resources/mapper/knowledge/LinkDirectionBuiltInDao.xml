@@ -6,6 +6,7 @@
         <result property="id" column="id"></result>
         <result property="interfaceName" column="interface_name"></result>
         <result property="direction" column="direction"></result>
+        <result property="bandwidth" column="bandwidth"></result>
         <result property="peerProvince" column="peer_province"></result>
         <result property="peerCity" column="peer_city"></result>
      	<result property="linkId" column="link_id"></result>

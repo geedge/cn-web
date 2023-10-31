@@ -39,15 +39,16 @@ public class LinkDirectionBuiltInServiceImpl extends ServiceImpl<LinkDirectionBu
 	public void saveBatchJDBC(Connection conn, List<LinkDirectionBuiltIn> linkDirectionBuiltIns) {
 		if(ObjectUtil.isNotEmpty(linkDirectionBuiltIns)) {
 			try {
-				PreparedStatement pstm = conn.prepareStatement("insert into cn_link_direction_built_in (interface_name,direction,peer_province,peer_city,"
-						+ "link_id,knowledge_id) values (?,?,?,?,?,?)");
+				PreparedStatement pstm = conn.prepareStatement("insert into cn_link_direction_built_in (interface_name,direction,bandwidth,peer_province,peer_city,"
+						+ "link_id,knowledge_id) values (?,?,?,?,?,?,?)");
 				for(LinkDirectionBuiltIn linkDirectionBuiltIn : linkDirectionBuiltIns) {
 					pstm.setString(1, linkDirectionBuiltIn.getInterfaceName());
 					pstm.setInt(2, linkDirectionBuiltIn.getDirection());
-					pstm.setString(3, linkDirectionBuiltIn.getPeerProvince());
-					pstm.setString(4, linkDirectionBuiltIn.getPeerCity());
-					pstm.setInt(5, linkDirectionBuiltIn.getLinkId());
-					pstm.setInt(6, linkDirectionBuiltIn.getKnowledgeId());
+					pstm.setLong(3, linkDirectionBuiltIn.getBandwidth());
+					pstm.setString(4, linkDirectionBuiltIn.getPeerProvince());
+					pstm.setString(5, linkDirectionBuiltIn.getPeerCity());
+					pstm.setInt(6, linkDirectionBuiltIn.getLinkId());
+					pstm.setInt(7, linkDirectionBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -63,16 +64,17 @@ public class LinkDirectionBuiltInServiceImpl extends ServiceImpl<LinkDirectionBu
 	public void modifyBatchJDBC(Connection conn, List<LinkDirectionBuiltIn> linkDirectionBuiltIns) {
 		if(ObjectUtil.isNotEmpty(linkDirectionBuiltIns)) {
 			try {
-				PreparedStatement pstm = conn.prepareStatement("update cn_link_direction_built_in set interface_name =? ,direction =?,peer_province =?,peer_city=?,"
+				PreparedStatement pstm = conn.prepareStatement("update cn_link_direction_built_in set interface_name =? ,direction =?,bandwidth =?,peer_province =?,peer_city=?,"
 						+ "link_id=?,knowledge_id=? where id =?");
 				for(LinkDirectionBuiltIn linkDirectionBuiltIn : linkDirectionBuiltIns) {
 					pstm.setString(1, linkDirectionBuiltIn.getInterfaceName());
 					pstm.setInt(2, linkDirectionBuiltIn.getDirection());
-					pstm.setString(3, linkDirectionBuiltIn.getPeerProvince());
-					pstm.setString(4, linkDirectionBuiltIn.getPeerCity());
-					pstm.setInt(5, linkDirectionBuiltIn.getLinkId());
-					pstm.setInt(6, linkDirectionBuiltIn.getKnowledgeId());
-					pstm.setInt(7, linkDirectionBuiltIn.getId());
+					pstm.setLong(3, linkDirectionBuiltIn.getBandwidth());
+					pstm.setString(4, linkDirectionBuiltIn.getPeerProvince());
+					pstm.setString(5, linkDirectionBuiltIn.getPeerCity());
+					pstm.setInt(6, linkDirectionBuiltIn.getLinkId());
+					pstm.setInt(7, linkDirectionBuiltIn.getKnowledgeId());
+					pstm.setInt(8, linkDirectionBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
