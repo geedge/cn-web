@@ -149,7 +149,6 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	}
 	
 	public String renderHtml(Integer jobId,List<ReportTask> reportTasks,List<ReportResult> reportResults) {
-		String driverEnable = sysConfigService.getValue("driver_enable");
 		String uiStaticUrl = sysConfigService.getValue("ui_static_url");
 		String reportJsCommon = sysConfigService.getValue("report_js_common");
 		String reportFreemarkerCommon = sysConfigService.getValue("report_freemarker_common");
@@ -159,7 +158,6 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			uiStaticUrl = "localhost";
 		}
 		String html = "";
-		ChromeDriver driver =null;
 		StringWriter writer =null;
 		try {
 			// 获取html模板信息
@@ -197,27 +195,9 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			template.process(data, writer);
 			writer.flush();
 			html = writer.toString();
-			// 判断是否开启引擎
-			/*if(StrUtil.isNotBlank(driverEnable) && StrUtil.equals(driverEnable, "1")) {
-				if(CommonUtils.isLinux()) {
-					System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver");
-				}else {
-					System.setProperty("webdriver.chrome.driver", Constant.CONFIG_PATH + File.separator + "chromedriver.exe");
-				}
-				ChromeOptions options = new ChromeOptions();
-				// 后台运行，不弹出浏览器
-				options.addArguments("--headless");
-				options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-				options.addArguments("--no-sandbox"); // Bypass OS security model
-				options.addArguments("--window-size=1920x1080");
-				driver = new ChromeDriver(options);
-				driver.navigate().to("data:text/html;charset=utf-8," + html);
-				html = (String) driver.executeScript("return document.documentElement.innerHTML;");
-			}*/
 			String htmlName = reportJob.getName()+reportJob.getCtime().getTime()+".html";
 			String fileName = reportJob.getName()+reportJob.getCtime().getTime()+".pdf";
 			File file = FileUtil.file(Constant.TEMP_PATH + File.separator +htmlName);
-			File pdfFile = FileUtil.file(Constant.TEMP_PATH + File.separator +fileName);
 			// 删除废弃文件
 			if(file.exists()) {
 				file.delete();
@@ -229,14 +209,6 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			html="";
 			log.error("render report html error : {}",e.getMessage());
 		}finally {
-			/*if(ObjectUtil.isNotEmpty(driver)) {
-				try {
-					driver.close();
-				} catch (Exception e) {
-					log.error(e.getMessage());
-				}
-				driver.quit();
-			}*/
 			IoUtil.close(writer);
 		}
 		return html;
@@ -245,10 +217,6 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	@Override
 	public void downloadPdf(Integer jobId, HttpServletResponse response) throws Exception{
 		ReportJob job = this.getBaseMapper().selectById(jobId);
-		Integer pdfWidth = 1000;
-		Integer pdfHeight = 1700;
-		pdfWidth = StrUtil.isEmpty(sysConfigService.getValue("pdf_width"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_width"));
-		pdfHeight = StrUtil.isEmpty(sysConfigService.getValue("pdf_height"))?pdfWidth:Integer.valueOf(sysConfigService.getValue("pdf_height"));
 		String s3Enable = sysConfigService.getValue("s3_enable");
 		String s3Path = sysConfigService.getValue("s3_path");
 		String s3BucketName = sysConfigService.getValue("s3_bucket_name");
@@ -282,16 +250,6 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			request.releaseConnection();
 			createDefault.close();
 		}else if(job.getState()==1){
-			/*String htmlContent = this.queryView(jobId);
-			ConverterProperties converterProperties=new ConverterProperties();
-			FontProvider fontProvider=new DefaultFontProvider();
-			FontProgram fontProgram = FontProgramFactory.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
-			fontProvider.addFont(fontProgram);
-			converterProperties.setFontProvider(fontProvider);
-			//	        HtmlConverter.convertToPdf(htmlContent,response.getOutputStream(),converterProperties);
-			PdfDocument pdfDoc = new PdfDocument(new PdfWriter(response.getOutputStream()));
-			pdfDoc.setDefaultPageSize(new PageSize(pdfWidth,pdfHeight));
-			HtmlConverter.convertToPdf(htmlContent,pdfDoc,converterProperties);*/
 			this.queryView(jobId);
 			String fileName = job.getName()+job.getCtime().getTime()+".pdf";
 			File file = FileUtil.file(Constant.TEMP_PATH + File.separator+fileName);
@@ -355,14 +313,6 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					request.releaseConnection();
 					createDefault.close();
 				}else if(job.getState()==1){
-					/*String htmlContent = this.queryView(job.getId());
-					ConverterProperties converterProperties=new ConverterProperties();
-					FontProvider fontProvider=new DefaultFontProvider();
-					FontProgram fontProgram = FontProgramFactory.createFont(Constant.CONFIG_PATH+File.separator+"simsun.ttc,1");
-					fontProvider.addFont(fontProgram);
-					converterProperties.setFontProvider(fontProvider);
-					HtmlConverter.convertToPdf(htmlContent,outputStream,converterProperties);
-					files.add(FileUtil.file(Constant.TEMP_PATH+File.separator+fileName));*/
 					this.queryView(job.getId());
 					File f = FileUtil.file(Constant.TEMP_PATH + File.separator+fileName);
 					boolean exist = FileUtil.exist(f);
@@ -375,11 +325,9 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 					throw new CNException(RCode.REPORT_NOT_FINSHED);
 				}
 			}
-			
 			if(ObjectUtil.isEmpty(files)) {
 				throw new CNException(RCode.REPORT_NOT_FINSHED);
 			}
-			
 			response.setHeader("Content-Disposition", "attachment;filename=report.zip");
 	        response.setContentType("application/zip");
 	        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
@@ -439,7 +387,6 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			// 创建桶，如果存储桶已存在会创建失败
 			s3.createBucket(createBucketRequest);
 		}
-		
 		// 创建ObjectMetadata对象，可以设置S3请求头信息
 		ObjectMetadata metadata = new ObjectMetadata();
 		// 设置content-type，对应于文件的类型，最好也设置
@@ -455,7 +402,6 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		s3.putObject(bucketName, fileName, inputStream, metadata);
 		// 关闭流
 		IoUtil.close(inputStream);
-			
 		// 关闭AmazonS3Client
 		s3.shutdown();
 	}
