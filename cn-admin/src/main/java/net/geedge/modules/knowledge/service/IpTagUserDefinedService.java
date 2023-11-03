@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -20,4 +21,8 @@ public interface IpTagUserDefinedService extends IService<IpTagUserDefined> {
     void modifyBatchForBinary(List<IpTagUserDefined> ipTagUserDefineds);
 
     List<Map> queryIpEntityTag(String resource);
+    
+	void saveBatchJDBC(Connection conn,List<IpTagUserDefined> ipTagUserDefineds);
+    
+	void modifyBatchJDBC(Connection conn,List<IpTagUserDefined> ipTagUserDefineds);
 }

@@ -9,7 +9,7 @@ public enum TypeEnum {
 	VISUALDATASET("visual dataset"),VISUALDATASETFIELD("visual dataset field"),
 	UNKNOWN("unknown"),SYSTEM("system"), LINK("link"),LICENSE("license"), SYSTEMAPIKEY("sys api key"),SETTING("proxy setting"),
 	INTERFACE("proxy interface"),I18N("i18n setting"),CTL("ctl"),REPORTJOB("report job"),REPORTTEMP("report temp"),
-	KNOWLEDGEBASE("knowledge base");
+	KNOWLEDGEBASE("knowledge base"),DETECTIONRULE("detection rule");
 
 	private String value;
 

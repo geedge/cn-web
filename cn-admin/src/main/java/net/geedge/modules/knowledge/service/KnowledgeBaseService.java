@@ -2,6 +2,7 @@ package net.geedge.modules.knowledge.service;
 
 
 import net.geedge.common.utils.PageUtils;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -31,7 +32,11 @@ public interface KnowledgeBaseService extends IService<KnowledgeBase> {
         
     Map<String,Object> validateParam(Map<String,Object> params);
     
-    Integer importBatch(MultipartFile file,Integer knowledgeId, String action,Integer status,String description);
+    Integer importBatch(MultipartFile file, Integer knowledgeId, String action, Integer status, String color, String description);
 
     void validAndBuildDatasets(MultipartFile file, KnowledgeBase knowledgeBase, String action, List<Map<String, String>> importDataList, List<Integer> deleteDataIds);
+
+    void intelligenceLearningStatus(String type, Integer knowledgeId);
+    
+    Map<String,Object> timedistribution(Integer knowledgeBaseId,String type,Map<String,Object> params);
 }

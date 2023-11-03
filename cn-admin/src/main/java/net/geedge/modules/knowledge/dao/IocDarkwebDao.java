@@ -21,4 +21,8 @@ public interface IocDarkwebDao extends BaseMapper<IocDarkweb> {
     Map<String, Object> queryIpEntityTag(@Param("resource") String resource);
 
     Map<String, Object> queryDomainEntityTag(@Param("resource") String resource, @Param("isFuzzyQuery") Boolean isFuzzyQuery);
+
+    Map<String, Object> queryDomainDetectionEntityDetail(@Param("resource") String resource);
+
+    Map<String, Object> queryIpDetectionEntityDetail(@Param("resource") String resource);
 }

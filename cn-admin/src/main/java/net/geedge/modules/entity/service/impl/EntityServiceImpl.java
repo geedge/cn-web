@@ -63,6 +63,9 @@ public class EntityServiceImpl implements EntityService {
     @Autowired
     private DomainTagUserDefinedService domainTagUserDefinedService;
 
+    @Autowired
+    private DnsServerInfoBuiltInService dnsServerInfoBuiltInService;
+
     @Override
     public R queryEntityDetail(String entityType, String resource) {
         Map<String, Object> data = new HashMap<>();
@@ -153,10 +156,12 @@ public class EntityServiceImpl implements EntityService {
             Map<String, Object> malware = iocMalwareService.queryIpEntityTag(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryIpEntityTag(resource);
             Map<String, Object> psiphon3Ip = psiphon3IpService.queryIpEntityTag(resource);
+            Map<String, Object> dnsServerInfo = dnsServerInfoBuiltInService.queryIpEntityTag(resource);
             List<Map> userDefinedTags = ipTagUserDefinedService.queryIpEntityTag(resource);
             addValidDataToMap(data, "malware", malware);
             addValidDataToMap(data, "darkweb", darkweb);
             addValidDataToMap(data, "psiphon3Ip", psiphon3Ip);
+            addValidDataToMap(data, "dnsServerInfo", dnsServerInfo);
             addValidListToMap(data, "userDefinedTags", userDefinedTags);
         }
         return R.ok(data);

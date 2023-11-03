@@ -15,6 +15,8 @@ public class LinkDirectionBuiltIn {
 	private String interfaceName;
 	
 	private Integer direction;
+
+	private Long bandwidth;
 	
 	private String peerProvince;
 	

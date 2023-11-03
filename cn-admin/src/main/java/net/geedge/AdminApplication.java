@@ -3,33 +3,23 @@ package net.geedge;
 
 import java.util.TimeZone;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 //import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import cn.hutool.core.util.StrUtil;
-//import io.micrometer.core.instrument.MeterRegistry;
-import net.geedge.AdminApplication.SetupAutoConfiguration;
-
-@SpringBootApplication(scanBasePackages = { "net.geedge.setup" })
+@SpringBootApplication
 @EnableTransactionManagement
-@Import(SetupAutoConfiguration.class)
+//@Import(SetupAutoConfiguration.class)
 @PropertySource(value = { "file:./config/cn.properties","classpath:./config/cn.properties" }, encoding = "utf-8", ignoreResourceNotFound = true)
+@MapperScan("net.geedge.modules.*.dao")
 public class AdminApplication {
 
 	public static void main(String[] args) {
@@ -43,7 +33,7 @@ public class AdminApplication {
 		return (registry) -> registry.config().commonTags("application", applicationName);
 	}*/
 
-	static class SetupAutoConfiguration implements ImportBeanDefinitionRegistrar, EnvironmentAware {
+	/*static class SetupAutoConfiguration implements ImportBeanDefinitionRegistrar, EnvironmentAware {
 		private Environment environment;
 		
 		@Override
@@ -60,7 +50,7 @@ public class AdminApplication {
 		public void setEnvironment(Environment environment) {
 			this.environment = environment;
 		}
-	}
+	}*/
 
 	@Bean
 	public FilterRegistrationBean<CorsFilter> corsFilter() {

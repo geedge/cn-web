@@ -11,10 +11,12 @@ package net.geedge.common.config;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import net.geedge.common.converter.StringToEnumConverter;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -85,5 +87,10 @@ public class WebConfig implements WebMvcConfigurer {
     	
         SysConfigService sysConfigService = (SysConfigService) SpringContextUtils.getBean("sysConfigService");
         registry.addInterceptor(new SysMenuInterceptor(sysConfigService)).addPathPatterns("/sys/menu/**");
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToEnumConverter());
     }
 }

@@ -3,7 +3,6 @@ package net.geedge.modules.knowledge.controller;
 
 import java.util.List;
 import java.util.Map;
-
 import net.geedge.common.annotation.SysLog;
 import net.geedge.common.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.modules.knowledge.enums.IntelligenceLearningStatus;
 import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 
 @RestController
@@ -85,13 +85,25 @@ public class KnowledgeBaseController {
 	
 	@PostMapping("/items/batch")
 	public R importBatch(@Param("file") MultipartFile file,@Param("knowledgeId")Integer knowledgeId,@Param("action")String action
-			,@Param("status")Integer status,@Param("description")String description) {
+			,@Param("status")Integer status,@Param("color")String color,@Param("description")String description) {
 		ValidateUtils.is(file).notNull(RCode.KNOWLEDGE_FILE_ISNULL);
 		ValidateUtils.is(knowledgeId).notNull(RCode.KNOWLEDGE_ID_ISNULL);
 		ValidateUtils.is(action).notNull(RCode.KNOWLEDGE_IMPORT_ACTION_ISNULL);
 		ValidateUtils.is(action).regex("(overwrite|append|update)", RCode.KNOWLEDGE_IMPORT_ACTION_VALUE_ERROR);
-		knowledgeBaseService.importBatch(file,knowledgeId,action,status,description);
+		knowledgeBaseService.importBatch(file,knowledgeId,action,status,color,description);
 		return R.ok().putData("knowledgeId",knowledgeId);
+	}
+
+	@PostMapping("/intelligence-learning/{type}")
+	public R intelligenceLearningStatus(@PathVariable(value = "type") IntelligenceLearningStatus type, @Param("knowledgeId")Integer knowledgeId){
+		knowledgeBaseService.intelligenceLearningStatus(type.getValue(), knowledgeId);
+		return R.ok().putData("knowledgeId",knowledgeId);
+	}
+	
+	@RequestMapping("/{knowledgeId}/{type}/timedistribution")
+	public R timedistribution(@PathVariable("knowledgeId")Integer knowledgeId,@PathVariable("type")String type,@RequestParam Map<String,Object> params) {
+		Map result = knowledgeBaseService.timedistribution(knowledgeId,type,params);
+		return R.ok(result);
 	}
 }
 

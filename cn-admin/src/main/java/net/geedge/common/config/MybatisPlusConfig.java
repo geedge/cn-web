@@ -192,6 +192,7 @@ public class MybatisPlusConfig {
 				}
 
 				List<String> packages = AutoConfigurationPackages.get(this.beanFactory);
+				packages.add("net.geedge");
 				if (logger.isDebugEnabled()) {
 					packages.forEach(pkg -> logger.debug("Using auto-configuration base package '{}'", pkg));
 				}

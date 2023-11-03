@@ -175,9 +175,15 @@ public class Constant {
 		Map<String, String> knowledgeOrderFieldMap = new HashMap<>();
 		knowledgeOrderFieldMap.put("opTime", "op_time");
 		knowledgeOrderFieldMap.put("knowledgeId", "knowledge_id");
+		
+		Map<String, String> ruleOrderFieldMap = new HashMap<>();
+		ruleOrderFieldMap.put("opTime", "op_time");
+		ruleOrderFieldMap.put("ruleId", "rule_id");
+		
 		TABLE_NAME_ORDER_FIELD_MAPPING.put("cn_knowledge_base", knowledgeOrderFieldMap);
 		TABLE_NAME_ORDER_FIELD_MAPPING.put("cn_knowledge_base_audit_log", knowledgeBaseAuditLogOrderFieldMap);
 		TABLE_NAME_ORDER_FIELD_MAPPING.put("report_job", reportOrderFieldMap);
+		TABLE_NAME_ORDER_FIELD_MAPPING.put("detection_rule", ruleOrderFieldMap);
 	}
 
 	/**
@@ -272,4 +278,24 @@ public class Constant {
 
 	//实体关系表别名（clickhouse.cyber_narrator_galaxy.cn_entity_relation） e
 	public static final String ENTITY_RELATION_TABLE_ALIAS = "e";
+	
+	/**
+	 * 规则类型
+	 */
+	public enum RuleType {
+		
+		INDICATOR_MATHCH("indicator_match"),
+		
+		THRESHOLD("threshold");
+
+		private String value;
+
+		RuleType(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
+	}
 }

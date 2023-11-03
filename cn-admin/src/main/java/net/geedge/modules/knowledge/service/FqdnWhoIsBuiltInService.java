@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.modules.knowledge.entity.FqdnWhoIsBuiltIn;
 
+import java.sql.Connection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,4 +17,8 @@ public interface FqdnWhoIsBuiltInService extends IService<FqdnWhoIsBuiltIn> {
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
 
     Map<String, Object> queryEntityDetail(String resource, Boolean isFuzzyQuery);
+    
+    void saveBatchJDBC(Connection conn,List<FqdnWhoIsBuiltIn> fqdnWhoIsBuiltIns);
+    
+    void modifyBatchJDBC(Connection conn,List<FqdnWhoIsBuiltIn> fqdnWhoIsBuiltIns);
 }

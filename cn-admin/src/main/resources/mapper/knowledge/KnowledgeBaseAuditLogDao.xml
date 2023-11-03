@@ -11,13 +11,15 @@
         <result property="status" column="status"></result>
         <result property="isPublished" column="is_published"></result>
         <result property="opTime" column="op_time"></result>
+        <result property="color" column="color"></result>
+        <result property="api_key_id" column="apiKeyId"></result>
         <association property="user" column="op_user" select="queryUserById"></association>
     </resultMap>
 	
 	<select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
         select id, name
         from sys_user
-        where id = #{id}
+        where  id = #{id}
           and status = 1
     </select>
 
@@ -26,6 +28,17 @@
              	kbal.* 
              from cn_knowledge_base_audit_log kbal 
              where knowledge_id = ${params.knowledgeId}
+             <choose>
+				<when test="params.opUser != null and params.opUser == -1">
+					and op_user != 0
+				</when>
+				<when test="params.opUser != null and params.opUser != -1">
+					and op_user = #{params.opUser}
+				</when>
+			</choose>
+			<if test="params.apiKeyId != null ">
+				and api_key_id = #{params.apiKeyId}
+			</if>
             <if test="params.orderBy == null or params.orderBy == ''">
                 ORDER BY kbal.op_time DESC
             </if>

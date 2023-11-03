@@ -333,10 +333,29 @@ public enum RCode {
     KNOWLEDGE_IMPORT_ACTION_ISNULL(591021,"KnowledgeBase import action is required"),
     KNOWLEDGE_IMPORT_ACTION_VALUE_ERROR(591022,"KnowledgeBase import action must be one of overwrite,append,update"),
     KNOWLEDGE_EXCELFILE_TYPE_ERROR(591023, "The type can only be csv"),
+    KNOWLEDGE_RULE_USE_ERROR(591024,"KnowledgeBase is reference rules that cannot be deleted"),
     
     ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
     ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
     ENTITY_TAG_NOT_EXIST(601003,"Entity tag not exist"),
+    
+    RULE_ID_ISNULL(611001,"Rule id is required"),
+    RULE_NOT_EXIST(611002,"Rule does not exist"),
+    RULE_BUILTIN_ERROR(611003,"Rule built-in data can not be removed"),
+    RULE_CONFIG_FORMAT_ERROR(611004,"Rule config format error"),
+    RULE_CONFIG_DB_ISNULL(611005,"Rule config info datasource is required"),
+    RULE_TYPE_ISNULL(611006,"Rule type is required"),
+    RULE_EVENT_TYPE_ISNULL(611007,"Rule event-type is required"),
+    RULE_NAME_ISNULL(611008,"Rule name is required"),
+    RULE_CATEGORY_ISNULL(611009,"Rule category is required"),
+    RULE_TRIGGER_ISNULL(611010,"Rule trigger is required"),
+    RULE_TYPE_INVALID(611011,"Rule type is not in the enum range"),
+    RULE_NAME_DUPLICATE(611012,"Rule name duplicate"),
+    RULE_TRIGGER_FORMAT_ERROR(611013,"Rule trigger format error"),
+    RULE_TRIGGER_INTERVAL_ISNULL(611014,"Rule interval is required"),
+    RULE_TRIGGER_RESET_INTERVAL_ISNULL(611015,"Rule reset interval is required"),
+    RULE_TRIGGER_INTERVAL_FORMAT_ERROR(611016,"Rule interval format error"),
+    RULE_TRIGGER_RESET_INTERVAL_FORMAT_ERROR(611017,"Rule reset interval format error"),
     /**
      * stat相关
      */

@@ -17,6 +17,17 @@
         <result property="ip2" column="ip2"></result>
         <association property="user" column="op_user" select="queryUserById"></association>
     </resultMap>
+
+    <resultMap id="IpTagMap" type="java.util.Map">
+        <result property="id" column="id"></result>
+        <result property="tagValue" column="tagValue"></result>
+        <result property="updateTime" column="updateTime"></result>
+        <result property="createTime" column="createTime"></result>
+        <result property="isValid" column="isValid"></result>
+        <result property="knowledgeId" column="knowledgeId"></result>
+        <association property="knowledgeBase" column="knowledgeId" select="queryKnowledgeById" javaType="java.util.Map"></association>
+    </resultMap>
+
     <select id="queryPageByKnowledgeId" resultMap="IpTagUserDefined">
         select * from
         cn_ip_tag_user_defined
@@ -25,7 +36,6 @@
             ORDER BY id
         </if>
     </select>
-
 
     <select id="queryUserById" resultType="net.geedge.modules.sys.entity.SysUserEntity">
         select id, name
@@ -75,7 +85,14 @@
     	</foreach>
     </update>
 
-    <select id="queryIpEntityTag" resultType="java.util.Map">
+    <select id="queryKnowledgeById" resultType="java.util.Map">
+        select knowledge_id as knowledgeId, color
+        from cn_knowledge_base
+        where knowledge_id = #{knowledgeId}
+          and status = 1
+    </select>
+
+    <select id="queryIpEntityTag" resultMap="IpTagMap" parameterType="java.util.Map">
         select id as id, tag_value as tagValue, op_time as updateTime,
         c_time as createTime, is_valid as isValid, knowledge_id as knowledgeId from
         cn_ip_tag_user_defined

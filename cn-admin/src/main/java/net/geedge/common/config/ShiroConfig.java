@@ -26,7 +26,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
-
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import net.geedge.common.interceptor.TokenCheckFilter;
 import net.geedge.common.utils.Constant;
@@ -141,6 +141,7 @@ public class ShiroConfig {
 	 *
 	 * @return
 	 */
+	@Bean
 	public RedisManager redisManager() {
 		RedisManager redisManager = new RedisManager();
 		redisManager.setHost(config.getRedisHost() + ":" + config.getRedisPort());
@@ -221,11 +222,14 @@ public class ShiroConfig {
 	}
 
 	private Integer getTimeOutData() {
-		/*String timeout = sysconfigService.getValue(Constant.SYSCONFIG_SESSION_TIMEOUT_KEY);
+		SysConfigEntity configEntity = sysconfigService.getOne(new QueryWrapper<SysConfigEntity>().lambda()
+				.eq(SysConfigEntity::getCkey, Constant.SYSCONFIG_SESSION_TIMEOUT_KEY));
 		Integer loginExpiration = 30;
-		if (StrUtil.isNotBlank(timeout)) {
-			loginExpiration = Integer.valueOf(timeout);
-		}*/
-		return 360;
+		if (ObjectUtil.isNotEmpty(configEntity)) {
+			loginExpiration = StrUtil.isNotBlank(configEntity.getCvalue())
+					? Integer.valueOf(configEntity.getCvalue())
+					: loginExpiration;
+		}
+		return loginExpiration;
 	}
 }
