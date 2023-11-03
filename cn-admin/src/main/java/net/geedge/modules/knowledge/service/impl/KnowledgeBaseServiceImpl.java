@@ -1191,7 +1191,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 					if (ObjectUtil.isNotEmpty(tmpMap)) {
 						importDataList.add(tmpMap);
 					}
-					if(importDataList.size() == 50) {
+					if(importDataList.size() == 100) {
 						if (StrUtil.equals(action, "update")) {
 							this.updateDataHandler(importDataList,knowledgeBase,validateColumns);
 						}
