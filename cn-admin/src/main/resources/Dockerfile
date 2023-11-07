@@ -1,5 +1,5 @@
 ARG JDK_IMAGE
-#设置依赖于jdk:1.8.0_73(自定义jdk),需要在docker中安装该版本的jdk,如不想使用该版本,可自行指定jdk版本
+#设置依赖于jdk:11.0.21,需要在docker中安装该版本的jdk,如不想使用该版本,可自行指定jdk版本
 FROM ${JDK_IMAGE}
 MAINTAINER shizhendong shizhendong@zdjizhi.com
 
@@ -23,7 +23,7 @@ ADD  go.tar.gz ./
 #ENTRYPOINT ["java","-jar","syncconfigtoredis.jar"]
 RUN yum -y install bind-utils pango.x86_64 libXcomposite.x86_64 libXcursor.x86_64 libXdamage.x86_64 libXext.x86_64 libXi.x86_64 libXtst.x86_64 cups-libs.x86_64 libXScrnSaver.x86_64 libXrandr.x86_64 GConf2.x86_64 alsa-lib.x86_64 atk.x86_64 gtk3.x86_64 && chmod -R 755 /opt/cn/cn-web/go/ && go build xjar.go && chmod +x /opt/cn/cn-web/xjar
 #默认启动jar
-ENTRYPOINT ["./xjar","java","--add-opens java.base/jdk.internal.loader=ALL-UNNAMED","--add-opens  jdk.zipfs/jdk.nio.zipfs=ALL-UNNAMED","-jar","cn-admin.xjar"]
+ENTRYPOINT ["sh","-c","./xjar java --add-opens java.base/jdk.internal.loader=ALL-UNNAMED --add-opens jdk.zipfs/jdk.nio.zipfs=ALL-UNNAMED -jar cn-admin.xjar"]
 
 #装到docker容器中名称是syncconfigtoredis,tag是1.0
 #docker build -t syncconfigtoredis:1.0 .
