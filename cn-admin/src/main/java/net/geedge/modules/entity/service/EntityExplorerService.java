@@ -16,4 +16,10 @@ public interface EntityExplorerService {
     Map<String, Object> getAssociationQueryParam(String resource);
 
     String getBasicQueryFilter(String resource);
+
+    List<String> getPrimayForFilter(String resource, String dataName);
+
+    String formatHasFilter(String resource);
+
+    List<String> gatTagsForFilter(String resource);
 }

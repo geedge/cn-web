@@ -10,8 +10,13 @@ import net.geedge.modules.sys.service.SysConfigService;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
+import net.sf.jsqlparser.expression.Function;
+import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
+import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.InExpression;
+import net.sf.jsqlparser.expression.operators.relational.LikeExpression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
@@ -59,15 +64,12 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
         ExpressionDeParser result =  new ExpressionDeParser() {
             @Override
             public void visit(Column column) {
+                removeDoubleQuotes(column);
+                String columnName = "";
+                if(ObjectUtil.isNotEmpty(column.getTable())) {
+                    columnName = column.getTable() + "." + column.getColumnName();
+                }
                 for (Map<String, Object> map : searchColumns) {
-                    if(column.getColumnName().contains("\"")) {
-                        String newColumn = column.getColumnName().replace("\"", "").trim().replace(" ",".");
-                        column.setColumnName(newColumn);
-                    }
-                    String columnName = "";
-                    if(ObjectUtil.isNotEmpty(column.getTable())) {
-                        columnName = column.getTable() + "." + column.getColumnName();
-                    }
                     if (column.getColumnName().equals((String)map.get("label")) || columnName.equals((String)map.get("label"))){
                         Map<String, Object> connector =(Map<String, Object>) map.get("connector");
                         String table = (String)connector.get("alias");
@@ -86,13 +88,9 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
         ExpressionDeParser result =  new ExpressionDeParser() {
             @Override
             public void visit(Column column) {
+                removeDoubleQuotes(column);
                 for (Map<String, Object> map : searchColumns) {
-                    if(column.getColumnName().contains("\"")) {
-                        String newColumn = column.getColumnName().replace("\"", "").trim().replace(" ",".");
-                        column.setColumnName(newColumn);
-                    }
-                    String columnName = "";
-                    if (column.getColumnName().equals((String)map.get("label")) || columnName.equals((String)map.get("label"))){
+                    if (column.getColumnName().equals((String)map.get("label"))){
                         column.setColumnName((String) map.get("name"));
                         break;
                     }
@@ -192,5 +190,136 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
         Map<String, Object> entityMetadata = (Map<String, Object>)entityExploreConfigs.get(dataName);
         List<Map<String, Object>> searchColumns = (List<Map<String, Object>>) entityMetadata.get("searchColumns");
         return searchColumns;
+    }
+
+    @Override
+    public List<String> getPrimayForFilter(String resource, String dataName) {
+        List<String> result = new ArrayList<>();
+        if(ObjectUtil.isNotEmpty(resource)) {
+            List<Map<String, Object>> searchColumns = getSearchColumns(dataName);
+            try {
+                Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
+                ExpressionDeParser expressionDeParser = null;
+                if("entityMetadata".equals(dataName)) {
+                    result = getPrimayParse(resource,searchColumns);
+                }
+            } catch (JSQLParserException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    private List<String> getPrimayParse(String resource, List<Map<String, Object>> searchColumns) throws JSQLParserException {
+        List<String> result = new ArrayList<>();
+        Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
+        ExpressionDeParser expressionDeParser =  new ExpressionDeParser() {
+            @Override
+            public void visit(Column column) {
+                removeDoubleQuotes(column);
+                String columnName = "";
+                if(ObjectUtil.isNotEmpty(column.getTable())) {
+                    columnName = column.getTable() + "." + column.getColumnName();
+                }
+                for (Map<String, Object> map : searchColumns) {
+                    if (column.getColumnName().equals((String)map.get("label")) || columnName.equals((String)map.get("label"))){
+                        Map<String, Object> doc =(Map<String, Object>) map.get("doc");
+                        Map<String, Object> constraints = (Map<String, Object>)doc.get("constraints");
+                        String primay = (String)constraints.get("primay");
+                        List<String> split = Arrays.asList(primay.split(","));
+                        result.addAll(split);
+                    }
+                }
+            }
+        };
+        expr.accept(expressionDeParser);
+        return result;
+    }
+
+    private void removeDoubleQuotes(Column column) {
+        if(column.getColumnName().contains("\"")) {
+            String newColumn = column.getColumnName().replace("\"", "").trim().replace(" ",".");
+            column.setColumnName(newColumn);
+        }
+    }
+
+    @Override
+    public String formatHasFilter(String resource) {
+        StringBuffer result = new StringBuffer();
+        if(ObjectUtil.isNotEmpty(resource)) {
+            try {
+                Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
+                ExpressionDeParser expressionDeParser = formatHasEdp(result);
+                expr.accept(expressionDeParser);
+            } catch (JSQLParserException e) {
+                e.printStackTrace();
+            }
+        }
+        removeSuperfluousAnd(result);
+        return result.toString().trim();
+    }
+
+    private ExpressionDeParser formatHasEdp(StringBuffer whereBuffer) {
+        ExpressionDeParser result =  new ExpressionDeParser() {
+            @Override
+            public void visit(Function function) {
+                if(function.getName().equals("has")) {
+                    ExpressionList parameters = function.getParameters();
+                    List<Expression> expressions = parameters.getExpressions();
+                    whereBuffer.append(StrUtil.concat(false," AND (has(",expressions.get(0).toString(),", concat('ip.',",expressions.get(1).toString(),
+                            ")) OR has(",expressions.get(0).toString(),", concat('domain.',",expressions.get(1).toString(),
+                            ")) OR has(",expressions.get(0).toString(),", concat('app.',",expressions.get(1).toString(),")))"));
+                }
+            }
+            @Override
+            public void visit(LikeExpression likeExpression) {
+                whereBuffer.append(StrUtil.concat(false," AND ",likeExpression.toString()));
+            }
+            @Override
+            public void visit(EqualsTo equalsTo) {
+                whereBuffer.append(StrUtil.concat(false," AND ",equalsTo.toString()));
+            }
+            @Override
+            public void visit(InExpression inExpression) {
+                whereBuffer.append(StrUtil.concat(false," AND ",inExpression.toString()));
+            }
+        };
+        return result;
+    }
+
+    private void removeSuperfluousAnd(StringBuffer whereBuffer) {
+        int firstAndIndex = whereBuffer.indexOf("AND");
+        if(firstAndIndex != -1) {
+            whereBuffer.delete(firstAndIndex,firstAndIndex + 3);
+        }
+    }
+
+    @Override
+    public List<String> gatTagsForFilter(String resource) {
+        List<String> result = new ArrayList<>();
+        if(ObjectUtil.isNotEmpty(resource)) {
+            try {
+                Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
+                ExpressionDeParser expressionDeParser = gatTagsForFilterEdp(result);
+                expr.accept(expressionDeParser);
+            } catch (JSQLParserException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    private ExpressionDeParser gatTagsForFilterEdp(List<String> list) {
+        ExpressionDeParser result =  new ExpressionDeParser() {
+            @Override
+            public void visit(Function function) {
+                if (function.getName().equals("has")) {
+                    ExpressionList parameters = function.getParameters();
+                    List<Expression> expressions = parameters.getExpressions();
+                    list.add(expressions.get(1).toString());
+                }
+            }
+        };
+        return result;
     }
 }
