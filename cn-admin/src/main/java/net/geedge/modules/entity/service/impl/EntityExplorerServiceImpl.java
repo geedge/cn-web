@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Auther: lijinyang
@@ -194,19 +195,20 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
 
     @Override
     public List<String> getPrimayForFilter(String resource, String dataName) {
-        List<String> result = new ArrayList<>();
+        List<String> primay = new ArrayList<>();
         if(ObjectUtil.isNotEmpty(resource)) {
             List<Map<String, Object>> searchColumns = getSearchColumns(dataName);
             try {
                 Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
                 ExpressionDeParser expressionDeParser = null;
                 if("entityMetadata".equals(dataName)) {
-                    result = getPrimayParse(resource,searchColumns);
+                    primay = getPrimayParse(resource,searchColumns);
                 }
             } catch (JSQLParserException e) {
                 e.printStackTrace();
             }
         }
+        List<String> result = primay.stream().distinct().collect(Collectors.toList());
         return result;
     }
 
@@ -226,8 +228,10 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
                         Map<String, Object> doc =(Map<String, Object>) map.get("doc");
                         Map<String, Object> constraints = (Map<String, Object>)doc.get("constraints");
                         String primay = (String)constraints.get("primay");
-                        List<String> split = Arrays.asList(primay.split(","));
-                        result.addAll(split);
+                        if(StrUtil.isNotEmpty(primay)){
+                            List<String> split = Arrays.asList(primay.split(","));
+                            result.addAll(split);
+                        }
                     }
                 }
             }
