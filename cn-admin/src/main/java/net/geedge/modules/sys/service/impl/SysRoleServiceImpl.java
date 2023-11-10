@@ -99,7 +99,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
         if (CollectionUtils.isEmpty(menuIds))
             throw new CNException(RCode.SYS_ROLE_MENUID_ISNULL);
 
-        List<SysMenuEntity> menuList = sysMenuService.list();
+        List<SysMenuEntity> menuList = sysMenuService.list(new LambdaQueryWrapper<SysMenuEntity>().eq(SysMenuEntity::getState, 1));
         List<Integer> menuIdList = menuList.stream().map(SysMenuEntity::getId).collect(Collectors.toList());
 
         for (Integer menuId : menuIds) {
