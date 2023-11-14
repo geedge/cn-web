@@ -136,8 +136,8 @@ public class ReportHandlerTask extends QuartzJobBean {
      */
 	public void createRpcJob(String rpcHost,Map<Integer, List<ReportTask>> stateTasks) {
 		if(ObjectUtil.isNotEmpty(stateTasks.get(0))) {			
-        	//http://ip:port/admin/query/jobs
-        	String createJobPath = StrUtil.str(rpcHost+"admin/query/jobs");
+        	//http://ip:port/query/jobs
+        	String createJobPath = StrUtil.str(rpcHost+"query/jobs");
         	List<ReportTask> initTasks = stateTasks.get(0);
         	Set<Integer> tempIds = initTasks.stream().map(ReportTask::getTempId).collect(Collectors.toSet());
         	Collection<ReportTemp> temps = reportTempService.listByIds(tempIds);
@@ -196,7 +196,7 @@ public class ReportHandlerTask extends QuartzJobBean {
         			if(status == 201) {
         				List<Map<String,Object>> resultData = (List<Map<String, Object>>) result.get("data");
         				Integer taskId = (Integer) result.get("taskId");
-        				String jobId = (String) resultData.get(0).get("jobId");
+        				String jobId = (String) resultData.get(0).get("job_id");
         				ReportTask task = idTasks.get(taskId);
         				if(ObjectUtil.isNotEmpty(task)) {
         					task.setState(1);
@@ -230,8 +230,8 @@ public class ReportHandlerTask extends QuartzJobBean {
         	List<ReportTask> modifyTasks = stateTasks.get(1);
         	List<CompletableFuture<Map<String, Object>>> futureList = ListUtil.list(false);
         	for(ReportTask task : modifyTasks) {
-        		//http://ip:port/admin/query/jobs/[jobId]/status
-            	String modifyJobPath = StrUtil.str(rpcHost+"admin/query/jobs/"+task.getCredential()+"/status");
+        		//http://ip:port/query/jobs/[jobId]/status
+            	String modifyJobPath = StrUtil.str(rpcHost+"query/jobs/"+task.getCredential()+"/status");
             	CompletableFuture<Map<String, Object>> future = CompletableFuture.supplyAsync(() -> {
             		ResponseEntity<Map> response = restTemplate.getForEntity(modifyJobPath,Map.class);
 	        		Map result = (Map) response.getBody();
@@ -297,8 +297,8 @@ public class ReportHandlerTask extends QuartzJobBean {
         	List<CompletableFuture<Map<String, Object>>> futureList = ListUtil.list(false);
         	for(ReportTask task : resultTasks) {
         		CompletableFuture<Map<String, Object>> future = CompletableFuture.supplyAsync(() -> {
-    				// http://ip:port/admin/query/jobs/[jobId]/report
-                	String resultJobPath = StrUtil.str(rpcHost+"admin/query/jobs/"+task.getCredential()+"/report");
+    				// http://ip:port/query/jobs/[jobId]/report
+                	String resultJobPath = StrUtil.str(rpcHost+"query/jobs/"+task.getCredential()+"/report");
                 	ResponseEntity<Map> response = restTemplate.getForEntity(resultJobPath,Map.class);
 	        		Map result = (Map) response.getBody();
         			result.put("taskId", task.getId());
