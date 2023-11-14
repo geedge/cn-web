@@ -27,7 +27,7 @@
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        select id,asn,organization,knowledge_id,is_valid from
+        select id as id,asn as asn,organization as organization,knowledge_id as knowledgeId,is_valid as isValid from
         cn_ip_asn_built_in
         where
         <choose>
