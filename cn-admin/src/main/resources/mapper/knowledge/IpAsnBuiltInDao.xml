@@ -27,14 +27,20 @@
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        select t.id as id, t.asn as asn, t.organization as organization, t.knowledge_id as knowledgeId, t.is_valid as isValid from
-            (   select * from
-                cn_ip_asn_built_in
-                where start_ip_binary &lt;= INET6_ATON(#{resource})
-                ORDER BY start_ip_binary DESC
-                limit 1
-            ) AS t
-        where t.end_ip_binary &gt;= INET6_ATON(#{resource})
+        select id,asn,organization,knowledge_id,is_valid from
+        cn_ip_asn_built_in
+        where
+        <choose>
+            <when test="!isIpv6">
+                addr_type = 4
+            </when>
+            <otherwise>
+                addr_type = 6
+            </otherwise>
+        </choose>
+        and INET6_ATON(#{resource}) BETWEEN start_ip_binary and end_ip_binary
+        ORDER BY id DESC
+        limit 1
     </select>
     
     <insert id="insertBatchForBinary">

@@ -15,6 +15,9 @@ import org.apache.commons.lang.StringUtils;
 import com.googlecode.ipv6.IPv6Address;
 import com.googlecode.ipv6.IPv6Network;
 
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,6 +105,14 @@ public class IPUtils {
         map.put("endIpStr",b.toLongString());
         return map;
     }
-	
-	
+
+    /**
+     * 判断是否是ipv6
+     * @param address
+     * @return
+     */
+    public static boolean isIpv6Address(String address) throws UnknownHostException {
+        final InetAddress inetAddress = InetAddress.getByName(address);
+        return inetAddress instanceof Inet6Address;
+    }
 }

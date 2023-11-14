@@ -3,6 +3,7 @@ package net.geedge.modules.detection.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.net.InetAddresses;
+import net.geedge.common.utils.IPUtils;
 import net.geedge.common.utils.R;
 import net.geedge.modules.detection.service.DetectionService;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +59,13 @@ public class DetectionServiceImpl implements DetectionService {
             addValidDataToMap(data, "malware", malware);
             addValidDataToMap(data, "darkweb", darkweb);
         } else if ("ip".equals(entityType)){
-            Map<String, Object> asn = ipAsnBuiltInService.queryEntityDetail(resource);
+            boolean isIpv6 = false;
+            try {
+                isIpv6 = IPUtils.isIpv6Address(resource);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+            Map<String, Object> asn = ipAsnBuiltInService.queryEntityDetail(resource,isIpv6);
             Map<String, Object> malware = iocMalwareService.queryIpDetectionEntityDetail(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryIpDetectionEntityDetail(resource);
             String ipNumber = null;

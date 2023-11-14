@@ -17,7 +17,7 @@ public interface IpAsnBuiltInService extends IService<IpAsnBuiltIn> {
 
     PageUtils queryListByKnowledgeId(Map<String,Object> params);
 
-    Map<String, Object> queryEntityDetail(String resource);
+    Map<String, Object> queryEntityDetail(String resource,boolean isIpv6);
     
 	void modifyBatchForBinary(List<IpAsnBuiltIn> ipAsnBuiltIns);
 

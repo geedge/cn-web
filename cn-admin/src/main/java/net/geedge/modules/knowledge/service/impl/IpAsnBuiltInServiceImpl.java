@@ -40,8 +40,8 @@ public class IpAsnBuiltInServiceImpl extends ServiceImpl<IpAsnBuiltInDao, IpAsnB
 
 
     @Override
-    public Map<String, Object> queryEntityDetail(String resource) {
-        return this.baseMapper.queryEntityDetail(resource);
+    public Map<String, Object> queryEntityDetail(String resource,boolean isIpv6) {
+        return this.baseMapper.queryEntityDetail(resource,isIpv6);
     }
     
     @Override
