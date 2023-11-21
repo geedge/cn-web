@@ -39,7 +39,7 @@
             </otherwise>
         </choose>
         AND start_ip_binary &lt;= INET6_ATON(#{resource})
-        ORDER BY start_ip_binary DESC LIMIT 35) AS t
+        ORDER BY start_ip_binary DESC LIMIT 500) AS t
         WHERE end_ip_binary &gt;= INET6_ATON(#{resource})
         ORDER BY id DESC LIMIT 1
     </select>
