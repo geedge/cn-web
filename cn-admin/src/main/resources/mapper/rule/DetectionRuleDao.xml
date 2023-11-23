@@ -24,8 +24,9 @@
         detection_rule
         <where>
             1 = 1 and is_valid = 1 and is_built_in !=1 
-            <if test=" params.name !=null and params.name !='' ">
-                and name like concat ( '%', #{params.name}, '%')
+            <if test=" params.q !=null and params.q !='' ">
+                and ((name like concat ( '%', #{params.q}, '%')) or (rule_id = #{params.q}) 
+                or (description like concat ( '%', #{params.q}, '%')))
             </if>
             <if test=" params.status !=null ">
                 and status = #{params.status}

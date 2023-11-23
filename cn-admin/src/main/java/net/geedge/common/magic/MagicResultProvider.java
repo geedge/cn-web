@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Component;
 import org.ssssssss.magicapi.core.context.RequestEntity;
 import org.ssssssss.magicapi.core.interceptor.ResultProvider;
+import org.ssssssss.magicapi.core.servlet.MagicHttpServletResponse;
 
 import com.alibaba.fastjson.JSON;
 
@@ -32,7 +35,7 @@ public class MagicResultProvider implements ResultProvider {
             result.put("code",code);
             result.put("message",message);
             result.put("time",new Date());	
-            requestEntity.getResponse().setStatus(code);
+            ((HttpServletResponse)requestEntity.getResponse().getResponse()).setStatus(code);
             return result;
         }else {
         	int status = (int) ((Map)data).get("status");

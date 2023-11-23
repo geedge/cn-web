@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 
@@ -90,7 +92,13 @@ public class EntityServiceImpl implements EntityService {
             addValidDataToMap(data, "icp", icp);
             addValidDataToMap(data, "category", category);
         } else if ("ip".equals(entityType)){
-            Map<String, Object> asn = ipAsnBuiltInService.queryEntityDetail(resource);
+            boolean isIpv6 = false;
+            try {
+                isIpv6 = IPUtils.isIpv6Address(resource);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+            Map<String, Object> asn = ipAsnBuiltInService.queryEntityDetail(resource,isIpv6);
             String ipNumber = null;
             try {
                 ipNumber = toIpNumber(resource);

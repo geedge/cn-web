@@ -22,7 +22,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<junit.version>4.12</junit.version>
 		<jedis.version>2.9.0</jedis.version>
 		<druid.version>1.1.13</druid.version>
@@ -42,7 +42,7 @@
 		<swagger.version>2.7.0</swagger.version>
 		<mibble.version>2.9.3</mibble.version>
 		<log4j2.version>2.16.0</log4j2.version>
-		<magic.version>2.0.2</magic.version>
+		<magic.version>2.1.1</magic.version>
 	</properties>
 
 	<dependencies>
