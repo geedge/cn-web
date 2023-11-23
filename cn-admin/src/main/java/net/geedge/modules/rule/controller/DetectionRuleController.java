@@ -78,8 +78,8 @@ public class DetectionRuleController {
 	}
 	
 	@GetMapping("/statistics")
-	public R statistics() {
-		Map<String,Object> result = detectionRuleService.statistics();
+	public R statistics(@RequestParam Map<String,Object> params) {
+		Map<String,Object> result = detectionRuleService.statistics(params);
 		return R.ok(result);
 	}
 }

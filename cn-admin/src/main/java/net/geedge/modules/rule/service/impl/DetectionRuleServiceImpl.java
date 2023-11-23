@@ -321,12 +321,14 @@ public class DetectionRuleServiceImpl extends ServiceImpl<DetectionRuleDao, Dete
 	}
 
 	@Override
-	public Map<String, Object> statistics() {
+	public Map<String, Object> statistics(Map<String,Object> params) {
+		String isBuiltIn = (String) params.get("isBuiltIn");
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("statusList", new ArrayList<Map<String,Object>>());
 		result.put("eventTypeList", new ArrayList<Map<String,Object>>());
 		result.put("categoryList", new ArrayList<Map<String,Object>>());
-		List<DetectionRule> rules = this.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getIsValid, 1));
+		List<DetectionRule> rules = this.list(new QueryWrapper<DetectionRule>().lambda().eq(DetectionRule::getIsValid, 1)
+				.eq(ObjectUtil.isNotEmpty(isBuiltIn), DetectionRule::getIsBuiltIn, isBuiltIn));
 		if(ObjectUtil.isNotEmpty(rules)) {
 			// 各状态以及个数的统计信息
 			Map<Integer, List<DetectionRule>> statusRules = rules.stream().collect(Collectors.groupingBy(DetectionRule::getStatus));

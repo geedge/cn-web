@@ -22,7 +22,7 @@ public interface DetectionRuleService extends IService<DetectionRule>{
 	
 	Map<String,Object> queryDetection(Integer queryDetection);
 	
-	Map<String,Object> statistics();
+	Map<String,Object> statistics(Map<String,Object> params);
 	
 	void handlerRuleData(List<DetectionRule> detectionRules);
 }
