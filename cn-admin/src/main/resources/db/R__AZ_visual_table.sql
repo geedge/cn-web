@@ -306,7 +306,7 @@ INSERT INTO `visual_chart` VALUES (2110, 'Subscribe基本信息', '', 21, 0, 712
 INSERT INTO `visual_chart` VALUES (2111, 'Subscribe KPI', '', 21, 0, 714, 0, 5, 4, 8, '', 1, '2023-11-20 18:35:01', 1, '2023-11-20 18:35:01', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (2112, 'Subscribe地图', '', 21, 0, 3, 4, 5, 12, 8, '', 1, '2023-11-20 18:35:01', 1, '2023-11-20 18:35:01', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (2113, 'Subscribe top app', '', 21, 0, 715, 16, 5, 8, 8, '', 1, '2023-11-20 18:35:01', 1, '2023-11-20 18:35:01', '', 1, 0, 0);
-INSERT INTO `visual_chart` VALUES (2114, 'Subscribe流量图', '', 21, 0, 107, 0, 13, 24, 7, '', 1, '2023-11-20 18:35:01', 1, '2023-11-20 18:35:01', '', 1, 0, 0);
+INSERT INTO `visual_chart` VALUES (2114, 'Subscribe流量图', '', 21, 0, 108, 0, 13, 24, 7, '', 1, '2023-11-20 18:35:01', 1, '2023-11-20 18:35:01', '', 1, 0, 0);
 INSERT INTO `visual_chart` VALUES (2115, 'Subscribe各维度图表', '', 21, 0, 713, 0, 20, 24, 8, '', 1, '2023-11-20 18:35:01', 1, '2023-11-20 18:35:01', '', 1, 0, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
