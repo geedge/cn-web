@@ -45,7 +45,7 @@ public class ReportJobController extends AbstractController{
 	
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE, type = TypeEnum.REPORTJOB)
-	@RequiresPermissions({"report:job:delete"})
+	/*@RequiresPermissions({"report:job:delete"})*/
 	public R remove(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.REPORT_JOB_ID_ISNULL);
 		reportJobService.removeReportJobs(ids);
