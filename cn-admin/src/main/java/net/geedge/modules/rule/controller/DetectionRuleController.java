@@ -3,6 +3,8 @@ package net.geedge.modules.rule.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +46,7 @@ public class DetectionRuleController {
 	
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE,type = TypeEnum.DETECTIONRULE)
+	@RequiresPermissions({"detection:rule:delete"})
 	public R removeRule(@RequestParam Integer... ruleIds) {
 		ValidateUtils.is(ruleIds).notNull(RCode.RULE_ID_ISNULL);
 		List<Integer> removeRuleIds = detectionRuleService.removeRules(Arrays.asList(ruleIds));
@@ -52,6 +55,7 @@ public class DetectionRuleController {
 	
 	@PostMapping
 	@SysLog(operation = OperationEnum.ADD,type = TypeEnum.DETECTIONRULE)
+	@RequiresPermissions({"detection:rule:add"})
 	public R saveDetectionRule(@RequestBody DetectionRule detectionRule) {
 		DetectionRule rule = detectionRuleService.saveDetectionRule(detectionRule);
 		return R.ok(rule.getRuleId());
@@ -59,6 +63,7 @@ public class DetectionRuleController {
 	
 	@PutMapping
 	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.DETECTIONRULE)
+	@RequiresPermissions({"detection:rule:update"})
 	public R modifyDetectionRule(@RequestBody DetectionRule detectionRule) {
 		ValidateUtils.is(detectionRule.getRuleId()).notNull(RCode.RULE_ID_ISNULL);
 		DetectionRule rule = detectionRuleService.modifyDetectionRule(detectionRule);
