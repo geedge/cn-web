@@ -47,7 +47,7 @@ public class ReportTempController extends AbstractController{
 	
 	@PostMapping
 	@SysLog(operation = OperationEnum.ADD, type = TypeEnum.REPORTTEMP)
-	/*@RequiresPermissions({"report:temp:add"})*/
+	@RequiresPermissions({"report:temp:add"})
 	public R save(@RequestBody ReportTemp reportTemp) {
 		reportTempService.saveOrModify(reportTemp);
 		return R.ok();
@@ -55,7 +55,7 @@ public class ReportTempController extends AbstractController{
 	
 	@PutMapping
 	@SysLog(operation = OperationEnum.UPDATE, type = TypeEnum.REPORTTEMP)
-	/*@RequiresPermissions({"report:temp:update"})*/
+	@RequiresPermissions({"report:temp:update"})
 	public R update(@RequestBody ReportTemp reportTemp) {
 		ValidateUtils.is(reportTemp.getId()).notNull(RCode.REPORT_TEMP_ID_ISNULL);
 		reportTempService.saveOrModify(reportTemp);
@@ -64,7 +64,7 @@ public class ReportTempController extends AbstractController{
 	
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE, type = TypeEnum.REPORTTEMP)
-	/*@RequiresPermissions({"report:temp:delete"})*/
+	@RequiresPermissions({"report:temp:delete"})
 	public R remove(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.REPORT_TEMP_ID_ISNULL);
 		reportTempService.removeReportTemps(ids);
@@ -73,7 +73,7 @@ public class ReportTempController extends AbstractController{
 	
 	@PostMapping("/createJob")
 	@SysLog(operation = OperationEnum.ADD, type = TypeEnum.REPORTJOB)
-	/*@RequiresPermissions({"report:job:add"})*/
+	@RequiresPermissions({"report:job:add"})
 	public R createJob(@RequestParam Integer id,@RequestParam String startTime,@RequestParam String endTime) {
 		ValidateUtils.is(id).notNull(RCode.REPORT_TEMP_ID_ISNULL);
 		ReportTemp temp = reportTempService.getById(id);

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import net.geedge.common.annotation.SysLog;
 import net.geedge.common.utils.*;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,7 @@ public class KnowledgeBaseController {
 
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE, type = TypeEnum.KNOWLEDGEBASE)
+	@RequiresPermissions({"knowledge:base:delete"})
 	public R remove(@RequestParam("knowledgeIds") String knowledgeIds) {
 		ValidateUtils.is(knowledgeIds).notNull(RCode.KNOWLEDGE_IDS_ISNULL);
 		List<Integer> result = knowledgeBaseService.remove(knowledgeIds);
@@ -38,6 +41,7 @@ public class KnowledgeBaseController {
 	}
 	
 	@PostMapping("/parser")
+	@RequiresPermissions({"knowledge:base:add"})
 	public R importKnowledgeBase(@Param("file") MultipartFile file,@Param("source")String source) {
 		ValidateUtils.is(file).notNull(RCode.KNOWLEDGE_FILE_ISNULL);
 		ValidateUtils.is(source).notNull(RCode.KNOWLEDGE_SOURCE_ISNULL);
@@ -69,6 +73,7 @@ public class KnowledgeBaseController {
 	
 	@PostMapping
 	@SysLog(operation = OperationEnum.ADD, type = TypeEnum.KNOWLEDGEBASE)
+	@RequiresPermissions({"knowledge:base:add"})
 	public R addKnowledgeBase(@RequestBody Map<String,Object> params) {
 		Integer id = knowledgeBaseService.addOrModifyKnowledgeBase(params);
 		return R.ok().put("knowledgeId", id);
@@ -76,6 +81,7 @@ public class KnowledgeBaseController {
 	
 	@PutMapping
 	@SysLog(operation = OperationEnum.UPDATE, type = TypeEnum.KNOWLEDGEBASE)
+	@RequiresPermissions({"knowledge:base:update"})
 	public R modifyKnowledgeBase(@RequestBody Map<String,Object> params) {
 		Integer knowledgeId = (Integer) params.get("knowledgeId");
 		ValidateUtils.is(knowledgeId).notNull(RCode.KNOWLEDGE_ID_ISNULL);
@@ -84,6 +90,7 @@ public class KnowledgeBaseController {
 	}
 	
 	@PostMapping("/items/batch")
+	@RequiresPermissions({"knowledge:base:add"})
 	public R importBatch(@Param("file") MultipartFile file,@Param("knowledgeId")Integer knowledgeId,@Param("action")String action
 			,@Param("status")Integer status,@Param("color")String color,@Param("description")String description) {
 		ValidateUtils.is(file).notNull(RCode.KNOWLEDGE_FILE_ISNULL);

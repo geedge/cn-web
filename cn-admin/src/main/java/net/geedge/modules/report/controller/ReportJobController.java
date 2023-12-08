@@ -45,7 +45,7 @@ public class ReportJobController extends AbstractController{
 	
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE, type = TypeEnum.REPORTJOB)
-	/*@RequiresPermissions({"report:job:delete"})*/
+	@RequiresPermissions({"report:job:delete"})
 	public R remove(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.REPORT_JOB_ID_ISNULL);
 		reportJobService.removeReportJobs(ids);
@@ -85,12 +85,14 @@ public class ReportJobController extends AbstractController{
 	}
 	
 	@PutMapping("/restart")
+	@RequiresPermissions({"report:job:update"})
 	public R restartJob(@RequestBody Map<String,Object> param) {
 		reportJobService.restartJob(param);
 		return R.ok();
 	}
 	
 	@PutMapping("/reupload")
+	@RequiresPermissions({"report:job:update"})
 	public R reuploadJob(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.REPORT_JOB_ID_ISNULL);
 		reportJobService.reuploadJob(ids);

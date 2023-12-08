@@ -31,7 +31,7 @@ public class LinkController extends AbstractController{
 	
 	@PostMapping
 	@SysLog(operation = OperationEnum.ADD,type = TypeEnum.LINK)
-	/*@RequiresPermissions({"sys:link:save"})*/
+	@RequiresPermissions({"sys:link:save"})
 	public R save(@RequestBody Link link) {
 		ValidateUtils.is(link.getName()).notNull(RCode.LINK_NAME_ISNULL);
 		ValidateUtils.is(link.getUrl()).notNull(RCode.LINK_URL_ISNULL);
@@ -41,7 +41,7 @@ public class LinkController extends AbstractController{
 	
 	@PutMapping
 	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.LINK)
-	/*@RequiresPermissions({"sys:link:update"})*/
+	@RequiresPermissions({"sys:link:update"})
 	public R update(@RequestBody Link link) {
 		ValidateUtils.is(link.getId()).notNull(RCode.LINK_ID_ISNULL);
 		ValidateUtils.is(link.getName()).notNull(RCode.LINK_NAME_ISNULL);
@@ -52,7 +52,7 @@ public class LinkController extends AbstractController{
 	
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE,type = TypeEnum.LINK)
-	/*@RequiresPermissions({"sys:link:delete"})*/
+	@RequiresPermissions({"sys:link:delete"})
 	public R remove(@RequestParam String ids) {
 		ValidateUtils.is(ids).notNull(RCode.LINK_ID_ISNULL);
 		String[] split = ids.split(",");
