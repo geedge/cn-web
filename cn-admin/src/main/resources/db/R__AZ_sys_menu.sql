@@ -62,5 +62,7 @@ INSERT INTO `sys_menu` VALUES (35, 'Appearance', 'appearance', 'appearance.appea
 INSERT INTO `sys_menu` VALUES (36, 'Edit appearence', 'editAppearence', 'overall.edit', 35, 'sys:config:update', 2, '', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (37, 'I18n', 'I18N', 'I18N', 0, NULL, 1, '/i18n', 'cn-icon cn-icon-i18n', NULL, 91, 1);
 INSERT INTO `sys_menu` VALUES (38, 'Link monitor', 'linkMonitor', 'overall.linkMonitor', 1, NULL, 1, '/panel/linkMonitor', '', NULL, 31, 1);
+INSERT INTO `sys_menu` VALUES (39, 'System', 'system', 'overall.system', 0, NULL, 1, 'redirect:/system', 'cn-icon cn-icon-system', NULL, 61, 1);
+INSERT INTO `sys_menu` VALUES (40, 'Plugin', 'plugin', 'plugin.pluginManagement', 39, NULL, 1, '/system/plugin', 'cn-icon cn-icon-plugin', NULL, 1, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
