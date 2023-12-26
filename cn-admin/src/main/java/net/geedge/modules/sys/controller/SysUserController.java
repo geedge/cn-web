@@ -81,7 +81,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@PostMapping
 	@SysLog(operation = OperationEnum.ADD,type = TypeEnum.ACCOUNT)
-	/*    @RequiresPermissions("sys:user:save")*/
+	@RequiresPermissions("sys:user:add")
 	public R save(@RequestBody SysUserEntity user){
 		Integer id = sysUserService.saveUser(user);
 		return R.ok().putData("id", id);
@@ -92,7 +92,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@PutMapping
 	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.ACCOUNT)
-	/*@RequiresPermissions("sys:user:update")*/
+	@RequiresPermissions("sys:user:update")
 	public R update(@RequestBody SysUserEntity user){
 		ValidateUtils.is(user).notNull(RCode.SYS_USER_ID_ISNULL)
 			.and(user.getId()).notNull(RCode.SYS_USER_ID_ISNULL);
@@ -105,7 +105,7 @@ public class SysUserController extends AbstractController {
 	 */
 	@DeleteMapping
 	@SysLog(operation = OperationEnum.DELETE,type = TypeEnum.ACCOUNT)
-	/*@RequiresPermissions("sys:user:delete")*/
+	@RequiresPermissions("sys:user:delete")
 	public R delete(String ids) {
 		sysUserService.deleteUsers(ids);
 		return R.ok();

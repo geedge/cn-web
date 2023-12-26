@@ -67,6 +67,7 @@ public class SysConfigController extends AbstractController {
 	 */
 	@SysLog
 	@PostMapping("/config")
+	@RequiresPermissions("sys:config:add")
 	public R save(@RequestBody SysConfigEntity config) {
 		ValidatorUtils.validateEntity(config);
 		sysConfigService.saveConfig(config);
@@ -78,6 +79,7 @@ public class SysConfigController extends AbstractController {
 	 */
 	@SysLog
 	@PutMapping("/config")
+	@RequiresPermissions("sys:config:update")
 	public R update(@RequestBody SysConfigEntity config) {
 		ValidatorUtils.validateEntity(config);
 		sysConfigService.update(config);
@@ -89,6 +91,7 @@ public class SysConfigController extends AbstractController {
 	 */
 	@SysLog
 	@DeleteMapping("/config")
+	@RequiresPermissions("sys:config:delete")
 	public R delete(@RequestBody Long[] ids) {
 		sysConfigService.deleteBatch(ids);
 		return R.ok();
@@ -109,6 +112,7 @@ public class SysConfigController extends AbstractController {
 	 */
 	@PutMapping("/appearance")
 	@SysLog(operation = OperationEnum.UPDATE, type = TypeEnum.SYSTEM)
+	@RequiresPermissions("sys:config:update")
 	public R updateAppearance(@RequestBody Map<String, String> params) {
 		sysConfigService.saveBasic(params);
 		return R.ok();
@@ -130,6 +134,7 @@ public class SysConfigController extends AbstractController {
 	 */
 	@PutMapping("/batchModify")
 	@SysLog(operation = OperationEnum.UPDATE, type = TypeEnum.SYSTEM)
+	@RequiresPermissions("sys:config:update")
 	public R updateSecurity(@RequestBody Map<String,String> params) {
 		sysConfigService.updateByKey(params);
 		return R.ok();

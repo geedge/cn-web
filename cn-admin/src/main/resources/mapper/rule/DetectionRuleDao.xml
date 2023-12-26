@@ -23,13 +23,16 @@
         select * from
         detection_rule
         <where>
-            1 = 1 and is_valid = 1 and is_built_in !=1 
+            1 = 1 and is_valid = 1
             <if test=" params.q !=null and params.q !='' ">
                 and ((name like concat ( '%', #{params.q}, '%')) or (rule_id = #{params.q}) 
                 or (description like concat ( '%', #{params.q}, '%')))
             </if>
             <if test=" params.status !=null ">
                 and status = #{params.status}
+            </if>
+            <if test=" params.isBuiltIn !=null ">
+                and is_built_in = #{params.isBuiltIn}
             </if>
             <if test="params.category != null and params.category.size > 0">
                 and category in
