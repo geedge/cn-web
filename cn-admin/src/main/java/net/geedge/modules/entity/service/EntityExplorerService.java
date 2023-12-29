@@ -21,5 +21,7 @@ public interface EntityExplorerService {
 
     String formatHasFilter(String resource);
 
-    List<String> gatTagsForFilter(String resource);
+    List<String> getTagsForFilter(String resource);
+
+    String formatSingleHasFilter(String resource,String entity);
 }

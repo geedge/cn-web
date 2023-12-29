@@ -299,12 +299,12 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
     }
 
     @Override
-    public List<String> gatTagsForFilter(String resource) {
+    public List<String> getTagsForFilter(String resource) {
         List<String> result = new ArrayList<>();
         if(ObjectUtil.isNotEmpty(resource)) {
             try {
                 Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
-                ExpressionDeParser expressionDeParser = gatTagsForFilterEdp(result);
+                ExpressionDeParser expressionDeParser = getTagsForFilterEdp(result);
                 expr.accept(expressionDeParser);
             } catch (JSQLParserException e) {
                 e.printStackTrace();
@@ -313,7 +313,7 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
         return result;
     }
 
-    private ExpressionDeParser gatTagsForFilterEdp(List<String> list) {
+    private ExpressionDeParser getTagsForFilterEdp(List<String> list) {
         ExpressionDeParser result =  new ExpressionDeParser() {
             @Override
             public void visit(Function function) {
@@ -322,6 +322,57 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
                     List<Expression> expressions = parameters.getExpressions();
                     list.add(expressions.get(1).toString());
                 }
+            }
+        };
+        return result;
+    }
+
+    @Override
+    public String formatSingleHasFilter(String resource,String entity) {
+        StringBuffer result = new StringBuffer();
+        if(ObjectUtil.isNotEmpty(resource) && ObjectUtil.isNotEmpty(entity)) {
+            try {
+                Expression expr = CCJSqlParserUtil.parseCondExpression(resource);
+                ExpressionDeParser expressionDeParser = formatSingleHasEdp(result,entity);
+                expr.accept(expressionDeParser);
+            } catch (JSQLParserException e) {
+                e.printStackTrace();
+            }
+        }
+        removeSuperfluousAnd(result);
+        return result.toString().trim();
+    }
+
+    private ExpressionDeParser formatSingleHasEdp(StringBuffer whereBuffer, String entity) {
+        ExpressionDeParser result =  new ExpressionDeParser() {
+            @Override
+            public void visit(Function function) {
+                if(function.getName().equals("has")) {
+                    ExpressionList parameters = function.getParameters();
+                    List<Expression> expressions = parameters.getExpressions();
+                    if("ip".equals(entity)) {
+                        whereBuffer.append(StrUtil.concat(false, " AND has(", expressions.get(0).toString(), ", concat('ip.',", expressions.get(1).toString(),
+                                "))"));
+                    }else if("app".equals(entity)) {
+                        whereBuffer.append(StrUtil.concat(false, " AND has(", expressions.get(0).toString(), ", concat('app.',", expressions.get(1).toString(),
+                                "))"));
+                    }else if("domain".equals(entity)) {
+                        whereBuffer.append(StrUtil.concat(false, " AND has(", expressions.get(0).toString(), ", concat('domain.',", expressions.get(1).toString(),
+                                "))"));
+                    }
+                }
+            }
+            @Override
+            public void visit(LikeExpression likeExpression) {
+                whereBuffer.append(StrUtil.concat(false," AND ",likeExpression.toString()));
+            }
+            @Override
+            public void visit(EqualsTo equalsTo) {
+                whereBuffer.append(StrUtil.concat(false," AND ",equalsTo.toString()));
+            }
+            @Override
+            public void visit(InExpression inExpression) {
+                whereBuffer.append(StrUtil.concat(false," AND ",inExpression.toString()));
             }
         };
         return result;
