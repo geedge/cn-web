@@ -57,7 +57,10 @@ public class EntityServiceImpl implements EntityService {
     private IocDarkwebService iocDarkwebService;
 
     @Autowired
-    private Psiphon3IpService psiphon3IpService;
+    private VpnLearningIpService vpnLearningIpService;
+
+    @Autowired
+    private VpnLearningDomainService vpnLearningDomainService;
 
     @Autowired
     private IpTagUserDefinedService ipTagUserDefinedService;
@@ -150,6 +153,7 @@ public class EntityServiceImpl implements EntityService {
         } else if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource, false);
             Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
+            Map<String, Object> vpnLearningDomain = vpnLearningDomainService.queryDomainEntityTag(resource);
             if (ObjectUtil.isEmpty(malware)) {
                 malware = iocMalwareService.queryDomainEntityTag(resource, true);
             }
@@ -159,16 +163,17 @@ public class EntityServiceImpl implements EntityService {
             List<Map> userDefinedTags = domainTagUserDefinedService.queryDomainEntityTag(resource);
             addValidDataToMap(data, "malware", malware);
             addValidDataToMap(data, "darkweb", darkweb);
+            addValidDataToMap(data, "vpnLearningDomain", vpnLearningDomain);
             addValidListToMap(data, "userDefinedTags", userDefinedTags);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryIpEntityTag(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryIpEntityTag(resource);
-            Map<String, Object> psiphon3Ip = psiphon3IpService.queryIpEntityTag(resource);
+            Map<String, Object> vpnLearningIp = vpnLearningIpService.queryIpEntityTag(resource);
             Map<String, Object> dnsServerInfo = dnsServerInfoBuiltInService.queryIpEntityTag(resource);
             List<Map> userDefinedTags = ipTagUserDefinedService.queryIpEntityTag(resource);
             addValidDataToMap(data, "malware", malware);
             addValidDataToMap(data, "darkweb", darkweb);
-            addValidDataToMap(data, "psiphon3Ip", psiphon3Ip);
+            addValidDataToMap(data, "vpnLearningIp", vpnLearningIp);
             addValidDataToMap(data, "dnsServerInfo", dnsServerInfo);
             addValidListToMap(data, "userDefinedTags", userDefinedTags);
         }
@@ -265,14 +270,11 @@ public class EntityServiceImpl implements EntityService {
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = createEnableMap("malware", iocMalwareService.queryIpEntityTag(resource));
             Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryIpEntityTag(resource));
-            Map<String, Object> psiphon3Ip = createEnableMap("psiphon3Ip", psiphon3IpService.queryIpEntityTag(resource));
             userDefinedTags = createEnableList(ipTagUserDefinedService.queryIpEntityTag(resource));
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
-            mapChangeTimestamp(psiphon3Ip);
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
-            addEntityList(entityList, psiphon3Ip);
         }
         userDefinedTags = listChangeTimestamp(userDefinedTags);
         addUserDefinedTag(entityList, userDefinedTags);

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.VpnLearningDomainDao">
+
+    <resultMap id="VpnLearningDomain" type="net.geedge.modules.knowledge.entity.VpnLearningDomain">
+        <result property="id" column="id"></result>
+        <result property="domain" column="domain"></result>
+        <result property="pluginId" column="plugin_id"></result>
+        <result property="pluginName" column="plugin_name"></result>
+        <result property="opTime" column="op_time"></result>
+        <result property="cTime" column="c_time"></result>
+        <result property="opUser" column="op_user"></result>
+        <result property="isValid" column="is_valid"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+    </resultMap>
+
+    <resultMap id="VpnLearningDomainTagMap" type="java.util.Map">
+        <result property="pluginId" column="pluginId"></result>
+        <result property="pluginName" column="pluginName"></result>
+        <result property="isValid" column="isValid"></result>
+        <result property="knowledgeId" column="knowledgeId"></result>
+        <association property="knowledgeBase" column="knowledgeId" select="queryKnowledgeById" javaType="java.util.Map"></association>
+    </resultMap>
+
+    <select id="queryKnowledgeById" resultType="java.util.Map">
+        select knowledge_id as knowledgeId
+        from cn_knowledge_base
+        where knowledge_id = #{knowledgeId}
+          and status = 1
+    </select>
+
+    <select id="queryDomainEntityTag" resultMap="VpnLearningDomainTagMap" parameterType="java.util.Map">
+        select plugin_id as pluginId, plugin_name as pluginName,
+               is_valid as isValid, knowledge_id as knowledgeId from
+            cn_vpn_learning_domain
+        where domain = #{resource}
+    </select>
+
+</mapper>

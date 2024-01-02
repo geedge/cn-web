@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.VpnLearningIpDao">
+
+    <resultMap id="VpnLearningIp" type="net.geedge.modules.knowledge.entity.VpnLearningIp">
+        <result property="id" column="id"></result>
+        <result property="addrFormat" column="addr_format"></result>
+        <result property="ip1" column="ip1"></result>
+        <result property="ip2" column="ip2"></result>
+        <result property="startIpBinary" column="start_ip_binary"></result>
+        <result property="endIpBinary" column="end_ip_binary"></result>
+        <result property="pluginId" column="plugin_id"></result>
+        <result property="pluginName" column="plugin_name"></result>
+        <result property="vpnServiceName" column="vpn_service_name"></result>
+        <result property="method" column="method"></result>
+        <result property="confidence" column="confidence"></result>
+        <result property="opTime" column="op_time"></result>
+        <result property="cTime" column="c_time"></result>
+        <result property="opUser" column="op_user"></result>
+        <result property="isValid" column="is_valid"></result>
+        <result property="knowledgeId" column="knowledge_id"></result>
+        <association property="knowledgeBase" column="knowledgeId" select="queryKnowledgeById"></association>
+    </resultMap>
+
+    <resultMap id="VpnLearningIpTagMap" type="java.util.Map">
+        <result property="pluginId" column="pluginId"></result>
+        <result property="pluginName" column="pluginName"></result>
+        <result property="vpnServiceName" column="vpnServiceName"></result>
+        <result property="method" column="method"></result>
+        <result property="confidence" column="confidence"></result>
+        <result property="isValid" column="isValid"></result>
+        <result property="knowledgeId" column="knowledgeId"></result>
+        <association property="knowledgeBase" column="knowledgeId" select="queryKnowledgeById" javaType="java.util.Map"></association>
+    </resultMap>
+
+    <select id="queryKnowledgeById" resultType="java.util.Map">
+        select knowledge_id as knowledgeId
+        from cn_knowledge_base
+        where knowledge_id = #{knowledgeId}
+          and status = 1
+    </select>
+
+    <select id="queryIpEntityTag" resultMap="VpnLearningIpTagMap" parameterType="java.util.Map">
+        select t.plugin_id as pluginId, t.plugin_name as pluginName, t.vpn_service_name as vpnServiceName,
+               t.method as method, t.confidence as confidence, t.is_valid as isValid, t.knowledge_id as knowledgeId from
+            (   select * from
+                cn_vpn_learning_ip
+                where start_ip_binary &lt;= INET6_ATON(#{resource})
+                ORDER BY start_ip_binary DESC
+                limit 1
+            ) AS t
+        where t.end_ip_binary &gt;= INET6_ATON(#{resource})
+    </select>
+
+</mapper>
