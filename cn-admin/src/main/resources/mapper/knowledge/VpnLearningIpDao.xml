@@ -41,15 +41,10 @@
     </select>
 
     <select id="queryIpEntityTag" resultMap="VpnLearningIpTagMap" parameterType="java.util.Map">
-        select t.plugin_id as pluginId, t.plugin_name as pluginName, t.vpn_service_name as vpnServiceName,
-               t.method as method, t.confidence as confidence, t.is_valid as isValid, t.knowledge_id as knowledgeId from
-            (   select * from
-                cn_vpn_learning_ip
-                where start_ip_binary &lt;= INET6_ATON(#{resource})
-                ORDER BY start_ip_binary DESC
-                limit 1
-            ) AS t
-        where t.end_ip_binary &gt;= INET6_ATON(#{resource})
+        select plugin_id as pluginId, plugin_name as pluginName, vpn_service_name as vpnServiceName,
+        method as method, confidence as confidence, is_valid as isValid, knowledge_id as knowledgeId from
+        cn_vpn_learning_ip
+        where start_ip_binary &lt;= INET6_ATON(#{resource}) AND end_ip_binary &gt;= INET6_ATON(#{resource})
     </select>
 
 </mapper>

@@ -6,6 +6,7 @@ import net.geedge.modules.knowledge.entity.VpnLearningDomain;
 import net.geedge.modules.knowledge.service.VpnLearningDomainService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Map;
 public class VpnLearningDomainServiceImpl extends ServiceImpl<VpnLearningDomainDao, VpnLearningDomain> implements VpnLearningDomainService {
 
     @Override
-    public Map<String, Object> queryDomainEntityTag(String resource) {
+    public List<Map> queryDomainEntityTag(String resource) {
         return this.baseMapper.queryDomainEntityTag(resource);
     }
 }

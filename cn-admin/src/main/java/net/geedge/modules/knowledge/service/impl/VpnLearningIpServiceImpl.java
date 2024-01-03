@@ -6,6 +6,7 @@ import net.geedge.modules.knowledge.entity.VpnLearningIp;
 import net.geedge.modules.knowledge.service.VpnLearningIpService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Map;
 public class VpnLearningIpServiceImpl extends ServiceImpl<VpnLearningIpDao, VpnLearningIp> implements VpnLearningIpService {
 
     @Override
-    public Map<String, Object> queryIpEntityTag(String resource) {
+    public List<Map> queryIpEntityTag(String resource) {
         return this.baseMapper.queryIpEntityTag(resource);
     }
 }

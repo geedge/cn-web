@@ -3,6 +3,7 @@ package net.geedge.modules.knowledge.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.geedge.modules.knowledge.entity.VpnLearningDomain;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,5 +12,5 @@ import java.util.Map;
  */
 public interface VpnLearningDomainService extends IService<VpnLearningDomain> {
 
-    Map<String, Object> queryDomainEntityTag(String resource);
+    List<Map> queryDomainEntityTag(String resource);
 }

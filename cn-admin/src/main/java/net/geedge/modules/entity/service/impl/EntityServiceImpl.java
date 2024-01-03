@@ -153,7 +153,7 @@ public class EntityServiceImpl implements EntityService {
         } else if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource, false);
             Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
-            Map<String, Object> vpnLearningDomain = vpnLearningDomainService.queryDomainEntityTag(resource);
+            List<Map> vpnLearningDomain = vpnLearningDomainService.queryDomainEntityTag(resource);
             if (ObjectUtil.isEmpty(malware)) {
                 malware = iocMalwareService.queryDomainEntityTag(resource, true);
             }
@@ -163,18 +163,18 @@ public class EntityServiceImpl implements EntityService {
             List<Map> userDefinedTags = domainTagUserDefinedService.queryDomainEntityTag(resource);
             addValidDataToMap(data, "malware", malware);
             addValidDataToMap(data, "darkweb", darkweb);
-            addValidDataToMap(data, "vpnLearningDomain", vpnLearningDomain);
+            addValidListToMap(data, "vpnLearningDomain", vpnLearningDomain);
             addValidListToMap(data, "userDefinedTags", userDefinedTags);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryIpEntityTag(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryIpEntityTag(resource);
-            Map<String, Object> vpnLearningIp = vpnLearningIpService.queryIpEntityTag(resource);
             Map<String, Object> dnsServerInfo = dnsServerInfoBuiltInService.queryIpEntityTag(resource);
+            List<Map> vpnLearningIp = vpnLearningIpService.queryIpEntityTag(resource);
             List<Map> userDefinedTags = ipTagUserDefinedService.queryIpEntityTag(resource);
             addValidDataToMap(data, "malware", malware);
             addValidDataToMap(data, "darkweb", darkweb);
-            addValidDataToMap(data, "vpnLearningIp", vpnLearningIp);
             addValidDataToMap(data, "dnsServerInfo", dnsServerInfo);
+            addValidListToMap(data, "vpnLearningIp", vpnLearningIp);
             addValidListToMap(data, "userDefinedTags", userDefinedTags);
         }
         return R.ok(data);

@@ -5,6 +5,7 @@ import net.geedge.modules.knowledge.entity.VpnLearningIp;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,5 +15,5 @@ import java.util.Map;
 @Mapper
 public interface VpnLearningIpDao extends BaseMapper<VpnLearningIp> {
 
-    Map<String, Object> queryIpEntityTag(@Param("resource") String resource);
+    List<Map> queryIpEntityTag(@Param("resource") String resource);
 }
