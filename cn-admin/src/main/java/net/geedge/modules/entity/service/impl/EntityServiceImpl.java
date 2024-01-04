@@ -254,6 +254,7 @@ public class EntityServiceImpl implements EntityService {
             if (ObjectUtil.isEmpty(whois)) {
                 darkweb = iocDarkwebService.queryDomainEntityTag(resource, true);
             }
+            List<Map> vpnLearningDomain = createEnableList(vpnLearningDomainService.queryDomainEntityTag(resource));
             userDefinedTags = createEnableList(domainTagUserDefinedService.queryDomainEntityTag(resource));
             whois = createEnableMap("whois", whois);
             category = createEnableMap("category", category);
@@ -267,17 +268,22 @@ public class EntityServiceImpl implements EntityService {
             addEntityList(entityList, category);
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
+            vpnLearningDomain = listChangeTimestamp(vpnLearningDomain);
+            addListTag("vpnLearningDomain",entityList, vpnLearningDomain);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = createEnableMap("malware", iocMalwareService.queryIpEntityTag(resource));
             Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryIpEntityTag(resource));
+            List<Map> vpnLearningIp = createEnableList(vpnLearningIpService.queryIpEntityTag(resource));
             userDefinedTags = createEnableList(ipTagUserDefinedService.queryIpEntityTag(resource));
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
+            vpnLearningIp = listChangeTimestamp(vpnLearningIp);
+            addListTag("vpnLearningIp",entityList, vpnLearningIp);
         }
         userDefinedTags = listChangeTimestamp(userDefinedTags);
-        addUserDefinedTag(entityList, userDefinedTags);
+        addListTag("userDefinedTag",entityList, userDefinedTags);
         sortByUpdateTime(entityList);
         return entityList;
     }
@@ -313,10 +319,10 @@ public class EntityServiceImpl implements EntityService {
         }
     }
 
-    private void addUserDefinedTag(List<Map<String,Object>> entityList, List<Map> userDefinedTags) {
-        for (Map<String,Object> tag: userDefinedTags) {
+    private void addListTag(String ListTagsName, List<Map<String,Object>> entityList, List<Map> ListTags) {
+        for (Map<String,Object> tag: ListTags) {
             Map<String, Object> tagMap = new HashMap<>();
-            tagMap.put("userDefinedTag", tag);
+            tagMap.put(ListTagsName, tag);
             entityList.add(tagMap);
         }
     }

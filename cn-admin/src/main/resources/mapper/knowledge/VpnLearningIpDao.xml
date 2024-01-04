@@ -28,6 +28,8 @@
         <result property="vpnServiceName" column="vpnServiceName"></result>
         <result property="method" column="method"></result>
         <result property="confidence" column="confidence"></result>
+        <result property="updateTime" column="updateTime"></result>
+        <result property="createTime" column="createTime"></result>
         <result property="isValid" column="isValid"></result>
         <result property="knowledgeId" column="knowledgeId"></result>
         <association property="knowledgeBase" column="knowledgeId" select="queryKnowledgeById" javaType="java.util.Map"></association>
@@ -42,7 +44,8 @@
 
     <select id="queryIpEntityTag" resultMap="VpnLearningIpTagMap" parameterType="java.util.Map">
         select plugin_id as pluginId, plugin_name as pluginName, vpn_service_name as vpnServiceName,
-        method as method, confidence as confidence, is_valid as isValid, knowledge_id as knowledgeId from
+        method as method, confidence as confidence, op_time as updateTime,
+        c_time as createTime, is_valid as isValid, knowledge_id as knowledgeId from
         cn_vpn_learning_ip
         where start_ip_binary &lt;= INET6_ATON(#{resource}) AND end_ip_binary &gt;= INET6_ATON(#{resource})
     </select>
