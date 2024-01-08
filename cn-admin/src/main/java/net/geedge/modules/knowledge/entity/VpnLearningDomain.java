@@ -1,11 +1,11 @@
 package net.geedge.modules.knowledge.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
 
-import java.util.Date;
+import lombok.Data;
 
 /**
  * @Auther: lijinyang
@@ -22,6 +22,12 @@ public class VpnLearningDomain {
     private Long pluginId;
 
     private String pluginName;
+    
+    private String vpnServiceName;
+
+    private String method;
+
+    private String confidence;
 
     private Date opTime;
 

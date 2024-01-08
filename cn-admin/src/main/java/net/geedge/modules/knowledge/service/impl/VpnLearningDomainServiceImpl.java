@@ -35,8 +35,8 @@ public class VpnLearningDomainServiceImpl extends ServiceImpl<VpnLearningDomainD
 		if(ObjectUtil.isNotEmpty(vpnLearningDomains)){
 			try {
 				PreparedStatement pstm = conn.prepareStatement("insert into cn_vpn_learning_domain (domain,plugin_id,plugin_name,op_time,"
-						+ "c_time,op_user,is_valid,knowledge_id) "
-						+ "values (?,?,?,?,?,?,?,?)");
+						+ "c_time,op_user,is_valid,knowledge_id,vpn_service_name,method,confidence) "
+						+ "values (?,?,?,?,?,?,?,?,?,?,?)");
 				for(VpnLearningDomain vpnLearningDomain : vpnLearningDomains) {
 					pstm.setString(1, vpnLearningDomain.getDomain());
 					pstm.setLong(2, vpnLearningDomain.getPluginId());
@@ -46,6 +46,9 @@ public class VpnLearningDomainServiceImpl extends ServiceImpl<VpnLearningDomainD
 					pstm.setInt(6, vpnLearningDomain.getOpUser());
 					pstm.setInt(7, vpnLearningDomain.getIsValid());
 					pstm.setInt(8, vpnLearningDomain.getKnowledgeId());
+					pstm.setString(9, vpnLearningDomain.getVpnServiceName());
+					pstm.setString(10, vpnLearningDomain.getMethod());
+					pstm.setString(11, vpnLearningDomain.getConfidence());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -63,7 +66,7 @@ public class VpnLearningDomainServiceImpl extends ServiceImpl<VpnLearningDomainD
 		if(ObjectUtil.isNotEmpty(vpnLearningDomains)){
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_vpn_learning_domain set domain=?,plugin_id=?,plugin_name=?,op_time=?,"
-						+ "is_valid=?,op_user=?,knowledge_id=? where id =? ");
+						+ "is_valid=?,op_user=?,knowledge_id=?,vpn_service_name=?,method=?,confidence=? where id =? ");
 				for(VpnLearningDomain vpnLearningDomain : vpnLearningDomains) {
 					pstm.setString(1, vpnLearningDomain.getDomain());
 					pstm.setLong(2, vpnLearningDomain.getPluginId());
@@ -72,7 +75,10 @@ public class VpnLearningDomainServiceImpl extends ServiceImpl<VpnLearningDomainD
 					pstm.setInt(5, vpnLearningDomain.getOpUser());
 					pstm.setInt(6, vpnLearningDomain.getIsValid());
 					pstm.setInt(7, vpnLearningDomain.getKnowledgeId());
-					pstm.setLong(8, vpnLearningDomain.getId());
+					pstm.setString(8, vpnLearningDomain.getVpnServiceName());
+					pstm.setString(9, vpnLearningDomain.getMethod());
+					pstm.setString(10, vpnLearningDomain.getConfidence());
+					pstm.setLong(11, vpnLearningDomain.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
