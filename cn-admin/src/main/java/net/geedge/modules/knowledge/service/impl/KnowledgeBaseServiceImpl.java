@@ -187,9 +187,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	
 	@Autowired
 	private DetectionRuleService detectionRuleService;
-
-	@Autowired
-	private RestTemplate restTemplate;
 	
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
@@ -1529,59 +1526,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			result.put("end_ip_binary",endIp);
 		}
 		return result;
-	}
-
-	@Override
-	public void intelligenceLearningStatus(String type, Integer knowledgeId) {
-		String value = sysConfigService.getValue("schedule_task");
-		Map<String, Object> scheduleTask = JSONObject.parseObject(value);
-		Map<String, Object> config = (Map<String, Object>)scheduleTask.get("config");
-		String url = (String)config.get("url");
-		String path = url+"/xxl-job-admin/jobinfo/"+type;
-		HttpHeaders requestHeaders = new HttpHeaders();
-		requestHeaders.add("Cookie", getCookie(config));
-		List<Map<String, Object>> jobIdMapping = (List<Map<String, Object>>)scheduleTask.get("jobIdMapping");
-		MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-		param.add("id",getJobId(jobIdMapping,knowledgeId));
-		ResponseEntity<HashMap> response = restTemplate.postForEntity(path,new HttpEntity<MultiValueMap>(param, requestHeaders),HashMap.class);
-		Map<String, Object> body = response.getBody();
-		int code = response.getStatusCodeValue();
-		if((Integer)body.get("code") != 200){
-			if(ObjectUtil.isNotEmpty(body.get("msg"))) {
-				throw new CNException((String) body.get("msg"), code);
-			}
-			throw new CNException(RCode.ERROR);
-		}
-	}
-
-	private Integer getJobId(List<Map<String, Object>> jobIdMapping, Integer knowledgeId){
-		Integer jobId = null;
-		if(ObjectUtil.isNotEmpty(jobIdMapping)){
-			for(Map<String, Object> map : jobIdMapping){
-				if(ObjectUtil.isNotEmpty(map.get("knowledgeId")) && (Integer)map.get("knowledgeId") == knowledgeId){
-					jobId = (Integer)map.get("jobId");
-				}
-			}
-		}
-		return jobId;
-	}
-
-	private String getCookie(Map<String, Object> config){
-		String url = (String)config.get("url");
-		String userName = (String)config.get("userName");
-		String pin = (String)config.get("pin");
-		pin = Tool.AesUtil.decrypt(pin, Constant.AES_SECRET_KEY);
-		String loginPath = url+"/xxl-job-admin/login";
-		MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-		param.add("userName",userName);
-		param.add("pin",pin);
-		ResponseEntity<HashMap> response = restTemplate.postForEntity(loginPath,new HttpEntity<MultiValueMap>(param),HashMap.class);
-		Map<String, Object> body = response.getBody();
-		if((Integer) body.get("code") != 200){
-			throw new CNException(RCode.ERROR);
-		}
-		HttpHeaders headers = response.getHeaders();
-		return headers.get("Set-Cookie").get(0);
 	}
 
 	@Override

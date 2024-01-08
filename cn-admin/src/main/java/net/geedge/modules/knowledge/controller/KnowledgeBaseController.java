@@ -100,12 +100,6 @@ public class KnowledgeBaseController {
 		knowledgeBaseService.importBatch(file,knowledgeId,action,status,color,description);
 		return R.ok().putData("knowledgeId",knowledgeId);
 	}
-
-	@PostMapping("/intelligence-learning/{type}")
-	public R intelligenceLearningStatus(@PathVariable(value = "type") IntelligenceLearningStatus type, @Param("knowledgeId")Integer knowledgeId){
-		knowledgeBaseService.intelligenceLearningStatus(type.getValue(), knowledgeId);
-		return R.ok().putData("knowledgeId",knowledgeId);
-	}
 	
 	@RequestMapping("/{knowledgeId}/{type}/timedistribution")
 	public R timedistribution(@PathVariable("knowledgeId")Integer knowledgeId,@PathVariable("type")String type,@RequestParam Map<String,Object> params) {

@@ -334,7 +334,9 @@ public enum RCode {
     KNOWLEDGE_IMPORT_ACTION_VALUE_ERROR(591022,"KnowledgeBase import action must be one of overwrite,append,update"),
     KNOWLEDGE_EXCELFILE_TYPE_ERROR(591023, "The type can only be csv"),
     KNOWLEDGE_RULE_USE_ERROR(591024,"KnowledgeBase is reference rules that cannot be deleted"),
-    
+
+    PLUGIN_LEARNING_JOB_GROUP_ISNULL(592001, "The job group is required"),
+
     ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
     ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
     ENTITY_TAG_NOT_EXIST(601003,"Entity tag not exist"),
