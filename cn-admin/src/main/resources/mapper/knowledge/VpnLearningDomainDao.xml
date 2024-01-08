@@ -20,6 +20,9 @@
     <resultMap id="VpnLearningDomainTagMap" type="java.util.Map">
         <result property="pluginId" column="pluginId"></result>
         <result property="pluginName" column="pluginName"></result>
+        <result property="vpnServiceName" column="vpnServiceName"></result>
+        <result property="method" column="method"></result>
+        <result property="confidence" column="confidence"></result>
         <result property="updateTime" column="updateTime"></result>
         <result property="createTime" column="createTime"></result>
         <result property="isValid" column="isValid"></result>
@@ -35,7 +38,8 @@
     </select>
 
     <select id="queryDomainEntityTag" resultMap="VpnLearningDomainTagMap" parameterType="java.util.Map">
-        select plugin_id as pluginId, plugin_name as pluginName, op_time as updateTime,
+        select plugin_id as pluginId, plugin_name as pluginName, vpn_service_name as vpnServiceName,
+               method as method, confidence as confidence, op_time as updateTime,
                c_time as createTime, is_valid as isValid, knowledge_id as knowledgeId from
             cn_vpn_learning_domain
         where domain = #{resource}
