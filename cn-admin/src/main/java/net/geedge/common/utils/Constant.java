@@ -254,6 +254,8 @@ public class Constant {
 	public static final String INTERNAL_IP_BUILT_IN = "cn_internal_ip_built_in";
 	public static final String LINK_DIRECTION_BUILT_IN = "cn_link_direction_built_in";
 	public static final String DNS_SERVER_INFO_BUILT_IN = "cn_dns_server_info_built_in";
+	public static final String VPN_LEARNING_DOMAIN = "cn_vpn_learning_domain";
+	public static final String VPN_LEARNING_IP = "cn_vpn_learning_ip";
 	
 	/**
 	 * IP格式类型分类

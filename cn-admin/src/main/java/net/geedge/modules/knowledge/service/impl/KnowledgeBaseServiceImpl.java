@@ -2,34 +2,25 @@ package net.geedge.modules.knowledge.service.impl;
 
 
 import static com.alibaba.fastjson.JSON.parseObject;
-import static net.geedge.common.utils.Constant.APP_CATEGORY_BUILT_IN;
-import static net.geedge.common.utils.Constant.APP_TAG_USER_DEFINED;
-import static net.geedge.common.utils.Constant.DNS_SERVER_INFO_BUILT_IN;
-import static net.geedge.common.utils.Constant.DOMAIN_TAG_USER_DEFINED;
-import static net.geedge.common.utils.Constant.FQDN_CATEGORY_BUILT_IN;
-import static net.geedge.common.utils.Constant.FQDN_ICP_BUILT_IN;
-import static net.geedge.common.utils.Constant.FQDN_WHO_IS_BUILT_IN;
-import static net.geedge.common.utils.Constant.IDC_RENTER_BUILT_IN;
-import static net.geedge.common.utils.Constant.INTERNAL_IP_BUILT_IN;
-import static net.geedge.common.utils.Constant.IOC_DARKWEB;
-import static net.geedge.common.utils.Constant.IOC_MALWARE;
-import static net.geedge.common.utils.Constant.IP_ASN_BUILT_IN;
-import static net.geedge.common.utils.Constant.IP_LOCATION_BUILT_IN;
-import static net.geedge.common.utils.Constant.IP_TAG_USER_DEFINED;
-import static net.geedge.common.utils.Constant.LINK_DIRECTION_BUILT_IN;
-import static net.geedge.common.utils.Constant.PSIPHON3_IP;
-import static net.geedge.common.utils.RCode.KNOWLEDGE_BASE_NOT_EXIST;
+import static net.geedge.common.utils.Constant.*;
 import static net.geedge.common.utils.RCode.KNOWLEDGE_SOURCE_ERROR;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.*;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.geedge.common.utils.*;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -37,7 +28,9 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -45,38 +38,38 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.amazonaws.util.DateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import java.sql.Connection;
 
-import cn.hutool.Hutool;
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.io.CharsetDetector;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.text.csv.CsvData;
 import cn.hutool.core.text.csv.CsvReader;
 import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.text.csv.CsvUtil;
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
-import freemarker.template.utility.DateUtil;
 import net.geedge.common.exception.CNException;
-import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.CSVUtils;
+import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.Constant.RuleType;
-import net.geedge.modules.knowledge.dao.DnsServerInfoBuiltInDao;
-import net.geedge.modules.knowledge.dao.IpTagUserDefinedDao;
+import net.geedge.common.utils.IPUtils;
+import net.geedge.common.utils.JSONUtil;
+import net.geedge.common.utils.KnowledgeCheckUtil;
+import net.geedge.common.utils.OperationEnum;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.Query;
+import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.knowledge.dao.KnowledgeBaseDao;
 import net.geedge.modules.knowledge.entity.AppCategoryBuiltIn;
 import net.geedge.modules.knowledge.entity.AppTagUserDefined;
@@ -97,6 +90,8 @@ import net.geedge.modules.knowledge.entity.KnowledgeBaseAuditLog;
 import net.geedge.modules.knowledge.entity.KnowledgeBaseSyncVersion;
 import net.geedge.modules.knowledge.entity.LinkDirectionBuiltIn;
 import net.geedge.modules.knowledge.entity.Psiphon3Ip;
+import net.geedge.modules.knowledge.entity.VpnLearningDomain;
+import net.geedge.modules.knowledge.entity.VpnLearningIp;
 import net.geedge.modules.knowledge.service.AppCategoryBuiltInService;
 import net.geedge.modules.knowledge.service.AppTagUserDefinedService;
 import net.geedge.modules.knowledge.service.DnsServerInfoBuiltInService;
@@ -116,6 +111,8 @@ import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
 import net.geedge.modules.knowledge.service.LinkDirectionBuiltInService;
 import net.geedge.modules.knowledge.service.Psiphon3IpService;
+import net.geedge.modules.knowledge.service.VpnLearningDomainService;
+import net.geedge.modules.knowledge.service.VpnLearningIpService;
 import net.geedge.modules.rule.entity.DetectionRule;
 import net.geedge.modules.rule.service.DetectionRuleService;
 import net.geedge.modules.sys.service.BasicImportAndExportService;
@@ -190,6 +187,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
+	
+	@Autowired
+	private VpnLearningDomainService vpnLearningDomainService;
+	
+	@Autowired
+	private VpnLearningIpService vpnLearningIpService;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -1072,8 +1075,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			basicImportAndExportService.removeList(knowledgeBase.getSource(), knowledgeBase.getKnowledgeId());
 		}
 		this.validAndBuildDatasets(file, knowledgeBase, action, saveOrUpdateList, deleteDataIds);
-		//更新操作时 删除多余重复数据
-		if (StrUtil.equals(action, "update") && !deleteDataIds.isEmpty()) {
+		//删除指定数据
+		if (!deleteDataIds.isEmpty()) {
 			basicImportAndExportService.removeList(knowledgeBase.getSource(), deleteDataIds);
 		}
 		KnowledgeBaseSyncVersion syncVersion = knowledgeBaseSyncVersionService.syncVersion(knowledgeBase.getKnowledgeId());
@@ -1471,6 +1474,34 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				List<DnsServerInfoBuiltIn> insertDnsServerInfoBuiltIns = dnsServerInfoBuiltInMap.get(false);
 				dnsServerInfoBuiltInService.saveBatchJDBC(conn,insertDnsServerInfoBuiltIns);
 				dnsServerInfoBuiltInService.modifyBatchJDBC(conn, updateDnsServerInfoBuiltIns);
+				break;
+			case VPN_LEARNING_DOMAIN:
+				List<VpnLearningDomain> vpnLearningDomains = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),VpnLearningDomain.class);
+				vpnLearningDomains.stream().forEach(data->{
+					data.setOpUser(ShiroUtils.getUserId().intValue());
+					data.setOpTime(new Date());
+					data.setCTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				Map<Boolean, List<VpnLearningDomain>> vpnLearningDomainMap = vpnLearningDomains.stream().collect(Collectors.groupingBy(vpnLearningDomain-> ObjectUtil.isNotEmpty(vpnLearningDomain.getId())));
+				List<VpnLearningDomain> updateVpnLearningDomains = vpnLearningDomainMap.get(true);
+				List<VpnLearningDomain> insertVpnLearningDomains = vpnLearningDomainMap.get(false);
+				vpnLearningDomainService.saveBatchJDBC(conn,insertVpnLearningDomains);
+				vpnLearningDomainService.modifyBatchJDBC(conn,updateVpnLearningDomains);
+				break;
+			case VPN_LEARNING_IP:
+				List<VpnLearningIp> vpnLearningIps = JSONUtil.toList(JSONUtil.toJsonStr(importDataList),VpnLearningIp.class);
+				vpnLearningIps.stream().forEach(data->{
+					data.setOpUser(ShiroUtils.getUserId().intValue());
+					data.setOpTime(new Date());
+					data.setCTime(new Date());
+					data.setKnowledgeId(knowledgeBase.getKnowledgeId());
+				});
+				Map<Boolean, List<VpnLearningIp>> vpnLearningIpMap = vpnLearningIps.stream().collect(Collectors.groupingBy(vpnLearningIp-> ObjectUtil.isNotEmpty(vpnLearningIp.getId())));
+				List<VpnLearningIp> updateVpnLearningIps = vpnLearningIpMap.get(true);
+				List<VpnLearningIp> insertVpnLearningIps = vpnLearningIpMap.get(false);
+				vpnLearningIpService.saveBatchJDBC(conn,insertVpnLearningIps);
+				vpnLearningIpService.modifyBatchJDBC(conn,updateVpnLearningIps);
 				break;
 			default:{
 				throw new CNException(RCode.KNOWLEDGE_SOURCE_ERROR);

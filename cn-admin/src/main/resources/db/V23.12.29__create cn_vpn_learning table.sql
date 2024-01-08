@@ -26,18 +26,22 @@ CREATE TABLE `cn_vpn_learning_ip`  (
 );
 
 DROP TABLE IF EXISTS `cn_vpn_learning_domain`;
-CREATE TABLE `cn_vpn_learning_domain`  (
-   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-   `domain` varchar(512) NOT NULL,
-   `plugin_id` bigint(20) NOT NULL COMMENT '插件ID，其他导入方式为0',
-   `plugin_name` varchar(512) NOT NULL COMMENT '其他导入方式为\'\'',
-   `op_time` datetime NOT NULL,
-   `c_time` datetime NOT NULL,
-   `op_user` int(10) NOT NULL,
-   `is_valid` int(1) NULL DEFAULT 1 COMMENT '是否有效：0-无效，1-有效',
-   `knowledge_id` int(11) NOT NULL COMMENT '知识库唯一标识，外键。',
-   PRIMARY KEY (`id`),
-   FOREIGN KEY (`knowledge_id`) REFERENCES `cn_knowledge_base` (`knowledge_id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+CREATE TABLE `cn_vpn_learning_domain` (
+	`id` BIGINT ( 20 ) NOT NULL AUTO_INCREMENT,
+	`domain` VARCHAR ( 512 ) NOT NULL,
+	`plugin_id` BIGINT ( 20 ) NOT NULL COMMENT '插件ID，其他导入方式为0',
+	`plugin_name` VARCHAR ( 512 ) NOT NULL COMMENT '其他导入方式为''''',
+	`vpn_service_name` VARCHAR ( 256 ) NOT NULL,
+	`method` VARCHAR ( 128 ) NOT NULL COMMENT 'passive_ml\r\npassive_sig\r\nacitve_probe\r\nthird_api',
+	`confidence` VARCHAR ( 128 ) NOT NULL COMMENT 'confirmed (80-100)\r\nsuspect (70-80)\r\ntentative (50-70)',
+	`op_time` datetime NOT NULL,
+	`c_time` datetime NOT NULL,
+	`op_user` INT ( 10 ) NOT NULL,
+	`is_valid` INT ( 1 ) DEFAULT 1 COMMENT '是否有效：0-无效，1-有效',
+	`knowledge_id` INT ( 11 ) NOT NULL COMMENT '知识库唯一标识，外键。',
+	PRIMARY KEY ( `id` ),
+	KEY `knowledge_id` ( `knowledge_id` ),
+CONSTRAINT `cn_vpn_learning_domain_ibfk_1` FOREIGN KEY ( `knowledge_id` ) REFERENCES `cn_knowledge_base` ( `knowledge_id` ) ON DELETE CASCADE ON UPDATE CASCADE 
+) ENGINE = INNODB AUTO_INCREMENT = 1022528 DEFAULT CHARSET = utf8mb4;
 
 SET FOREIGN_KEY_CHECKS = 1;
