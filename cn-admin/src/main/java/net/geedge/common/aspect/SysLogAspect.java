@@ -145,7 +145,7 @@ public class SysLogAspect {
 		// 处理参数记录
 		String paramResult = this.handleArgs(syslog, args, ShiroUtils.getUserEntity());
 		paramResult = this.handleLogParam(request.getRequestURI(), paramResult);
-		paramResult = Tool.StrUtil.subPre(paramResult, Constant.MYSQL_TEXT_MAXLENGTH-(Constant.MYSQL_TEXT_MAXLENGTH-1000));
+		paramResult = Tool.StrUtil.subPre(paramResult, 10000);
 		sysLog.setParams(paramResult);
 
 		// 登录出现异常时
@@ -155,7 +155,7 @@ public class SysLogAspect {
 			map.remove("pin");
 			String logParams = gson.toJson(map);
 			logParams = Tool.ObjectUtil.isEmpty(logParams) ? "" : logParams;
-			logParams = Tool.StrUtil.subPre(logParams, Constant.MYSQL_TEXT_MAXLENGTH-(Constant.MYSQL_TEXT_MAXLENGTH-1000));
+			logParams = Tool.StrUtil.subPre(logParams, 10000);
 			sysLog.setParams(logParams);
 		} else {
 			Object principal = SecurityUtils.getSubject().getPrincipal();
@@ -234,7 +234,7 @@ public class SysLogAspect {
 
 		// 处理 参数信息
 		paramResult = this.handleLogParam(request.getRequestURI(), paramResult);
-		paramResult = Tool.StrUtil.subPre(paramResult, Constant.MYSQL_TEXT_MAXLENGTH-(Constant.MYSQL_TEXT_MAXLENGTH-1000));
+		paramResult = Tool.StrUtil.subPre(paramResult, 10000);
 		sysLog.setParams(paramResult);
 
 		Long userId = null;
