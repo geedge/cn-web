@@ -47,4 +47,6 @@ CREATE TABLE `cn_vpn_learning_domain` (
   CONSTRAINT `cn_vpn_learning_domain_ibfk_1` FOREIGN KEY (`knowledge_id`) REFERENCES `cn_knowledge_base` (`knowledge_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `cn_psiphon3_ip`;
+
 SET FOREIGN_KEY_CHECKS = 1;
