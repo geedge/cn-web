@@ -254,78 +254,21 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		if(!StrUtil.endWith(file.getOriginalFilename(), ".csv")) {
 			throw new CNException(RCode.KNOWLEDGE_FILE_TYPE_ERROR);
 		}
+		String knowledgeImportConfigJson = sysConfigService.getValue("knowledge_import_config_json");
+		HashMap knowledgeConfigs = parseObject(knowledgeImportConfigJson, HashMap.class);
+		Map<String,Object> sourceConfig = (Map<String, Object>) knowledgeConfigs.get(source);
+		List<String> headerInfos = StrUtil.split((String)sourceConfig.get("headers"), StrUtil.C_COMMA);
+		if(ObjectUtils.isEmpty(headerInfos)) {
+			throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
+		}
+		Map<String,Object> result = new HashMap<String,Object>();
+		List<Map<String,Object>> handlerData = new ArrayList<Map<String,Object>>();
+		List<CsvRow> csvRows = null;
 		try{
 			tempFile = FileUtil.file(Constant.TMP_ROOT_PATH + File.separator + new Date().getTime() + ".csv");
 			FileUtils.copyInputStreamToFile(file.getInputStream(),tempFile);
 			CsvData datas = CsvUtil.getReader().read(ResourceUtil.getReader(tempFile.getPath(), CharsetDetector.detect(tempFile)));
-			
-			Map<String,Object> result = new HashMap<String,Object>();
-			List<Map<String,Object>> handlerData = new ArrayList<Map<String,Object>>();
-
-			List<CsvRow> csvRows = (List<CsvRow>)datas.getRows();
-			//去除表头
-			csvRows.remove(0);
-			//csv文件去重
-			Set<CsvRow> rowsSet = new TreeSet<CsvRow>(Comparator.comparing(row -> row.get(0).trim() + "_____" + row.get(1).trim()));
-			rowsSet.addAll(csvRows);
-
-		    for(CsvRow data : rowsSet){
-		        // 此处进行数据校验
-		    	boolean format = true;
-		    	String row = data.get(0).trim();
-		    	String tag = data.get(1).trim();
-		    	// 标签不能为空
-		    	if(StrUtil.isEmpty(tag)){
-		    		format = false;
-		    	}
-		    	if(format) {
-		    		if(StrUtil.equals(source, Constant.IP_TAG_USER_DEFINED)) {
-			    		format = KnowledgeCheckUtil.validIpFormat(row);
-			    	}else if(StrUtil.equals(source, Constant.DOMAIN_TAG_USER_DEFINED)){
-			    		format = KnowledgeCheckUtil.validateFqdn(row);
-			    	}else {
-			    		format = KnowledgeCheckUtil.validateApp(row);
-			    	}
-		    	}
-		        Map<String,Object> res = new HashMap<String,Object>();
-		        if(StrUtil.equals(source, Constant.IP_TAG_USER_DEFINED)) {
-		        	String s = data.get(0);
-		        	String ipType = "";
-		        	String ip1="";
-		        	String ip2="";
-		        	if(StrUtil.contains(s, StrUtil.C_SLASH)) {
-		        		ipType = Constant.IpFormatType.CIDR.getValue();
-		        		ip1 = StrUtil.split(s, StrUtil.C_SLASH).get(0);
-		        		ip2 = StrUtil.split(s, StrUtil.C_SLASH).get(1);
-		        	}else if(StrUtil.contains(s, StrUtil.DASHED)) {
-		        		ipType = Constant.IpFormatType.RANGE.getValue();
-		        		ip1 = StrUtil.split(s, StrUtil.DASHED).get(0);
-		        		ip2 = StrUtil.split(s, StrUtil.DASHED).get(1);
-		        	}else {
-		        		ipType = Constant.IpFormatType.SINGLE.getValue();
-		        		ip1 = s;
-		        		ip2 = s;
-		        	}
-		        	res.put("addrFormat",ipType);
-		        	res.put("ip1", ip1);
-		        	res.put("ip2", ip2);
-		        }else if(StrUtil.equals(source, Constant.DOMAIN_TAG_USER_DEFINED)){
-		        	res.put("domain", data.get(0));
-		        }else {
-		        	res.put("appName", data.get(0));
-		        }
-		        res.put("tagValue", data.get(1));
-		        if(format) {
-		        	res.put("isValid",1);
-			        res.put("msg","success");
-		        }else {
-		        	res.put("isValid",0);
-			        res.put("msg","Data format error, please check");
-		        }
-		        handlerData.add(res);
-		    }
-		    result.put("data",handlerData);
-		    return R.ok(result);
+			csvRows = (List<CsvRow>)datas.getRows();
 		}catch(Exception e) {
 		    return R.error(400,e.getMessage());
 		}finally {
@@ -333,6 +276,78 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				tempFile.delete();
 			}
 		}
+		if(ObjectUtil.isEmpty(csvRows) || csvRows.size() < 2) {
+			throw new CNException(RCode.EXCELFILE_EMPTY_ERROR);
+		}
+		CsvRow csvRow = csvRows.get(0);
+		List<String> headerInfo = csvRow.getRawList();
+		// 表头校验
+        if (!CSVUtils.validateCSVHeader(headerInfo, headerInfos)) {
+            throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
+        }
+		//去除表头
+		csvRows.remove(0);
+		//csv文件去重
+		Set<CsvRow> rowsSet = new TreeSet<CsvRow>(Comparator.comparing(row -> row.get(0).trim() + "_____" + row.get(1).trim()));
+		rowsSet.addAll(csvRows);
+
+	    for(CsvRow data : rowsSet){
+	        // 此处进行数据校验
+	    	boolean format = true;
+	    	String row = data.get(0).trim();
+	    	String tag = data.get(1).trim();
+	    	// 标签不能为空
+	    	if(StrUtil.isEmpty(tag)){
+	    		format = false;
+	    	}
+	    	if(format) {
+	    		if(StrUtil.equals(source, Constant.IP_TAG_USER_DEFINED)) {
+		    		format = KnowledgeCheckUtil.validIpFormat(row);
+		    	}else if(StrUtil.equals(source, Constant.DOMAIN_TAG_USER_DEFINED)){
+		    		format = KnowledgeCheckUtil.validateFqdn(row);
+		    	}else {
+		    		format = KnowledgeCheckUtil.validateApp(row);
+		    	}
+	    	}
+	        Map<String,Object> res = new HashMap<String,Object>();
+	        if(StrUtil.equals(source, Constant.IP_TAG_USER_DEFINED)) {
+	        	String s = data.get(0);
+	        	String ipType = "";
+	        	String ip1="";
+	        	String ip2="";
+	        	if(StrUtil.contains(s, StrUtil.C_SLASH)) {
+	        		ipType = Constant.IpFormatType.CIDR.getValue();
+	        		ip1 = StrUtil.split(s, StrUtil.C_SLASH).get(0);
+	        		ip2 = StrUtil.split(s, StrUtil.C_SLASH).get(1);
+	        	}else if(StrUtil.contains(s, StrUtil.DASHED)) {
+	        		ipType = Constant.IpFormatType.RANGE.getValue();
+	        		ip1 = StrUtil.split(s, StrUtil.DASHED).get(0);
+	        		ip2 = StrUtil.split(s, StrUtil.DASHED).get(1);
+	        	}else {
+	        		ipType = Constant.IpFormatType.SINGLE.getValue();
+	        		ip1 = s;
+	        		ip2 = s;
+	        	}
+	        	res.put("addrFormat",ipType);
+	        	res.put("ip1", ip1);
+	        	res.put("ip2", ip2);
+	        }else if(StrUtil.equals(source, Constant.DOMAIN_TAG_USER_DEFINED)){
+	        	res.put("domain", data.get(0));
+	        }else {
+	        	res.put("appName", data.get(0));
+	        }
+	        res.put("tagValue", data.get(1));
+	        if(format) {
+	        	res.put("isValid",1);
+		        res.put("msg","success");
+	        }else {
+	        	res.put("isValid",0);
+		        res.put("msg","Data format error, please check");
+	        }
+	        handlerData.add(res);
+	    }
+	    result.put("data",handlerData);
+	    return R.ok(result);
 	}
 
 	@Override
