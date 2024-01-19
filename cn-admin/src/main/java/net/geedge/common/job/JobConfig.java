@@ -79,32 +79,6 @@ public class JobConfig {
         createCronScheduleJob(reportHandlerTaskName, reportHandlerTaskDetail(), StringUtils.isEmpty(reportHandlerTaskCron) ? "0 0/1 * * * ? *" : reportHandlerTaskCron);
 
     }
-    
-    /**
-     * 根据 jobName jobDetail jobCronExpression  创建任务，如果存在则删除再创建
-     * @param jobName
-     * @param jobDetail
-     * @param jobCronExpression
-     * @param scheduler
-     * @throws Exception
-     
-    public static void createCronScheduleJob(String jobName, JobDetail jobDetail, String jobCronExpression, Scheduler scheduler) throws SchedulerException {
-        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(jobCronExpression);
-
-        CronTrigger cronTrigger = TriggerBuilder.newTrigger()
-                .forJob(jobDetail)
-                .withSchedule(cronScheduleBuilder)
-                .build();
-
-        // job如果存在则删除
-        JobKey jobKey = new JobKey(JOB_NAME + jobName);
-        boolean b = scheduler.checkExists(jobKey);
-        if (b) {
-            scheduler.deleteJob(jobKey);
-        }
-        // 创建任务
-        scheduler.scheduleJob(jobDetail, cronTrigger);
-    }*/
 
     /**
      * 根据 jobName jobDetail jobCronExpression  创建任务，如果存在则删除再创建

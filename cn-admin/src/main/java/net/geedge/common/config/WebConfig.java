@@ -59,15 +59,6 @@ public class WebConfig implements WebMvcConfigurer {
     }
     @Bean
     public SQLUtils getSqlUtils() throws SQLException {
-        /*switch (Constant.DB_TYPE){
-            case Constant.MYSQL:
-                return new MysqlHelper();
-            case Constant.POSTGRESQL:
-                return new PostgresqlHelper();
-            case Constant.ORACLE:
-                return new OracleHelper();
-            default:
-            }*/
         return new MysqlHelper();
     }
 

@@ -78,7 +78,6 @@ public class ShiroConfig {
 		filterMap.put("/swagger-ui.html", "anon");
 		filterMap.put("/webjars/**", "anon");
 		filterMap.put("/swagger-resources/**", "anon");
-//        filterMap.put("/statics/**", "anon");
 		filterMap.put("/static/**", "anon");
 		filterMap.put("/cn/**", "anon");
 		filterMap.put("/", "anon");
@@ -89,7 +88,6 @@ public class ShiroConfig {
 		filterMap.put("/healthy", "anon");
 		filterMap.put("/actuator/**", "anon");
 		filterMap.put("/gitLog", "anon");
-//        filterMap.put("/logout","anon");
 		filterMap.put("/favicon.ico", "anon");
 		filterMap.put("/captcha.jpg", "anon");
 		filterMap.put("/api/**", "anon");
@@ -99,7 +97,6 @@ public class ShiroConfig {
 		filterMap.put("/setup/**", "anon");// license 相关接口
 		filterMap.put("/sys/appearance", "anon");
 		filterMap.put("/magic/web/**", "anon");
-//        filterMap.put("/**", "authc");
 		filterMap.put("/**", "tokenCheckFilter");
 
 		Integer loginExpiration = getTimeOutData();

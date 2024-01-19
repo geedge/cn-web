@@ -48,15 +48,6 @@ public class ControllerExecTimeAspect {
 
     @AfterThrowing(pointcut = "logPointCut()", throwing = "e")
     public void saveExceptionLog(JoinPoint point, Throwable e) {
-       /* MethodSignature signature = (MethodSignature) point.getSignature();
-        String className = point.getTarget().getClass().getName();
-        String methodName = className + "." + signature.getName() + "()";
-        String errorMsg;
-        if (e instanceof CNException) {
-            errorMsg = ((CNException) e).getMsg();
-        } else {
-            errorMsg = e.getMessage();
-        }
-        log.error(String.format("方法: %s 执行失败,异常信息是: %s", methodName,errorMsg));*/
+       
     }
 }

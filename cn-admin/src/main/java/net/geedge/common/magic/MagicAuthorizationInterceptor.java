@@ -51,7 +51,7 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
             MagicUser magicUser = JSON.parseObject(str,MagicUser.class);
             return magicUser;
         } else {
-            throw new MagicLoginException("token无效");
+            throw new MagicLoginException("Token invalid please check certification information");
         }
     }
 
@@ -72,6 +72,6 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
                 return this.magicUser;
             }
         }
-        throw new MagicLoginException("用户名或密码不正确或非管理员账号");
+        throw new MagicLoginException("Incorrect username or password or non-administrator account");
     }
 }

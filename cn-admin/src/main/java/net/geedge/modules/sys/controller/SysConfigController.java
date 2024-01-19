@@ -139,45 +139,4 @@ public class SysConfigController extends AbstractController {
 		sysConfigService.updateByKey(params);
 		return R.ok();
 	}
-
-	/**
-	 * 系统邮箱配置查询
-	 *
-	 */
-	/*
-	@GetMapping("/email")
-	public R queryEmail(){
-	String paramKey = "email";
-	JSONObject email = sysConfigService.queryConfig(paramKey);
-	email.remove("authPin");
-	return R.ok(email);
-	}
-	*//**
-		 * 系统邮箱配置修改
-		 *
-		 */
-	/*
-	@PutMapping("/email")
-	@SysLog(operation = OperationEnum.UPDATE,type = TypeEnum.SYSTEM)
-	public R updateEmail(@RequestBody JSONObject email){
-	String paramKey = "email";
-	int isUpdate = sysConfigService.updateConfig(paramKey, email);
-	if(isUpdate == 0){
-		return R.error();
-	}
-	return R.ok();
-	}
-	*//**
-		 * 系统邮箱配置测试
-		 *
-		 *//*
-			@PutMapping("/email/test")
-			@SysLog
-			public R testEmail(@RequestBody JSONObject email){
-			boolean isSuccess = sysConfigService.testEmail(email);
-			if(!isSuccess){
-				return R.error();
-			}
-			return R.ok();
-			}*/
 }
