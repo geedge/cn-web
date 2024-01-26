@@ -112,8 +112,13 @@ public class PluginServiceImpl implements PluginService {
         if(ObjectUtil.isNotEmpty(params.get("pageNo"))) {
             result.put("pageNo",Integer.parseInt((String)params.get("pageNo")));
         }
-        result.put("total", list.size());
-        result.putData("list",list);
+        if(ObjectUtil.isNotEmpty(list)) {
+            result.put("total", list.size());
+            result.putData("list",list);
+        } else {
+            result.put("total", 0);
+            result.putData("list",new ArrayList<Map<String,Object>>());
+        }
         return result;
     }
 
