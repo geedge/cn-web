@@ -7,10 +7,9 @@ import net.geedge.modules.knowledge.enums.IntelligenceLearningStatus;
 import net.geedge.modules.plugin.service.PluginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @Auther: lijinyang
@@ -30,8 +29,9 @@ public class PluginController {
     }
 
     @RequestMapping("/intelligence-learning/list")
-    public R intelligenceLearningStatus(@Param("jobGroup")Integer jobGroup, @Param("triggerStatus")Integer triggerStatus){
+    public R intelligenceLearningStatus(@RequestParam Map<String,Object> params){
+        Integer jobGroup = Integer.parseInt((String)params.get("jobGroup"));
         ValidateUtils.is(jobGroup).notNull(RCode.PLUGIN_LEARNING_JOB_GROUP_ISNULL);
-        return pluginService.intelligenceLearningList(jobGroup, triggerStatus);
+        return pluginService.intelligenceLearningList(params);
     }
 }

@@ -306,10 +306,12 @@ public class Constant {
 	public static final String XXL_JOB_ADMIN_JOBINFO = "/xxl-job-admin/jobinfo/";
 	public static final String XXL_JOB_ADMIN_JOBINFO_PAGELIST = "/xxl-job-admin/jobinfo/pageList";
 	public static final String XXL_JOB_ADMIN_COOKIE = "Cookie";
-	public static final String XXL_JOB_ADMIN_JOBINFO_PAGELIST_PARAMS = "{0}?jobGroup={1}&triggerStatus={2}";
+	public static final String XXL_JOB_ADMIN_JOBINFO_PAGELIST_PARAMS = "{0}?jobGroup={1}&triggerStatus={2}&start={3}&length={4}";
 	public static final String SYSCONFIG_SCHEDULE_TASK = "schedule_task";
 	public static final String LEARNING_JOB_ID = "id";
 	public static final String LEARNING_JOB_DESC = "jobDesc";
 	public static final String LEARNING_JOB_TRIGGER_STATUS = "triggerStatus";
 	public static final String DEFAULT_TRIGGER_STATUS = "defaultTriggerStatus";
+	public static final Integer DEFAULT_LENGTH = 10;
+	public static final Integer DEFAULT_START = 0;
 }

@@ -92,21 +92,50 @@ public class PluginServiceImpl implements PluginService {
     }
 
     @Override
-    public R intelligenceLearningList(Integer jobGroup, Integer triggerStatus) {
-        String path = listPath(jobGroup,triggerStatus);
+    public R intelligenceLearningList(Map<String,Object> params) {
+        preHandle(params);
+        String path = listPath(params);
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add(Constant.XXL_JOB_ADMIN_COOKIE, getCookie(getScheduleConfig()));
         ResponseEntity<HashMap> response = restTemplate.postForEntity(path,new HttpEntity<MultiValueMap>(requestHeaders),HashMap.class);
         Map<String, Object> body = response.getBody();
         requestError(response);
-        return R.ok().putData("list",formatResult(body));
+        R r = creatResult(params, formatResult(body));
+        return r;
     }
 
-    private String listPath(Integer jobGroup, Integer triggerStatus) {
+    private R creatResult(Map<String,Object> params, List<Map<String,Object>> list) {
+        R result = new R();
+        if(ObjectUtil.isNotEmpty(params.get("pageSize"))) {
+            result.put("pageSize",Integer.parseInt((String)params.get("pageSize")));
+        }
+        if(ObjectUtil.isNotEmpty(params.get("pageNo"))) {
+            result.put("pageNo",Integer.parseInt((String)params.get("pageNo")));
+        }
+        result.put("total", list.size());
+        result.putData("list",list);
+        return result;
+    }
+
+    private void preHandle(Map<String,Object> params) {
+        Integer jobGroup = Integer.parseInt((String)params.get("jobGroup"));
+        Integer triggerStatus = ObjectUtil.isNotEmpty(params.get("triggerStatus"))?Integer.parseInt((String)params.get("triggerStatus")):(Integer) getScheduleParam(Constant.DEFAULT_TRIGGER_STATUS);
+        Integer length = ObjectUtil.isNotEmpty(params.get("pageSize"))?Integer.parseInt((String)params.get("pageSize")):Constant.DEFAULT_LENGTH;
+        Integer start = ObjectUtil.isNotEmpty(params.get("pageNo"))?start(length, Integer.parseInt((String)params.get("pageNo"))):Constant.DEFAULT_START;
+        params.put("jobGroup",jobGroup);
+        params.put("triggerStatus",triggerStatus);
+        params.put("length",length);
+        params.put("start",start);
+    }
+
+    private String listPath(Map<String,Object> params) {
         String path = (String) getScheduleParam("url")+Constant.XXL_JOB_ADMIN_JOBINFO_PAGELIST;
-        triggerStatus = ObjectUtil.isNotEmpty(triggerStatus)?triggerStatus:(Integer) getScheduleParam(Constant.DEFAULT_TRIGGER_STATUS);
-        path = MessageFormat.format(Constant.XXL_JOB_ADMIN_JOBINFO_PAGELIST_PARAMS,path,jobGroup,triggerStatus);
+        path = MessageFormat.format(Constant.XXL_JOB_ADMIN_JOBINFO_PAGELIST_PARAMS,path,params.get("jobGroup"),params.get("triggerStatus"),params.get("start"),params.get("length"));
         return path;
+    }
+
+    private Integer start(Integer length,Integer pageNo) {
+        return (pageNo - 1) * length;
     }
 
     private List<Map<String,Object>> formatResult(Map<String, Object> body) {
