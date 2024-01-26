@@ -107,16 +107,16 @@ public class PluginServiceImpl implements PluginService {
     private R creatResult(Map<String,Object> params, List<Map<String,Object>> list) {
         R result = new R();
         if(ObjectUtil.isNotEmpty(params.get("pageSize"))) {
-            result.put("pageSize",Integer.parseInt((String)params.get("pageSize")));
+            result.putData("pageSize",Integer.parseInt((String)params.get("pageSize")));
         }
         if(ObjectUtil.isNotEmpty(params.get("pageNo"))) {
-            result.put("pageNo",Integer.parseInt((String)params.get("pageNo")));
+            result.putData("pageNo",Integer.parseInt((String)params.get("pageNo")));
         }
         if(ObjectUtil.isNotEmpty(list)) {
-            result.put("total", list.size());
+            result.putData("total", list.size());
             result.putData("list",list);
         } else {
-            result.put("total", 0);
+            result.putData("total", 0);
             result.putData("list",new ArrayList<Map<String,Object>>());
         }
         return result;
