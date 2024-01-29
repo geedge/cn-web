@@ -100,11 +100,15 @@ public class PluginServiceImpl implements PluginService {
         ResponseEntity<HashMap> response = restTemplate.postForEntity(path,new HttpEntity<MultiValueMap>(requestHeaders),HashMap.class);
         Map<String, Object> body = response.getBody();
         requestError(response);
-        R r = creatResult(params, formatResult(body));
+        R r = creatResult(params, formatResult(body), total(body));
         return r;
     }
 
-    private R creatResult(Map<String,Object> params, List<Map<String,Object>> list) {
+    private Integer total(Map<String, Object> body) {
+        return (Integer) body.get("recordsTotal");
+    }
+
+    private R creatResult(Map<String,Object> params, List<Map<String,Object>> list, Integer total) {
         R result = new R();
         if(ObjectUtil.isNotEmpty(params.get("pageSize"))) {
             result.putData("pageSize",Integer.parseInt((String)params.get("pageSize")));
@@ -113,12 +117,11 @@ public class PluginServiceImpl implements PluginService {
             result.putData("pageNo",Integer.parseInt((String)params.get("pageNo")));
         }
         if(ObjectUtil.isNotEmpty(list)) {
-            result.putData("total", list.size());
             result.putData("list",list);
         } else {
-            result.putData("total", 0);
             result.putData("list",new ArrayList<Map<String,Object>>());
         }
+        result.putData("total", total);
         return result;
     }
 
