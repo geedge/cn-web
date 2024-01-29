@@ -94,14 +94,19 @@ public class PluginServiceImpl implements PluginService {
     @Override
     public R intelligenceLearningList(Map<String,Object> params) {
         preHandle(params);
-        String path = listPath(params);
+        String path = creatPath(params);
+        Map<String, Object> body = responseBody(path);
+        R r = creatResult(params, formatResult(body), total(body));
+        return r;
+    }
+
+    private Map<String, Object> responseBody(String path) {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add(Constant.XXL_JOB_ADMIN_COOKIE, getCookie(getScheduleConfig()));
         ResponseEntity<HashMap> response = restTemplate.postForEntity(path,new HttpEntity<MultiValueMap>(requestHeaders),HashMap.class);
         Map<String, Object> body = response.getBody();
         requestError(response);
-        R r = creatResult(params, formatResult(body), total(body));
-        return r;
+        return body;
     }
 
     private Integer total(Map<String, Object> body) {
@@ -128,7 +133,7 @@ public class PluginServiceImpl implements PluginService {
     private void preHandle(Map<String,Object> params) {
         Integer jobGroup = Integer.parseInt((String)params.get("jobGroup"));
         Integer triggerStatus = ObjectUtil.isNotEmpty(params.get("triggerStatus"))?Integer.parseInt((String)params.get("triggerStatus")):(Integer) getScheduleParam(Constant.DEFAULT_TRIGGER_STATUS);
-        Integer length = ObjectUtil.isNotEmpty(params.get("pageSize"))?Integer.parseInt((String)params.get("pageSize")):Constant.DEFAULT_LENGTH;
+        Integer length = ObjectUtil.isNotEmpty(params.get("pageSize"))&Integer.parseInt((String)params.get("pageSize"))!=-1?Integer.parseInt((String)params.get("pageSize")):Constant.DEFAULT_LENGTH;
         Integer start = ObjectUtil.isNotEmpty(params.get("pageNo"))?start(length, Integer.parseInt((String)params.get("pageNo"))):Constant.DEFAULT_START;
         params.put("jobGroup",jobGroup);
         params.put("triggerStatus",triggerStatus);
@@ -136,9 +141,29 @@ public class PluginServiceImpl implements PluginService {
         params.put("start",start);
     }
 
+    private String creatPath(Map<String,Object> params) {
+        String result = "";
+        Integer pageSize = ObjectUtil.isNotEmpty(params.get("pageSize"))?Integer.parseInt((String)params.get("pageSize")):Constant.DEFAULT_LENGTH;
+        if (pageSize == -1) {
+            String path = listPath(params);
+            Map<String, Object> body = responseBody(path);
+            result = fullListPath(params,total(body));
+        } else {
+            result = listPath(params);
+        }
+        return result;
+    }
+
+
     private String listPath(Map<String,Object> params) {
         String path = (String) getScheduleParam("url")+Constant.XXL_JOB_ADMIN_JOBINFO_PAGELIST;
         path = MessageFormat.format(Constant.XXL_JOB_ADMIN_JOBINFO_PAGELIST_PARAMS,path,params.get("jobGroup"),params.get("triggerStatus"),params.get("start"),params.get("length"));
+        return path;
+    }
+
+    private String fullListPath(Map<String,Object> params, Integer total) {
+        String path = (String) getScheduleParam("url")+Constant.XXL_JOB_ADMIN_JOBINFO_PAGELIST;
+        path = MessageFormat.format(Constant.XXL_JOB_ADMIN_JOBINFO_PAGELIST_PARAMS,path,params.get("jobGroup"),params.get("triggerStatus"),params.get("start"),total);
         return path;
     }
 
