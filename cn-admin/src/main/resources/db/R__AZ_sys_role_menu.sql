@@ -100,5 +100,7 @@ INSERT INTO `sys_role_menu` VALUES (null, 7, 36);
 INSERT INTO `sys_role_menu` VALUES (null, 7, 37);
 INSERT INTO `sys_role_menu` VALUES (null, 1, 39);
 INSERT INTO `sys_role_menu` VALUES (null, 1, 40);
+INSERT INTO `sys_role_menu` VALUES (null, 1, 41);
+INSERT INTO `sys_role_menu` VALUES (null, 1, 42);
 
 SET FOREIGN_KEY_CHECKS = 1;
