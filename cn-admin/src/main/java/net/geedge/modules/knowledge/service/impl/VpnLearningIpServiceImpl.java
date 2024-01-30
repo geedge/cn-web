@@ -73,7 +73,7 @@ public class VpnLearningIpServiceImpl extends ServiceImpl<VpnLearningIpDao, VpnL
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_vpn_learning_ip set addr_format=?,ip1=?,ip2=?,"
 						+ "start_ip_binary=INET6_ATON(?),end_ip_binary=INET6_ATON(?),plugin_id=?,plugin_name=?,vpn_service_name=?,method=?,confidence=?,"
-						+ "op_time=?,is_valid=?,op_user=?,knowledge_id=? where id =? ");
+						+ "op_time=?,op_user=?,is_valid=?,knowledge_id=? where id =? ");
 				for(VpnLearningIp vpnLearningIp : vpnLearningIps) {
 					pstm.setString(1, vpnLearningIp.getAddrFormat());
 					pstm.setString(2, vpnLearningIp.getIp1());
