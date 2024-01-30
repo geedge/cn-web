@@ -66,7 +66,7 @@ public class VpnLearningDomainServiceImpl extends ServiceImpl<VpnLearningDomainD
 		if(ObjectUtil.isNotEmpty(vpnLearningDomains)){
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_vpn_learning_domain set domain=?,plugin_id=?,plugin_name=?,op_time=?,"
-						+ "is_valid=?,op_user=?,knowledge_id=?,vpn_service_name=?,method=?,confidence=? where id =? ");
+						+ "op_user=?,is_valid=?,knowledge_id=?,vpn_service_name=?,method=?,confidence=? where id =? ");
 				for(VpnLearningDomain vpnLearningDomain : vpnLearningDomains) {
 					pstm.setString(1, vpnLearningDomain.getDomain());
 					pstm.setLong(2, vpnLearningDomain.getPluginId());
