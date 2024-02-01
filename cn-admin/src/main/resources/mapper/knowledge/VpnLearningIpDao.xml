@@ -50,4 +50,13 @@
         where start_ip_binary &lt;= INET6_ATON(#{resource}) AND end_ip_binary &gt;= INET6_ATON(#{resource})
     </select>
 
+    <select id="queryPageByKnowledgeId" resultMap="VpnLearningIp">
+        select * from
+        cn_vpn_learning_ip
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.q != null or params.q != ''">
+            AND ${params.q}
+        </if>
+        ORDER BY id
+    </select>
 </mapper>

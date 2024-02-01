@@ -2,6 +2,7 @@ package net.geedge.modules.knowledge.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import net.geedge.common.utils.PageUtils;
 import net.geedge.modules.knowledge.entity.IpAsnBuiltIn;
 import net.geedge.modules.knowledge.entity.VpnLearningIp;
 
@@ -20,4 +21,6 @@ public interface VpnLearningIpService extends IService<VpnLearningIp> {
     void saveBatchJDBC(Connection conn,List<VpnLearningIp> vpnLearningIps);
 	
 	void modifyBatchJDBC(Connection conn,List<VpnLearningIp> vpnLearningIps);
+
+    PageUtils queryListByKnowledgeId(Map<String,Object> params);
 }

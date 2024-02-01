@@ -588,6 +588,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 			case LINK_DIRECTION_BUILT_IN:
 				pageUtils = linkDirectionBuiltInService.queryListByKnowledgeId(params);
 				break;
+			case VPN_LEARNING_DOMAIN:
+				pageUtils = vpnLearningDomainService.queryListByKnowledgeId(params);
+				break;
+			case VPN_LEARNING_IP:
+				pageUtils = vpnLearningIpService.queryListByKnowledgeId(params);
+				break;
 			default:
 				throw new CNException(KNOWLEDGE_SOURCE_ERROR);
 		}

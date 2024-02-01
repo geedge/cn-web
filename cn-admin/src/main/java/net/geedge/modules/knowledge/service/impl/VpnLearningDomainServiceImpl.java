@@ -6,6 +6,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.Query;
+import net.geedge.modules.knowledge.entity.LinkDirectionBuiltIn;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -29,7 +33,15 @@ public class VpnLearningDomainServiceImpl extends ServiceImpl<VpnLearningDomainD
     public List<Map> queryDomainEntityTag(String resource) {
         return this.baseMapper.queryDomainEntityTag(resource);
     }
-    
+
+	@Override
+	public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+		IPage page = this.page(new Query(VpnLearningDomain.class).getPage(params));
+		List<VpnLearningDomain> vpnLearningDomains = this.baseMapper.queryPageByKnowledgeId(page, params);
+		page.setRecords(vpnLearningDomains);
+		return new PageUtils(page);
+	}
+
     @Override
 	public void saveBatchJDBC(Connection conn, List<VpnLearningDomain> vpnLearningDomains) {
 		if(ObjectUtil.isNotEmpty(vpnLearningDomains)){

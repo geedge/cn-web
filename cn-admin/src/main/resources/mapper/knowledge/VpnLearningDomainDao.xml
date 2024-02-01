@@ -45,4 +45,15 @@
         where domain = #{resource}
     </select>
 
+    <select id="queryPageByKnowledgeId" resultMap="VpnLearningDomain">
+        select * from
+        cn_vpn_learning_domain
+        where knowledge_id = #{params.knowledgeId}
+        <if test="params.q != null and params.q != ''">
+            AND ${params.q}
+        </if>
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
 </mapper>
