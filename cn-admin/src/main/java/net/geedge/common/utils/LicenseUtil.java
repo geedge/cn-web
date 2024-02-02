@@ -1,21 +1,30 @@
 package net.geedge.common.utils;
 
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.security.PrivateKey;
+import java.util.Map;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
+import org.w3c.dom.Document;
+
+import com.alibaba.fastjson.JSON;
+
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.Sign;
 import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import cn.hutool.log.Log;
 import cn.hutool.system.oshi.OshiUtil;
-import com.alibaba.fastjson.JSON;
 import net.geedge.modules.sys.entity.LicenseEntity;
-import net.geedge.modules.sys.entity.LicenseEntity.Signature;
-import org.w3c.dom.Document;
 import oshi.hardware.ComputerSystem;
-
-import java.io.UnsupportedEncodingException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.Map;
 
 public class LicenseUtil {
 	private static final Log log = Log.get();
@@ -42,7 +51,7 @@ public class LicenseUtil {
 	 * 
 	 * @param pk
 	 * @return
-	 */
+	 
 	public static boolean verifyLicenseSign(LicenseEntity license, PublicKey pk, String signAlgorithm) {
 		Signature signature = license.getSignature();
 		if (signature != null
@@ -65,7 +74,7 @@ public class LicenseUtil {
 		}
 		return false;
 
-	}
+	}*/
 
 	/**
 	 * 生成签名摘要信息
@@ -101,7 +110,12 @@ public class LicenseUtil {
 	public static LicenseEntity xmlToLicenseBean(String licenseXml) {
 		if (Tool.StrUtil.isNotBlank(licenseXml)) {
 			Map<String, Object> map = Tool.XmlUtil.xmlToMap(licenseXml);
-			return Tool.BeanUtil.toBeanIgnoreError(map, LicenseEntity.class);
+			map.forEach((k, v) -> {
+				if(Tool.ObjectUtil.isEmpty(v)) {
+					map.put(k, null);
+				}
+			});
+			return Tool.BeanUtil.toBean(map, LicenseEntity.class,CopyOptions.create().setIgnoreError(true).setIgnoreNullValue(true));
 		}
 		return null;
 	}
@@ -120,5 +134,55 @@ public class LicenseUtil {
 		Document document = Tool.XmlUtil.mapToXml(beanToMap,"license");
 		return Tool.XmlUtil.toStr(document, Constant.DEFAULT_CHARTSET_NAME, isPretty);
 	}
+	
+	/**
+     * 将对象转换成String类型的xml
+     */
+    public static String convertObjectToXmlStr(LicenseEntity licenseEntity) {
+    	String result = null;
+        try {
+        	StringWriter sw =new StringWriter();
+            JAXBContext context = JAXBContext.newInstance(LicenseEntity.class);
+            // 进行将Xml转成对象的核心接口
+            Marshaller createMarshaller = context.createMarshaller();
+            createMarshaller.marshal(licenseEntity, sw);
+            result = sw.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+	
+	 /**
+     * 将String类型的xml转换成对象
+     */
+    public static Object convertXmlStrToObject(Class<?> clazz, String xmlStr) {
+        Object xmlObject = null;
+        try {
+            JAXBContext context = JAXBContext.newInstance(clazz);
+            // 进行将Xml转成对象的核心接口
+            Unmarshaller unmarshal = context.createUnmarshaller();
+            StringReader sr = new StringReader(xmlStr);
+            xmlObject = unmarshal.unmarshal(sr);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return xmlObject;
+    }
 
+    /**
+     * 将file类型的xml转换成对象
+     */
+    public static Object convertXmlFileToObject(Class<?> clazz, String xmlPath) {
+        Object xmlObject = null;
+        try {
+            JAXBContext context = JAXBContext.newInstance(clazz);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            InputStreamReader isr=new InputStreamReader(new FileInputStream(xmlPath),"UTF-8");
+            xmlObject = unmarshaller.unmarshal(isr);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return xmlObject;
+    }
 }

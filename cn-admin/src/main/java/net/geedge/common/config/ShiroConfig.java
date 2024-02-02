@@ -1,20 +1,25 @@
 package net.geedge.common.config;
 
+import Aladdin.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import javax.servlet.Filter;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.catalina.connector.Connector;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -23,6 +28,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
@@ -30,10 +37,13 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import net.geedge.common.interceptor.TokenCheckFilter;
 import net.geedge.common.utils.Constant;
+import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysApiKeyDao;
 import net.geedge.modules.sys.dao.SysUserDao;
 import net.geedge.modules.sys.entity.SysConfigEntity;
+import net.geedge.modules.sys.service.LicenseService;
 import net.geedge.modules.sys.service.SysConfigService;
 import net.geedge.modules.sys.shiro.MySessionManager;
 import net.geedge.modules.sys.shiro.ShiroUtils;
@@ -61,6 +71,14 @@ public class ShiroConfig {
 
 	@Autowired
 	private SysApiKeyDao sysApiKeyDao;
+	
+	@Autowired
+	private LicenseService licenseService;
+	
+	@Value("${compileType:release}")
+	private String compileType;
+	@Value("${vendorCode}")
+	private String vendorCode;
 
 	@Bean("shiroFilter")
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -108,6 +126,34 @@ public class ShiroConfig {
 		shiroFilter.setFilterChainDefinitionMap(filterMap);
 
 		return shiroFilter;
+	}
+	
+	@Component
+	public class LicenseShiroFilter extends AccessControlFilter {
+
+		@Override
+		protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
+				throws Exception {
+			// debug 模式不校验 license
+			if (Tool.StrUtil.equalsIgnoreCase(compileType, "debug")) {
+				return true;
+			}
+			Integer status = licenseService.verify();
+			if (!Tool.NumberUtil.equals(status, HaspStatus.HASP_STATUS_OK)) {
+				HttpServletResponse httpResponse = (HttpServletResponse) response;
+				httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
+				httpResponse.getWriter()
+						.write(Tool.JSONUtil.toJsonStr(R.error(999,"Invalid license,code: " + status)));
+				return false;
+			}
+			return true;
+		}
+
+		@Override
+		protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+			return false;
+		}
+
 	}
 
 	@Bean

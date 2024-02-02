@@ -1100,8 +1100,8 @@ public class Tool {
 	 * license 授权处理工具类
 	 * @author ThinkPad
 	 *
-	 */
-	public static class LicenseUtil extends net.geedge.common.utils.LicenseUtil{};
+	 
+	public static class LicenseUtil extends net.geedge.common.utils.LicenseUtil{};*/
 	/**
 	 * AES 加密工具类
 	 * @author lijinyang

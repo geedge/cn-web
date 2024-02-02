@@ -380,12 +380,19 @@ public enum RCode {
 	 * License 相关
 	 */
 	LICENSE_FILE_IS_NULL(711001, "license file is required"),
-	LICENSE_FILE_IS_EMPTY(716001, "The license file does not exist"), LICENSE_FILE_INVALID(715001, "Invalid license"),
+	LICENSE_FILE_IS_EMPTY(716001, "The license file does not exist"), 
+	LICENSE_FILE_INVALID(715001, "Invalid license"),
 	LICENSE_PARAM_IS_NULL(711002, "license parameter is required"),
 	LICENSE_TOKEN_INVALID(715002, "Invalid license,token error"),
 	LICENSE_MAXIMUMASSETS_INVALID(715003, "The number of assets exceeds the maximumAssets"),
 	LICENSE_VERSION_INVALID(715004, "The version is not valid"),
 	LICENSE_FILE_TYPE_ERROR(715005,"license upload file only suppose xml"),
+	LICENSE_DIGESTVALUE_INVALID(715006,"Lincese digest value error ,The file may have been modified"),
+	LICENSE_TYPE_ISNULL(715007,"License params type can not be null"),
+	LICENSE_SUPPORT_ID_ISNULL(715008,"License params support id can not be null"),
+	LICENSE_ORGANIZATION_ISNULL(715009,"License params organization can not be null"),
+	LICENSE_API_ISNULL(715010,"license api url is empty , please check config"),
+
 
 	REPORT_JOB_ID_ISNULL(311001,"Report job id is required"),
 	REPORT_TEMP_ID_ISNULL(311002,"Report temp id is required"),
