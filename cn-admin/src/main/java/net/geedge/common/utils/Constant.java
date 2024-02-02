@@ -314,4 +314,17 @@ public class Constant {
 	public static final String DEFAULT_TRIGGER_STATUS = "defaultTriggerStatus";
 	public static final Integer DEFAULT_LENGTH = 10;
 	public static final Integer DEFAULT_START = 0;
+	
+	
+	//获取c2v信息
+    public static final Integer LICENSE_C2V = 1;
+
+    //更新license信息
+    public static final Integer LICENSE_UPDATE = 2;
+
+    //查询license信息
+    public static final Integer LICENSE_QUERY = 3;
+
+    //验证授权信息
+    public static final Integer LICENSE_VERIFY = 4;
 }

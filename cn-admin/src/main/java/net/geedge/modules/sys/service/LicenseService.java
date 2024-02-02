@@ -1,56 +1,38 @@
 package net.geedge.modules.sys.service;
 
 import java.io.IOException;
-import java.security.PublicKey;
+import java.util.Map;
 
-import net.geedge.modules.sys.entity.LicenseEntity;
+import javax.servlet.http.HttpServletResponse;
+
+import org.dom4j.DocumentException;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface LicenseService {
-
-	/**
-	 * 获取token 首先尝试获取 硬件token 硬件token获取失败从数据库读取 数据库不存在 通过uuid 生成，保存到数据库
-	 * 
-	 * @param key
-	 * @return
-	 */
-	String getLicenseToken();
 
 	/**
 	 * 获取 license
 	 * 
 	 * @return
 	 */
-	LicenseEntity getLicenseEntity();
+	Map<String,Object> getLicenseDetail();
+	
+	Boolean uploadLicense(String v2c) throws DocumentException ;
 
 	/**
-	 * 更新 license
-	 */
-	void uploadLicenseEntity(LicenseEntity license);
-
-	/**
-	 * 获取系统版本
-	 * 
+	 * 证书校验
 	 * @return
 	 */
-	String getSystemVersion();
+	Integer verify();
 
+	void getLicenseC2V(HttpServletResponse response) throws DocumentException, IOException;
+	
+	void validateDigestValue(String v2c) throws Exception;
+	
 	/**
-	 * 验证license 签名，以及 开始时间，结束时间等是否有效
-	 * 
-	 * @return
+	 * 生成v2c文件
 	 */
-	boolean verify(LicenseEntity license);
+	String gen(MultipartFile[] files,Map<String,Object> params);
 
-	/**
-	 * 获取license 缓存，没有从数据库读取
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	LicenseEntity getAndSetLicenseCache();
-
-	String getSignAlgorithm();
-
-	PublicKey getPublicKey();
 
 }

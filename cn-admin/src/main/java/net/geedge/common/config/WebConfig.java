@@ -11,7 +11,6 @@ package net.geedge.common.config;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import net.geedge.common.converter.StringToEnumConverter;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.springframework.context.annotation.Bean;
@@ -20,14 +19,11 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import net.geedge.common.interceptor.LicenseInterceptor;
+import net.geedge.common.converter.StringToEnumConverter;
 import net.geedge.common.interceptor.SysMenuInterceptor;
-import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.SQLUtils;
 import net.geedge.common.utils.SpringContextUtils;
 import net.geedge.common.utils.SqlHelper.MysqlHelper;
-import net.geedge.common.utils.SqlHelper.OracleHelper;
-import net.geedge.common.utils.SqlHelper.PostgresqlHelper;
 import net.geedge.modules.sys.service.SysConfigService;
 
 /**
@@ -65,16 +61,16 @@ public class WebConfig implements WebMvcConfigurer {
     /**
      * license校验拦截器
      * @return
-     */
+     
     @Bean
     LicenseInterceptor licenseInterceptor() {
         return new LicenseInterceptor();
-    }
+    }*/
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
     	//添加license 拦截器，排除 license 接口
-    	registry.addInterceptor(licenseInterceptor()).excludePathPatterns("/sys/license/**","/api/v1/alerts","/api/v2/alerts","/setup/**");
+    	//registry.addInterceptor(licenseInterceptor()).excludePathPatterns("/sys/license/**","/api/v1/alerts","/api/v2/alerts","/setup/**");
     	
         SysConfigService sysConfigService = (SysConfigService) SpringContextUtils.getBean("sysConfigService");
         registry.addInterceptor(new SysMenuInterceptor(sysConfigService)).addPathPatterns("/sys/menu/**");
