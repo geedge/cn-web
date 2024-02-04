@@ -35,6 +35,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import net.geedge.common.interceptor.LicenseShiroFilter;
 import net.geedge.common.interceptor.TokenCheckFilter;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.R;
@@ -71,15 +72,13 @@ public class ShiroConfig {
 
 	@Autowired
 	private SysApiKeyDao sysApiKeyDao;
-	
+
 	@Autowired
 	private LicenseService licenseService;
 	
 	@Value("${compileType:release}")
 	private String compileType;
-	@Value("${vendorCode}")
-	private String vendorCode;
-
+	
 	@Bean("shiroFilter")
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
@@ -116,44 +115,19 @@ public class ShiroConfig {
 		filterMap.put("/sys/appearance", "anon");
 		filterMap.put("/magic/web/**", "anon");
 		filterMap.put("/**", "tokenCheckFilter");
-
+		filterMap.put("/**", "licenseShiroFilter");
+		
 		Integer loginExpiration = getTimeOutData();
 		Map<String, Filter> cumstomFilterMap = new LinkedHashMap<String, Filter>();
 		TokenCheckFilter tokenCheckFilter = new TokenCheckFilter(redisTemplate, loginExpiration, sysUserDao,
 				sysApiKeyDao);
+		LicenseShiroFilter licenseShiroFilter = new LicenseShiroFilter(licenseService,compileType);
 		cumstomFilterMap.put("tokenCheckFilter", tokenCheckFilter);
+		cumstomFilterMap.put("licenseShiroFilter", licenseShiroFilter);
 		shiroFilter.setFilters(cumstomFilterMap);
 		shiroFilter.setFilterChainDefinitionMap(filterMap);
 
 		return shiroFilter;
-	}
-	
-	@Component
-	public class LicenseShiroFilter extends AccessControlFilter {
-
-		@Override
-		protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
-				throws Exception {
-			// debug 模式不校验 license
-			if (Tool.StrUtil.equalsIgnoreCase(compileType, "debug")) {
-				return true;
-			}
-			Integer status = licenseService.verify();
-			if (!Tool.NumberUtil.equals(status, HaspStatus.HASP_STATUS_OK)) {
-				HttpServletResponse httpResponse = (HttpServletResponse) response;
-				httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
-				httpResponse.getWriter()
-						.write(Tool.JSONUtil.toJsonStr(R.error(999,"Invalid license,code: " + status)));
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-			return false;
-		}
-
 	}
 
 	@Bean
