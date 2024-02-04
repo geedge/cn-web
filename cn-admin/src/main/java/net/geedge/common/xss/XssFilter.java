@@ -31,6 +31,7 @@ public class XssFilter implements Filter {
 	@Override
 	public void init(FilterConfig config) throws ServletException {
 		excludedList.add("/magic/web");
+		excludedList.add("/v1/knowledgeBase");
 	}
 
 	@Override
