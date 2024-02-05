@@ -114,8 +114,7 @@ public class ShiroConfig {
 		filterMap.put("/setup/**", "anon");// license 相关接口
 		filterMap.put("/sys/appearance", "anon");
 		filterMap.put("/magic/web/**", "anon");
-		filterMap.put("/**", "tokenCheckFilter");
-		filterMap.put("/**", "licenseShiroFilter");
+		filterMap.put("/**", "tokenCheckFilter,licenseShiroFilter");
 		
 		Integer loginExpiration = getTimeOutData();
 		Map<String, Filter> cumstomFilterMap = new LinkedHashMap<String, Filter>();
