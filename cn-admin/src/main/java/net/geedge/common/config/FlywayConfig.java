@@ -44,8 +44,6 @@ public class FlywayConfig {
             for (PropertyDescriptor property : propertyDescriptors) {
                 String key = property.getName();
                 if (!"class".equals(key) && !"enabled".equals(key)) {
-                    //Method getter = property.getReadMethod();
-                    //Object value = getter.invoke(flywayProperties);
                     Object value = ReflectUtil.invoke(flywayProperties, property.getReadMethod(), key);
                     map.put("flyway." + key, value.toString());
                 }

@@ -446,10 +446,6 @@ public class ReportTempServiceImpl extends ServiceImpl<ReportTempDao, ReportTemp
 				}
 				break;
 			case "customize":
-				/*String sTime = (String) conf.get("startTime");
-				String eTime = (String) conf.get("endTime");
-				startTime = DateUtil.parse(sTime);
-				endTime = DateUtil.parse(eTime);*/
 				Long sTime = (Long)conf.get("startTime");
 				Long eTime = (Long)conf.get("endTime");
 				startTime = DateUtil.date(sTime);

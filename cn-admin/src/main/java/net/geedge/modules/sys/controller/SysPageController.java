@@ -25,11 +25,6 @@ public class SysPageController {
 		return "modules/" + module + "/" + url;
 	}
 
-	/*@RequestMapping(value = {"/", "index.html"})
-	public String index(){
-		return "index";
-	}*/
-
 	@RequestMapping("index1.html")
 	public String index1(){
 		return "index1";

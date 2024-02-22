@@ -1,4 +1,4 @@
-package net.geedge.common.interceptor;
+/*package net.geedge.common.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,4 +24,4 @@ public class LicenseInterceptor extends HandlerInterceptorAdapter {
 		return licenseService.verify(licenseEntity);
 	}
 
-}
+}*/

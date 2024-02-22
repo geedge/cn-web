@@ -64,5 +64,10 @@ INSERT INTO `sys_menu` VALUES (37, 'I18n', 'I18N', 'I18N', 0, NULL, 1, '/i18n', 
 INSERT INTO `sys_menu` VALUES (38, 'Link monitor', 'linkMonitor', 'overall.linkMonitor', 1, NULL, 1, '/panel/linkMonitor', '', NULL, 31, 1);
 INSERT INTO `sys_menu` VALUES (39, 'System', 'system', 'overall.system', 0, NULL, 1, 'redirect:/system', 'cn-icon cn-icon-system', NULL, 61, 1);
 INSERT INTO `sys_menu` VALUES (40, 'Plugin', 'plugin', 'plugin.pluginManagement', 39, NULL, 1, '/system/plugin', 'cn-icon cn-icon-plugin', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (41, 'License', 'license', 'overall.license', 25, NULL, 1, '/administration/license', 'cn-icon cn-icon-license', NULL, 26, 1);
+INSERT INTO `sys_menu` VALUES (42, 'Edit license', 'editLicense', 'overall.edit', 41, NULL, 2, '', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (43, 'Location Intelligence', 'locationIntelligence', 'ovreall.locationIntelligence', 0, '', 1, 'redirect:/location', '', NULL, 2, 1);
+INSERT INTO `sys_menu` VALUES (44, 'Location Map', 'locationMap', 'location.locationMap', 43, '', 1, '/location/map', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (45, 'Trace Tracking', 'traceTracking', 'location.locationMap', 43, '', 1, '/location/tracking', '', NULL, 11, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

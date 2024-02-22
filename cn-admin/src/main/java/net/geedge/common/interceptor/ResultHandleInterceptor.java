@@ -83,13 +83,6 @@ public class ResultHandleInterceptor implements ResponseBodyAdvice {
     	}
     	// include优先级高于exclude 去除exclude中间无用数值
     	if(Tool.ObjectUtil.equals(result.size(), 2)) {
-			/*List<String> includeFields = (List<String>) result.get(INCLUDE);
-			List<String> excludeFields = (List<String>) result.get(EXCLUDE);
-			// 交集
-			List<String> intersection = includeFields.stream().filter(item -> excludeFields.contains(item)).collect(toList());
-			excludeFields.removeAll(intersection);
-			result.put(EXCLUDE, excludeFields);*/
-    		
     		// include 和 exclude互斥 所以有include 就可以忽视 exclude
     		result.remove(EXCLUDE);
     	}

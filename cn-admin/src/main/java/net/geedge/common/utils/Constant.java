@@ -254,6 +254,8 @@ public class Constant {
 	public static final String INTERNAL_IP_BUILT_IN = "cn_internal_ip_built_in";
 	public static final String LINK_DIRECTION_BUILT_IN = "cn_link_direction_built_in";
 	public static final String DNS_SERVER_INFO_BUILT_IN = "cn_dns_server_info_built_in";
+	public static final String VPN_LEARNING_DOMAIN = "cn_vpn_learning_domain";
+	public static final String VPN_LEARNING_IP = "cn_vpn_learning_ip";
 	
 	/**
 	 * IP格式类型分类
@@ -298,4 +300,31 @@ public class Constant {
 			return value;
 		}
 	}
+
+	//plugin
+	public static final String XXL_JOB_ADMIN_LOGIN = "/xxl-job-admin/login";
+	public static final String XXL_JOB_ADMIN_JOBINFO = "/xxl-job-admin/jobinfo/";
+	public static final String XXL_JOB_ADMIN_JOBINFO_PAGELIST = "/xxl-job-admin/jobinfo/pageList";
+	public static final String XXL_JOB_ADMIN_COOKIE = "Cookie";
+	public static final String XXL_JOB_ADMIN_JOBINFO_PAGELIST_PARAMS = "{0}?jobGroup={1}&triggerStatus={2}&start={3}&length={4}";
+	public static final String SYSCONFIG_SCHEDULE_TASK = "schedule_task";
+	public static final String LEARNING_JOB_ID = "id";
+	public static final String LEARNING_JOB_DESC = "jobDesc";
+	public static final String LEARNING_JOB_TRIGGER_STATUS = "triggerStatus";
+	public static final String DEFAULT_TRIGGER_STATUS = "defaultTriggerStatus";
+	public static final Integer DEFAULT_LENGTH = 10;
+	public static final Integer DEFAULT_START = 0;
+	
+	
+	//获取c2v信息
+    public static final Integer LICENSE_C2V = 1;
+
+    //更新license信息
+    public static final Integer LICENSE_UPDATE = 2;
+
+    //查询license信息
+    public static final Integer LICENSE_QUERY = 3;
+
+    //验证授权信息
+    public static final Integer LICENSE_VERIFY = 4;
 }

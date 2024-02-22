@@ -1,20 +1,25 @@
 package net.geedge.common.config;
 
+import Aladdin.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import javax.servlet.Filter;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.catalina.connector.Connector;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -23,17 +28,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import net.geedge.common.interceptor.LicenseShiroFilter;
 import net.geedge.common.interceptor.TokenCheckFilter;
 import net.geedge.common.utils.Constant;
+import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysApiKeyDao;
 import net.geedge.modules.sys.dao.SysUserDao;
 import net.geedge.modules.sys.entity.SysConfigEntity;
+import net.geedge.modules.sys.service.LicenseService;
 import net.geedge.modules.sys.service.SysConfigService;
 import net.geedge.modules.sys.shiro.MySessionManager;
 import net.geedge.modules.sys.shiro.ShiroUtils;
@@ -62,6 +73,12 @@ public class ShiroConfig {
 	@Autowired
 	private SysApiKeyDao sysApiKeyDao;
 
+	@Autowired
+	private LicenseService licenseService;
+	
+	@Value("${compileType:release}")
+	private String compileType;
+	
 	@Bean("shiroFilter")
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
@@ -78,7 +95,6 @@ public class ShiroConfig {
 		filterMap.put("/swagger-ui.html", "anon");
 		filterMap.put("/webjars/**", "anon");
 		filterMap.put("/swagger-resources/**", "anon");
-//        filterMap.put("/statics/**", "anon");
 		filterMap.put("/static/**", "anon");
 		filterMap.put("/cn/**", "anon");
 		filterMap.put("/", "anon");
@@ -89,7 +105,6 @@ public class ShiroConfig {
 		filterMap.put("/healthy", "anon");
 		filterMap.put("/actuator/**", "anon");
 		filterMap.put("/gitLog", "anon");
-//        filterMap.put("/logout","anon");
 		filterMap.put("/favicon.ico", "anon");
 		filterMap.put("/captcha.jpg", "anon");
 		filterMap.put("/api/**", "anon");
@@ -99,14 +114,16 @@ public class ShiroConfig {
 		filterMap.put("/setup/**", "anon");// license 相关接口
 		filterMap.put("/sys/appearance", "anon");
 		filterMap.put("/magic/web/**", "anon");
-//        filterMap.put("/**", "authc");
-		filterMap.put("/**", "tokenCheckFilter");
-
+		filterMap.put("/v1/knowledgeBase/items/batch", "anon");
+		filterMap.put("/**", "tokenCheckFilter,licenseShiroFilter");
+		
 		Integer loginExpiration = getTimeOutData();
 		Map<String, Filter> cumstomFilterMap = new LinkedHashMap<String, Filter>();
 		TokenCheckFilter tokenCheckFilter = new TokenCheckFilter(redisTemplate, loginExpiration, sysUserDao,
 				sysApiKeyDao);
+		LicenseShiroFilter licenseShiroFilter = new LicenseShiroFilter(licenseService,compileType);
 		cumstomFilterMap.put("tokenCheckFilter", tokenCheckFilter);
+		cumstomFilterMap.put("licenseShiroFilter", licenseShiroFilter);
 		shiroFilter.setFilters(cumstomFilterMap);
 		shiroFilter.setFilterChainDefinitionMap(filterMap);
 

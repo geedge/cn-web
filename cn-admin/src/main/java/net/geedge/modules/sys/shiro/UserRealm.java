@@ -160,7 +160,7 @@ public class UserRealm extends AuthorizingRealm {
 			sb.append(token.getPassword());
 //			user = getLdapAuthentication(token.getUsername(), sb.toString());
 			if (user == null) {
-				throw new IncorrectCredentialsException("账号或密码不正确");
+				throw new IncorrectCredentialsException("The account or password is incorrect");
 			}
 			user.setSource("ldap");
 			user.setStatus(1);
@@ -182,7 +182,7 @@ public class UserRealm extends AuthorizingRealm {
 			SysUserEntity tmpUser = null;
 			if(tmpUser == null) {
 				// 验证失败 则登录失败
-				throw new IncorrectCredentialsException("账号或密码不正确");
+				throw new IncorrectCredentialsException("The account or password is incorrect");
 			}
 			@SuppressWarnings("unchecked")
 			Map<String,String> defaultMapping = JSONUtil.toBean(defaultMappingStr, HashMap.class);
@@ -198,7 +198,7 @@ public class UserRealm extends AuthorizingRealm {
 		} else {
 			// 判断系统内用户账号是否锁定
 			if (user.getStatus() == 0) {
-				throw new LockedAccountException("账号已被锁定,请联系管理员");
+				throw new LockedAccountException("The account has been locked, please contact the administrator");
 			}
 		}
 		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPin(),ByteSource.Util.bytes(user.getSalt()), getName());
@@ -212,108 +212,4 @@ public class UserRealm extends AuthorizingRealm {
 		shaCredentialsMatcher.setHashIterations(ShiroUtils.hashIterations);
 		super.setCredentialsMatcher(shaCredentialsMatcher);
 	}
-
-	/**
-	 * ldap登录验证
-	 * 
-	 * @return
-	 
-	@SuppressWarnings("unchecked")
-	public SysUserEntity getLdapAuthentication(String userName, String pin) {
-		// 获取sys_config中的ldap信息 判断是否支持ldap登录
-		Map<String, Object> ldapInfos = sysConfigService.getConfigListByTypes(new String[] { "ldap" }, null);
-		Map<String, String> ldap = (Map<String, String>) ldapInfos.get("ldap");
-		// 判断是否开启 ldap 认证
-		if (ObjectUtils.isEmpty(ldap) || StrUtil.isBlank(ldap.get("ldap_enable"))
-				|| "off".equalsIgnoreCase(ldap.get("ldap_enable"))) {
-			return null;
-		}
-		String ldapAddress = ldap.get("ldap_address");
-		String ldapDN = ldap.get("ldap_dn");
-		String ldapPassword = ldap.get("ldap_password");
-		ldapPassword = StrUtil.str(Base64.getDecoder().decode(ldapPassword), "UTF-8");
-		String ldapUserFilter = ldap.get("ldap_user_filter");
-		String ldapMapping = ldap.get("ldap_mapping");
-		String ldapOu = ldap.get("ldap_ou");
-
-		if (StrUtil.isBlank(ldapAddress) || StrUtil.isBlank(ldapDN) || StrUtil.isBlank(ldapPassword)
-				|| StrUtil.isBlank(ldapUserFilter)) {
-			// 参数不正确
-			return null;
-		}
-		//用户配置 mapping
-		Map<String, String> configMapping = JSONUtil.toBean(ldapMapping, HashMap.class);
-		Map<String,String> defaultMapping = JSONUtil.toBean(defaultMappingStr, HashMap.class);
-		LdapContextSource ldapContextSource = new LdapContextSource();
-		ldapContextSource.setUrl(ldapAddress);
-		ldapContextSource.setUserDn(ldapDN);
-		ldapContextSource.setPassword(ldapPassword);
-		ldapContextSource.setReferral("follow");
-		ldapContextSource.afterPropertiesSet(); // important
-
-		LdapTemplate ldapTemplate = new LdapTemplate(ldapContextSource);
-		// 组织filter
-		AndFilter queryFilter = new AndFilter();
-		// username filter
-		String uname = StrUtil.isNotBlank(configMapping.get(LDAP_MAPPING_USERNAME_KEY))
-				? configMapping.get(LDAP_MAPPING_USERNAME_KEY)
-				: defaultMapping.get(LDAP_MAPPING_USERNAME_KEY);
-		List<String> unameList = StrUtil.splitTrim(uname, "|");
-		OrFilter orFilter = new OrFilter();
-		for (String n : unameList) {
-			orFilter.append(new EqualsFilter(n, userName));
-		}
-		queryFilter.append(orFilter);
-		if (StrUtil.isNotEmpty(ldapUserFilter)) {
-			queryFilter.append(new HardcodedFilter(ldapUserFilter));
-		}
-		// 支持配置多个 ou 搜索用户
-		List<String> baseList = StrUtil.splitTrim(ldapOu, "|");
-		SysUserEntity entity = null;
-		for (String base : baseList) {
-			LdapQuery query = LdapQueryBuilder.query().base(base).timeLimit(20000).countLimit(1000).filter(queryFilter);
-			try {
-				// 开始认证
-				entity = ldapTemplate.authenticate(query, pin,new AuthenticatedLdapEntryContextMapper<SysUserEntity>() {
-							@Override
-							public SysUserEntity mapWithContext(DirContext ctx,LdapEntryIdentification ldapEntryIdentification) {
-								LdapName ldapName = ldapEntryIdentification.getAbsoluteName();
-								Attributes attributes;
-								SysUserEntity user = null;
-								try {
-									attributes = ctx.getAttributes(ldapName);
-									Map<String, String> attrMap = new HashMap<String, String>();
-									// 获取用户属性导入 系统
-									for (Entry<String, String> entry : defaultMapping.entrySet()) {
-										String key = entry.getKey();
-										String attrKey = StrUtil.isNotBlank(configMapping.get(key)) ? configMapping.get(key) : entry.getValue();
-										List<String> attrKeyList = StrUtil.splitTrim(attrKey, "|");
-										for (String ak : attrKeyList) {
-											Object obj = attributes.get(ak) != null ? attributes.get(ak).get() : null;
-											if (obj != null) {
-												attrMap.put(key, obj.toString());
-												break;
-											}
-										}
-									}
-									// 赋值 sysuser
-									user = new SysUserEntity();
-									BeanUtil.fillBeanWithMap(attrMap, user, true);
-								} catch (NamingException e) {
-									log.debug(e);
-								}
-								LdapUtils.closeContext(ctx);
-								return user;
-							}
-						});
-			} catch (RuntimeException e) {
-				log.warn(e,"ldap Authentication failed,base: {}",base);
-			}
-			if (entity != null) {
-				break;
-			}
-		}
-		return entity;
-	}
-*/
 }

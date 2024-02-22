@@ -14,6 +14,7 @@ public enum OperationEnum {
     RESET("reset"),
     UNKNOWN("unknown"),
     LOGIN("login"),
+    DOWNLOAD("download"),
     LOGOUT("logout");
 
 

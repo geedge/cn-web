@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.util.ObjectUtils;
@@ -136,8 +138,7 @@ public class ReportHandlerTask extends QuartzJobBean {
      */
 	public void createRpcJob(String rpcHost,Map<Integer, List<ReportTask>> stateTasks) {
 		if(ObjectUtil.isNotEmpty(stateTasks.get(0))) {			
-        	//http://ip:port/query/jobs
-        	String createJobPath = StrUtil.str(rpcHost+"query/jobs");
+        	String createJobPath = StrUtil.str(rpcHost+"v1/query/sql");
         	List<ReportTask> initTasks = stateTasks.get(0);
         	Set<Integer> tempIds = initTasks.stream().map(ReportTask::getTempId).collect(Collectors.toSet());
         	Collection<ReportTemp> temps = reportTempService.listByIds(tempIds);
@@ -172,9 +173,8 @@ public class ReportHandlerTask extends QuartzJobBean {
 	    			writer.flush();
 	    			querySql = writer.toString();
 	        		Map<String,String> param = new HashMap<String,String>();
-	        		param.put("query.type", "report");
-	        		param.put("query.data_source", source);
-	        		param.put("custom.report.sql", querySql);
+	        		param.put("is_saved_query", "1");
+	        		param.put("statement", querySql);
 	        		
 	        		CompletableFuture<Map<String, Object>> future = CompletableFuture.supplyAsync(() -> {
 	        			ResponseEntity<Object> response = restTemplate.exchange(createJobPath, HttpMethod.POST, new HttpEntity<Object>(param), Object.class, new HashMap<String,Object>());
@@ -194,9 +194,9 @@ public class ReportHandlerTask extends QuartzJobBean {
 					Map<String, Object> result = future.getNow(null);
 					Integer status = (Integer) result.get("status");
         			if(status == 201) {
-        				List<Map<String,Object>> resultData = (List<Map<String, Object>>) result.get("data");
+        				Map<String,Object> resultData = (Map<String, Object>) result.get("job");
         				Integer taskId = (Integer) result.get("taskId");
-        				String jobId = (String) resultData.get(0).get("job_id");
+        				String jobId = (String) resultData.get("job_id");
         				ReportTask task = idTasks.get(taskId);
         				if(ObjectUtil.isNotEmpty(task)) {
         					task.setState(1);
@@ -205,7 +205,7 @@ public class ReportHandlerTask extends QuartzJobBean {
         				}
         			}else {
         				String failedMsg = (String) result.get("message");
-        				List<Map<String,Object>> resultData = (List<Map<String, Object>>) result.get("data");
+        				List<Map<String,Object>> resultData = (List<Map<String, Object>>) result.get("job");
         				Integer taskId = (Integer) result.get("taskId");
         				ReportTask task = idTasks.get(taskId);
         				task.setState(4);
@@ -217,6 +217,7 @@ public class ReportHandlerTask extends QuartzJobBean {
 				// 将注册成功的任务状态进行修改 同时更新字段信息
 				reportTaskService.updateBatchById(initTasks);
         	} catch (Exception e) {
+        		log.error(e);
 				log.error("createRpcJob error msg : {}",e.getMessage());
 			}
         }
@@ -229,11 +230,13 @@ public class ReportHandlerTask extends QuartzJobBean {
 		if(ObjectUtil.isNotEmpty(stateTasks.get(1))) {
         	List<ReportTask> modifyTasks = stateTasks.get(1);
         	List<CompletableFuture<Map<String, Object>>> futureList = ListUtil.list(false);
+        	HttpHeaders headers = new HttpHeaders();
+        	headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        	HttpEntity entity = new HttpEntity<>(headers);
         	for(ReportTask task : modifyTasks) {
-        		//http://ip:port/query/jobs/[jobId]/status
-            	String modifyJobPath = StrUtil.str(rpcHost+"query/jobs/"+task.getCredential()+"/status");
+            	String modifyJobPath = StrUtil.str(rpcHost+"v1/query/job/"+task.getCredential()+"?is_saved_query=1");
             	CompletableFuture<Map<String, Object>> future = CompletableFuture.supplyAsync(() -> {
-            		ResponseEntity<Map> response = restTemplate.getForEntity(modifyJobPath,Map.class);
+            		ResponseEntity<Map> response = restTemplate.exchange(modifyJobPath,HttpMethod.GET,entity,Map.class);
 	        		Map result = (Map) response.getBody();
         			result.put("taskId", task.getId());
         			return result;
@@ -255,14 +258,14 @@ public class ReportHandlerTask extends QuartzJobBean {
 				Map<String, Object> result = future.getNow(null);
 				Integer status = (Integer) result.get("status");
     			if(status == 200) {
-    				List<Map<String,Object>> resultData = (List<Map<String, Object>>) result.get("data");
+    				Map<String,Object> resultData = (Map<String, Object>) result.get("job");
     				Integer taskId = (Integer) result.get("taskId");
     				ReportTask task = idTasks.get(taskId);
     				if(ObjectUtil.isNotEmpty(task)) { 
-    					boolean isDone = (boolean) resultData.get(0).get("is_done");
-    					boolean isCanceled = (boolean) resultData.get(0).get("is_canceled");
-    					boolean isFailed = (boolean) resultData.get(0).get("is_failed");
-    					Double doneProgress = (Double) resultData.get(0).get("done_progress");
+    					boolean isDone = (boolean) resultData.get("is_done");
+    					boolean isCanceled = (boolean) resultData.get("is_canceled");
+    					boolean isFailed = (boolean) resultData.get("is_failed");
+    					Double doneProgress = (Double) resultData.get("done_progress");
     					task.setPercent(doneProgress.doubleValue());
     					if(isDone && !isFailed && !isCanceled) {
     						task.setState(2);
@@ -273,9 +276,8 @@ public class ReportHandlerTask extends QuartzJobBean {
     						task.setFailedMsg("Canceled");
     					}
     					if(isFailed) {
-    						String failedMsg = (String) result.get("message");
     						task.setState(4);
-    						task.setFailedMsg(failedMsg);
+    						task.setFailedMsg(JSON.toJSONString(result));
     					}
     				}
     			}else {
@@ -295,11 +297,13 @@ public class ReportHandlerTask extends QuartzJobBean {
 		if(ObjectUtil.isNotEmpty(stateTasks.get(2))) {
         	List<ReportTask> resultTasks = stateTasks.get(2);
         	List<CompletableFuture<Map<String, Object>>> futureList = ListUtil.list(false);
+        	HttpHeaders headers = new HttpHeaders();
+        	headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        	HttpEntity entity = new HttpEntity<>(headers);
         	for(ReportTask task : resultTasks) {
         		CompletableFuture<Map<String, Object>> future = CompletableFuture.supplyAsync(() -> {
-    				// http://ip:port/query/jobs/[jobId]/report
-                	String resultJobPath = StrUtil.str(rpcHost+"query/jobs/"+task.getCredential()+"/report");
-                	ResponseEntity<Map> response = restTemplate.getForEntity(resultJobPath,Map.class);
+                	String resultJobPath = StrUtil.str(rpcHost+"v1/query/job/"+task.getCredential()+"/result?is_saved_query=1");
+                	ResponseEntity<Map> response = restTemplate.exchange(resultJobPath,HttpMethod.GET,entity,Map.class);
 	        		Map result = (Map) response.getBody();
         			result.put("taskId", task.getId());
         			return result;

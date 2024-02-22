@@ -1,48 +1,49 @@
 package net.geedge.modules.sys.service.impl;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.PublicKey;
-import java.util.Date;
-import java.util.TimeZone;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.apache.commons.io.IOUtils;
+import javax.servlet.http.HttpServletResponse;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import Aladdin.HaspStatus;
+import cn.hutool.core.io.IORuntimeException;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
-import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.Constant;
+import net.geedge.common.utils.LicenseUtil;
 import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.entity.LicenseEntity;
-import net.geedge.modules.sys.entity.LicenseEntity.Product;
-import net.geedge.modules.sys.entity.LicenseEntity.Tokens;
-import net.geedge.modules.sys.entity.SysConfigEntity;
+import net.geedge.modules.sys.entity.Signature;
 import net.geedge.modules.sys.service.LicenseService;
 import net.geedge.modules.sys.service.SysConfigService;
-
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.io.IORuntimeException;
-import cn.hutool.log.Log;
 
 @Service
 public class LicenseServiceImpl implements LicenseService {
 	private static final Log log = Log.get();
-	/**
-	 * 公钥缓存
-	 */
-	private static PublicKey publickeyCache;
-	/**
-	 * 缓存license ，避免重复计算sign
-	 */
-	private static LicenseEntity licenseCache;
+
 	@Autowired
 	private SysConfigService sysConfigService;
-
 
 	@Value("${license.config.key:license}")
 	private String licenseConfigKey;
@@ -54,221 +55,279 @@ public class LicenseServiceImpl implements LicenseService {
 	@Value("${system.version.key:system_version}")
 	private String systemVersionKey;
 
-	/**
-	 * 签名算法
-	 */
-	@Value("${license.sign.algorithm:NONEwithRSA}")
-	private String signAlgorithm;
+	@Value("${vendorCode}")
+	private String vendorCode;
+
+	@Value("${fetureId}")
+	private Integer fetureId;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	/**
-	 * 公钥路径，首先在jar包外查找，未找到在jar包中查找
-	 */
-	@Value("${license.publickey.path:/license/license.pem}")
-	public String publicKeyPath = "/license/license.pem";
-
-
-	/**
-	 * base 不校验版本
-	 */
-	@Value("${license.base.version:base}")
-	private String baseVersion;
-
-	/**
-	 * 获取token 首先尝试获取 硬件token 硬件token获取失败从数据库读取 数据库不存在 通过uuid 生成，保存到数据库
-	 * 
-	 * @param key
-	 * @return
+	 * 获取license 详情
 	 */
 	@Override
-	public String getLicenseToken() {
-		String token = Tool.LicenseUtil.getMachineID();
-		if (Tool.StrUtil.isBlank(token)) {
-			SysConfigEntity entity = sysConfigService
-					.getOne(new QueryWrapper<SysConfigEntity>().eq("ckey", licenseTokenKey));
-			if (entity == null || Tool.StrUtil.isBlank(entity.getCvalue())) {
-				token = Tool.IdUtil.fastSimpleUUID();
-				if (entity == null) {
-					entity = new SysConfigEntity();
-				}
-				entity.setCkey(licenseTokenKey);
-				entity.setCvalue(token);
-				entity.setRemark("Automatic generated");
-				sysConfigService.saveOrUpdate(entity);
-			}
-			token = entity.getCvalue();
+	public Map<String,Object> getLicenseDetail() {
+		String licenseUrl = sysConfigService.getValue("license_url");
+		if(StrUtil.isEmpty(licenseUrl)) {
+			log.error("license api url is empty , please check config");
+			return new HashMap();
 		}
-		return token;
+		Map param = new HashMap();
+		param.put("type", Constant.LICENSE_QUERY);
+		param.put("vendorCode", vendorCode);
+		param.put("featureId", 30000);
+		ResponseEntity<Object> response = restTemplate.exchange(licenseUrl, HttpMethod.POST, 
+				new HttpEntity<Object>(param), Object.class, new HashMap<String,Object>());
+		Map result = (Map) response.getBody();
+		String licenseInfo = null;
+		if(ObjectUtil.isNotEmpty(result) && ObjectUtil.isNotEmpty(result.get("data"))) {
+			licenseInfo = (String) result.get("data");
+		}
+		if(Tool.StrUtil.isBlank(licenseInfo)) {
+			throw new CNException(RCode.LICENSE_FILE_IS_EMPTY);
+		}
+		Map<String, Object> licenseMap = Tool.XmlUtil.xmlToMap(licenseInfo);
+		
+		String v2c = sysConfigService.getValue("license");
+		LicenseEntity license = (LicenseEntity) LicenseUtil.convertXmlStrToObject(LicenseEntity.class, v2c);
+		if(ObjectUtil.isNotEmpty(license)) {
+			licenseMap.put("comment", license.getComment());
+			licenseMap.put("supportID", license.getSupportID());
+			licenseMap.put("organization", license.getOrganization());
+			licenseMap.put("type", license.getType());
+		}
+		return licenseMap;
 	}
 
+
+	/**
+	 * 获取 license 指纹
+	 * @return
+	 * @throws DocumentException 
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws IORuntimeException 
+	 */
 	@Override
-	public LicenseEntity getLicenseEntity() {
-		SysConfigEntity entity = sysConfigService
-				.getOne(new QueryWrapper<SysConfigEntity>().lambda().eq(SysConfigEntity::getCkey, licenseConfigKey));
-		if (entity == null || Tool.StrUtil.isBlank(entity.getCvalue())) {
+	public void getLicenseC2V(HttpServletResponse response) throws DocumentException, IOException {
+		String licenseUrl = sysConfigService.getValue("license_url");
+		if(StrUtil.isEmpty(licenseUrl)) {
+			log.error("license api url is empty , please check config");
+			throw new CNException(RCode.LICENSE_API_ISNULL);
+		}
+		Map param = new HashMap();
+		param.put("type", Constant.LICENSE_C2V);
+		param.put("vendorCode", vendorCode);
+		param.put("featureId", 30000);
+		ResponseEntity<Object> res = restTemplate.exchange(licenseUrl, HttpMethod.POST, 
+				new HttpEntity<Object>(param), Object.class, new HashMap<String,Object>());
+		Map result = (Map) res.getBody();
+		String c2v = null;
+		if(ObjectUtil.isNotEmpty(result) && ObjectUtil.isNotEmpty(result.get("data"))) {
+			c2v = (String) result.get("data");
+		}
+		
+		Document document = DocumentHelper.createDocument();
+		Element licenseEle = document.addElement("license");
+		Element hasps = licenseEle.addElement("hasps");
+		Document haspDoc = DocumentHelper.parseText(c2v);
+		Element haspInfo = haspDoc.getRootElement();
+		hasps.add(haspInfo);
+		String haspsStr = hasps.asXML();
+		licenseEle.remove(hasps);
+		String licenseToken = sysConfigService.getValue("license_token");
+		LicenseEntity licenseEntity = new LicenseEntity();
+		try {
+			String licenseStr = sysConfigService.getValue("license"); // 已签发 license 信息
+			if(StrUtil.isNotEmpty(licenseStr)) {
+				LicenseEntity oldLicense = (LicenseEntity) LicenseUtil.convertXmlStrToObject(LicenseEntity.class, licenseStr);
+				licenseEntity.setComment(oldLicense.getComment());
+				licenseEntity.setType(oldLicense.getType());
+				licenseEntity.setOrganization(oldLicense.getOrganization());
+			}
+		} catch (Exception e) {
+			log.warn(e);
+		}
+		licenseEntity.setSupportID(licenseToken);
+		licenseEntity.setHasps(haspsStr);
+		String digest = licenseEntity.genLicenseDigest();
+		
+		Signature signature = new Signature();
+		signature.setDigestMethod("sha1");
+		signature.setDigestValue(digest);
+		licenseEntity.setSignature(signature);
+		
+		String licenseXml = LicenseUtil.convertObjectToXmlStr(licenseEntity);
+		
+		Document licDoc = DocumentHelper.parseText(licenseXml);
+		Element lic = licDoc.getRootElement();
+		Element licHasps = lic.element("hasps");
+		if(ObjectUtil.isNotEmpty(licHasps)) {
+			lic.remove(licHasps);
+		}
+		lic.add(hasps);
+		// 多个 c2v组织成一个 license 文件
+		String license = licDoc.asXML();
+		String licenseProductName = sysConfigService.getValue("license_product_name");
+		Tool.ResponseUtil.downloadFile(response, String.format("%s-%s-license-apply.xml", licenseProductName, licenseToken),
+				license.getBytes(Constant.DEFAULT_CHARTSET_NAME));
+	}
+
+	/**
+	 * 验证 license
+	 */
+	@Override
+	public Integer verify() {
+		String licenseUrl = sysConfigService.getValue("license_url");
+		if(StrUtil.isEmpty(licenseUrl)) {
+			log.error("license api url is empty , please check config");
 			return null;
 		}
-		// 证书由xml转为 map
-		LicenseEntity licenseEntity = Tool.LicenseUtil.xmlToLicenseBean(entity.getCvalue());
-		return licenseEntity;
+		Map param = new HashMap();
+		param.put("type", Constant.LICENSE_VERIFY);
+		param.put("vendorCode", vendorCode);
+		param.put("featureId", 30000);
+		ResponseEntity<Object> response = restTemplate.exchange(licenseUrl, HttpMethod.POST, 
+				new HttpEntity<Object>(param), Object.class, new HashMap<String,Object>());
+		Map result = (Map) response.getBody();
+		Integer status = null;
+		if(ObjectUtil.isNotEmpty(result) && ObjectUtil.isNotEmpty(result.get("data"))) {
+			status = (Integer) result.get("data");
+		}
+		return status;
 	}
 
-	/**
-	 * 更新license
-	 */
 	@Override
-	public void uploadLicenseEntity(LicenseEntity license) {
-		SysConfigEntity entity = sysConfigService
-				.getOne(new QueryWrapper<SysConfigEntity>().lambda().eq(SysConfigEntity::getCkey, licenseConfigKey));
-		if (entity == null) {
-			entity = new SysConfigEntity();
+	public void validateDigestValue(String v2c) throws DocumentException {
+		org.dom4j.Document doc = DocumentHelper.parseText(v2c);
+		Element rootElement = doc.getRootElement();
+		Element hasps = rootElement.element("hasps");
+		String haspsStr = hasps.asXML();
+		LicenseEntity entity = (LicenseEntity) LicenseUtil.convertXmlStrToObject(LicenseEntity.class, v2c);
+		String digestValue = entity.getSignature().getDigestValue();
+		entity.setHasps(haspsStr);
+		String genLicenseDigest = entity.genLicenseDigest();
+		log.debug("File digestValue : %s , figure out genLicenseDigest : %s", digestValue,genLicenseDigest);
+		if(!StrUtil.equals(digestValue, genLicenseDigest)) {
+			throw new CNException(RCode.LICENSE_DIGESTVALUE_INVALID);
 		}
-		entity.setCkey(licenseConfigKey);
-		entity.setCvalue(Tool.LicenseUtil.licenseBeanToXml(license, false));
-		entity.setRemark(license.getSignature().getDigestValue());
-		sysConfigService.saveOrUpdate(entity);
-
 	}
 
-	/**
-	 * 获取系统版本
-	 * 
-	 * @return
-	 */
 	@Override
-	public String getSystemVersion() {
-		return sysConfigService.getValue(systemVersionKey);
+	public String gen(MultipartFile[] files, Map<String, Object> params) {
+		String supportID = (String) params.get("supportID");
+		String organization = (String) params.get("organization");
+		String type = (String) params.get("type");
+		String comment = (String) params.get("comment");
+		List<String> haspInfos = new ArrayList<String>();
+		String license = null;
+		try {
+			// 提取v2c文件中的hasp info数据
+			for(MultipartFile file : files) {
+				byte[] bytes = file.getBytes();
+				String fileLicense = Tool.StrUtil.str(bytes, "utf-8");
+				org.dom4j.Document document = DocumentHelper.parseText(fileLicense);
+		    	Element ele = document.getRootElement();
+		    	if(StrUtil.equals(ele.getName(), "hasp_info")) {
+	    			haspInfos.add(ele.asXML());
+	    		}
+		    	List<Element> elements = ele.elements();
+		    	for(Element e : elements) {
+		    		if(StrUtil.equals(e.getName(), "hasp_info")) {
+		    			haspInfos.add(e.asXML());
+		    		}
+		    		List<org.dom4j.Node> nodes = e.content();
+		    		for(org.dom4j.Node node : nodes) {
+		    			if(StrUtil.equals(node.getName(), "hasp_info")) {
+		        			haspInfos.add(node.asXML());
+		        		}
+		    		}
+		    	}
+			}
+			if(ObjectUtil.isEmpty(haspInfos)) {
+				log.debug("license gen haspInfos empty");
+				return null;
+			}
+			// 程序组装v2c文件 返回
+			List<String> sortHasp = haspInfos.stream().sorted().collect(Collectors.toList());
+			org.dom4j.Document document = DocumentHelper.createDocument();
+			Element licenseEle = document.addElement("license");
+			Element hasps = licenseEle.addElement("hasps");
+		
+			for(String hasp : haspInfos) {
+				org.dom4j.Document haspDoc = DocumentHelper.parseText(hasp);
+				org.dom4j.Element haspInfo = haspDoc.getRootElement();
+				hasps.add(haspInfo);
+			}
+			String haspsStr = hasps.asXML();
+			licenseEle.remove(hasps);
+			LicenseEntity licenseEntity = new LicenseEntity();
+			licenseEntity.setSupportID(supportID);
+			licenseEntity.setOrganization(organization);
+			licenseEntity.setType(type);
+			licenseEntity.setComment(comment);
+			licenseEntity.setHasps(haspsStr);
+			String digest = licenseEntity.genLicenseDigest();
+			Signature signature = new Signature();
+			signature.setDigestMethod("sha1");
+			signature.setDigestValue(digest);
+			licenseEntity.setSignature(signature);
+			String licenseXml = LicenseUtil.convertObjectToXmlStr(licenseEntity);
+			org.dom4j.Document licDoc = DocumentHelper.parseText(licenseXml);
+			org.dom4j.Element lic = licDoc.getRootElement();
+			Element licHasps = lic.element("hasps");
+			if(ObjectUtil.isNotEmpty(licHasps)) {
+				lic.remove(licHasps);
+			}
+			lic.add(hasps);
+			license = licDoc.asXML();
+		} catch (Exception e) {
+			log.error("license  gen error msg : %s",e.getMessage());
+			e.printStackTrace();
+		}
+		return license;
 	}
 
-	/**
-	 * 开始验证
-	 * 
-	 * @param license
-	 * @return
-	 */
 	@Override
-	public boolean verify(LicenseEntity license) {
-		// 当前时间
-		Date now = new DateTime(TimeZone.getTimeZone("UTC"));
-		// license 开始时间
-		String startDateStr = license.getStartDate();
-		// license 结束时间
-		String endDateStr = license.getEndDate();
-		// license 授权token
-		Tokens tokens = license.getTokens();
-		Product product = license.getProduct();
-		// 开始时间不为空 并且大于当前时间
-		if (Tool.StrUtil.isNotBlank(startDateStr)) {
-			Date startDate = Tool.DateUtil.parse(startDateStr, DatePattern.UTC_PATTERN)
-					.setTimeZone(TimeZone.getTimeZone("UTC"));
-			if (startDate != null && Tool.DateUtil.compare(startDate, now) > 0) {
-				throw new CNException(RCode.LICENSE_FILE_INVALID);
+	public Boolean uploadLicense(String v2c) throws DocumentException {
+		// 保存前先校验摘要值
+		this.validateDigestValue(v2c);
+		// 保存到数据库中
+		sysConfigService.updateValueByKey("license", v2c);
+		try {
+			String licenseUrl = sysConfigService.getValue("license_url");
+			if(StrUtil.isEmpty(licenseUrl)) {
+				log.error("license api url is empty , please check config");
 			}
-		}
-		// 验证结束时间
-		if (Tool.StrUtil.isNotBlank(endDateStr)) {
-			Date endDate = Tool.DateUtil.parse(endDateStr, DatePattern.UTC_PATTERN)
-					.setTimeZone(TimeZone.getTimeZone("UTC"));
-			if (endDate != null && Tool.DateUtil.compare(now, endDate) > 0) {
-				throw new CNException(RCode.LICENSE_FILE_INVALID);
+			Map param = new HashMap();
+			param.put("type", Constant.LICENSE_UPDATE);
+			param.put("vendorCode", vendorCode);
+			param.put("featureId", 30000);
+			org.dom4j.Document document = DocumentHelper.parseText(v2c);
+			Element hasps = document.getRootElement().element("hasps");
+			if(ObjectUtil.isEmpty(hasps)) {
+				log.error("license hasps error, check file content");
+				return false;
 			}
-		}
-		// 验证 tokens 是否有效
-		if (tokens != null && tokens.getToken() != null) {
-			String[] token = tokens.getToken();
-			String currentToken = this.getLicenseToken();
-			// license中不包含 token
-			if (!Tool.ArrayUtil.contains(token, currentToken)) {
-				throw new CNException(RCode.LICENSE_TOKEN_INVALID);
-			}
-		}
-
-		if (product != null) {
-			// 验证asset数量
-			String version = product.getVersion();
-			// 校验版本
-			if (Tool.StrUtil.isNotBlank(version) && !Tool.StrUtil.equalsIgnoreCase(version, baseVersion)) {
-				// 当前版本
-				String systemVersion = this.getSystemVersion();
-				if (Tool.StrUtil.isNotBlank(systemVersion) && !Tool.StrUtil.equalsIgnoreCase(version, systemVersion)) {
-					throw new CNException(RCode.LICENSE_VERSION_INVALID);
+			List<org.dom4j.Node> nodeList = hasps.content();
+			for(int i = 0,j = nodeList.size();i<j;i++) {
+				org.dom4j.Node node = nodeList.get(i);
+				String v2cHandler = node.asXML();
+				param.put("param", v2cHandler);
+				ResponseEntity<Object> response = restTemplate.exchange(licenseUrl, HttpMethod.POST, 
+						new HttpEntity<Object>(param), Object.class, new HashMap<String,Object>());
+				Map res = (Map) response.getBody();
+				int status = (int)res.get("data");
+				if(status == HaspStatus.HASP_STATUS_OK || status == HaspStatus.HASP_UPDATE_ALREADY_ADDED) {
+					return true;
 				}
 			}
+			return false;
+		}catch(Exception e) {
+			log.error("installLicense error msg : %s",e.getMessage());
+			return false;
 		}
-		return true;
-	}
-
-	/**
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	@Override
-	public LicenseEntity getAndSetLicenseCache() {
-		// 从本地缓存获取
-		LicenseEntity license = LicenseServiceImpl.licenseCache;
-		// 数据库获取license
-		LicenseEntity licenseDB = this.getLicenseEntity();
-		ValidateUtils.is(licenseDB).notNull(RCode.LICENSE_FILE_IS_NULL);
-		// 获取公钥证书
-		PublicKey pk = this.getPublicKey();
-		if (license != null) {
-			// 通过digest验证数据库中内容 是否和 缓存一致
-			String digestValueDB = licenseDB.getSignature().getDigestValue();
-			String digestValueCache = license.getSignature().getDigestValue();
-			// verify 耗时较长，通过比较digest判断是否变更
-			if (!Tool.StrUtil.equals(digestValueDB, digestValueCache)) {
-				log.info("license change,db:{},cache:{}", digestValueDB, digestValueCache);
-				// 验证签名，digest不一致说明数据库中内容已变更，需要重新校验并修改 LicenseCache
-				boolean verifyLicense = Tool.LicenseUtil.verifyLicenseSign(licenseDB, pk, signAlgorithm);
-				log.info("license verify result: {}", verifyLicense);
-				if (!verifyLicense) {// 验证失败，证书无效
-					throw new CNException(RCode.LICENSE_FILE_INVALID);
-				}
-				// 更新缓存
-				LicenseServiceImpl.licenseCache = licenseDB;
-			}
-		} else {
-			// 更新缓存
-			LicenseServiceImpl.licenseCache = licenseDB;
-		}
-		return LicenseServiceImpl.licenseCache;
-	}
-
-	/**
-	 * 获取 publickey ，首先查找内存中查找，否则本地路径查找
-	 * 
-	 * @return @throws IOException @throws
-	 */
-	@Override
-	public PublicKey getPublicKey() {
-		PublicKey cache = LicenseServiceImpl.publickeyCache;
-		if (cache == null) {
-			File file = Tool.FileUtil.newFile(publicKeyPath);
-			log.debug("pubk path : {} ,exist : {}", file.getAbsolutePath(),file.exists());
-			// 通过 getResourceAsStream 确保jar包中也能够读取
-			InputStream is = null;
-			try {
-				is = file.exists() ? Tool.FileUtil.getInputStream(file) : this.getClass().getResourceAsStream(publicKeyPath);
-				cache = Tool.PemUtil.readPemPublicKey(is);
-				log.info("license public key load success");
-				if (log.isDebugEnabled()) {
-					log.debug("public key content: {}", cache);
-				}
-				LicenseServiceImpl.publickeyCache = cache;
-			} catch (IORuntimeException e) {
-				log.error(e);
-				throw new CNException("license public key load error", 999);
-			} finally {
-				if(is != null){
-					IOUtils.closeQuietly(is);
-				}
-			}
-		}
-		return cache;
-	}
-
-	@Override
-	public String getSignAlgorithm() {
-		return this.signAlgorithm;
 	}
 }
