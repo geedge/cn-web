@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
+<mapper namespace="net.geedge.modules.location.dao.UserSubscriberDao">
+	
+	<resultMap type="net.geedge.modules.location.entity.UserSubscriber" id="userSubscriber">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="subscriberId" column="subscriber_id"/>
+        <result property="ctime" column="ctime"/>
+        <result property="utime" column="utime"/>
+    </resultMap>
+	
+	<select id="queryPage" resultMap="userSubscriber">
+        select * from
+        user_subscriber us
+        <where>
+            <if test="params.startTime != null">
+				AND us.ctime &gt;= #{params.startTime}
+			</if>
+			<if test="params.endTime != null">
+				AND us.ctime &lt;= #{params.endTime}
+			</if>
+        </where>
+    </select>
+    
+</mapper>
