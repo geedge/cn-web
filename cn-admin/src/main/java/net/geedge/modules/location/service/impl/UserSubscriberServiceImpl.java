@@ -1,6 +1,7 @@
 package net.geedge.modules.location.service.impl;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -47,9 +48,10 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 			params.put("subscriberIds", subscriberIds);
 			params.put("startTime", DateUtil.parse(sTime).getTime() / 1000);
 			params.put("endTime", DateUtil.parse(eTime).getTime() / 1000);
-			Object results = magicAPIService.execute("Get", "/v1/locationIntelligence/followed/status", params);
-			if(ObjectUtil.isNotEmpty(results)) {
-				List<SubscriberDto> subscriberDtos = JSON.parseArray(JSON.toJSONString(results), SubscriberDto.class);
+			LinkedHashMap results = magicAPIService.execute("Get", "/v1/locationIntelligence/followed/status", params);
+			Object data = results.get("data");
+			if(ObjectUtil.isNotEmpty(data)) {
+				List<SubscriberDto> subscriberDtos = JSON.parseArray(JSON.toJSONString(data), SubscriberDto.class);
 				Map<String, SubscriberDto> idDto = subscriberDtos.stream().collect(Collectors.toMap(SubscriberDto::getSubscriberId, Function.identity()));
 				userSubscribers.forEach(us -> {
 					if(ObjectUtil.isNotEmpty(idDto.get(us.getSubscriberId()))) {
