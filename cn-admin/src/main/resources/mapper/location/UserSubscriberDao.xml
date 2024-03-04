@@ -13,14 +13,6 @@
 	<select id="queryPage" resultMap="userSubscriber">
         select * from
         user_subscriber us
-        <where>
-            <if test="params.startTime != null">
-				AND us.ctime &gt;= #{params.startTime}
-			</if>
-			<if test="params.endTime != null">
-				AND us.ctime &lt;= #{params.endTime}
-			</if>
-        </where>
     </select>
     
 </mapper>

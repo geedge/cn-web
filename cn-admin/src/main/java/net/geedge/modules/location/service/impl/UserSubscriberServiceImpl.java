@@ -21,8 +21,10 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
+import net.geedge.common.utils.RCode;
 import net.geedge.modules.location.dao.UserSubscriberDao;
 import net.geedge.modules.location.entity.SubscriberDto;
 import net.geedge.modules.location.entity.UserSubscriber;
@@ -38,6 +40,8 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 	public PageUtils getFollowedList(Map<String, Object> params) {
 		String sTime = (String) params.get("startTime");
 		String eTime = (String) params.get("endTime");
+		ValidateUtils.is(sTime).notNull(RCode.NOT_NULL_ERROR);
+		ValidateUtils.is(eTime).notNull(RCode.NOT_NULL_ERROR);
 		IPage<UserSubscriber> page=this.page(new Query(UserSubscriber.class).getPage(params));
 		List<UserSubscriber> userSubscribers=this.baseMapper.queryPage(page,params);
 		page.setRecords(userSubscribers);
@@ -46,8 +50,8 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 			List<String> ids = userSubscribers.stream().map(UserSubscriber::getSubscriberId).collect(Collectors.toList());
 			String subscriberIds = ids.stream().map(s -> "'" + s + "'").collect(Collectors.joining(", "));
 			params.put("subscriberIds", subscriberIds);
-			params.put("startTime", DateUtil.parse(sTime).getTime() / 1000);
-			params.put("endTime", DateUtil.parse(eTime).getTime() / 1000);
+			params.put("startTime", Long.valueOf(sTime));
+			params.put("endTime", Long.valueOf(eTime));
 			LinkedHashMap results = magicAPIService.execute("Get", "/v1/locationIntelligence/followed/status", params);
 			Object data = results.get("data");
 			if(ObjectUtil.isNotEmpty(data)) {
