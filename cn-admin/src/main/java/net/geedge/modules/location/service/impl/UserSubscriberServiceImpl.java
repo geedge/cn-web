@@ -58,8 +58,10 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 				List<SubscriberDto> subscriberDtos = JSON.parseArray(JSON.toJSONString(data), SubscriberDto.class);
 				Map<String, SubscriberDto> idDto = subscriberDtos.stream().collect(Collectors.toMap(SubscriberDto::getSubscriberId, Function.identity()));
 				userSubscribers.forEach(us -> {
-					if(ObjectUtil.isNotEmpty(idDto.get(us.getSubscriberId()))) {
+					SubscriberDto dto = idDto.get(us.getSubscriberId());
+					if(ObjectUtil.isNotEmpty(dto)) {
 						us.setActive(1);
+						us.setSubscriberDto(dto);
 					}
 				});
 			}

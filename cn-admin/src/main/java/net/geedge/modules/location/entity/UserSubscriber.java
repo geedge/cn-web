@@ -24,4 +24,7 @@ public class UserSubscriber {
 	
 	@TableField(exist = false)
 	private Integer active = 0;
+	
+	@TableField(exist = false)
+	private SubscriberDto subscriberDto;
 }

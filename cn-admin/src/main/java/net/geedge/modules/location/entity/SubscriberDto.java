@@ -14,4 +14,6 @@ public class SubscriberDto {
 	private String phoneNumber;
 	
 	private String apn;
+	
+	private String hexId;
 }
