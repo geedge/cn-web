@@ -16,4 +16,8 @@ public class SubscriberDto {
 	private String apn;
 	
 	private String hexId;
+	
+	private Double subscriberLongitude;
+	
+	private Double subscriberLatitude;
 }
