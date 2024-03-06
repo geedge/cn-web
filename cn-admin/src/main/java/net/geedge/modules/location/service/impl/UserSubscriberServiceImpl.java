@@ -40,8 +40,10 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 	public PageUtils getFollowedList(Map<String, Object> params) {
 		String sTime = (String) params.get("startTime");
 		String eTime = (String) params.get("endTime");
+		String level = (String) params.get("level");
 		ValidateUtils.is(sTime).notNull(RCode.NOT_NULL_ERROR);
 		ValidateUtils.is(eTime).notNull(RCode.NOT_NULL_ERROR);
+		ValidateUtils.is(level).notNull(RCode.NOT_NULL_ERROR);
 		IPage<UserSubscriber> page=this.page(new Query(UserSubscriber.class).getPage(params));
 		List<UserSubscriber> userSubscribers=this.baseMapper.queryPage(page,params);
 		page.setRecords(userSubscribers);
@@ -52,6 +54,7 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 			params.put("subscriberIds", subscriberIds);
 			params.put("startTime", Long.valueOf(sTime));
 			params.put("endTime", Long.valueOf(eTime));
+			params.put("level", Integer.valueOf(level));
 			LinkedHashMap results = magicAPIService.execute("Get", "/v1/locationIntelligence/followed/status", params);
 			Object data = results.get("data");
 			if(ObjectUtil.isNotEmpty(data)) {
