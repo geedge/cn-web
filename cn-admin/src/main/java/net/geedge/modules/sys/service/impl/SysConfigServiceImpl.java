@@ -53,7 +53,7 @@ import net.geedge.modules.sys.service.SysConfigService;
 @Service("sysConfigService")
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEntity> implements SysConfigService {
 
-    public static final String[] BASIC_KEYS = {"system_name","lang","date_format","system_logo", "timezone","system_bgImg","system_favicon","s3_enable","delay_time"};
+    public static final String[] BASIC_KEYS = {"system_name","lang","date_format","system_logo", "timezone","system_bgImg","system_favicon","s3_enable","delay_time","map_config"};
 	
     @Autowired
     private SysConfigRedis sysConfigRedis;
