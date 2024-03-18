@@ -22,6 +22,7 @@ import cn.hutool.log.Log;
 import net.geedge.modules.report.job.ReportHandlerJob;
 import net.geedge.modules.report.job.ReportHandlerTask;
 import net.geedge.modules.report.job.ReportRegisterJob;
+import net.geedge.modules.sys.job.SysComponentJob;
 
 /**
  * JobConfig 统一管理 job config
@@ -41,6 +42,9 @@ public class JobConfig {
     @Value("${cn.reportTaskCron:0 0/5 * * * ? *}")
     private String reportHandlerTaskCron;
     
+    @Value("${cn.sysComponentJobCron:0/30 * * * * ?}")
+	private String sysComponentJobCron;
+    
 	@Autowired
 	private Scheduler scheduler;
     
@@ -50,6 +54,7 @@ public class JobConfig {
     private String haJobName = "HA_JOB";
     private String reportHandlerTaskName = "REPORT_HANDLER_TASK";
     private String reportRegisterJobName = "REPORT_REGISTER_JOB";
+    private String sysComponentJobName = "SYSCOMPONENT_JOB";
     
     @Bean
 	public JobDetail reportRegisterJobDetail() {
@@ -66,6 +71,11 @@ public class JobConfig {
         return JobBuilder.newJob(HaJob.class).withIdentity(JOB_NAME + haJobName).storeDurably().build();
     }
     
+    @Bean
+    public JobDetail sysComponentJobDetail() {
+        return JobBuilder.newJob(SysComponentJob.class).withIdentity(JOB_NAME + sysComponentJobName).storeDurably().build();
+    }
+    
     @PostConstruct
     public void init() throws SchedulerException {
     	
@@ -77,6 +87,9 @@ public class JobConfig {
         
         // 报表任务执行相关定时任务
         createCronScheduleJob(reportHandlerTaskName, reportHandlerTaskDetail(), StringUtils.isEmpty(reportHandlerTaskCron) ? "0 0/1 * * * ? *" : reportHandlerTaskCron);
+
+        //sys component 状态更新线程
+        createCronScheduleJob(sysComponentJobName, sysComponentJobDetail(), StringUtils.isEmpty(sysComponentJobCron) ? "0/30 * * * * ?" : sysComponentJobCron);
 
     }
 

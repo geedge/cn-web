@@ -327,4 +327,6 @@ public class Constant {
 
     //验证授权信息
     public static final Integer LICENSE_VERIFY = 4;
+    
+    public static final String CN_WEB_COMPONENT_NAME = "cn-web";
 }

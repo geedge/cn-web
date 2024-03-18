@@ -34,5 +34,5 @@ public interface LicenseService {
 	 */
 	String gen(MultipartFile[] files,Map<String,Object> params);
 
-
+	String getLicense();
 }

@@ -90,7 +90,7 @@ public class SysLicenseController extends AbstractController {
 	 * 获取license state
 	 */
 	@GetMapping("/status")
-	public R getLicenseState(@RequestParam(required = false) String scope) {
+	public R getLicenseState() {
 		if(Tool.StrUtil.equalsIgnoreCase(compileType, "debug")) {
 			return R.ok().putData("status", 0);
 		}
