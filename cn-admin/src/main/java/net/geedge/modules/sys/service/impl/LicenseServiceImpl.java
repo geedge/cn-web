@@ -424,11 +424,11 @@ public class LicenseServiceImpl implements LicenseService {
 				Boolean result = future.getNow(null);
 				flags.add(result);
 			});
-			log.debug("license upload result data :{}",JSON.toJSON(flags));
-			if(flags.contains(false)) {
-				return false;
-			}else {
+			log.info("license upload result data :{}",JSON.toJSON(flags));
+			if(flags.contains(true)) {
 				return true;
+			}else {
+				return false;
 			}
 		}catch(Exception e) {
 			log.error("installLicense error msg : %s",e.getMessage());

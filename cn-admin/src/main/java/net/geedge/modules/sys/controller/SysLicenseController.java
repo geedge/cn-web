@@ -112,7 +112,7 @@ public class SysLicenseController extends AbstractController {
 		if (flag) {
 			return R.ok().putData("status", HaspStatus.HASP_STATUS_OK);
 		}
-		return R.error(999,"License error,code: 999");
+		throw new CNException(RCode.LICENSE_FILE_INVALID);
 	}
 	
 	@PostMapping("/gen")
