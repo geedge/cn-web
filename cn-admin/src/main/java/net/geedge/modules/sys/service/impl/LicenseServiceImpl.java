@@ -425,10 +425,10 @@ public class LicenseServiceImpl implements LicenseService {
 				flags.add(result);
 			});
 			log.info("license upload result data :{}",JSON.toJSON(flags));
-			if(flags.contains(true)) {
-				return true;
-			}else {
+			if(flags.contains(false)) {
 				return false;
+			}else {
+				return true;
 			}
 		}catch(Exception e) {
 			log.error("installLicense error msg : %s",e.getMessage());
