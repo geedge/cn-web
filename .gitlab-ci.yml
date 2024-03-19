@@ -30,7 +30,7 @@ generate_git-log:
     paths:
       - ./cn-admin/src/main/resources/git.log
   only:
-    - dev-24.03
+    - dev-24.04
   tags:
     - galaxy
 
@@ -50,7 +50,7 @@ ci_update_i18n_sql:
     expire_in: 1 day
   # 在哪个分支上可用
   only:
-    - dev-24.03
+    - dev-24.04
   # 指定哪个ci runner跑该工作
   tags:
     - galaxy
@@ -101,7 +101,7 @@ build_image:
   #manual - 手动设置，比较复杂，略过。
   when: on_success
   only:
-    - dev-24.03
+    - dev-24.04
   tags:
     - galaxy
 
@@ -137,6 +137,6 @@ package_clean:
     - mvn clean
   when: on_failure
   only:
-    - dev-24.03
+    - dev-24.04
   tags:
     - galaxy
