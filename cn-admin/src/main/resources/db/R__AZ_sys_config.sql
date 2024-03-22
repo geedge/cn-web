@@ -6,7 +6,7 @@ REPLACE INTO `sys_config` VALUES (null, 'security', '{"pinPolicy":{"num":1,"lowe
 REPLACE INTO `sys_config` VALUES (null, 'email', '{"enable": 1,"host": "192.168.1.1","port": 25,"timeoue": 10,"authAccount": "zs@126.com","authPin": "111","sendAccount": "zs@126.com","securityType": "NONE"}', 1, '');
 REPLACE INTO `sys_config` VALUES (null, 's3_accessKey', 'default', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 's3_secretKey', 'default', 1, NULL);
-REPLACE INTO `sys_config` VALUES (null, 's3_bucket_name', 'report-hos-bucket', 1, NULL);
+REPLACE INTO `sys_config` VALUES (null, 's3_bucket_name', 'report_snapshot_bucket', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'lang', 'zh', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'date_format', 'YYYY-MM-DD HH:mm:ss', 1, NULL);
 REPLACE INTO `sys_config` VALUES (null, 'system_bgImg', '', 1, NULL);

@@ -409,6 +409,8 @@ public enum RCode {
 	REPORT_SCHEDULER_CRON_IS_NULL(311013,"Report scheduler cron is required"),
 	REPORT_BUILD_IN_ERROR(311014,"Report build_in data cannot remove"),
 	REPORT_CRON_MONTH_WEEK_DATE_ERROR(311015,"Report cron month week date error must in (1-5)"),
+	REPORT_UPLOAD_FAILED(311016,"Report upload file failed"),
+	REPORT_DOWNLOAD_FAILED(311017,"Report download file failed"),
 	
 	/**
 	 * 导入相关错误提示
