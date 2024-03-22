@@ -12,9 +12,9 @@ import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import net.geedge.modules.knowledge.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.ssssssss.magicapi.core.service.MagicAPIService;
 
 import java.math.BigInteger;
-import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -71,6 +71,9 @@ public class EntityServiceImpl implements EntityService {
     @Autowired
     private DnsServerInfoBuiltInService dnsServerInfoBuiltInService;
 
+    @Autowired
+    private MagicAPIService magicAPIService;
+
     @Override
     public R queryEntityDetail(String entityType, String resource) {
         Map<String, Object> data = new HashMap<>();
@@ -111,6 +114,10 @@ public class EntityServiceImpl implements EntityService {
             Map<String, Object> location = ipLocationBuiltInService.queryEntityDetail(ipNumber);
             addValidDataToMap(data, "asn", asn);
             addValidDataToMap(data, "location", location);
+        } else if ("subscriber".equals(entityType)){
+            Map<String,Object> params = new HashMap<>();
+            params.put("resource",resource);
+            return magicAPIService.execute("GET", "/v1/entity/detail/basic/subscriber", params);
         }
         return R.ok(data);
     }
