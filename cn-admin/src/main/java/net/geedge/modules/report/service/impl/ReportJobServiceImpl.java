@@ -288,8 +288,11 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		String s3BucketName = sysConfigService.getValue("s3_bucket_name");
 		if(Integer.valueOf(s3Enable)==1 && job.getState()==1 && job.getUpload()==1) {
 			String path = StrUtil.str(galaxyUrl+"v1/hos/"+s3BucketName+StrUtil.C_SLASH+job.getName()+job.getCtime().getTime()+".pdf");
+			HttpHeaders headers = new HttpHeaders();
+	    	headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	    	org.springframework.http.HttpEntity entity = new org.springframework.http.HttpEntity<>(headers);
 			// 调用QGW服务获取文件地址信息
-			ResponseEntity<Map> res = restTemplate.exchange(path, HttpMethod.GET, null, Map.class);
+			ResponseEntity<Map> res = restTemplate.exchange(path, HttpMethod.GET, entity, Map.class);
 			String downloadPath = "";
 			if(res.getStatusCodeValue() == 200) {
 				List<Map> ll = (List<Map>) res.getBody().get("data");
@@ -429,6 +432,9 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			String s3Enable = sysConfigService.getValue("s3_enable");
 			String galaxyUrl = sysConfigService.getValue("galaxy_url");
 			String s3BucketName = sysConfigService.getValue("s3_bucket_name");
+			HttpHeaders headers = new HttpHeaders();
+	    	headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	    	org.springframework.http.HttpEntity entity = new org.springframework.http.HttpEntity<>(headers);
 			for(ReportJob job : reportJobs) {
 				String fileName = job.getName()+job.getCtime().getTime()+".pdf";
 				File file = FileUtil.file(Constant.TEMP_PATH+File.separator+fileName);
@@ -437,9 +443,9 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 				}
 				BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH+File.separator+fileName);
 				if(Integer.valueOf(s3Enable)==1 && job.getState()==1 && job.getUpload()==1) {
-					String path = StrUtil.str(galaxyUrl+s3BucketName+StrUtil.C_SLASH+job.getName()+job.getCtime().getTime()+".pdf");
+					String path = StrUtil.str(galaxyUrl+"v1/hos/"+s3BucketName+StrUtil.C_SLASH+job.getName()+job.getCtime().getTime()+".pdf");
 					// 调用QGW服务获取文件地址信息
-					ResponseEntity<Map> res = restTemplate.exchange(path, HttpMethod.GET, null, Map.class);
+					ResponseEntity<Map> res = restTemplate.exchange(path, HttpMethod.GET, entity, Map.class);
 					String downloadPath = "";
 					if(res.getStatusCodeValue() == 200) {
 						List<Map> ll = (List<Map>) res.getBody().get("data");
