@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 
 import Aladdin.HaspStatus;
 import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.service.LicenseService;
 
@@ -34,7 +35,7 @@ public class LicenseShiroFilter extends AccessControlFilter {
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
 			httpResponse.setStatus(HttpStatus.FORBIDDEN.value());
 			httpResponse.getWriter()
-					.write(Tool.JSONUtil.toJsonStr(R.error(999,"Invalid license,code: " + status)));
+					.write(Tool.JSONUtil.toJsonStr(R.error(RCode.LICENSE_FILE_INVALID.getCode(),"Invalid license,code: " + status)));
 			return false;
 		}
 		return true;
