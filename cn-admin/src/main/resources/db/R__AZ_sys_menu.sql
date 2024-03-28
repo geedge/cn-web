@@ -42,11 +42,11 @@ INSERT INTO `sys_menu` VALUES (15, 'Report', 'report', 'overall.report', 0, NULL
 INSERT INTO `sys_menu` VALUES (16, 'Create report', 'createReport', 'overall.create', 15, 'report:job:add,report:temp:add', 2, '', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (17, 'Edit report', 'editReport', 'overall.edit', 15, 'report:job:update,report:temp:update', 2, '', '', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (18, 'Delete report', 'deleteReport', 'overall.delete', 15, 'report:job:delete,report:temp:delete', 2, '', '', NULL, 21, 1);
-INSERT INTO `sys_menu` VALUES (19, 'Knowledge base', 'knowledgeBase', 'overall.knowledgeBase', 0, NULL, 1, '/knowledgeBase', 'cn-icon cn-icon-knowledge-base', NULL, 41, 1);
+INSERT INTO `sys_menu` VALUES (19, 'Knowledge base', 'knowledgeBase', 'overall.knowledgeBase', 39, NULL, 1, '/system/knowledgeBase', 'cn-icon cn-icon-knowledge-base', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (20, 'Edit built-in knowledge base', 'editBuiltInKnowledgeBase', 'overall.edit', 19, 'knowledge:base:add', 2, '', '', NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (21, 'User-defined library', 'userDefinedLibrary', 'knowledgeBase.userDefinedLibrary', 19, NULL, 1, '/knowledgeBase/userDefined', '', NULL, 11, 1);
-INSERT INTO `sys_menu` VALUES (22, 'Create user-defined library', 'createUserDefinedLibrary', 'overall.create', 21, 'knowledge:base:add', 1, '/knowledgeBase/userDefined/create', '', NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (23, 'Edit user-defined library', 'editUserDefinedLibrary', 'overall.edit', 21, 'knowledge:base:update', 1, '/knowledgeBase/userDefined/edit', '', NULL, 11, 1);
+INSERT INTO `sys_menu` VALUES (21, 'User-defined library', 'userDefinedLibrary', 'knowledgeBase.userDefinedLibrary', 46, NULL, 1, '/tag/userDefined', '', NULL, 11, 1);
+INSERT INTO `sys_menu` VALUES (22, 'Create user-defined library', 'createUserDefinedLibrary', 'overall.create', 21, 'knowledge:base:add', 1, '/tag/userDefined/create', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (23, 'Edit user-defined library', 'editUserDefinedLibrary', 'overall.edit', 21, 'knowledge:base:update', 1, '/tag/userDefined/edit', '', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (24, 'Delete user-defined library', 'deleteUserDefinedLibrary', 'overall.delete', 21, 'knowledge:base:delete', 2, '', '', NULL, 21, 1);
 INSERT INTO `sys_menu` VALUES (25, 'Administration', 'administration', 'overall.administration', 0, NULL, 1, 'redirect:/administration', 'cn-icon cn-icon-administrations', NULL, 51, 1);
 INSERT INTO `sys_menu` VALUES (26, 'User', 'user', 'overall.user', 25, NULL, 1, '/administration/user', 'cn-icon cn-icon-user2', NULL, 1, 1);
@@ -66,8 +66,9 @@ INSERT INTO `sys_menu` VALUES (39, 'System', 'system', 'overall.system', 0, NULL
 INSERT INTO `sys_menu` VALUES (40, 'Plugin', 'plugin', 'plugin.pluginManagement', 39, NULL, 1, '/system/plugin', 'cn-icon cn-icon-plugin', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (41, 'License', 'license', 'overall.license', 25, NULL, 1, '/administration/license', 'cn-icon cn-icon-license', NULL, 26, 1);
 INSERT INTO `sys_menu` VALUES (42, 'Edit license', 'editLicense', 'overall.edit', 41, NULL, 2, '', '', NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (43, 'Location Intelligence', 'locationIntelligence', 'ovreall.locationIntelligence', 0, '', 1, 'redirect:/location', '', NULL, 2, 1);
+INSERT INTO `sys_menu` VALUES (43, 'Location Intelligence', 'locationIntelligence', 'overall.locationIntelligence', 0, '', 1, 'redirect:/location', '', NULL, 2, 1);
 INSERT INTO `sys_menu` VALUES (44, 'Location Map', 'locationMap', 'location.locationMap', 43, '', 1, '/location/map', '', NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (45, 'Trace Tracking', 'traceTracking', 'location.locationMap', 43, '', 1, '/location/tracking', '', NULL, 11, 1);
+INSERT INTO `sys_menu` VALUES (45, 'Trace Tracking', 'traceTracking', 'location.traceTracking', 43, '', 1, '/location/tracking', '', NULL, 11, 1);
+INSERT INTO `sys_menu` VALUES (46, 'Tag', 'tag', 'overall.tag', 0, NULL, 1, '/tag', 'cn-icon cn-icon-tag', NULL, 41, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
