@@ -69,6 +69,6 @@ INSERT INTO `sys_menu` VALUES (42, 'Edit license', 'editLicense', 'overall.edit'
 INSERT INTO `sys_menu` VALUES (43, 'Location Intelligence', 'locationIntelligence', 'overall.locationIntelligence', 0, '', 1, 'redirect:/location', '', NULL, 2, 1);
 INSERT INTO `sys_menu` VALUES (44, 'Location Map', 'locationMap', 'location.locationMap', 43, '', 1, '/location/map', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (45, 'Trace Tracking', 'traceTracking', 'location.traceTracking', 43, '', 1, '/location/tracking', '', NULL, 11, 1);
-INSERT INTO `sys_menu` VALUES (46, 'Tag', 'tag', 'overall.tag', 0, NULL, 1, '/tag', 'cn-icon cn-icon-tag', NULL, 41, 1);
+INSERT INTO `sys_menu` VALUES (46, 'Tag', 'tag', 'overall.tag', 0, NULL, 1, '/tag', 'cn-icon cn-icon-tag-fill', NULL, 41, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
