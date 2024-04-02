@@ -45,6 +45,4 @@ public class FqdnCategoryBuiltIn {
     private Date createTime;
 
     private Date updateTime;
-
-    private Integer knowledgeId;
 }

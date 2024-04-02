@@ -41,12 +41,10 @@
         <result property="lastAppearTime" column="last_appear_time"></result>
         <result property="createTime" column="create_time"></result>
         <result property="updateTime" column="update_time"></result>
-        <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
-    <select id="queryPageByKnowledgeId" resultMap="IocDarkweb">
+    <select id="queryPage" resultMap="IocDarkweb">
         select * from
         cn_ioc_darkweb
-        where knowledge_id = #{params.knowledgeId}
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>
@@ -54,7 +52,7 @@
 
     <select id="queryIpEntityTag" resultType="java.util.Map">
         select node_type as nodeType, update_time as updateTime,
-               create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+               create_time as createTime, 1 as isValid from
         cn_ioc_darkweb
         where ioc_type = 'ip' and ioc_value = #{resource}
         limit 1
@@ -62,7 +60,7 @@
 
     <select id="queryDomainEntityTag" resultType="java.util.Map">
         select node_type as nodeType, update_time as updateTime,
-               create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+               create_time as createTime, 1 as isValid from
             cn_ioc_darkweb
         <where>
             ioc_type = 'domain'
@@ -85,7 +83,7 @@
                i2p_bandwidth as i2pBandwidth,i2p_is_hidden as i2pIsHidden,i2p_is_reachable as i2pIsReachable,i2p_publish_time as i2pPublishTime,
                mtproxy_port as mtproxyPort,mtproxy_secret as mtproxySecret,obfs4_port as obfs4Port,obfs4_fingerprint as obfs4Fingerprint,
                obfs4_cert as obfs4Cert,obfs4_iat_mode as obfs4IatMode,snowflake_port as snowflakePort,update_time as updateTime,
-               create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+               create_time as createTime, 1 as isValid from
             cn_ioc_darkweb
         where ioc_type = 'domain' and ioc_value = #{resource}
         limit 1
@@ -98,7 +96,7 @@
                i2p_bandwidth as i2pBandwidth,i2p_is_hidden as i2pIsHidden,i2p_is_reachable as i2pIsReachable,i2p_publish_time as i2pPublishTime,
                mtproxy_port as mtproxyPort,mtproxy_secret as mtproxySecret,obfs4_port as obfs4Port,obfs4_fingerprint as obfs4Fingerprint,
                obfs4_cert as obfs4Cert,obfs4_iat_mode as obfs4IatMode,snowflake_port as snowflakePort,update_time as updateTime,
-               create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+               create_time as createTime, 1 as isValid from
             cn_ioc_darkweb
         where ioc_type = 'ip' and ioc_value = #{resource}
         limit 1

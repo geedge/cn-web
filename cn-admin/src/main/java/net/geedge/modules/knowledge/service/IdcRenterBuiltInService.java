@@ -15,7 +15,7 @@ public interface IdcRenterBuiltInService extends IService<IdcRenterBuiltIn>{
     
     void modifyBatchForBinary(List<IdcRenterBuiltIn> idcRenterBuiltIns);
 
-    PageUtils queryListByKnowledgeId(Map<String,Object> params);
+    PageUtils queryList(Map<String,Object> params);
     
     void saveBatchJDBC(Connection conn,List<IdcRenterBuiltIn> idcRenterBuiltIns);
     

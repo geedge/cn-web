@@ -23,6 +23,4 @@ public class LinkDirectionBuiltIn {
 	private String peerCity;
 	
 	private Integer linkId;
-	
-	private Integer knowledgeId;
 }

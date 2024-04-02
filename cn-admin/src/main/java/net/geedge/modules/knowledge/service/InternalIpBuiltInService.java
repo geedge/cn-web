@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import net.geedge.common.utils.PageUtils;
 import net.geedge.modules.knowledge.entity.InternalIpBuiltIn;
-import net.geedge.modules.knowledge.entity.IpTagUserDefined;
 
 public interface InternalIpBuiltInService extends IService<InternalIpBuiltIn>{
 	
@@ -20,6 +19,6 @@ public interface InternalIpBuiltInService extends IService<InternalIpBuiltIn>{
     
     void modifyBatchJDBC(Connection conn,List<InternalIpBuiltIn> internalIpBuiltIns);
 
-    PageUtils queryListByKnowledgeId(Map<String,Object> params);
+    PageUtils queryList(Map<String,Object> params);
     
 }

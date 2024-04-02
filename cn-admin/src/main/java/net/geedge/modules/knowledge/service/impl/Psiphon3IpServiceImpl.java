@@ -10,7 +10,6 @@ import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.dao.Psiphon3IpDao;
-import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.Psiphon3Ip;
 import net.geedge.modules.knowledge.service.Psiphon3IpService;
 import org.springframework.stereotype.Service;

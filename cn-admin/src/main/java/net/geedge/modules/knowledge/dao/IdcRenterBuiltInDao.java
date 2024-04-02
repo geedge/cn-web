@@ -18,5 +18,5 @@ public interface IdcRenterBuiltInDao extends BaseMapper<IdcRenterBuiltIn>{
     
     void updateBatchForBinary(@Param("idcRenterBuiltIns")List<IdcRenterBuiltIn> idcRenterBuiltIns);
 
-    List<IdcRenterBuiltIn> queryPageByKnowledgeId(IPage<IdcRenterBuiltIn> page, @Param("params") Map<String, Object> params);
+    List<IdcRenterBuiltIn> queryPage(IPage<IdcRenterBuiltIn> page, @Param("params") Map<String, Object> params);
 }

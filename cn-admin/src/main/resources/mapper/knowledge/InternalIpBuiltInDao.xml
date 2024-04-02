@@ -9,13 +9,12 @@
         <result property="ip2" column="ip2"></result>
         <result property="startIpBinary" column="start_ip_binary"></result>
         <result property="endIpBinary" column="end_ip_binary"></result>
-        <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
     
     
     <insert id="insertBatchForBinary">
     	insert into cn_internal_ip_built_in (addr_format,ip1,ip2,start_ip_binary,
-    	end_ip_binary,knowledge_id)
+    	end_ip_binary)
     	values
     	<foreach collection="internalIpBuiltIns" item="internalIpBuiltIn" separator=",">
     		(
@@ -23,8 +22,7 @@
     		#{internalIpBuiltIn.ip1},
     		#{internalIpBuiltIn.ip2},
     		INET6_ATON(#{internalIpBuiltIn.startIpBinary}),
-    		INET6_ATON(#{internalIpBuiltIn.endIpBinary}),
-    		#{internalIpBuiltIn.knowledgeId}
+    		INET6_ATON(#{internalIpBuiltIn.endIpBinary})
     		)
     	</foreach>
     </insert>
@@ -36,16 +34,14 @@
             ip1 = #{internalIpBuiltIn.ip1},
             ip2 = #{internalIpBuiltIn.ip2},
     		start_ip_binary = INET6_ATON(#{internalIpBuiltIn.startIpBinary}),
-    		end_ip_binary = INET6_ATON(#{internalIpBuiltIn.endIpBinary}),
-    		knowledge_id = #{internalIpBuiltIn.knowledgeId}
+    		end_ip_binary = INET6_ATON(#{internalIpBuiltIn.endIpBinary})
     		where id = #{internalIpBuiltIn.id}
     	</foreach>
     </update>
 
-	<select id="queryPageByKnowledgeId" resultMap="internalIpBuiltIn">
+	<select id="queryPage" resultMap="internalIpBuiltIn">
 		select * from
 		cn_internal_ip_built_in
-		where knowledge_id = #{params.knowledgeId}
 		<if test="params.orderBy == null or params.orderBy == ''">
 			ORDER BY id
 		</if>

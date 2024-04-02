@@ -34,7 +34,7 @@ public class DnsServerInfoBuiltInServiceImpl extends ServiceImpl<DnsServerInfoBu
 			try {
 				PreparedStatement pstm = conn.prepareStatement("insert into cn_dns_server_info_built_in (ip_addr,location_country,location_province,location_region,asn,\r\n"
 						+ "    	dns_server_role,orgnization,operation_system,dns_software,dnssec_support,dot_support,doh_support,\r\n"
-						+ "    	root_mirror_locations,create_time,update_time,knowledge_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						+ "    	root_mirror_locations,create_time,update_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				for(DnsServerInfoBuiltIn dnsServerInfoBuiltIn : dnsServerInfoBuiltIns) {
 					pstm.setString(1, dnsServerInfoBuiltIn.getIpAddr());
 					pstm.setString(2, dnsServerInfoBuiltIn.getLocationCountry());
@@ -63,7 +63,6 @@ public class DnsServerInfoBuiltInServiceImpl extends ServiceImpl<DnsServerInfoBu
 					pstm.setString(13, dnsServerInfoBuiltIn.getRootMirrorLocations());
 					pstm.setTimestamp(14, new java.sql.Timestamp(dnsServerInfoBuiltIn.getCreateTime().getTime()));
 					pstm.setTimestamp(15, new java.sql.Timestamp(dnsServerInfoBuiltIn.getUpdateTime().getTime()));
-					pstm.setInt(16, dnsServerInfoBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -81,7 +80,7 @@ public class DnsServerInfoBuiltInServiceImpl extends ServiceImpl<DnsServerInfoBu
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_dns_server_info_built_in set ip_addr =?,location_country =?,location_province =?,location_region=?,"
 						+ "asn =?,dns_server_role =?,orgnization =?,operation_system=?,dns_software=?,dnssec_support=?,dot_support=?,doh_support=?,"
-						+ "root_mirror_locations =?,update_time=?,knowledge_id=? where id = ?");
+						+ "root_mirror_locations =?,update_time=? where id = ?");
 				for(DnsServerInfoBuiltIn dnsServerInfoBuiltIn : dnsServerInfoBuiltIns) {
 					pstm.setString(1, dnsServerInfoBuiltIn.getIpAddr());
 					pstm.setString(2, dnsServerInfoBuiltIn.getLocationCountry());
@@ -109,8 +108,7 @@ public class DnsServerInfoBuiltInServiceImpl extends ServiceImpl<DnsServerInfoBu
 					}
 					pstm.setString(13, dnsServerInfoBuiltIn.getRootMirrorLocations());
 					pstm.setTimestamp(14, new java.sql.Timestamp(dnsServerInfoBuiltIn.getUpdateTime().getTime()));
-					pstm.setInt(15, dnsServerInfoBuiltIn.getKnowledgeId());
-					pstm.setInt(16,dnsServerInfoBuiltIn.getId());
+					pstm.setInt(15,dnsServerInfoBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

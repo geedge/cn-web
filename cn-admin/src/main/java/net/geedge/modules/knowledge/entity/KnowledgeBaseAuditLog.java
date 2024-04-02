@@ -30,8 +30,6 @@ public class KnowledgeBaseAuditLog {
 	private Integer opUser;
 	
 	private Date opTime;
-
-	private String color;
 	
 	private Integer apiKeyId;
 	

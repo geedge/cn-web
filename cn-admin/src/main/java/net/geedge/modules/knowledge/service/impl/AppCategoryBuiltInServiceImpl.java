@@ -31,9 +31,9 @@ public class AppCategoryBuiltInServiceImpl extends ServiceImpl<AppCategoryBuiltI
 	private Log log = Log.get();
 	
     @Override
-    public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+    public PageUtils queryList(Map<String, Object> params) {
         IPage page = this.page(new Query(AppCategoryBuiltIn.class).getPage(params));
-        List<AppCategoryBuiltIn> appCategoryBuiltIns = this.baseMapper.queryPageByKnowledgeId(page, params);
+        List<AppCategoryBuiltIn> appCategoryBuiltIns = this.baseMapper.queryPage(page, params);
         page.setRecords(appCategoryBuiltIns);
         return new PageUtils(page);
     }
@@ -49,7 +49,7 @@ public class AppCategoryBuiltInServiceImpl extends ServiceImpl<AppCategoryBuiltI
 			try {
 				PreparedStatement pstm = conn.prepareStatement("insert into cn_app_category_built_in (app_name,app_id,app_category,"
 						+ "app_subcategory,app_risk,app_description,app_longname,app_technology,app_is_protocol,app_company,"
-						+ "app_company_category,op_time,c_time,op_user,is_valid,knowledge_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						+ "app_company_category,op_time,c_time,op_user,is_valid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				for(AppCategoryBuiltIn appCategoryBuiltIn : appCategoryBuiltIns) {
 					pstm.setString(1, appCategoryBuiltIn.getAppName());
 					pstm.setString(2, appCategoryBuiltIn.getAppId());
@@ -74,7 +74,6 @@ public class AppCategoryBuiltInServiceImpl extends ServiceImpl<AppCategoryBuiltI
 					pstm.setTimestamp(13, new java.sql.Timestamp(appCategoryBuiltIn.getCTime().getTime()));
 					pstm.setInt(14, appCategoryBuiltIn.getOpUser());
 					pstm.setInt(15, appCategoryBuiltIn.getIsValid());
-					pstm.setInt(16, appCategoryBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -92,7 +91,7 @@ public class AppCategoryBuiltInServiceImpl extends ServiceImpl<AppCategoryBuiltI
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_app_category_built_in set app_name =?,app_id=?,app_category=?,"
 						+ "app_subcategory=?,app_risk=?,app_description=?,app_longname=?,app_technology=?,app_is_protocol=?,app_company=?,"
-						+ "app_company_category=?,op_time=?,op_user=?,is_valid=?,knowledge_id=? where id =?");
+						+ "app_company_category=?,op_time=?,op_user=?,is_valid=? where id =?");
 				for(AppCategoryBuiltIn appCategoryBuiltIn : appCategoryBuiltIns) {
 					pstm.setString(1, appCategoryBuiltIn.getAppName());
 					pstm.setString(2, appCategoryBuiltIn.getAppId());
@@ -116,8 +115,7 @@ public class AppCategoryBuiltInServiceImpl extends ServiceImpl<AppCategoryBuiltI
 					pstm.setTimestamp(12, new java.sql.Timestamp(appCategoryBuiltIn.getOpTime().getTime()));
 					pstm.setInt(13, appCategoryBuiltIn.getOpUser());
 					pstm.setInt(14, appCategoryBuiltIn.getIsValid());
-					pstm.setInt(15, appCategoryBuiltIn.getKnowledgeId());
-					pstm.setLong(16, appCategoryBuiltIn.getId());
+					pstm.setLong(15, appCategoryBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

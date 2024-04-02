@@ -37,6 +37,4 @@ public class IpAsnBuiltIn {
     private Date opTime;
 
     private Integer opUser;
-
-    private Integer knowledgeId;
 }

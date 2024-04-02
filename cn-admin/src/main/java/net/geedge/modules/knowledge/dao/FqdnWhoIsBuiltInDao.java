@@ -2,7 +2,7 @@ package net.geedge.modules.knowledge.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import net.geedge.modules.knowledge.entity.AppTagUserDefined;
+import net.geedge.modules.knowledge.entity.FqdnCategoryBuiltIn;
 import net.geedge.modules.knowledge.entity.FqdnWhoIsBuiltIn;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Mapper
 public interface FqdnWhoIsBuiltInDao extends BaseMapper<FqdnWhoIsBuiltIn> {
 
-    List<FqdnWhoIsBuiltIn> queryPageByKnowledgeId(IPage<FqdnWhoIsBuiltIn> page, @Param("params") Map<String, Object> params);
+    List<FqdnWhoIsBuiltIn> queryPage(IPage<FqdnWhoIsBuiltIn> page, @Param("params") Map<String, Object> params);
 
     Map<String, Object> queryEntityDetail(@Param("resource") String resource, @Param("isFuzzyQuery")Boolean isFuzzyQuery);
 }

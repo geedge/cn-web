@@ -43,6 +43,4 @@ public class DnsServerInfoBuiltIn {
 	private Date createTime;
 	
 	private Date updateTime;
-	
-	private Integer knowledgeId;
 }

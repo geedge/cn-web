@@ -9,7 +9,6 @@ import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.dao.FqdnCategoryBuiltInDao;
-import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.FqdnCategoryBuiltIn;
 import net.geedge.modules.knowledge.service.FqdnCategoryBuiltInService;
 import org.springframework.stereotype.Service;
@@ -30,9 +29,9 @@ public class FqdnCategoryBuiltInServiceImpl extends ServiceImpl<FqdnCategoryBuil
 	private Log log = Log.get();
 	
     @Override
-    public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+    public PageUtils queryList(Map<String, Object> params) {
         IPage page = this.page(new Query(FqdnCategoryBuiltIn.class).getPage(params));
-        List<FqdnCategoryBuiltIn> fqdnCategoryBuiltIns = this.baseMapper.queryPageByKnowledgeId(page, params);
+        List<FqdnCategoryBuiltIn> fqdnCategoryBuiltIns = this.baseMapper.queryPage(page, params);
         page.setRecords(fqdnCategoryBuiltIns);
         return new PageUtils(page);
     }
@@ -48,7 +47,7 @@ public class FqdnCategoryBuiltInServiceImpl extends ServiceImpl<FqdnCategoryBuil
 			try {
 				PreparedStatement pstm = conn.prepareStatement("insert into cn_fqdn_category_built_in (fqdn,source,query_success,"
 						+ "match_pattern,reputation_score,reputation_level,category_id,category_name,category_group,category_conf,"
-						+ "is_a1_cat,status_code,submit_user,create_time,update_time,knowledge_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						+ "is_a1_cat,status_code,submit_user,create_time,update_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				for(FqdnCategoryBuiltIn fqdnCategoryBuiltIn : fqdnCategoryBuiltIns) {
 					pstm.setString(1, fqdnCategoryBuiltIn.getFqdn());
 					pstm.setString(2, fqdnCategoryBuiltIn.getSource());
@@ -89,7 +88,6 @@ public class FqdnCategoryBuiltInServiceImpl extends ServiceImpl<FqdnCategoryBuil
 					pstm.setString(13, fqdnCategoryBuiltIn.getSubmitUser());
 					pstm.setTimestamp(14, new java.sql.Timestamp(fqdnCategoryBuiltIn.getCreateTime().getTime()));
 					pstm.setTimestamp(15, new java.sql.Timestamp(fqdnCategoryBuiltIn.getUpdateTime().getTime()));
-					pstm.setInt(16, fqdnCategoryBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -107,7 +105,7 @@ public class FqdnCategoryBuiltInServiceImpl extends ServiceImpl<FqdnCategoryBuil
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_fqdn_category_built_in set fqdn=?,source=?,query_success=?,"
 						+ "match_pattern=?,reputation_score=?,reputation_level=?,category_id=?,category_name=?,category_group=?,category_conf=?,"
-						+ "is_a1_cat=?,status_code=?,submit_user=?,update_time=?,knowledge_id=? where id = ?");
+						+ "is_a1_cat=?,status_code=?,submit_user=?,update_time=? where id = ?");
 				for(FqdnCategoryBuiltIn fqdnCategoryBuiltIn : fqdnCategoryBuiltIns) {
 					pstm.setString(1, fqdnCategoryBuiltIn.getFqdn());
 					pstm.setString(2, fqdnCategoryBuiltIn.getSource());
@@ -147,8 +145,7 @@ public class FqdnCategoryBuiltInServiceImpl extends ServiceImpl<FqdnCategoryBuil
 					}
 					pstm.setString(13, fqdnCategoryBuiltIn.getSubmitUser());
 					pstm.setTimestamp(14, new java.sql.Timestamp(fqdnCategoryBuiltIn.getUpdateTime().getTime()));
-					pstm.setInt(15, fqdnCategoryBuiltIn.getKnowledgeId());
-					pstm.setInt(16, fqdnCategoryBuiltIn.getId());
+					pstm.setInt(15, fqdnCategoryBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

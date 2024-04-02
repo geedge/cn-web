@@ -10,7 +10,6 @@ import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
 import net.geedge.modules.knowledge.dao.IpLocationBuiltInDao;
-import net.geedge.modules.knowledge.entity.AppTagUserDefined;
 import net.geedge.modules.knowledge.entity.IpLocationBuiltIn;
 import net.geedge.modules.knowledge.service.IpLocationBuiltInService;
 import org.apache.ibatis.annotations.Param;
@@ -32,9 +31,9 @@ public class IpLocationBuiltInServiceImpl extends ServiceImpl<IpLocationBuiltInD
 	private Log log = Log.get();
 	
     @Override
-    public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+    public PageUtils queryList(Map<String, Object> params) {
         IPage page = this.page(new Query(IpLocationBuiltIn.class).getPage(params));
-        List<IpLocationBuiltIn> ipLocationBuiltIns = this.baseMapper.queryPageByKnowledgeId(page, params);
+        List<IpLocationBuiltIn> ipLocationBuiltIns = this.baseMapper.queryPage(page, params);
         page.setRecords(ipLocationBuiltIns);
         return new PageUtils(page);
     }
@@ -50,7 +49,7 @@ public class IpLocationBuiltInServiceImpl extends ServiceImpl<IpLocationBuiltInD
 			try {
 				PreparedStatement pstm = conn.prepareStatement("insert into cn_ip_location_built_in (addr_type,start_ip,end_ip,minip,"
 						+ "maxip,continent,areacode,country,province,city,lngwgs,latwgs,owner,isp,asnumber,timezone,"
-						+ "is_valid,op_time,op_user,knowledge_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						+ "is_valid,op_time,op_user) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				for(IpLocationBuiltIn ipLocationBuiltIn : ipLocationBuiltIns) {
 					pstm.setInt(1, ipLocationBuiltIn.getAddrType());
 					pstm.setString(2, ipLocationBuiltIn.getStartIp());
@@ -79,7 +78,6 @@ public class IpLocationBuiltInServiceImpl extends ServiceImpl<IpLocationBuiltInD
 					pstm.setInt(17, ObjectUtil.isEmpty(ipLocationBuiltIn.getIsValid())?1:ipLocationBuiltIn.getIsValid());
 					pstm.setTimestamp(18, new java.sql.Timestamp(ipLocationBuiltIn.getOpTime().getTime()));
 					pstm.setInt(19, ipLocationBuiltIn.getOpUser());
-					pstm.setInt(20, ipLocationBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -97,7 +95,7 @@ public class IpLocationBuiltInServiceImpl extends ServiceImpl<IpLocationBuiltInD
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_ip_location_built_in set addr_type=?,start_ip=?,end_ip=?,minip=?,"
 						+ "maxip=?,continent=?,areacode=?,country=?,province=?,city=?,lngwgs=?,latwgs=?,owner=?,isp=?,asnumber=?,timezone=?,"
-						+ "is_valid=?,op_time=?,op_user=?,knowledge_id=? where id = ?");
+						+ "is_valid=?,op_time=?,op_user=? where id = ?");
 				for(IpLocationBuiltIn ipLocationBuiltIn : ipLocationBuiltIns) {
 					pstm.setInt(1, ipLocationBuiltIn.getAddrType());
 					pstm.setString(2, ipLocationBuiltIn.getStartIp());
@@ -126,8 +124,7 @@ public class IpLocationBuiltInServiceImpl extends ServiceImpl<IpLocationBuiltInD
 					pstm.setInt(17, ipLocationBuiltIn.getIsValid());
 					pstm.setTimestamp(18, new java.sql.Timestamp(ipLocationBuiltIn.getOpTime().getTime()));
 					pstm.setInt(19, ipLocationBuiltIn.getOpUser());
-					pstm.setInt(20, ipLocationBuiltIn.getKnowledgeId());
-					pstm.setLong(21, ipLocationBuiltIn.getId());
+					pstm.setLong(20, ipLocationBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

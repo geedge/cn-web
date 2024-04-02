@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface IpLocationBuiltInService extends IService<IpLocationBuiltIn> {
 
-    PageUtils queryListByKnowledgeId(Map<String,Object> params);
+    PageUtils queryList(Map<String,Object> params);
 
     Map<String, Object> queryEntityDetail(String resource);
     

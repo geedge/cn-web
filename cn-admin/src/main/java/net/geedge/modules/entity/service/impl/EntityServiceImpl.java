@@ -48,25 +48,10 @@ public class EntityServiceImpl implements EntityService {
     private AppCategoryBuiltInService appCategoryBuiltInService;
 
     @Autowired
-    private AppTagUserDefinedService appTagUserDefinedService;
-
-    @Autowired
     private IocMalwareService iocMalwareService;
 
     @Autowired
     private IocDarkwebService iocDarkwebService;
-
-    @Autowired
-    private VpnLearningIpService vpnLearningIpService;
-
-    @Autowired
-    private VpnLearningDomainService vpnLearningDomainService;
-
-    @Autowired
-    private IpTagUserDefinedService ipTagUserDefinedService;
-
-    @Autowired
-    private DomainTagUserDefinedService domainTagUserDefinedService;
 
     @Autowired
     private DnsServerInfoBuiltInService dnsServerInfoBuiltInService;
@@ -155,34 +140,24 @@ public class EntityServiceImpl implements EntityService {
     public R queryEntityTag(String entityType, String resource) {
         Map<String, Object> data = new HashMap<>();
         if ("app".equals(entityType)){
-            List<Map> userDefinedTags = appTagUserDefinedService.queryAppEntityTag(resource);
-            addValidListToMap(data, "userDefinedTags", userDefinedTags);
         } else if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource, false);
             Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
-            List<Map> vpnLearningDomain = vpnLearningDomainService.queryDomainEntityTag(resource);
             if (ObjectUtil.isEmpty(malware)) {
                 malware = iocMalwareService.queryDomainEntityTag(resource, true);
             }
             if (ObjectUtil.isEmpty(darkweb)) {
                 darkweb = iocDarkwebService.queryDomainEntityTag(resource, true);
             }
-            List<Map> userDefinedTags = domainTagUserDefinedService.queryDomainEntityTag(resource);
             addValidDataToMap(data, "malware", malware);
             addValidDataToMap(data, "darkweb", darkweb);
-            addValidListToMap(data, "vpnLearningDomain", vpnLearningDomain);
-            addValidListToMap(data, "userDefinedTags", userDefinedTags);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryIpEntityTag(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryIpEntityTag(resource);
             Map<String, Object> dnsServerInfo = dnsServerInfoBuiltInService.queryIpEntityTag(resource);
-            List<Map> vpnLearningIp = vpnLearningIpService.queryIpEntityTag(resource);
-            List<Map> userDefinedTags = ipTagUserDefinedService.queryIpEntityTag(resource);
             addValidDataToMap(data, "malware", malware);
             addValidDataToMap(data, "darkweb", darkweb);
             addValidDataToMap(data, "dnsServerInfo", dnsServerInfo);
-            addValidListToMap(data, "vpnLearningIp", vpnLearningIp);
-            addValidListToMap(data, "userDefinedTags", userDefinedTags);
         }
         return R.ok(data);
     }
@@ -238,9 +213,7 @@ public class EntityServiceImpl implements EntityService {
 
     private List<Map<String,Object>> createEntityList(String entityType, String resource) {
         List<Map<String,Object>> entityList = new ArrayList<>();
-        List<Map> userDefinedTags = new ArrayList<>();
         if ("app".equals(entityType)){
-            userDefinedTags = createEnableList(appTagUserDefinedService.queryAppEntityTag(resource));
         } else if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource,false);
             Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
@@ -250,33 +223,23 @@ public class EntityServiceImpl implements EntityService {
             if (ObjectUtil.isEmpty(darkweb)) {
                 darkweb = iocDarkwebService.queryDomainEntityTag(resource, true);
             }
-            List<Map> vpnLearningDomain = createEnableList(vpnLearningDomainService.queryDomainEntityTag(resource));
-            userDefinedTags = createEnableList(domainTagUserDefinedService.queryDomainEntityTag(resource));
             malware = createEnableMap("malware", malware);
             darkweb = createEnableMap("darkweb", darkweb);
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
-            vpnLearningDomain = listChangeTimestamp(vpnLearningDomain);
-            addListTag("vpnLearningDomain",entityList, vpnLearningDomain);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = createEnableMap("malware", iocMalwareService.queryIpEntityTag(resource));
             Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryIpEntityTag(resource));
             Map<String, Object> dnsServerInfo = createEnableMap("dnsServerInfo", dnsServerInfoBuiltInService.queryIpEntityTag(resource));
-            List<Map> vpnLearningIp = createEnableList(vpnLearningIpService.queryIpEntityTag(resource));
-            userDefinedTags = createEnableList(ipTagUserDefinedService.queryIpEntityTag(resource));
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             mapChangeTimestamp(dnsServerInfo);
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
             addEntityList(entityList, dnsServerInfo);
-            vpnLearningIp = listChangeTimestamp(vpnLearningIp);
-            addListTag("vpnLearningIp",entityList, vpnLearningIp);
         }
-        userDefinedTags = listChangeTimestamp(userDefinedTags);
-        addListTag("userDefinedTag",entityList, userDefinedTags);
         sortByUpdateTime(entityList);
         return entityList;
     }

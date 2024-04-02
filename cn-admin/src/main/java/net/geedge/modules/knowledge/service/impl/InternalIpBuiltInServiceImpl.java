@@ -26,9 +26,9 @@ public class InternalIpBuiltInServiceImpl extends ServiceImpl<InternalIpBuiltInD
 	private Log log = Log.get();
 	
 	@Override
-	public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+	public PageUtils queryList(Map<String, Object> params) {
 		IPage page = this.page(new Query(InternalIpBuiltIn.class).getPage(params));
-		List<InternalIpBuiltIn> internalIpBuiltIns = this.baseMapper.queryPageByKnowledgeId(page, params);
+		List<InternalIpBuiltIn> internalIpBuiltIns = this.baseMapper.queryPage(page, params);
 		page.setRecords(internalIpBuiltIns);
 		return new PageUtils(page);
 	}
@@ -53,14 +53,13 @@ public class InternalIpBuiltInServiceImpl extends ServiceImpl<InternalIpBuiltInD
 		if(ObjectUtil.isNotEmpty(internalIpBuiltIns)) {
 			try {
 				PreparedStatement pstm = conn.prepareStatement("insert into cn_internal_ip_built_in "
-						+ "(addr_format,ip1,ip2,start_ip_binary,end_ip_binary,knowledge_id) values (?,?,?,INET6_ATON(?),INET6_ATON(?),?)");
+						+ "(addr_format,ip1,ip2,start_ip_binary,end_ip_binary) values (?,?,?,INET6_ATON(?),INET6_ATON(?),?)");
 				for(InternalIpBuiltIn insertInternalIpBuiltIn : internalIpBuiltIns) {
 					pstm.setString(1, insertInternalIpBuiltIn.getAddrFormat());
 					pstm.setString(2, insertInternalIpBuiltIn.getIp1());
 					pstm.setString(3, insertInternalIpBuiltIn.getIp2());
 					pstm.setString(4, insertInternalIpBuiltIn.getStartIpBinary());
 					pstm.setString(5, insertInternalIpBuiltIn.getEndIpBinary());
-					pstm.setInt(6, insertInternalIpBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -77,15 +76,14 @@ public class InternalIpBuiltInServiceImpl extends ServiceImpl<InternalIpBuiltInD
 		if(ObjectUtil.isNotEmpty(internalIpBuiltIns)) {
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_internal_ip_built_in "
-						+ " set addr_format = ?,ip1=?,ip2=?,start_ip_binary=INET6_ATON(?),end_ip_binary=INET6_ATON(?),knowledge_id=? where id=?");
+						+ " set addr_format = ?,ip1=?,ip2=?,start_ip_binary=INET6_ATON(?),end_ip_binary=INET6_ATON(?) where id=?");
 				for(InternalIpBuiltIn insertInternalIpBuiltIn : internalIpBuiltIns) {
 					pstm.setString(1, insertInternalIpBuiltIn.getAddrFormat());
 					pstm.setString(2, insertInternalIpBuiltIn.getIp1());
 					pstm.setString(3, insertInternalIpBuiltIn.getIp2());
 					pstm.setString(4, insertInternalIpBuiltIn.getStartIpBinary());
 					pstm.setString(5, insertInternalIpBuiltIn.getEndIpBinary());
-					pstm.setInt(6, insertInternalIpBuiltIn.getKnowledgeId());
-					pstm.setInt(7, insertInternalIpBuiltIn.getId());
+					pstm.setInt(6, insertInternalIpBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

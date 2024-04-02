@@ -31,9 +31,9 @@ public class FqdnWhoIsBuiltInServiceImpl extends ServiceImpl<FqdnWhoIsBuiltInDao
 	private Log log = Log.get();
 	
     @Override
-    public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+    public PageUtils queryList(Map<String, Object> params) {
         IPage page = this.page(new Query(FqdnWhoIsBuiltIn.class).getPage(params));
-        List<FqdnWhoIsBuiltIn> fqdnWhoIsBuiltIns = this.baseMapper.queryPageByKnowledgeId(page, params);
+        List<FqdnWhoIsBuiltIn> fqdnWhoIsBuiltIns = this.baseMapper.queryPage(page, params);
         page.setRecords(fqdnWhoIsBuiltIns);
         return new PageUtils(page);
     }
@@ -51,7 +51,7 @@ public class FqdnWhoIsBuiltInServiceImpl extends ServiceImpl<FqdnWhoIsBuiltInDao
 						+ "status_code,match_pattern,whois_domain,whois_update_date,whois_create_date,whois_expire_date,whois_email,whois_ns,"
 						+ "whois_registrar_name,whois_registrant_org,whois_registrant_name,whois_registrant_street,whois_registrant_city,"
 						+ "whois_registrant_state,whois_registrant_postcode,whois_registrant_country,whois_registrant_phone,create_time,"
-						+ "update_time,knowledge_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						+ "update_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				for(FqdnWhoIsBuiltIn fqdnWhoIsBuiltIn : fqdnWhoIsBuiltIns) {
 					pstm.setString(1, fqdnWhoIsBuiltIn.getFqdn());
 					pstm.setString(2, fqdnWhoIsBuiltIn.getSource());
@@ -99,7 +99,6 @@ public class FqdnWhoIsBuiltInServiceImpl extends ServiceImpl<FqdnWhoIsBuiltInDao
 					pstm.setString(20, fqdnWhoIsBuiltIn.getWhoisRegistrantPhone());
 					pstm.setTimestamp(21, new java.sql.Timestamp(fqdnWhoIsBuiltIn.getCreateTime().getTime()));
 					pstm.setTimestamp(22, new java.sql.Timestamp(fqdnWhoIsBuiltIn.getUpdateTime().getTime()));
-					pstm.setInt(23, fqdnWhoIsBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -119,7 +118,7 @@ public class FqdnWhoIsBuiltInServiceImpl extends ServiceImpl<FqdnWhoIsBuiltInDao
 						+ "status_code=?,match_pattern=?,whois_domain=?,whois_update_date=?,whois_create_date=?,whois_expire_date=?,whois_email=?,whois_ns=?,"
 						+ "whois_registrar_name=?,whois_registrant_org=?,whois_registrant_name=?,whois_registrant_street=?,whois_registrant_city=?,"
 						+ "whois_registrant_state=?,whois_registrant_postcode=?,whois_registrant_country=?,whois_registrant_phone=?,"
-						+ "update_time=?,knowledge_id=? where id = ?");
+						+ "update_time=? where id = ?");
 				for(FqdnWhoIsBuiltIn fqdnWhoIsBuiltIn : fqdnWhoIsBuiltIns) {
 					pstm.setString(1, fqdnWhoIsBuiltIn.getFqdn());
 					pstm.setString(2, fqdnWhoIsBuiltIn.getSource());
@@ -166,8 +165,7 @@ public class FqdnWhoIsBuiltInServiceImpl extends ServiceImpl<FqdnWhoIsBuiltInDao
 					pstm.setString(19, fqdnWhoIsBuiltIn.getWhoisRegistrantCountry());
 					pstm.setString(20, fqdnWhoIsBuiltIn.getWhoisRegistrantPhone());
 					pstm.setTimestamp(21, new java.sql.Timestamp(fqdnWhoIsBuiltIn.getUpdateTime().getTime()));
-					pstm.setInt(22, fqdnWhoIsBuiltIn.getKnowledgeId());
-					pstm.setInt(23, fqdnWhoIsBuiltIn.getId());
+					pstm.setInt(22, fqdnWhoIsBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

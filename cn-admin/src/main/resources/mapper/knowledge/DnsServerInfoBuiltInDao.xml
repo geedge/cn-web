@@ -19,12 +19,11 @@
         <result property="rootMirrorLocations" column="root_mirror_locations"></result>
         <result property="createTime" column="create_time"></result>
         <result property="updateTime" column="update_time"></result>
-        <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
 
     <select id="queryIpEntityTag" resultType="java.util.Map">
         select dns_server_role as dnsServerRole, update_time as updateTime,
-               create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+               create_time as createTime, 1 as isValid from
             cn_dns_server_info_built_in
         where ip_addr = #{resource}
         limit 1

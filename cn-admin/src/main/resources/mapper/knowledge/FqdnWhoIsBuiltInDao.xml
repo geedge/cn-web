@@ -26,12 +26,10 @@
         <result property="whoisRegistrantPhone" column="whois_registrant_phone"></result>
         <result property="createTime" column="create_time"></result>
         <result property="updateTime" column="update_time"></result>
-        <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
-    <select id="queryPageByKnowledgeId" resultMap="FqdnWhoIsBuiltIn">
+    <select id="queryPage" resultMap="FqdnWhoIsBuiltIn">
         select * from
         cn_fqdn_who_is_built_in
-        where knowledge_id = #{params.knowledgeId}
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>
@@ -43,7 +41,7 @@
                 select whois_registrar_name as registrarName, whois_registrant_org as registrantOrg,
                 whois_registrant_country as registrantCountry, whois_email as email,
                 whois_create_date as createDate, whois_expire_date as expireDate,
-                update_time as updateTime, create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+                update_time as updateTime, create_time as createTime, 1 as isValid from
                 cn_fqdn_who_is_built_in
                 where fqdn = #{resource} limit 1
             </when>
@@ -51,7 +49,7 @@
                 select whois_registrar_name as registrarName, whois_registrant_org as registrantOrg,
                 whois_registrant_country as registrantCountry, whois_email as email,
                 whois_create_date as createDate, whois_expire_date as expireDate,
-                update_time as updateTime, create_time as createTime, 1 as isValid, knowledge_id as knowledgeId from
+                update_time as updateTime, create_time as createTime, 1 as isValid from
                 (select * from cn_fqdn_who_is_built_in
                 where fqdn = SUBSTRING_INDEX(#{resource},'.',-4) or fqdn = SUBSTRING_INDEX(#{resource},'.',-3) or fqdn = SUBSTRING_INDEX(#{resource},'.',-2)) a
                 where #{resource} like CONCAT('%','.',fqdn) limit 1
