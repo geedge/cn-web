@@ -23,5 +23,6 @@ CREATE TABLE `sys_api_key`  (
 -- ----------------------------
 INSERT INTO `sys_api_key` VALUES (1, 'ETL', '1a653ea0-d39b-4246-94b0-1ba95db4b6a7', 1, 1, '2023-10-16 10:01:21', NULL);
 INSERT INTO `sys_api_key` VALUES (2, 'Learning Engine', 'a2857bc21b01421b85953fc2c65b4d4c', 1, 1, '2023-10-30 18:10:15', NULL);
+INSERT INTO `sys_api_key` VALUES (3, 'Digital Horizon', 'a0e623d7-47f8-475b-a0a5-5d77f76601c1', 1, 1, '2024-03-28 15:33:49', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
