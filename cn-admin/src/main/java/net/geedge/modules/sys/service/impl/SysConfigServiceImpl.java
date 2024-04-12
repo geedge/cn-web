@@ -25,8 +25,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,29 +35,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import com.sun.mail.util.MailSSLSocketFactory;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import net.geedge.common.exception.CNException;
-import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysConfigDao;
 import net.geedge.modules.sys.entity.SysConfigEntity;
-import net.geedge.modules.sys.redis.SysConfigRedis;
 import net.geedge.modules.sys.service.SysConfigService;
 
 @Service("sysConfigService")
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEntity> implements SysConfigService {
 
     public static final String[] BASIC_KEYS = {"system_name","lang","date_format","system_logo", "timezone","system_bgImg","system_favicon","s3_enable","delay_time","map_config"};
-	
-    @Autowired
-    private SysConfigRedis sysConfigRedis;
-    
-    @Autowired
-    private RedisTemplate redisTemplate;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -78,49 +66,29 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
 	@Override
 	public void saveConfig(SysConfigEntity config) {
 		this.save(config);
-		sysConfigRedis.saveOrUpdate(config);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void update(SysConfigEntity config) {
-		//发布session过期时间变化 监听端口
-		if(StrUtil.equals(config.getCkey(), Constant.SYSCONFIG_SESSION_TIMEOUT_KEY)) {
-			SysConfigEntity sessionTimeout = baseMapper.queryByKey(Constant.SYSCONFIG_SESSION_TIMEOUT_KEY);
-	        if(ObjectUtil.isEmpty(sessionTimeout) || !StrUtil.equals(sessionTimeout.getCvalue(),config.getCvalue())) {
-	        	redisTemplate.convertAndSend(Constant.SYSCONFIG_SESSION_TIMEOUT_KEY,config.getCvalue());
-	        }
-		}
 		this.updateById(config);
-		sysConfigRedis.saveOrUpdate(config);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void updateValueByKey(String key, String value) {
 		baseMapper.updateValueByKey(key, value);
-		sysConfigRedis.delete(key);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteBatch(Long[] ids) {
-		for(Long id : ids){
-			SysConfigEntity config = this.getById(id);
-			sysConfigRedis.delete(config.getCkey());
-		}
-
 		this.removeByIds(Arrays.asList(ids));
 	}
 
 	@Override
 	public String getValue(String key) {
-		SysConfigEntity config = sysConfigRedis.get(key);
-		if(config == null){
-		config = baseMapper.queryByKey(key);
-			sysConfigRedis.saveOrUpdate(config);
-		}
-
+		SysConfigEntity config = baseMapper.queryByKey(key);
 		return config == null ? null : config.getCvalue();
 	}
 
@@ -190,10 +158,6 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
         }
 
         this.saveOrUpdateBatch(map.values());
-        // 清除redis缓存
-        for(String key : map.keySet()) {
-        	sysConfigRedis.saveOrUpdate(map.get(key));
-        }
         return map;
     }
 	
@@ -330,10 +294,5 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
         }
 
         this.saveOrUpdateBatch(map.values());
-        
-        // 清除redis缓存
-        for(String key : map.keySet()) {
-        	sysConfigRedis.saveOrUpdate(map.get(key));
-        }
 	}
 }

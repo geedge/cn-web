@@ -1,21 +1,22 @@
 package net.geedge.modules.sys.service.impl;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.log.Log;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysConfigDao;
 import net.geedge.modules.sys.entity.SysConfigEntity;
 import net.geedge.modules.sys.service.SysInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisServerCommands;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-
-import java.io.InputStream;
-import java.util.*;
 
 @Service("sysInfoService")
 public class SysInfoServiceImpl implements SysInfoService {
@@ -26,21 +27,18 @@ public class SysInfoServiceImpl implements SysInfoService {
     private SysConfigDao sysConfigDao;
 
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-
     @Override
     public Map getAboutInfo() {
         Map resultMap = new HashMap(4);
-        // 1. nehza 系统版本
+        // 1. cn 系统版本
         SysConfigEntity sysVersion = new SysConfigEntity();
         Map sysVersionMap = new HashMap(4);
-        sysVersionMap.put("name", "cn Monitoring System");
+        sysVersionMap.put("name", "Cyber Narrator");
         sysVersionMap.put("version", sysVersion.getCvalue());
 
         resultMap.put("cn", sysVersionMap);
 
-        // 2. 组件版本信息  mariaDB redis prometheus
+        // 2. 组件版本信息  mariaDB
         List<Map> componentVersionInfoList = new ArrayList<>();
 
         // ① mariaDB version
@@ -50,21 +48,8 @@ public class SysInfoServiceImpl implements SysInfoService {
         componentVersion.put("version", dataBasesVersion);
         componentVersionInfoList.add(componentVersion);
 
-        // ② redis version
-        Object redisVersion = redisTemplate.execute(new RedisCallback<String>() {
-            @Override
-            public String doInRedis(RedisConnection connection) throws DataAccessException {
-                RedisServerCommands redisServerCommands = connection.serverCommands();
-                Properties info = redisServerCommands.info();
-                return info.get("redis_version").toString();
-            }
-        });
         componentVersion = new HashMap(4);
-        componentVersion.put("name", "Redis");
-        componentVersion.put("version", redisVersion.toString());
         componentVersionInfoList.add(componentVersion);
-
-
         resultMap.put("components", componentVersionInfoList);
         return resultMap;
     }

@@ -1,32 +1,49 @@
 package net.geedge.modules.sys.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.log.Log;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.geedge.common.exception.CNException;
-import net.geedge.common.smartvalidate.ValidateUtils;
-import net.geedge.common.utils.*;
-import net.geedge.modules.sys.dao.SysMenuDao;
-import net.geedge.modules.sys.dao.SysRoleDao;
-import net.geedge.modules.sys.entity.*;
-import net.geedge.modules.sys.service.*;
-import net.geedge.modules.sys.shiro.ShiroUtils;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import static net.geedge.common.utils.RCode.SYS_ROLE_IS_RELATED_CANNOT_DELETE;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.log.Log;
+import net.geedge.common.exception.CNException;
+import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.Query;
+import net.geedge.common.utils.R;
+import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
+import net.geedge.modules.sys.dao.SysMenuDao;
+import net.geedge.modules.sys.dao.SysRoleDao;
+import net.geedge.modules.sys.entity.SysMenuEntity;
+import net.geedge.modules.sys.entity.SysRoleEntity;
+import net.geedge.modules.sys.entity.SysRoleMenuEntity;
+import net.geedge.modules.sys.entity.SysUserEntity;
+import net.geedge.modules.sys.entity.SysUserRoleEntity;
+import net.geedge.modules.sys.service.SysMenuService;
+import net.geedge.modules.sys.service.SysRoleMenuService;
+import net.geedge.modules.sys.service.SysRoleService;
+import net.geedge.modules.sys.service.SysUserRoleService;
+import net.geedge.modules.sys.service.SysUserService;
+import net.geedge.modules.sys.shiro.ShiroUtils;
 
 @Service("sysRoleService")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {
@@ -48,8 +65,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
     @Autowired
     private SysMenuDao sysMenuDao;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -173,7 +188,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 
         List<Long> userIds = userList.stream().map(SysUserEntity::getId).distinct().collect(Collectors.toList());
 
-        // 删除 redis 中的 token
         List<String> removeKeys = new ArrayList<>();
         try {
             Map<String, SysUserEntity> shiroSessionInfoMap = ShiroUtils.getShiroSessionInfoMap();
@@ -184,11 +198,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
                 }
             }
         } catch (RuntimeException e) {
-            log.error(String.format("从redis中获取用户登录信息失败,错误信息是：%s,角色Id是：%s", e.getMessage(), roleId), e);
-        } finally {
+            log.error(String.format("获取用户登录信息失败,错误信息是：%s,角色Id是：%s", e.getMessage(), roleId), e);
+        }  finally {
             // 删除 关联key
             if (CollectionUtils.isNotEmpty(removeKeys)) {
-                redisTemplate.delete(removeKeys);
+                ShiroUtils.deleteSession(removeKeys);
             }
         }
     }
