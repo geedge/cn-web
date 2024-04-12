@@ -1,5 +1,6 @@
 package net.geedge.modules.knowledge.service.impl;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
@@ -10,16 +11,22 @@ import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.knowledge.dao.IntelligenceIndicatorDao;
 import net.geedge.modules.knowledge.entity.IntelligenceIndicator;
 import net.geedge.modules.knowledge.entity.Tag;
 import net.geedge.modules.knowledge.service.IntelligenceIndicatorService;
+import net.geedge.modules.knowledge.service.KnowledgeBaseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Auther: lijinyang
@@ -29,6 +36,9 @@ import java.util.*;
 public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIndicatorDao, IntelligenceIndicator> implements IntelligenceIndicatorService {
 
     private Log log = Log.get();
+
+    @Autowired
+    private KnowledgeBaseServiceImpl knowledgeBaseServiceImpl;
 
     @Override
     public void saveBatchForBinary(List<IntelligenceIndicator> intelligenceIndicators) {
@@ -72,19 +82,39 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
         Long startTime = Long.valueOf((String)params.get("startTime"));
         Long endTime = Long.valueOf((String)params.get("endTime"));
         // 计算粒度
-        Integer step = this.handlerStep(startTime, endTime);
+        Integer step = knowledgeBaseServiceImpl.handlerStep(startTime, endTime);
         params.put("startTime",cn.hutool.core.date.DateUtil.date(startTime*1000));
         params.put("endTime",cn.hutool.core.date.DateUtil.date(endTime*1000));
         params.put("step", step);
         List<Map<String, Object>> data = this.baseMapper.indicatorTrend(params);
-
-        return R.ok(data);
+        List<Map<String, Object>> result = sumHandler(data, params);
+        return R.ok(result);
     }
 
-    private void sumHandler(List<Map<String, Object>> data) {
-        data.stream().forEach(map->{
-
-        });
+    private List<Map<String, Object>> sumHandler(List<Map<String, Object>> data, Map<String,Object> params) {
+        String name = (String)params.get("name");
+        DateTime startTime = (DateTime)params.get("startTime");
+        DateTime endTime = (DateTime)params.get("endTime");
+        Integer ipSum = this.baseMapper.selectCount(new QueryWrapper<IntelligenceIndicator>().eq("tags",name).eq("type","IP").between("created_time",startTime,endTime));
+        Integer domainSum = this.baseMapper.selectCount(new QueryWrapper<IntelligenceIndicator>().eq("tags",name).eq("type","Domain").between("created_time",startTime,endTime));
+        Map<String, Object> last = Tool.MapUtil.newHashMap();
+        last.put("statTime",endTime.getTime()/1000);
+        last.put("ipIndicatorCount",ipSum);
+        last.put("domainIndicatorCount",domainSum);
+        List<Map<String, Object>> reversed = data.stream().sorted((m1,m2) -> ((Long) m2.get("statTime")).compareTo((Long) m1.get("statTime"))).collect(Collectors.toList());
+        List<Map<String, Object>> result = Tool.CollectionUtil.newArrayList();
+        result.add(last);
+        for (Map<String, Object> map:reversed) {
+            Map<String, Object> resultMap = Tool.MapUtil.newHashMap();
+            resultMap.put("statTime",map.get("statTime"));
+            resultMap.put("ipIndicatorCount",ipSum-Integer.valueOf(map.get("ipIndicatorCount").toString()));
+            resultMap.put("domainIndicatorCount",domainSum-Integer.valueOf(map.get("domainIndicatorCount").toString()));
+            ipSum-=Integer.valueOf(map.get("ipIndicatorCount").toString());
+            domainSum-=Integer.valueOf(map.get("domainIndicatorCount").toString());
+            result.add(resultMap);
+        }
+        result = result.stream().sorted(Comparator.comparing(m -> ((Long) m.get("statTime")))).collect(Collectors.toList());
+        return result;
     }
 
     private Integer handlerStep(Long startTime,Long endTime) {
@@ -112,7 +142,7 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
                         "ip_addr_format, ip1, ip2, start_ip_binary, end_ip_binary, domain, method, confidence, tags, description, first_seen_time, last_seen_time, " +
                         "created_time, updated_time) "
                         + "values (?,?,?,?,?,?,INET6_ATON(?),INET6_ATON(?),?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE " +
-                        "type=VALUES(type),source_id=VALUES(source_id),ip1=VALUES(ip1),ip2=VALUES(ip2),domain=VALUES(domain)");
+                        "type=VALUES(type),source_id=VALUES(source_id),ip1=VALUES(ip1),ip2=VALUES(ip2),domain=VALUES(domain),tags=VALUES(tags)");
                 for(IntelligenceIndicator intelligenceIndicator : intelligenceIndicators) {
                     pstm.setString(1, intelligenceIndicator.getType());
                     pstm.setString(2, intelligenceIndicator.getSourceId());

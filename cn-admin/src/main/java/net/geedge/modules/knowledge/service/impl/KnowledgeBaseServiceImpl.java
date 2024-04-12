@@ -1390,7 +1390,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		return result;
 	}
 	
-	private Integer handlerStep(Long startTime,Long endTime) {
+	public Integer handlerStep(Long startTime,Long endTime) {
 		Integer step = 1;
 		Long diffTime = endTime-startTime;
 		if(diffTime <= 86400) {
