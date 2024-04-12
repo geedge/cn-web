@@ -21,7 +21,6 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +42,7 @@ import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool;
 import net.geedge.common.utils.TypeEnum;
+import net.geedge.modules.sys.dao.SysLoginSessionDao;
 import net.geedge.modules.sys.entity.SysConfigEntity;
 import net.geedge.modules.sys.entity.SysUserEntity;
 import net.geedge.modules.sys.entity.Timezone;
@@ -61,12 +61,11 @@ public class SysLoginController extends AbstractController {
 	@Autowired
 	private Producer producer;
 	@Autowired
-	private RedisTemplate<String,String> redisTemplate;
-	@Autowired
 	private SysConfigService configService;
 	@Autowired
 	private SysUserService sysUserService;
-
+	@Autowired
+	private SysLoginSessionDao sysLoginSessionDao;
 	@Autowired
 	private TimezoneService timezoneService;
 	
@@ -148,9 +147,9 @@ public class SysLoginController extends AbstractController {
 			requestToken=request.getParameter(Constant.AUTH_TOKEN_CODE);
 		}
 		try {
-			redisTemplate.delete(requestToken);
+			sysLoginSessionDao.deleteById(requestToken);
 		}catch (RuntimeException e){
-				logger.debug("登出操作删除redis信息失败，失败key：{}",requestToken);
+				logger.debug("登出操作删除信息失败，失败key：{}",requestToken);
 		}
 		return R.ok();
 	}

@@ -17,35 +17,29 @@ import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.SimpleScheduleBuilder;
 import org.quartz.SimpleTrigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.jcraft.jsch.Logger;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.utils.Constant;
+import net.geedge.modules.election.dao.LeaderElectionDao;
 import net.geedge.modules.report.entity.ReportTemp;
-import net.geedge.modules.report.service.ReportJobService;
-import net.geedge.modules.report.service.ReportTaskService;
 import net.geedge.modules.report.service.ReportTempService;
 
 @DisallowConcurrentExecution
 public class ReportRegisterJob extends QuartzJobBean {
 	private Log log = Log.get();
-	
-	@Autowired
-	private RedisTemplate redisTemplate;
 	
 	@Autowired
 	private ReportTempService reportTempService;
@@ -60,8 +54,10 @@ public class ReportRegisterJob extends QuartzJobBean {
 		Thread.currentThread().setName("ReportRegisterJob");
 		scheduler = context.getScheduler();
 		// 检查 haMode
-    	String serverId = (String) redisTemplate.opsForValue().get(Constant.SYS_HA_LOCK);
-        if(!StrUtil.equals(serverId, Constant.SERVER_ID)) return;
+		LeaderElectionDao dao = LeaderElectionDao.getInstance();
+        boolean isLeader = dao.isLeader(Constant.SYS_HA_LOCK, Constant.SERVER_ID);
+        log.info("[LoginSessionCleanJob] [Get HA_LOCK] [isLeader: {}]", isLeader);
+        if (BooleanUtil.negate(isLeader)) return;
         
         log.info("ReportRegisterJob start");
         StopWatch sw = new StopWatch();

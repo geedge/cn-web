@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -61,10 +63,15 @@ public class SysApiKeyServiceImpl extends ServiceImpl<SysApiKeyDao,SysApiKey> im
 		List<SysApiKey> sysApiKeys = this.list(new QueryWrapper<SysApiKey>().lambda().in(SysApiKey::getId, Arrays.asList(ids.split(","))));
 		List<String> tokens = new ArrayList<String>();
 		for(SysApiKey sysApiKey : sysApiKeys) {
-			tokens.add(StrUtil.str(ShiroUtils.REDIS_KEYPREFIX+sysApiKey.getToken()));
+			tokens.add(sysApiKey.getToken());
 		}
-		ShiroUtils.removeRedisCacheByToken(tokens);
+		ShiroUtils.deleteSession(tokens);
 		this.removeByIds(Arrays.asList(ids.split(",")));
 	}
-
+	
+	@Override
+    @Transactional(rollbackFor = Exception.class)
+	public void updateRoleIdByUser(Integer userId, Integer roleId) {
+		this.getBaseMapper().updateRoleIdByCreateBy(userId, roleId);
+	}
 }

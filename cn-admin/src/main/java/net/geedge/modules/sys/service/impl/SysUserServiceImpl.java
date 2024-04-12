@@ -1,47 +1,56 @@
 package net.geedge.modules.sys.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.log.Log;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
-import net.geedge.common.utils.*;
+import net.geedge.common.utils.Constant;
+import net.geedge.common.utils.PageUtils;
+import net.geedge.common.utils.Query;
+import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysRoleDao;
 import net.geedge.modules.sys.dao.SysUserDao;
+import net.geedge.modules.sys.entity.SysApiKey;
 import net.geedge.modules.sys.entity.SysRoleEntity;
 import net.geedge.modules.sys.entity.SysUserEntity;
 import net.geedge.modules.sys.entity.SysUserRoleEntity;
+import net.geedge.modules.sys.service.SysApiKeyService;
 import net.geedge.modules.sys.service.SysMenuService;
 import net.geedge.modules.sys.service.SysRoleService;
 import net.geedge.modules.sys.service.SysUserRoleService;
 import net.geedge.modules.sys.service.SysUserService;
 import net.geedge.modules.sys.shiro.ShiroUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.mgt.SimpleSession;
-import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.apache.shiro.subject.support.DefaultSubjectContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service("sysUserService")
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
@@ -59,12 +68,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 	@Autowired
 	private SysMenuService sysMenuService;
-
+	
 	@Autowired
-	private RedisTemplate redisTemplate;
-
-	@Autowired
-	private RedisConnectionFactory factory;
+	private SysApiKeyService sysApiKeyService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -164,11 +170,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		if (StringUtils.isBlank(user.getPin())) {
 			user.setPin(byId.getPin());
 		} else {
-			// 如果不是本人更改 自己密码的话，删除 redis 中用户session
+			// 如果不是本人更改 自己密码的话，删除用户session
 			Long loginUserId = ShiroUtils.getUserId();
 			if (!loginUserId.equals(user.getId())) {
-				// 通过 userId 删除 redis 中记录的 登录信息
-				this.removeUserInfoInRedis(user.getId());
+				// remove user session
+				this.removeUserSession(user.getId());
 			}
 			user.setPin(ShiroUtils.sha256(user.getPin(), byId.getSalt()));
 		}
@@ -180,6 +186,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		this.handleUserRoleRelation(user.getId(), user.getRoleIds());
 		
 		return user.getId().intValue();
+	}
+	
+	/**
+	 * remove user session
+	 *
+	 * @param userId
+	 */
+	private void removeUserSession(Long userId) {
+		List<String> removeKeys = new ArrayList<>();
+		try {
+			Map<String, SysUserEntity> shiroSessionInfoMap = ShiroUtils.getShiroSessionInfoMap();
+			for (Map.Entry<String, SysUserEntity> entry : shiroSessionInfoMap.entrySet()) {
+				SysUserEntity userEntity = entry.getValue();
+				if (userId.equals(userEntity.getId())) {
+					removeKeys.add(entry.getKey());
+				}
+			}
+		} catch (Exception e) {
+            log.error(e, "[removeUserSession] [error] [userId: {}]", userId);
+		} finally {
+			// 删除 关联key
+			if (CollectionUtils.isNotEmpty(removeKeys)) {
+				ShiroUtils.deleteSession(removeKeys);
+			}
+		}
 	}
 
 	/**
@@ -202,37 +233,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
 		// 角色变更
 		sysUserRoleService.saveOrUpdate(userId, roleIds);
-
-		// 通过 userId 删除 redis 中记录的 登录信息
-		this.removeUserInfoInRedis(userId);
+		
+		// remove user session
+		this.removeUserSession(userId);
+		
+		// 变更 sys_api_key role_id  注：当前 用户只能关联一个角色
+		String updateRoleId = Arrays.asList(roleIds.split(",")).get(0);
+		sysApiKeyService.updateRoleIdByUser(userId.intValue(), Integer.valueOf(updateRoleId));
 	}
-
-	/**
-	 * 通过 userId 删除 redis 中记录的 登录信息
-	 *
-	 * @param userId
-	 */
-	private void removeUserInfoInRedis(Long userId) {
-		// 删除 redis 中的 token
-		List<String> removeKeys = new ArrayList<>();
-		try {
-			Map<String, SysUserEntity> shiroSessionInfoMap = ShiroUtils.getShiroSessionInfoMap();
-			for (Map.Entry<String, SysUserEntity> entry : shiroSessionInfoMap.entrySet()) {
-				SysUserEntity userEntity = entry.getValue();
-				if (userId.equals(userEntity.getId())) {
-					removeKeys.add(entry.getKey());
-				}
-			}
-		} catch (RuntimeException e) {
-			log.error(String.format("Failed to obtain user login information from redis, the error message is：%s,Current user is:%s", e.getMessage(), userId), e);
-		} finally {
-			// 删除 关联key
-			if (CollectionUtils.isNotEmpty(removeKeys)) {
-				redisTemplate.delete(removeKeys);
-			}
-		}
-	}
-
 
 	@Override
 	public boolean updatePassword(Long userId, String pin, String newPin) {
@@ -272,14 +280,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		if (ArrayUtils.contains(split, userEntity.getId().toString())) {
 			throw new CNException(RCode.SYS_USER_CANNOTDEL);
 		}
+		// 用户创建的 api key
+        List<SysApiKey> apiKeyList = sysApiKeyService.list(new LambdaUpdateWrapper<SysApiKey>().in(SysApiKey::getUby, Arrays.asList(split)));
+        // 删除相关 sys_api_key
+        sysApiKeyService.remove(new LambdaUpdateWrapper<SysApiKey>().in(SysApiKey::getUby, Arrays.asList(split)));
 
 		// 删除 user
 		this.removeByIds(Arrays.asList(split));
 
 		// 删除 关联 role 关系
 		sysUserRoleService.remove(new LambdaQueryWrapper<SysUserRoleEntity>().in(SysUserRoleEntity::getUserId, Arrays.asList(split)));
-
-		// 删除 redis 中 用户token 信息
+		
+		// 删除用户token 信息
 		List<String> removeKeys = new ArrayList<>();
 		List<Long> userIdList = new ArrayList<>(split.length);
 		for (int i = 0; i < split.length; i++) {
@@ -293,12 +305,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 					removeKeys.add(entry.getKey());
 				}
 			}
+			for (SysApiKey apiKey : apiKeyList) {
+                removeKeys.add(apiKey.getToken());
+            }
 		} catch (RuntimeException e) {
-			log.error(String.format("Failed to obtain user login information from redis, the error message is：%s,delete user ID:%s", e.getMessage(), userIdList.toString()), e);
+			log.error(String.format("Failed to obtain user login information, the error message is：%s,delete user ID:%s", e.getMessage(), userIdList.toString()), e);
 		} finally {
 			// 删除 关联key
 			if (CollectionUtils.isNotEmpty(removeKeys)) {
-				redisTemplate.delete(removeKeys);
+				ShiroUtils.deleteSession(removeKeys);
 			}
 		}
 	}
@@ -307,24 +322,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	public Map<String, Object> getUserPermissions(HttpServletRequest request) {
 		String requestToken = request.getHeader(Constant.AUTH_TOKEN_CODE);
 		requestToken = StringUtils.isEmpty(requestToken) ? request.getParameter(Constant.AUTH_TOKEN_CODE) : requestToken;
-		if (StringUtils.isEmpty(requestToken))
+		if (StringUtils.isEmpty(requestToken)) {
 			throw new CNException(RCode.SYS_TOKEN_ISNULL);
-
-		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-		redisTemplate.setKeySerializer(new StringRedisSerializer());
-		redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
-		redisTemplate.setConnectionFactory(factory);
-
-		redisTemplate.afterPropertiesSet();
-
-		Boolean exist = redisTemplate.hasKey(ShiroUtils.REDIS_KEYPREFIX + requestToken);
-		if (!exist)
+		}
+		Session session = ShiroUtils.getSessionById(requestToken);
+		if(Tool.ObjectUtil.isNull(session)) {
 			throw new CNException(RCode.SYS_LOGIN_REQUIRED);
-
-		ValueOperations ops = redisTemplate.opsForValue();
-		Object obj = ops.get(ShiroUtils.REDIS_KEYPREFIX + requestToken);
-		SimpleSession session = (SimpleSession) obj;
-		SimplePrincipalCollection primaryPrincipal = (SimplePrincipalCollection) session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+		}
+		PrincipalCollection primaryPrincipal = (PrincipalCollection) session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
 		SysUserEntity userEntity = (SysUserEntity) primaryPrincipal.getPrimaryPrincipal();
 
 		SysUserEntity user = this.getById(userEntity.getId());

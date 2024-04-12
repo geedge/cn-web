@@ -13,4 +13,6 @@ public interface SysApiKeyService extends IService<SysApiKey>{
 	Integer addSysApiKey(SysApiKey sysApiKey);
 	
 	void removeSysApiKeys(String ids);
+	
+	void updateRoleIdByUser(Integer userId, Integer roleId);
 }
