@@ -256,7 +256,9 @@ public class Constant {
 	public static final String DNS_SERVER_INFO_BUILT_IN = "cn_dns_server_info_built_in";
 	public static final String VPN_LEARNING_DOMAIN = "cn_vpn_learning_domain";
 	public static final String VPN_LEARNING_IP = "cn_vpn_learning_ip";
-	
+	public static final String INTELLIGENCE_INDICATOR = "cn_intelligence_indicator";
+	public static final String INTELLIGENCE_INDICATOR_PARSER = "cn_intelligence_indicator_parser";
+
 	/**
 	 * IP格式类型分类
 	 */
@@ -329,4 +331,8 @@ public class Constant {
     public static final Integer LICENSE_VERIFY = 4;
     
     public static final String CN_WEB_COMPONENT_NAME = "cn-web";
+
+    //tag
+	public static final String SOURCE_NAME = "UDF";
+	public static final String SOURCE_ID = "35c19f09-2a2c-44f4-bca1-fe0cd0c447cb";
 }

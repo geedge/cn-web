@@ -725,6 +725,12 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				}
 				break;
 		}
+		syncVersion(knowledgeBase);
+		return knowledgeBase.getKnowledgeId();
+	}
+
+	@Override
+	public void syncVersion(KnowledgeBase knowledgeBase) {
 		KnowledgeBaseSyncVersion knowledgeBaseSyncVersion = knowledgeBaseSyncVersionService.getById(knowledgeBase.getKnowledgeId());
 		KnowledgeBaseAuditLog knowledgeBaseAuditLog = new KnowledgeBaseAuditLog();
 		knowledgeBaseAuditLog.setDescription(knowledgeBase.getDescription());
@@ -749,9 +755,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		knowledgeBaseSyncVersion.setOpTime(new Date());
 		knowledgeBaseSyncVersionService.saveOrUpdate(knowledgeBaseSyncVersion);
 		knowledgeBaseAuditLogService.saveOrUpdate(knowledgeBaseAuditLog);
-		return knowledgeBase.getKnowledgeId();
 	}
-	
+
 	@Override
 	public Map<String,Object> validateParam(Map<String, Object> params) {
 		Map<String,Object> result = new HashMap<String,Object>(); 
@@ -957,7 +962,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		List<Map<String, String>> saveOrUpdateList = Lists.newArrayList();
 		//覆盖操作时 将对应表中数据删除清空
 		if (StrUtil.equals(action, "overwrite")) {
-			basicImportAndExportService.removeList(knowledgeBase.getSource(), knowledgeBase.getKnowledgeId());
+			basicImportAndExportService.removeList(knowledgeBase.getSource());
 		}
 		this.validAndBuildDatasets(file, knowledgeBase, action, saveOrUpdateList, deleteDataIds);
 		//删除指定数据
@@ -1103,7 +1108,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 
 	private void updateDataHandler(List<Map<String, String>> importDataList,KnowledgeBase knowledgeBase,List<String> condition) {
 		// 更新操作 更新最早创建数据、删除其余冗余数据
-		List<Map<String, Object>> results = basicImportAndExportService.queryDataIds(knowledgeBase.getSource(), condition, knowledgeBase.getKnowledgeId(), importDataList);
+		List<Map<String, Object>> results = basicImportAndExportService.queryDataIds(knowledgeBase.getSource(), condition, importDataList);
 		if(ObjectUtil.isNotEmpty(results)) {
 			Map<String,Object> conId = new HashMap<String,Object>();
 			results.stream().forEach(result->{

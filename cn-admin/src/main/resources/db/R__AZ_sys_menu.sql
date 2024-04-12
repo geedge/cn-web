@@ -44,10 +44,10 @@ INSERT INTO `sys_menu` VALUES (17, 'Edit report', 'editReport', 'overall.edit', 
 INSERT INTO `sys_menu` VALUES (18, 'Delete report', 'deleteReport', 'overall.delete', 15, 'report:job:delete,report:temp:delete', 2, '', '', NULL, 21, 1);
 INSERT INTO `sys_menu` VALUES (19, 'Knowledge base', 'knowledgeBase', 'overall.knowledgeBase', 39, NULL, 1, '/system/knowledgeBase', 'cn-icon cn-icon-knowledge-base', NULL, 11, 1);
 INSERT INTO `sys_menu` VALUES (20, 'Edit built-in knowledge base', 'editBuiltInKnowledgeBase', 'overall.edit', 19, 'knowledge:base:add', 2, '', '', NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (21, 'User-defined library', 'userDefinedLibrary', 'knowledgeBase.userDefinedLibrary', 46, NULL, 1, '/tag/userDefined', '', NULL, 11, 1);
-INSERT INTO `sys_menu` VALUES (22, 'Create user-defined library', 'createUserDefinedLibrary', 'overall.create', 21, 'knowledge:base:add', 1, '/tag/userDefined/create', '', NULL, 1, 1);
-INSERT INTO `sys_menu` VALUES (23, 'Edit user-defined library', 'editUserDefinedLibrary', 'overall.edit', 21, 'knowledge:base:update', 1, '/tag/userDefined/edit', '', NULL, 11, 1);
-INSERT INTO `sys_menu` VALUES (24, 'Delete user-defined library', 'deleteUserDefinedLibrary', 'overall.delete', 21, 'knowledge:base:delete', 2, '', '', NULL, 21, 1);
+INSERT INTO `sys_menu` VALUES (21, 'Tag', 'tag', 'overall.tag', 0, NULL, 1, '/tag', 'cn-icon cn-icon-tag-fill', NULL, 36, 1);
+INSERT INTO `sys_menu` VALUES (22, 'Create tag', 'createTag', 'overall.create', 21, 'knowledge:base:add', 1, '/tag/create', '', NULL, 1, 1);
+INSERT INTO `sys_menu` VALUES (23, 'Edit tag', 'editTag', 'overall.edit', 21, 'knowledge:base:update', 1, '/tag/edit', '', NULL, 11, 1);
+INSERT INTO `sys_menu` VALUES (24, 'Delete tag', 'deleteTag', 'overall.delete', 21, 'knowledge:base:delete', 2, '', '', NULL, 21, 1);
 INSERT INTO `sys_menu` VALUES (25, 'Administration', 'administration', 'overall.administration', 0, NULL, 1, 'redirect:/administration', 'cn-icon cn-icon-administrations', NULL, 51, 1);
 INSERT INTO `sys_menu` VALUES (26, 'User', 'user', 'overall.user', 25, NULL, 1, '/administration/user', 'cn-icon cn-icon-user2', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (27, 'Create user', 'createUser', 'overall.create', 26, 'sys:user:add', 2, '', '', NULL, 1, 1);
@@ -69,6 +69,5 @@ INSERT INTO `sys_menu` VALUES (42, 'Edit license', 'editLicense', 'overall.edit'
 INSERT INTO `sys_menu` VALUES (43, 'Location Intelligence', 'locationIntelligence', 'overall.locationIntelligence', 0, '', 1, 'redirect:/location', '', NULL, 2, 1);
 INSERT INTO `sys_menu` VALUES (44, 'Location Map', 'locationMap', 'location.locationMap', 43, '', 1, '/location/map', '', NULL, 1, 1);
 INSERT INTO `sys_menu` VALUES (45, 'Trace Tracking', 'traceTracking', 'location.traceTracking', 43, '', 1, '/location/tracking', '', NULL, 11, 1);
-INSERT INTO `sys_menu` VALUES (46, 'Tag', 'tag', 'overall.tag', 0, NULL, 1, '/tag', 'cn-icon cn-icon-tag-fill', NULL, 41, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
