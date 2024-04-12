@@ -50,8 +50,8 @@ public class TokenCheckFilter extends AccessControlFilter {
 			requestToken = request.getParameter(Constant.AUTH_TOKEN_CODE);
 		}
 		if (StringUtils.isBlank(requestToken)) {
+			response.setStatus(500);
 			response.getWriter().write(JSON.toJSON(R.error(RCode.SYS_LOGIN_REQUIRED)).toString());
-			return false;
 		}
 		
 		Session session = ShiroUtils.getSessionById(requestToken);
@@ -64,6 +64,7 @@ public class TokenCheckFilter extends AccessControlFilter {
 		} else {
 			boolean login = this.apiKeyLogin(requestToken);
 			if(!login) {
+				response.setStatus(500);
 				response.getWriter().write(JSON.toJSON(R.error(RCode.SYS_LOGIN_REQUIRED)).toString());
 			}
 			return login;
