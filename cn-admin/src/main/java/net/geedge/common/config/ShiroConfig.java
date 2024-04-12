@@ -30,6 +30,7 @@ import net.geedge.common.interceptor.LicenseShiroFilter;
 import net.geedge.common.interceptor.TokenCheckFilter;
 import net.geedge.common.utils.Constant;
 import net.geedge.modules.sys.dao.SysApiKeyDao;
+import net.geedge.modules.sys.dao.SysLoginSessionDao;
 import net.geedge.modules.sys.dao.SysUserDao;
 import net.geedge.modules.sys.entity.SysConfigEntity;
 import net.geedge.modules.sys.service.LicenseService;
@@ -61,6 +62,9 @@ public class ShiroConfig {
 	@Value("${compileType:release}")
 	private String compileType;
 	
+	@Autowired
+	private SysLoginSessionDao loginSessionDao;
+
 	@Bean("shiroFilter")
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
@@ -101,7 +105,7 @@ public class ShiroConfig {
 		
 		Integer loginExpiration = getTimeOutData();
 		Map<String, Filter> cumstomFilterMap = new LinkedHashMap<String, Filter>();
-		TokenCheckFilter tokenCheckFilter = new TokenCheckFilter(sysApiKeyDao);
+		TokenCheckFilter tokenCheckFilter = new TokenCheckFilter(sysApiKeyDao,loginSessionDao);
 		LicenseShiroFilter licenseShiroFilter = new LicenseShiroFilter(licenseService,compileType);
 		cumstomFilterMap.put("tokenCheckFilter", tokenCheckFilter);
 		cumstomFilterMap.put("licenseShiroFilter", licenseShiroFilter);

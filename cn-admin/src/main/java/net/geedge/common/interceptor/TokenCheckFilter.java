@@ -18,6 +18,7 @@ import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.web.filter.AccessControlFilter;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import cn.hutool.core.date.DateUnit;
@@ -28,7 +29,9 @@ import net.geedge.common.utils.R;
 import net.geedge.common.utils.RCode;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysApiKeyDao;
+import net.geedge.modules.sys.dao.SysLoginSessionDao;
 import net.geedge.modules.sys.entity.SysApiKey;
+import net.geedge.modules.sys.entity.SysLoginSession;
 import net.geedge.modules.sys.entity.SysUserEntity;
 import net.geedge.modules.sys.shiro.MariadbSession;
 import net.geedge.modules.sys.shiro.ShiroUtils;
@@ -37,8 +40,11 @@ public class TokenCheckFilter extends AccessControlFilter {
 
 	private SysApiKeyDao sysApiKeyDao;
 
-	public TokenCheckFilter(SysApiKeyDao sysApiKeyDao) {
+	private SysLoginSessionDao sysLoginSessionDao;
+	
+	public TokenCheckFilter(SysApiKeyDao sysApiKeyDao,SysLoginSessionDao sysLoginSessionDao) {
 		this.sysApiKeyDao = sysApiKeyDao;
+		this.sysLoginSessionDao = sysLoginSessionDao;
 	}
 
 	@Override
@@ -52,9 +58,10 @@ public class TokenCheckFilter extends AccessControlFilter {
 		if (StringUtils.isBlank(requestToken)) {
 			response.setStatus(500);
 			response.getWriter().write(JSON.toJSON(R.error(RCode.SYS_LOGIN_REQUIRED)).toString());
+			return false;
 		}
 		
-		Session session = ShiroUtils.getSessionById(requestToken);
+		SysLoginSession session = sysLoginSessionDao.selectOne(new LambdaQueryWrapper<SysLoginSession>().eq(SysLoginSession::getSessionId, requestToken));
 		if (Tool.ObjectUtil.isNotNull(session)) {
 			SysUserEntity userEntity = ShiroUtils.getUserEntity();
 			if (Tool.ObjectUtil.isNull(userEntity)) {
@@ -66,6 +73,7 @@ public class TokenCheckFilter extends AccessControlFilter {
 			if(!login) {
 				response.setStatus(500);
 				response.getWriter().write(JSON.toJSON(R.error(RCode.SYS_LOGIN_REQUIRED)).toString());
+				return false;
 			}
 			return login;
 		}
