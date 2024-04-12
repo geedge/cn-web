@@ -16,8 +16,8 @@ public class BasicImportAndExportServiceImpl implements BasicImportAndExportServ
 	private BasicImportAndExportDao basicImportAndExportDao;
 	
 	@Override
-	public List<Map<String,Object>> queryDataIds(String tableName, List<String> columnVal, Integer knowledgeId, List<Map<String, String>> importDataList) {
-		return basicImportAndExportDao.selectDataId(tableName,columnVal,knowledgeId,importDataList);
+	public List<Map<String,Object>> queryDataIds(String tableName, List<String> columnVal, List<Map<String, String>> importDataList) {
+		return basicImportAndExportDao.selectDataId(tableName,columnVal,importDataList);
 	}
 
 	@Override
@@ -30,4 +30,8 @@ public class BasicImportAndExportServiceImpl implements BasicImportAndExportServ
 		basicImportAndExportDao.deleteListByKnowledgeId(tableName,knowledgeId);
 	}
 
+	@Override
+	public void removeList(String tableName) {
+		basicImportAndExportDao.deleteTable(tableName);
+	}
 }

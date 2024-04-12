@@ -1,8 +1,10 @@
 package net.geedge.common.utils;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.geedge.common.exception.CNException;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.googlecode.ipv6.IPv6Address;
@@ -392,7 +394,37 @@ public class KnowledgeCheckUtil {
         }
         return ipData;
     }
-    
+
+    /**
+     * 根据value获取IP格式、开始及结束IP
+     * @param val example: 192.0.2.130-192.0.2.131 或 192.168.0.1/24
+     * @return
+     */
+    public static String[] ipToData(String val) {
+        //第一位存format，第二位ip，第三位maskIp
+        String[] ipData = new String[4];
+        String[] ipFir = val.split("/");//mask
+        String[] ipSec = val.split("-");//range
+        ipData[3] = isIPv6Address(ipFir[0]) || isIPv6Address(ipSec[0]) ? "6" : "4";
+        Integer addrType = Integer.valueOf(ipData[3]);
+        if (ipFir.length == 2 && ipSec.length == 1) {//mask
+            ipData[0] = NumberUtils.isDigits(ipFir[1]) ? "CIDR" : "mask";
+            ipData[1] = ipFir[0];
+            ipData[2] = ipFir[1];
+        }
+        if (ipFir.length == 1 && ipSec.length == 2) {//range
+            ipData[0] = "Range";
+            ipData[1] = ipSec[0];
+            ipData[2] = ipSec[1];
+        }
+        if (ipFir.length == 1 && ipSec.length == 1) {//Single
+            ipData[0] = "Single";
+            ipData[1] = ipSec[0];
+            ipData[2] = ipSec[0];
+        }
+        return ipData;
+    }
+
     /**
      * 判断Ipv6结束Ip是否大于开始Ip startIp < endIp
      * @param startIp 开始IP
@@ -493,6 +525,10 @@ public class KnowledgeCheckUtil {
                     }
                 }
             } else {
+                pattern = "^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$";
+                if(Pattern.matches(pattern, val)) {
+                    return true;
+                }
                 return false;
             }
         }else {
@@ -517,5 +553,55 @@ public class KnowledgeCheckUtil {
     		return false;
     	}
     	return true;
+    }
+
+    /**
+     * ip相关处理 校验ip格式 返回值包含 计算起始ip 末尾ip
+     * @param ipFormat
+     * @param ip1
+     * @param ip2
+     * @return
+     */
+    public static Map<String,String> ipBinaryHandler(String ipFormat, String ip1, String ip2){
+        Map<String,String> result = Tool.MapUtil.newHashMap();
+        boolean validIpFormat = KnowledgeCheckUtil.validIpFormat(ip1);
+        if(!validIpFormat) {
+            throw new CNException(RCode.IMPORT_ERROR);
+        }
+        if(StrUtil.equals(ipFormat, Constant.IpFormatType.SINGLE.getValue())) {
+            result.put("ip2",ip1);
+            result.put("start_ip_binary",ip1);
+            result.put("end_ip_binary",ip1);
+        }else if(StrUtil.equals(ipFormat, Constant.IpFormatType.RANGE.getValue())){
+            validIpFormat = KnowledgeCheckUtil.validIpFormat(ip1+"-"+ip2);
+            if(!validIpFormat) {
+                throw new CNException(RCode.IMPORT_ERROR);
+            }
+            result.put("ip2",ip2);
+            result.put("start_ip_binary",ip1);
+            result.put("end_ip_binary",ip2);
+        }else {
+            validIpFormat = KnowledgeCheckUtil.validIpFormat(ip1+"/"+ip2);
+            if(!validIpFormat) {
+                throw new CNException(RCode.IMPORT_ERROR);
+            }
+            result.put("ip2",ip2);
+            boolean iPv4Address = KnowledgeCheckUtil.isIPv4Address(ip1);
+            Map<String, String> ipsStartEnd = null;
+            String startIp = "";
+            String endIp = "";
+            if(iPv4Address) {
+                ipsStartEnd = IPUtils.getIpsV4ByCidr(ip1+"/"+ip2);
+                startIp = ipsStartEnd.get("startIpStr");
+                endIp = ipsStartEnd.get("endIpStr");
+            }else {
+                ipsStartEnd = IPUtils.getIpsV6ByCidr(ip1+"/"+ip2);
+                startIp = ipsStartEnd.get("startIpStr");
+                endIp = ipsStartEnd.get("endIpStr");
+            }
+            result.put("start_ip_binary",startIp);
+            result.put("end_ip_binary",endIp);
+        }
+        return result;
     }
 }
