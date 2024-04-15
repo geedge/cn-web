@@ -1,0 +1,3 @@
+ALTER TABLE `cn_intelligence_indicator`
+MODIFY COLUMN `method` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'passive_ml\r\npassive_sig\r\nacitve_probe\r\nthird_api' AFTER `domain`,
+MODIFY COLUMN `confidence` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'confirmed (80-100)\r\nsuspect (70-80)\r\ntentative (50-70)' AFTER `method`;
