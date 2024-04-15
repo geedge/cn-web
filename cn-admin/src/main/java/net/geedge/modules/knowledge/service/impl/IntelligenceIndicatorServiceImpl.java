@@ -86,9 +86,12 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
         params.put("startTime",cn.hutool.core.date.DateUtil.date(startTime*1000));
         params.put("endTime",cn.hutool.core.date.DateUtil.date(endTime*1000));
         params.put("step", step);
-        List<Map<String, Object>> data = this.baseMapper.indicatorTrend(params);
-        List<Map<String, Object>> result = sumHandler(data, params);
-        return R.ok(result);
+        List<Map<String, Object>> list = this.baseMapper.indicatorTrend(params);
+        List<Map<String, Object>> result = sumHandler(list, params);
+        Map<String,Object> data = Tool.MapUtil.newHashMap();
+        data.put("resultType","table");
+        data.put("result",result);
+        return R.ok(data);
     }
 
     private List<Map<String, Object>> sumHandler(List<Map<String, Object>> data, Map<String,Object> params) {
@@ -115,23 +118,6 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
         }
         result = result.stream().sorted(Comparator.comparing(m -> ((Long) m.get("statTime")))).collect(Collectors.toList());
         return result;
-    }
-
-    private Integer handlerStep(Long startTime,Long endTime) {
-        Integer step = 3600;
-        Long diffTime = endTime-startTime;
-        if(diffTime <= 86400) {
-            step = 3600;
-        }else if(diffTime > 86400 && diffTime <= 2 * 86400) {
-            step = 2*3600;
-        }else if(diffTime > 2 * 86400 && diffTime <= 7 * 86400) {
-            step = 6*3600;
-        }else if(diffTime > 7 * 86400 && diffTime <= 15 * 86400) {
-            step = 12*3600;
-        }else if(diffTime > 15 * 86400) {
-            step = 24*3600;
-        }
-        return step;
     }
 
     @Override
@@ -234,5 +220,15 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
     @Override
     public List<IntelligenceIndicator> queryPage(IPage page, Map<String,Object> params) {
         return this.baseMapper.queryPage(page, params);
+    }
+
+    @Override
+    public List<String> queryDomainEntityTags(String resource) {
+        return this.baseMapper.queryDomainEntityTags(resource);
+    }
+
+    @Override
+    public List<String> queryIpEntityTags(String resource) {
+        return this.baseMapper.queryIpEntityTags(resource);
     }
 }

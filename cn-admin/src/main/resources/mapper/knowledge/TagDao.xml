@@ -40,5 +40,15 @@
         </where>
     </select>
 
+    <select id="queryTagList" resultType="java.util.Map">
+        select id,category,name,intent,indicator_type,description,is_built_in,created_time as createTime,updated_time as updateTime from
+        tag
+        <where>
+            name in
+            <foreach item="name" collection="tagNames" separator="," open="(" close=")" index="">
+                #{name}
+            </foreach>
+        </where>
+    </select>
 
 </mapper>

@@ -10,6 +10,7 @@ import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.*;
 import net.geedge.modules.entity.service.EntityService;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
+import net.geedge.modules.knowledge.entity.Tag;
 import net.geedge.modules.knowledge.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,9 @@ import org.ssssssss.magicapi.core.service.MagicAPIService;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -59,6 +62,9 @@ public class EntityServiceImpl implements EntityService {
 
     @Autowired
     private MagicAPIService magicAPIService;
+
+    @Autowired
+    private  TagService tagService;
 
     @Override
     public R queryEntityDetail(String entityType, String resource) {
@@ -140,10 +146,11 @@ public class EntityServiceImpl implements EntityService {
     @Override
     public R queryEntityTag(String entityType, String resource) {
         Map<String, Object> data = new HashMap<>();
-        if ("app".equals(entityType)){
-        } else if ("domain".equals(entityType)){
+        if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource, false);
             Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
+            List<Map<String, Object>> tags = tagService.queryDomainEntityTags(resource);
+            tags = tags.stream().sorted((m1,m2) -> ((Timestamp) m2.get("updateTime")).compareTo((Timestamp) m1.get("updateTime"))).collect(Collectors.toList());
             if (ObjectUtil.isEmpty(malware)) {
                 malware = iocMalwareService.queryDomainEntityTag(resource, true);
             }
@@ -152,13 +159,17 @@ public class EntityServiceImpl implements EntityService {
             }
             addValidDataToMap(data, "malware", malware, Constant.IOC_MALWARE);
             addValidDataToMap(data, "darkweb", darkweb, Constant.IOC_DARKWEB);
+            data.put("tags",tags);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryIpEntityTag(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryIpEntityTag(resource);
             Map<String, Object> dnsServerInfo = dnsServerInfoBuiltInService.queryIpEntityTag(resource);
+            List<Map<String, Object>> tags = tagService.queryIpEntityTags(resource);
+            tags = tags.stream().sorted((m1,m2) -> ((Timestamp) m2.get("updateTime")).compareTo((Timestamp) m1.get("updateTime"))).collect(Collectors.toList());
             addValidDataToMap(data, "malware", malware, Constant.IOC_MALWARE);
             addValidDataToMap(data, "darkweb", darkweb, Constant.IOC_DARKWEB);
             addValidDataToMap(data, "dnsServerInfo", dnsServerInfo, Constant.DNS_SERVER_INFO_BUILT_IN);
+            data.put("tags",tags);
         }
         return R.ok(data);
     }
@@ -213,9 +224,8 @@ public class EntityServiceImpl implements EntityService {
     }
 
     private List<Map<String,Object>> createEntityList(String entityType, String resource) {
-        List<Map<String,Object>> entityList = new ArrayList<>();
-        if ("app".equals(entityType)){
-        } else if ("domain".equals(entityType)){
+        List<Map<String,Object>> entityList = Tool.CollectionUtil.newArrayList();
+        if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource,false);
             Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
             if (ObjectUtil.isEmpty(malware)) {
@@ -226,20 +236,26 @@ public class EntityServiceImpl implements EntityService {
             }
             malware = createEnableMap("malware", malware, Constant.IOC_MALWARE);
             darkweb = createEnableMap("darkweb", darkweb, Constant.IOC_DARKWEB);
+            List<Map<String, Object>> tags = tagService.queryDomainEntityTags(resource);
+            List<Map<String,Object>> tagList = createTagList(tags);
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
+            entityList.addAll(tagList);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = createEnableMap("malware", iocMalwareService.queryIpEntityTag(resource), Constant.IOC_MALWARE);
             Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryIpEntityTag(resource), Constant.IOC_DARKWEB);
             Map<String, Object> dnsServerInfo = createEnableMap("dnsServerInfo", dnsServerInfoBuiltInService.queryIpEntityTag(resource), Constant.DNS_SERVER_INFO_BUILT_IN);
+            List<Map<String, Object>> tags = tagService.queryIpEntityTags(resource);
+            List<Map<String,Object>> tagList = createTagList(tags);
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             mapChangeTimestamp(dnsServerInfo);
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
             addEntityList(entityList, dnsServerInfo);
+            entityList.addAll(tagList);
         }
         sortByUpdateTime(entityList);
         return entityList;
@@ -254,6 +270,20 @@ public class EntityServiceImpl implements EntityService {
             }
         }
         return map;
+    }
+
+    private List<Map<String,Object>> createTagList(List<Map<String, Object>> tags) {
+        List<Map<String,Object>> result = Tool.CollectionUtil.newArrayList();
+        tags.stream().forEach(tag -> {
+            Map<String,Object> map = Tool.MapUtil.newHashMap();
+            Date updateTime = (Date) tag.get("updateTime");
+            Date createTime = (Date) tag.get("createTime");
+            tag.put("updateTime", updateTime.getTime() / 1000);
+            tag.put("createTime", createTime.getTime() / 1000);
+            map.put("tags",tag);
+            result.add(map);
+        });
+        return result;
     }
 
     private List<Map> createEnableList(List<Map> value, String source) {
@@ -322,10 +352,10 @@ public class EntityServiceImpl implements EntityService {
         }
     }
 
-    private List<Map> listChangeTimestamp(List<Map> tagsList) {
-        List<Map> newList = new ArrayList<>();
+    private List<Map<String,Object>> listChangeTimestamp(List<Map<String,Object>> tagsList) {
+        List<Map<String,Object>> newList = new ArrayList<>();
         if (ObjectUtil.isNotEmpty(tagsList)) {
-            for (Map tagMap : tagsList) {
+            for (Map<String,Object> tagMap : tagsList) {
                 if (ObjectUtil.isNotEmpty(tagMap)) {
                     if (ObjectUtil.isNotEmpty(tagMap.get("updateTime"))) {
                         Date updateTime = (Date) tagMap.get("updateTime");

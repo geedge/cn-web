@@ -25,4 +25,8 @@ public interface IntelligenceIndicatorDao extends BaseMapper<IntelligenceIndicat
     void updateBatchForBinary(@Param("intelligenceIndicators")List<IntelligenceIndicator> intelligenceIndicators);
 
     List<IntelligenceIndicator> queryPage(IPage page, @Param("params") Map<String,Object> params);
+
+    List<String> queryDomainEntityTags(@Param("resource") String resource);
+
+    List<String> queryIpEntityTags(@Param("resource") String resource);
 }

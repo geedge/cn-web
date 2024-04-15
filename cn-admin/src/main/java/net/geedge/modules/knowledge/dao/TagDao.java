@@ -19,4 +19,5 @@ public interface TagDao extends BaseMapper<Tag> {
 
     List<KnowledgeBase> queryPage(IPage<KnowledgeBase> page, @Param("params") Map<String, Object> params);
 
+    List<Map<String,Object>> queryTagList(@Param("tagNames") List<String> tagNames);
 }

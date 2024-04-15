@@ -80,6 +80,9 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
     }
 
     private void preHandleParams(Map<String, Object> params) {
+        if(ObjectUtil.isEmpty(params.get("pageSize"))) {
+            params.put("pageSize","20");
+        }
         if (ObjectUtil.isNotEmpty(params.get("category"))) {
             params.put("category", Arrays.asList(String.valueOf(params.get("category")).split(StringPool.COMMA)));
         } else {
@@ -529,5 +532,25 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
             entityValue = intelligenceIndicator.getDomain();
         }
         return entityValue;
+    }
+
+    @Override
+    public List<Map<String,Object>> queryDomainEntityTags(String resource) {
+        List<Map<String,Object>> result = Tool.CollectionUtil.newArrayList();
+        List<String> tagNames = intelligenceIndicatorService.queryDomainEntityTags(resource);
+        if(ObjectUtil.isNotEmpty(tagNames)) {
+            result = this.baseMapper.queryTagList(tagNames);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Map<String,Object>> queryIpEntityTags(String resource) {
+        List<Map<String,Object>> result = Tool.CollectionUtil.newArrayList();
+        List<String> tagNames = intelligenceIndicatorService.queryIpEntityTags(resource);
+        if(ObjectUtil.isNotEmpty(tagNames)) {
+            result = this.baseMapper.queryTagList(tagNames);
+        }
+        return result;
     }
 }

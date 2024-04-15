@@ -26,4 +26,8 @@ public interface TagService extends IService<Tag> {
     Integer importBatch(MultipartFile file,String action);
 
     Map<String,Object> queryIndicators(String id, Map<String, Object> params);
+
+    List<Map<String,Object>> queryDomainEntityTags(String resource);
+
+    List<Map<String,Object>> queryIpEntityTags(String resource);
 }

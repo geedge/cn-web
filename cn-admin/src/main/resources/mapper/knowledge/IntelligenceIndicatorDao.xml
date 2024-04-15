@@ -140,4 +140,24 @@
         cn_intelligence_indicator
         where tags = #{params.name}
     </select>
+
+    <select id="queryDomainEntityTags" parameterType="java.util.List" resultType="java.lang.String">
+        select tags from
+            cn_intelligence_indicator
+        where type = "Domain" and (domain = concat ('$', #{resource}) or LOCATE(substring_index(domain, '*', -1), #{resource}) > 0) and updated_time in
+        (select MAX(updated_time) from
+            cn_intelligence_indicator
+        where type = "Domain" and (domain = concat ('$', #{resource}) or LOCATE(substring_index(domain, '*', -1), #{resource}) > 0)
+        group by tags)
+    </select>
+
+    <select id="queryIpEntityTags" resultType="java.lang.String">
+        select tags from
+            cn_intelligence_indicator
+        where type = "IP" and start_ip_binary &lt;= INET6_ATON(#{resource}) and end_ip_binary &gt;= INET6_ATON(#{resource}) AND updated_time in
+        (select MAX(updated_time) from
+            cn_intelligence_indicator
+        where type = "IP" and start_ip_binary &lt;= INET6_ATON(#{resource}) and end_ip_binary &gt;= INET6_ATON(#{resource})
+        group by tags)
+    </select>
 </mapper>
