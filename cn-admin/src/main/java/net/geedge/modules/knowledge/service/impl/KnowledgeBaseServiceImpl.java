@@ -21,6 +21,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import net.geedge.modules.knowledge.service.*;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -81,22 +82,6 @@ import net.geedge.modules.knowledge.entity.KnowledgeBaseAuditLog;
 import net.geedge.modules.knowledge.entity.KnowledgeBaseSyncVersion;
 import net.geedge.modules.knowledge.entity.LinkDirectionBuiltIn;
 import net.geedge.modules.knowledge.entity.Psiphon3Ip;
-import net.geedge.modules.knowledge.service.AppCategoryBuiltInService;
-import net.geedge.modules.knowledge.service.DnsServerInfoBuiltInService;
-import net.geedge.modules.knowledge.service.FqdnCategoryBuiltInService;
-import net.geedge.modules.knowledge.service.FqdnIcpBuiltInService;
-import net.geedge.modules.knowledge.service.FqdnWhoIsBuiltInService;
-import net.geedge.modules.knowledge.service.IdcRenterBuiltInService;
-import net.geedge.modules.knowledge.service.InternalIpBuiltInService;
-import net.geedge.modules.knowledge.service.IocDarkwebService;
-import net.geedge.modules.knowledge.service.IocMalwareService;
-import net.geedge.modules.knowledge.service.IpAsnBuiltInService;
-import net.geedge.modules.knowledge.service.IpLocationBuiltInService;
-import net.geedge.modules.knowledge.service.KnowledgeBaseAuditLogService;
-import net.geedge.modules.knowledge.service.KnowledgeBaseService;
-import net.geedge.modules.knowledge.service.KnowledgeBaseSyncVersionService;
-import net.geedge.modules.knowledge.service.LinkDirectionBuiltInService;
-import net.geedge.modules.knowledge.service.Psiphon3IpService;
 import net.geedge.modules.rule.entity.DetectionRule;
 import net.geedge.modules.rule.service.DetectionRuleService;
 import net.geedge.modules.sys.service.BasicImportAndExportService;
@@ -162,6 +147,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 	
 	@Autowired
 	private SqlSessionFactory sqlSessionFactory;
+
+	@Autowired
+	private IntelligenceIndicatorService intelligenceIndicatorService;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -547,6 +535,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				break;
 			case LINK_DIRECTION_BUILT_IN:
 				pageUtils = linkDirectionBuiltInService.queryList(params);
+				break;
+			case INTELLIGENCE_INDICATOR:
+				pageUtils = intelligenceIndicatorService.queryList(params);
 				break;
 			default:
 				throw new CNException(KNOWLEDGE_SOURCE_ERROR);

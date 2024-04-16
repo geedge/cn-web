@@ -3,8 +3,6 @@ package net.geedge.modules.knowledge.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import net.geedge.modules.knowledge.entity.IntelligenceIndicator;
-import net.geedge.modules.knowledge.entity.InternalIpBuiltIn;
-import net.geedge.modules.knowledge.entity.KnowledgeBase;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,9 +22,11 @@ public interface IntelligenceIndicatorDao extends BaseMapper<IntelligenceIndicat
 
     void updateBatchForBinary(@Param("intelligenceIndicators")List<IntelligenceIndicator> intelligenceIndicators);
 
-    List<IntelligenceIndicator> queryPage(IPage page, @Param("params") Map<String,Object> params);
+    List<IntelligenceIndicator> queryByTag(IPage page, @Param("params") Map<String,Object> params);
 
     List<String> queryDomainEntityTags(@Param("resource") String resource);
 
     List<String> queryIpEntityTags(@Param("resource") String resource);
+
+    List<IntelligenceIndicator> queryList(IPage<IntelligenceIndicator> page, @Param("params") Map<String, Object> params);
 }

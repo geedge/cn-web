@@ -31,9 +31,11 @@ public interface IntelligenceIndicatorService extends IService<IntelligenceIndic
 
     void modifyBatchJDBC(Connection conn,List<IntelligenceIndicator> intelligenceIndicators);
 
-    List<IntelligenceIndicator> queryPage(IPage page, Map<String,Object> params);
+    List<IntelligenceIndicator> queryByTag(IPage page, Map<String,Object> params);
 
     List<String> queryDomainEntityTags(String resource);
 
     List<String> queryIpEntityTags(String resource);
+
+    PageUtils queryList(Map<String,Object> params);
 }

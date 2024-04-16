@@ -32,7 +32,7 @@
                     (
                         SELECT FLOOR(UNIX_TIMESTAMP(created_time)/(#{params.step}*3600)) * (#{params.step}*3600) AS statTime,type
                         FROM cn_intelligence_indicator
-                        WHERE tags = #{params.name} and created_time >= #{params.startTime} and created_time &lt; #{params.endTime}
+                        WHERE tags = #{params.name} and created_time >= FROM_UNIXTIME(#{params.startTime}) and created_time &lt; FROM_UNIXTIME(#{params.endTime})
                     ) cn_knowledge_table
                 GROUP BY statTime
                 ORDER BY statTime
@@ -40,8 +40,8 @@
                 RIGHT JOIN
             (
                 SELECT FLOOR(UNIX_TIMESTAMP(@cdate := DATE_ADD(@cdate,INTERVAL - #{params.step} HOUR))/(#{params.step}*3600)) * (#{params.step}*3600) date
-                FROM (SELECT @cdate :=DATE_ADD(#{params.endTime}, INTERVAL + #{params.step} HOUR) FROM cn_intelligence_indicator) t2
-                WHERE @cdate &gt; #{params.startTime}
+                FROM (SELECT @cdate :=DATE_ADD(FROM_UNIXTIME(#{params.endTime}), INTERVAL + #{params.step} HOUR) FROM cn_intelligence_indicator) t2
+                WHERE @cdate &gt; FROM_UNIXTIME(#{params.startTime})
             ) table2
             ON  statTime = date
         ORDER BY date
@@ -135,10 +135,18 @@
         </foreach>
     </update>
 
-    <select id="queryPage" resultMap="intelligenceIndicator">
+    <select id="queryByTag" resultMap="intelligenceIndicator">
         select * from
         cn_intelligence_indicator
         where tags = #{params.name}
+    </select>
+
+    <select id="queryList" resultMap="intelligenceIndicator">
+        select * from
+        cn_intelligence_indicator
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
     </select>
 
     <select id="queryDomainEntityTags" parameterType="java.util.List" resultType="java.lang.String">

@@ -1,6 +1,5 @@
 package net.geedge.modules.knowledge.service.impl;
 
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
@@ -8,25 +7,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.geedge.common.exception.CNException;
-import net.geedge.common.utils.Query;
-import net.geedge.common.utils.R;
-import net.geedge.common.utils.RCode;
-import net.geedge.common.utils.Tool;
+import net.geedge.common.utils.*;
 import net.geedge.modules.knowledge.dao.IntelligenceIndicatorDao;
 import net.geedge.modules.knowledge.entity.IntelligenceIndicator;
-import net.geedge.modules.knowledge.entity.Tag;
 import net.geedge.modules.knowledge.service.IntelligenceIndicatorService;
-import net.geedge.modules.knowledge.service.KnowledgeBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 /**
  * @Auther: lijinyang
@@ -83,8 +76,6 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
         Long endTime = Long.valueOf((String)params.get("endTime"));
         // 计算粒度
         Integer step = knowledgeBaseServiceImpl.handlerStep(startTime, endTime);
-        params.put("startTime",cn.hutool.core.date.DateUtil.date(startTime*1000));
-        params.put("endTime",cn.hutool.core.date.DateUtil.date(endTime*1000));
         params.put("step", step);
         List<Map<String, Object>> list = this.baseMapper.indicatorTrend(params);
         List<Map<String, Object>> result = sumHandler(list, params);
@@ -95,28 +86,19 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
     }
 
     private List<Map<String, Object>> sumHandler(List<Map<String, Object>> data, Map<String,Object> params) {
-        String name = (String)params.get("name");
-        DateTime startTime = (DateTime)params.get("startTime");
-        DateTime endTime = (DateTime)params.get("endTime");
-        Integer ipSum = this.baseMapper.selectCount(new QueryWrapper<IntelligenceIndicator>().eq("tags",name).eq("type","IP").between("created_time",startTime,endTime));
-        Integer domainSum = this.baseMapper.selectCount(new QueryWrapper<IntelligenceIndicator>().eq("tags",name).eq("type","Domain").between("created_time",startTime,endTime));
-        Map<String, Object> last = Tool.MapUtil.newHashMap();
-        last.put("statTime",endTime.getTime()/1000);
-        last.put("ipIndicatorCount",ipSum);
-        last.put("domainIndicatorCount",domainSum);
-        List<Map<String, Object>> reversed = data.stream().sorted((m1,m2) -> ((Long) m2.get("statTime")).compareTo((Long) m1.get("statTime"))).collect(Collectors.toList());
+        List<Map<String, Object>> sort = data.stream().sorted((m1,m2) -> ((Long) m1.get("statTime")).compareTo((Long) m2.get("statTime"))).collect(Collectors.toList());
         List<Map<String, Object>> result = Tool.CollectionUtil.newArrayList();
-        result.add(last);
-        for (Map<String, Object> map:reversed) {
+        int ipSum = 0;
+        int domainSum = 0;
+        for (Map<String, Object> map:sort) {
             Map<String, Object> resultMap = Tool.MapUtil.newHashMap();
             resultMap.put("statTime",map.get("statTime"));
-            resultMap.put("ipIndicatorCount",ipSum-Integer.valueOf(map.get("ipIndicatorCount").toString()));
-            resultMap.put("domainIndicatorCount",domainSum-Integer.valueOf(map.get("domainIndicatorCount").toString()));
-            ipSum-=Integer.valueOf(map.get("ipIndicatorCount").toString());
-            domainSum-=Integer.valueOf(map.get("domainIndicatorCount").toString());
+            resultMap.put("ipIndicatorCount",ipSum+Integer.valueOf(map.get("ipIndicatorCount").toString()));
+            resultMap.put("domainIndicatorCount",domainSum+Integer.valueOf(map.get("domainIndicatorCount").toString()));
+            ipSum+=Integer.valueOf(map.get("ipIndicatorCount").toString());
+            domainSum+=Integer.valueOf(map.get("domainIndicatorCount").toString());
             result.add(resultMap);
         }
-        result = result.stream().sorted(Comparator.comparing(m -> ((Long) m.get("statTime")))).collect(Collectors.toList());
         return result;
     }
 
@@ -218,8 +200,8 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
     }
 
     @Override
-    public List<IntelligenceIndicator> queryPage(IPage page, Map<String,Object> params) {
-        return this.baseMapper.queryPage(page, params);
+    public List<IntelligenceIndicator> queryByTag(IPage page, Map<String,Object> params) {
+        return this.baseMapper.queryByTag(page, params);
     }
 
     @Override
@@ -230,5 +212,13 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
     @Override
     public List<String> queryIpEntityTags(String resource) {
         return this.baseMapper.queryIpEntityTags(resource);
+    }
+
+    @Override
+    public PageUtils queryList(Map<String, Object> params) {
+        IPage page = this.page(new Query(IntelligenceIndicator.class).getPage(params));
+        List<IntelligenceIndicator> intelligenceIndicators = this.baseMapper.queryList(page, params);
+        page.setRecords(intelligenceIndicators);
+        return new PageUtils(page);
     }
 }

@@ -143,6 +143,9 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
         } else {
             tag = this.getById(id);
         }
+        if(ObjectUtil.isEmpty(tag)){
+            throw new CNException(RCode.TAG_NOT_EXIST);
+        }
         tag.setCategory(category);
         tag.setIntent(intent);
         tag.setDescription(description);
@@ -479,6 +482,12 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
         intelligenceIndicators.stream().forEach(data->{
             if(ObjectUtil.isEmpty(data.getId())) {
                 data.setCreatedTime(new Date());
+                if(ObjectUtil.isEmpty(data.getFirstSeenTime())) {
+                    data.setFirstSeenTime(new Date());
+                }
+            }
+            if(ObjectUtil.isEmpty(data.getLastSeenTime())) {
+                data.setLastSeenTime(new Date());
             }
             data.setUpdatedTime(new Date());
         });
@@ -498,7 +507,7 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
         }
         IPage page = this.page(new Query(IntelligenceIndicator.class).getPage(params));
         params.put("name",tag.getName());
-        List<IntelligenceIndicator> list = intelligenceIndicatorService.queryPage(page, params);
+        List<IntelligenceIndicator> list = intelligenceIndicatorService.queryByTag(page, params);
         page.setRecords(list);
         PageUtils pageUtils = new PageUtils(page);
         List<Map<String,Object>> itemList = Tool.CollectionUtil.newArrayList();
@@ -513,9 +522,20 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
         result.put("pageNo",pageUtils.getpageNo());
         result.put("pageSize",pageUtils.getPageSize());
         result.put("total",pageUtils.gettotal());
-        result.putAll(Tool.BeanUtil.beanToMap(tag));
+        result.putAll(modifyTagTime(tag));
         result.put("itemList",itemList);
         return result;
+    }
+
+    private Map<String,Object> modifyTagTime(Tag tag) {
+        Map<String, Object> map = Tool.BeanUtil.beanToMap(tag);
+        if(ObjectUtil.isNotEmpty(map.get("updatedTime")) && ObjectUtil.isNotEmpty(map.get("createdTime"))) {
+            Date updateTime = (Date) map.get("updatedTime");
+            Date createTime = (Date) map.get("createdTime");
+            map.put("updatedTime", updateTime.getTime() / 1000);
+            map.put("createdTime", createTime.getTime() / 1000);
+        }
+        return map;
     }
 
     private String createEntityValue(IntelligenceIndicator intelligenceIndicator) {
