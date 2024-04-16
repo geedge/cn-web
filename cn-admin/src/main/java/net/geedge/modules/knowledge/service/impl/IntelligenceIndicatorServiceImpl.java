@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,8 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
         Long endTime = Long.valueOf((String)params.get("endTime"));
         // 计算粒度
         Integer step = knowledgeBaseServiceImpl.handlerStep(startTime, endTime);
+        params.put("startTime", cn.hutool.core.date.DateUtil.date(startTime*1000));
+        params.put("endTime", cn.hutool.core.date.DateUtil.date(endTime*1000));
         params.put("step", step);
         List<Map<String, Object>> list = this.baseMapper.indicatorTrend(params);
         List<Map<String, Object>> result = sumHandler(list, params);
@@ -86,13 +89,14 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
     }
 
     private List<Map<String, Object>> sumHandler(List<Map<String, Object>> data, Map<String,Object> params) {
-        List<Map<String, Object>> sort = data.stream().sorted((m1,m2) -> ((Long) m1.get("statTime")).compareTo((Long) m2.get("statTime"))).collect(Collectors.toList());
+        List<Map<String, Object>> sort = data.stream().sorted((m1,m2) -> ((Timestamp) m1.get("statTime")).compareTo((Timestamp) m2.get("statTime"))).collect(Collectors.toList());
         List<Map<String, Object>> result = Tool.CollectionUtil.newArrayList();
         int ipSum = 0;
         int domainSum = 0;
         for (Map<String, Object> map:sort) {
             Map<String, Object> resultMap = Tool.MapUtil.newHashMap();
-            resultMap.put("statTime",map.get("statTime"));
+            Date statTime = (Date)map.get("statTime");
+            resultMap.put("statTime",statTime.getTime()/1000);
             resultMap.put("ipIndicatorCount",ipSum+Integer.valueOf(map.get("ipIndicatorCount").toString()));
             resultMap.put("domainIndicatorCount",domainSum+Integer.valueOf(map.get("domainIndicatorCount").toString()));
             ipSum+=Integer.valueOf(map.get("ipIndicatorCount").toString());

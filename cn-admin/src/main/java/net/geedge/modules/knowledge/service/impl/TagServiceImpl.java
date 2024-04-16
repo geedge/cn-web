@@ -74,9 +74,18 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
     public PageUtils queryTagList(Map<String, Object> params) {
         preHandleParams(params);
         IPage page = this.page(new Query(Tag.class).getPage(params));
-        List list = this.baseMapper.queryPage(page, params);
-        page.setRecords(list);
+        List<Tag> list = this.baseMapper.queryPage(page, params);
+        page.setRecords(timeHandle(list));
         return new PageUtils(page);
+    }
+
+    private List<Map<String,Object>> timeHandle(List<Tag> list) {
+        List<Map<String,Object>> result = Tool.CollectionUtil.newArrayList();
+        list.stream().forEach(tag -> {
+            Map<String, Object> map = modifyTagTime(tag);
+            result.add(map);
+        });
+        return result;
     }
 
     private void preHandleParams(Map<String, Object> params) {

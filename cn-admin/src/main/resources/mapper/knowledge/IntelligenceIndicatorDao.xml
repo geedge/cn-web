@@ -24,7 +24,7 @@
     </resultMap>
 
     <select id="indicatorTrend" parameterType="java.util.Map" resultType="java.util.Map">
-        SELECT date as statTime, IFNULL(ipIndicatorCount,0) as ipIndicatorCount, IFNULL(domainIndicatorCount,0) as domainIndicatorCount
+        SELECT FROM_UNIXTIME(date) as statTime, IFNULL(ipIndicatorCount,0) as ipIndicatorCount, IFNULL(domainIndicatorCount,0) as domainIndicatorCount
         FROM
             (
                 SELECT statTime, SUM(case when type='IP' then 1 else 0 end) as ipIndicatorCount, SUM(case when type='Domain' then 1 else 0 end) as domainIndicatorCount
@@ -32,7 +32,7 @@
                     (
                         SELECT FLOOR(UNIX_TIMESTAMP(created_time)/(#{params.step}*3600)) * (#{params.step}*3600) AS statTime,type
                         FROM cn_intelligence_indicator
-                        WHERE tags = #{params.name} and created_time >= FROM_UNIXTIME(#{params.startTime}) and created_time &lt; FROM_UNIXTIME(#{params.endTime})
+                        WHERE tags = #{params.name} and created_time >= #{params.startTime} and created_time &lt; #{params.endTime}
                     ) cn_knowledge_table
                 GROUP BY statTime
                 ORDER BY statTime
@@ -40,8 +40,8 @@
                 RIGHT JOIN
             (
                 SELECT FLOOR(UNIX_TIMESTAMP(@cdate := DATE_ADD(@cdate,INTERVAL - #{params.step} HOUR))/(#{params.step}*3600)) * (#{params.step}*3600) date
-                FROM (SELECT @cdate :=DATE_ADD(FROM_UNIXTIME(#{params.endTime}), INTERVAL + #{params.step} HOUR) FROM cn_intelligence_indicator) t2
-                WHERE @cdate &gt; FROM_UNIXTIME(#{params.startTime})
+                FROM (SELECT @cdate :=DATE_ADD(#{params.endTime}, INTERVAL + #{params.step} HOUR) FROM cn_intelligence_indicator) t2
+                WHERE @cdate &gt; #{params.startTime}
             ) table2
             ON  statTime = date
         ORDER BY date
