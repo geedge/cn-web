@@ -23,6 +23,11 @@
     <select id="queryPage" resultMap="AppCategoryBuiltIn">
         select * from
         cn_app_category_built_in
+        <where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>

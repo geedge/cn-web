@@ -30,6 +30,11 @@
     <select id="queryPage" resultMap="FqdnWhoIsBuiltIn">
         select * from
         cn_fqdn_who_is_built_in
+        <where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>

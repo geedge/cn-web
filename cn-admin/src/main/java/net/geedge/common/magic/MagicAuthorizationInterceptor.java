@@ -1,6 +1,7 @@
 package net.geedge.common.magic;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import org.ssssssss.magicapi.core.interceptor.AuthorizationInterceptor;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import net.geedge.common.utils.ObjectUtils;
 import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.entity.SysUserEntity;
 import net.geedge.modules.sys.service.SysUserService;
@@ -40,7 +42,7 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
      */
     @Override
     public boolean requireLogin() {
-        return true;
+        return false;
     }
 
     /**
@@ -48,15 +50,9 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
      */
     @Override
     public MagicUser getUserByToken(String token) throws MagicLoginException {
-        if (requireLogin() && token != null) {
-            SysUserEntity user = ShiroUtils.getUserEntityBySessionId(token);
-            MagicUser magicUser = new MagicUser();
-            try {
-				BeanUtils.copyProperties(user, magicUser);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new MagicLoginException("something error");
-			}
+    	SysUserEntity user = ShiroUtils.getUserEntityBySessionId(token);
+        if (requireLogin() && token != null && user != null) {
+            MagicUser magicUser = this.magicUser = new MagicUser(user.getUsername(), user.getUsername(), token);
             return magicUser;
         } else {
             throw new MagicLoginException("Token invalid please check certification information");

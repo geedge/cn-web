@@ -15,6 +15,11 @@
     <select id="queryPage" resultMap="linkDirectionBuiltIn">
         select * from
         cn_link_direction_built_in
+        <where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>

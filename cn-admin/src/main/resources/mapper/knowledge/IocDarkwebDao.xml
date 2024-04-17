@@ -45,6 +45,11 @@
     <select id="queryPage" resultMap="IocDarkweb">
         select * from
         cn_ioc_darkweb
+        <where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>
