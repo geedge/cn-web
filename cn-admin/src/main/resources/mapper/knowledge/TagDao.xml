@@ -38,6 +38,7 @@
                 and is_built_in = #{params.isBuiltIn}
             </if>
         </where>
+        order by updated_time desc
     </select>
 
     <select id="queryTagList" resultType="java.util.Map">

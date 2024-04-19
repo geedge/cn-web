@@ -97,10 +97,10 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
             Map<String, Object> resultMap = Tool.MapUtil.newHashMap();
             Date statTime = (Date)map.get("statTime");
             resultMap.put("statTime",statTime.getTime()/1000);
-            resultMap.put("ipIndicatorCount",ipSum+Integer.valueOf(map.get("ipIndicatorCount").toString()));
-            resultMap.put("domainIndicatorCount",domainSum+Integer.valueOf(map.get("domainIndicatorCount").toString()));
-            ipSum+=Integer.valueOf(map.get("ipIndicatorCount").toString());
-            domainSum+=Integer.valueOf(map.get("domainIndicatorCount").toString());
+            resultMap.put("ipCount",ipSum+Integer.valueOf(map.get("ipCount").toString()));
+            resultMap.put("domainCount",domainSum+Integer.valueOf(map.get("domainCount").toString()));
+            ipSum+=Integer.valueOf(map.get("ipCount").toString());
+            domainSum+=Integer.valueOf(map.get("domainCount").toString());
             result.add(resultMap);
         }
         return result;

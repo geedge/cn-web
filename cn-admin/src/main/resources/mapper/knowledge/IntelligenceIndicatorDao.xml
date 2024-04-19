@@ -24,7 +24,7 @@
     </resultMap>
 
     <select id="indicatorTrend" parameterType="java.util.Map" resultType="java.util.Map">
-        SELECT FROM_UNIXTIME(date) as statTime, IFNULL(ipIndicatorCount,0) as ipIndicatorCount, IFNULL(domainIndicatorCount,0) as domainIndicatorCount
+        SELECT FROM_UNIXTIME(date) as statTime, IFNULL(ipIndicatorCount,0) as ipCount, IFNULL(domainIndicatorCount,0) as domainCount
         FROM
             (
                 SELECT statTime, SUM(case when type='IP' then 1 else 0 end) as ipIndicatorCount, SUM(case when type='Domain' then 1 else 0 end) as domainIndicatorCount
