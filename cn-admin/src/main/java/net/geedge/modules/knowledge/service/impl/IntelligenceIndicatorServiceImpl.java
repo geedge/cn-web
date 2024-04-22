@@ -91,8 +91,8 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
     private List<Map<String, Object>> sumHandler(List<Map<String, Object>> data, Map<String,Object> params) {
         List<Map<String, Object>> sort = data.stream().sorted((m1,m2) -> ((Timestamp) m1.get("statTime")).compareTo((Timestamp) m2.get("statTime"))).collect(Collectors.toList());
         List<Map<String, Object>> result = Tool.CollectionUtil.newArrayList();
-        int ipSum = 0;
-        int domainSum = 0;
+        Integer ipSum = this.baseMapper.selectCount(new QueryWrapper<IntelligenceIndicator>().lambda().eq(IntelligenceIndicator::getType, "IP").eq(IntelligenceIndicator::getTags, params.get("name")).lt(IntelligenceIndicator::getCreatedTime, params.get("startTime")));
+        Integer domainSum = this.baseMapper.selectCount(new QueryWrapper<IntelligenceIndicator>().lambda().eq(IntelligenceIndicator::getType, "Domain").eq(IntelligenceIndicator::getTags, params.get("name")).lt(IntelligenceIndicator::getCreatedTime, params.get("startTime")));
         for (Map<String, Object> map:sort) {
             Map<String, Object> resultMap = Tool.MapUtil.newHashMap();
             Date statTime = (Date)map.get("statTime");
