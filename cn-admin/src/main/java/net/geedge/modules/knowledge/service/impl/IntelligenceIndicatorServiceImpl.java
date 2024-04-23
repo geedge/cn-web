@@ -113,30 +113,17 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
                 PreparedStatement pstm = conn.prepareStatement("insert into cn_intelligence_indicator (type, source_id, source_name, " +
                         "ip_addr_format, ip1, ip2, start_ip_binary, end_ip_binary, domain, method, confidence, tags, description, first_seen_time, last_seen_time, " +
                         "created_time, updated_time) "
-                        + "values (?,?,?,?,?,?,INET6_ATON(?),INET6_ATON(?),?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE " +
-                        "type=VALUES(type),source_id=VALUES(source_id),ip1=VALUES(ip1),ip2=VALUES(ip2),domain=VALUES(domain),tags=VALUES(tags)");
+                        + "values (?,?,?,?,?,?,INET6_ATON(?),INET6_ATON(?),?,?,?,?,?,?,?,?,?)");
                 for(IntelligenceIndicator intelligenceIndicator : intelligenceIndicators) {
                     pstm.setString(1, intelligenceIndicator.getType());
                     pstm.setString(2, intelligenceIndicator.getSourceId());
                     pstm.setString(3, intelligenceIndicator.getSourceName());
                     pstm.setString(4, intelligenceIndicator.getIpAddrFormat());
-                    if(intelligenceIndicator.getIp1()!=null) {
-                        pstm.setString(5, intelligenceIndicator.getIp1());
-                    } else {
-                        pstm.setString(5, StrUtil.EMPTY);
-                    }
-                    if(intelligenceIndicator.getIp2()!=null) {
-                        pstm.setString(6, intelligenceIndicator.getIp2());
-                    } else {
-                        pstm.setString(6, StrUtil.EMPTY);
-                    }
+                    pstm.setString(5, intelligenceIndicator.getIp1());
+                    pstm.setString(6, intelligenceIndicator.getIp2());
                     pstm.setString(7, intelligenceIndicator.getStartIpBinary());
                     pstm.setString(8, intelligenceIndicator.getEndIpBinary());
-                    if(intelligenceIndicator.getDomain()!=null) {
-                        pstm.setString(9, intelligenceIndicator.getDomain());
-                    } else {
-                        pstm.setString(9, StrUtil.EMPTY);
-                    }
+                    pstm.setString(9, intelligenceIndicator.getDomain());
                     pstm.setString(10, intelligenceIndicator.getMethod());
                     pstm.setString(11, intelligenceIndicator.getConfidence());
                     pstm.setString(12, intelligenceIndicator.getTags());
@@ -168,23 +155,11 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
                     pstm.setString(2, intelligenceIndicator.getSourceId());
                     pstm.setString(3, intelligenceIndicator.getSourceName());
                     pstm.setString(4, intelligenceIndicator.getIpAddrFormat());
-                    if(intelligenceIndicator.getIp1()!=null) {
-                        pstm.setString(5, intelligenceIndicator.getIp1());
-                    } else {
-                        pstm.setString(5, StrUtil.EMPTY);
-                    }
-                    if(intelligenceIndicator.getIp2()!=null) {
-                        pstm.setString(6, intelligenceIndicator.getIp2());
-                    } else {
-                        pstm.setString(6, StrUtil.EMPTY);
-                    }
+                    pstm.setString(5, intelligenceIndicator.getIp1());
+                    pstm.setString(6, intelligenceIndicator.getIp2());
                     pstm.setString(7, intelligenceIndicator.getStartIpBinary());
                     pstm.setString(8, intelligenceIndicator.getEndIpBinary());
-                    if(intelligenceIndicator.getDomain()!=null) {
-                        pstm.setString(9, intelligenceIndicator.getDomain());
-                    } else {
-                        pstm.setString(9, StrUtil.EMPTY);
-                    }
+                    pstm.setString(9, intelligenceIndicator.getDomain());
                     pstm.setString(10, intelligenceIndicator.getMethod());
                     pstm.setString(11, intelligenceIndicator.getConfidence());
                     pstm.setString(12, intelligenceIndicator.getTags());

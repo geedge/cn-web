@@ -28,6 +28,13 @@ public interface BasicImportAndExportDao extends BaseMapper{
      * @param deleteIds
      */
     void deleteList(@Param("tableName") String tableName,  @Param("deleteIds") List<Integer> deleteIds);
+
+    /**
+     * 指定表名 删除id集合
+     * @param tableName
+     * @param deleteIds
+     */
+    void deleteLongList(@Param("tableName") String tableName,  @Param("deleteIds") List<Long> deleteIds);
     
     /**
      * 根据knowledgeId进行数据删除

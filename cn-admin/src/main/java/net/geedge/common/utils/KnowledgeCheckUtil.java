@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.hutool.log.Log;
 import net.geedge.common.exception.CNException;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -14,6 +15,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 
 public class KnowledgeCheckUtil {
+
+    public static Log log = Log.get();
 	
 	public static final String ipv6AddrDefault = "::";
 	
@@ -562,6 +565,7 @@ public class KnowledgeCheckUtil {
         Map<String,String> result = Tool.MapUtil.newHashMap();
         boolean validIpFormat = KnowledgeCheckUtil.validIpFormat(ip1);
         if(!validIpFormat) {
+            log.error("ip import data error , ip1 is {},ip2 is {}", ip1, ip2);
             throw new CNException(RCode.IMPORT_ERROR);
         }
         if(StrUtil.equals(ipFormat, Constant.IpFormatType.SINGLE.getValue())) {
@@ -571,6 +575,7 @@ public class KnowledgeCheckUtil {
         }else if(StrUtil.equals(ipFormat, Constant.IpFormatType.RANGE.getValue())){
             validIpFormat = KnowledgeCheckUtil.validIpFormat(ip1+"-"+ip2);
             if(!validIpFormat) {
+                log.error("ip import data error , ip1 is {},ip2 is {}", ip1, ip2);
                 throw new CNException(RCode.IMPORT_ERROR);
             }
             result.put("ip2",ip2);
@@ -579,6 +584,7 @@ public class KnowledgeCheckUtil {
         }else {
             validIpFormat = KnowledgeCheckUtil.validIpFormat(ip1+"/"+ip2);
             if(!validIpFormat) {
+                log.error("ip import data error , ip1 is {},ip2 is {}", ip1, ip2);
                 throw new CNException(RCode.IMPORT_ERROR);
             }
             result.put("ip2",ip2);

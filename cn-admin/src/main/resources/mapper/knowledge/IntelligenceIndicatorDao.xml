@@ -93,8 +93,6 @@
             #{tag.updatedTime}
             )
         </foreach>
-        ON DUPLICATE KEY UPDATE
-        type=VALUES(type),source_id=VALUES(source_id),ip1=VALUES(ip1),ip2=VALUES(ip2),domain=VALUES(domain),tags=VALUES(tags)
     </insert>
 
     <update id="updateBatchForBinary">

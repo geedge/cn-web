@@ -26,6 +26,11 @@ public class BasicImportAndExportServiceImpl implements BasicImportAndExportServ
 	}
 
 	@Override
+	public void removeLongList(String tableName, List<Long> deleteIds) {
+		basicImportAndExportDao.deleteLongList(tableName,deleteIds);
+	}
+
+	@Override
 	public void removeList(String tableName, Integer knowledgeId) {
 		basicImportAndExportDao.deleteListByKnowledgeId(tableName,knowledgeId);
 	}

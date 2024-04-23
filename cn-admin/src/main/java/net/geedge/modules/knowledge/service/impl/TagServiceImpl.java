@@ -10,11 +10,13 @@ import cn.hutool.core.text.csv.CsvRow;
 import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.swagger.models.auth.In;
 import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.*;
 import net.geedge.modules.knowledge.dao.TagDao;
@@ -39,6 +41,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.alibaba.fastjson.JSON.parseObject;
 
@@ -48,7 +51,7 @@ import static com.alibaba.fastjson.JSON.parseObject;
  */
 @Service("TagService")
 public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagService {
-
+    private Log log = Log.get();
     @Autowired
     public IntelligenceIndicatorService intelligenceIndicatorService;
 
@@ -406,10 +409,25 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
                     // 当前行号
                     Map<String, String> tmpMap = Tool.MapUtil.newHashMap();
                     Map<String, String> fieldMap = row.getFieldMap();
+                    long originalLineNumber = row.getOriginalLineNumber();
                     for(String headerName : fieldMap.keySet()) {
                         String value = fieldMap.get(headerName);
                         if(headerName.indexOf("\uFEFF")>= 0) {
                             headerName = headerName.substring(1);
+                        }
+                        Map<String, Object> info = configs.get(headerName);
+                        List<String> validateVal = (List<String>) info.get("validateVal");
+                        if(ObjectUtil.isNotEmpty(validateVal) && !headerName.equals("ip_addr_format")) {
+                            boolean isPass = false;
+                            for(String str : validateVal) {
+                                if(str.equals(value)){
+                                    isPass = true;
+                                }
+                            }
+                            if(!isPass) {
+                                log.error("tag import data error , line is {},columnName is {}", originalLineNumber, headerName);
+                                throw new CNException(RCode.IMPORT_ERROR);
+                            }
                         }
                         tmpMap.put(headerName, value);
                     }
@@ -467,6 +485,10 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
                 Object id = conId.get(val);
                 data.put("id",ObjectUtil.isNotEmpty(id)?id.toString():null);
             }
+            List<Long> deleteIds = Tool.CollectionUtil.newArrayList();
+            results = results.stream().filter(o -> !conId.values().contains(o.get("id"))).collect(Collectors.toList());
+            results.stream().forEach(o -> {deleteIds.add((Long)o.get("id"));});
+            basicImportAndExportService.removeLongList(Constant.INTELLIGENCE_INDICATOR,deleteIds);
         }
     }
 

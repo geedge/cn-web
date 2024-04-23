@@ -23,6 +23,13 @@
 			#{id}
 		</foreach>
 	</delete>
+
+	<delete id="deleteLongList">
+		delete from ${tableName} where id in
+		<foreach collection="deleteIds" item="id" separator="," open="(" close=")" >
+			#{id}
+		</foreach>
+	</delete>
 	
 	<delete id="deleteListByKnowledgeId">
 		delete from ${tableName} where knowledge_id = #{knowledgeId}
