@@ -159,7 +159,7 @@ public class EntityServiceImpl implements EntityService {
             }
             addValidDataToMap(data, "malware", malware, Constant.IOC_MALWARE);
             addValidDataToMap(data, "darkweb", darkweb, Constant.IOC_DARKWEB);
-            data.put("tags",tags);
+            addValidListToMap(data, "tags", tags, Constant.INTELLIGENCE_INDICATOR);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryIpEntityTag(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryIpEntityTag(resource);
@@ -169,12 +169,12 @@ public class EntityServiceImpl implements EntityService {
             addValidDataToMap(data, "malware", malware, Constant.IOC_MALWARE);
             addValidDataToMap(data, "darkweb", darkweb, Constant.IOC_DARKWEB);
             addValidDataToMap(data, "dnsServerInfo", dnsServerInfo, Constant.DNS_SERVER_INFO_BUILT_IN);
-            data.put("tags",tags);
+            addValidListToMap(data, "tags", tags, Constant.INTELLIGENCE_INDICATOR);
         }
         return R.ok(data);
     }
 
-    private void addValidListToMap(Map<String, Object> map, String key, List<Map> value, String source) {
+    private void addValidListToMap(Map<String, Object> map, String key, List<Map<String, Object>> value, String source) {
         map.put(key, null);
         List<Map> list = new ArrayList<>();
         if (ObjectUtil.isNotEmpty(value)) {
@@ -237,7 +237,7 @@ public class EntityServiceImpl implements EntityService {
             malware = createEnableMap("malware", malware, Constant.IOC_MALWARE);
             darkweb = createEnableMap("darkweb", darkweb, Constant.IOC_DARKWEB);
             List<Map<String, Object>> tags = tagService.queryDomainEntityTags(resource);
-            List<Map<String,Object>> tagList = createTagList(tags);
+            List<Map<String,Object>> tagList = createTagList(tags,Constant.INTELLIGENCE_INDICATOR);
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             addEntityList(entityList, malware);
@@ -248,7 +248,7 @@ public class EntityServiceImpl implements EntityService {
             Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryIpEntityTag(resource), Constant.IOC_DARKWEB);
             Map<String, Object> dnsServerInfo = createEnableMap("dnsServerInfo", dnsServerInfoBuiltInService.queryIpEntityTag(resource), Constant.DNS_SERVER_INFO_BUILT_IN);
             List<Map<String, Object>> tags = tagService.queryIpEntityTags(resource);
-            List<Map<String,Object>> tagList = createTagList(tags);
+            List<Map<String,Object>> tagList = createTagList(tags,Constant.INTELLIGENCE_INDICATOR);
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             mapChangeTimestamp(dnsServerInfo);
@@ -272,17 +272,22 @@ public class EntityServiceImpl implements EntityService {
         return map;
     }
 
-    private List<Map<String,Object>> createTagList(List<Map<String, Object>> tags) {
+    private List<Map<String,Object>> createTagList(List<Map<String, Object>> tags,String source) {
         List<Map<String,Object>> result = Tool.CollectionUtil.newArrayList();
-        tags.stream().forEach(tag -> {
-            Map<String,Object> map = Tool.MapUtil.newHashMap();
-            Date updateTime = (Date) tag.get("updateTime");
-            Date createTime = (Date) tag.get("createTime");
-            tag.put("updateTime", updateTime.getTime() / 1000);
-            tag.put("createTime", createTime.getTime() / 1000);
-            map.put("tags",tag);
-            result.add(map);
-        });
+        if (ObjectUtil.isNotEmpty(tags)) {
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("source", source));
+            if (ObjectUtil.isNotEmpty(knowledgeBase) && knowledgeBase.getStatus() == 1) {
+                tags.stream().forEach(tag -> {
+                    Map<String,Object> map = Tool.MapUtil.newHashMap();
+                    Date updateTime = (Date) tag.get("updateTime");
+                    Date createTime = (Date) tag.get("createTime");
+                    tag.put("updateTime", updateTime.getTime() / 1000);
+                    tag.put("createTime", createTime.getTime() / 1000);
+                    map.put("tags",tag);
+                    result.add(map);
+                });
+            }
+        }
         return result;
     }
 

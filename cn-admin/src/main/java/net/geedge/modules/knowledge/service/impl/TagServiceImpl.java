@@ -488,7 +488,9 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
             List<Long> deleteIds = Tool.CollectionUtil.newArrayList();
             results = results.stream().filter(o -> !conId.values().contains(o.get("id"))).collect(Collectors.toList());
             results.stream().forEach(o -> {deleteIds.add((Long)o.get("id"));});
-            basicImportAndExportService.removeLongList(Constant.INTELLIGENCE_INDICATOR,deleteIds);
+            if(ObjectUtil.isNotEmpty(deleteIds)) {
+                basicImportAndExportService.removeLongList(Constant.INTELLIGENCE_INDICATOR,deleteIds);
+            }
         }
     }
 
