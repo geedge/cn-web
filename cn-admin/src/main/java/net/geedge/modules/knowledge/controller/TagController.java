@@ -1,4 +1,4 @@
-package net.geedge.modules.tag.controller;
+package net.geedge.modules.knowledge.controller;
 
 import net.geedge.common.annotation.SysLog;
 import net.geedge.common.smartvalidate.ValidateUtils;
