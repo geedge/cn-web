@@ -73,7 +73,7 @@
                         	AND sl.exception = #{params.exception}
                         </if>
                         <if test="params.q != null and params.q != ''">
-                        	AND (su.name like CONCAT('%', #{params.q}, '%') or su.username like CONCAT('%', #{params.q}, '%') or sl.type like CONCAT('%', #{params.q}, '%') or sl.opera_id like CONCAT('%', #{params.q}, '%') or sl.params like CONCAT('%', #{params.q}, '%') or sl.response like CONCAT('%', #{params.q}, '%') or sl.exception like CONCAT('%', #{params.q}, '%'))
+                        	AND (su.name like CONCAT('%', #{params.q}, '%') or su.username like CONCAT('%', #{params.q}, '%') or sl.type like CONCAT('%', #{params.q}, '%') or sl.opera_id like CONCAT('%', #{params.q}, '%') or sl.ip like CONCAT('%', #{params.q}, '%') or sl.params like CONCAT('%', #{params.q}, '%') or sl.response like CONCAT('%', #{params.q}, '%') or sl.exception like CONCAT('%', #{params.q}, '%'))
                         </if>
                     </where>
 
