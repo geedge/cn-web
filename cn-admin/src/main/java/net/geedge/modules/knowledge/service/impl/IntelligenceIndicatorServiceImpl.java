@@ -1,7 +1,6 @@
 package net.geedge.modules.knowledge.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -96,6 +95,11 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
         for (Map<String, Object> map:sort) {
             Map<String, Object> resultMap = Tool.MapUtil.newHashMap();
             Date statTime = (Date)map.get("statTime");
+            Date startTime = (Date)params.get("startTime");
+            long diff = startTime.getTime()/1000-statTime.getTime()/1000;
+            if(diff >= (Integer)params.get("step")*3600) {
+                continue;
+            }
             resultMap.put("statTime",statTime.getTime()/1000);
             resultMap.put("ipCount",ipSum+Integer.valueOf(map.get("ipCount").toString()));
             resultMap.put("domainCount",domainSum+Integer.valueOf(map.get("domainCount").toString()));
