@@ -951,6 +951,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		}
 		List<Integer> deleteDataIds = Lists.newArrayList();
 		List<Map<String, String>> saveOrUpdateList = Lists.newArrayList();
+		//校验文件表头相关信息
+		checkImportTableHeader(file, knowledgeBase);
 		//覆盖操作时 将对应表中数据删除清空
 		if (StrUtil.equals(action, "overwrite")) {
 			basicImportAndExportService.removeList(knowledgeBase.getSource());
@@ -976,16 +978,45 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 		return knowledgeId;
 	}
 
-	@Override
-	public void validAndBuildDatasets(MultipartFile file, KnowledgeBase knowledgeBase, String action, List<Map<String, String>> importDataList, List<Integer> deleteDataIds) {
+	private void checkImportTableHeader(MultipartFile file,KnowledgeBase knowledgeBase) {
 		// 根据source获取对应的表头信息
 		String knowledgeImportConfigJson = sysConfigService.getValue("knowledge_import_config_json");
 		HashMap knowledgeConfigs = parseObject(knowledgeImportConfigJson, HashMap.class);
 		Map<String,Object> sourceConfig = (Map<String, Object>) knowledgeConfigs.get(knowledgeBase.getSource());
 		List<String> headerInfos = StrUtil.split((String)sourceConfig.get("headers"), StrUtil.C_COMMA);
 		if(ObjectUtils.isEmpty(headerInfos)) {
-			throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
+			throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_REQUIRED);
 		}
+		String fileType = FilenameUtils.getExtension(file.getOriginalFilename());
+		switch (fileType) {
+	        case "csv": {
+	        	File tempCsvFile = new File(Constant.TEMP_PATH + File.separator + "csv_" + UUID.randomUUID());
+	        	try {
+					FileUtils.copyInputStreamToFile(file.getInputStream(), tempCsvFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	        	CsvData datas = CsvUtil.getReader().read(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetDetector.detect(tempCsvFile)));
+				List<CsvRow> csvRows = datas.getRows();
+				if(ObjectUtil.isEmpty(csvRows) || csvRows.size() < 2) {
+					throw new CNException(RCode.EXCELFILE_EMPTY_ERROR);
+				}
+				CsvRow headerInfo = csvRows.get(0);
+				// 表头校验
+				if (!CSVUtils.validateCSVHeader(headerInfo, headerInfos)) {
+				    throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
+				}
+				
+	        }
+		}
+	}
+	
+	@Override
+	public void validAndBuildDatasets(MultipartFile file, KnowledgeBase knowledgeBase, String action, List<Map<String, String>> importDataList, List<Integer> deleteDataIds) {
+		// 根据source获取对应的表头信息
+		String knowledgeImportConfigJson = sysConfigService.getValue("knowledge_import_config_json");
+		HashMap knowledgeConfigs = parseObject(knowledgeImportConfigJson, HashMap.class);
+		Map<String,Object> sourceConfig = (Map<String, Object>) knowledgeConfigs.get(knowledgeBase.getSource());
 		String fileType = FilenameUtils.getExtension(file.getOriginalFilename());
 		List<Map<String,Object>> infos = (List<Map<String, Object>>) sourceConfig.get("infos");
 		// 将系统配置表头和验证相关整理成map
@@ -1009,17 +1040,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseDao, Know
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-    		    CsvReader reader = CsvUtil.getReader(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetDetector.detect(tempCsvFile)));
+                CsvReader reader = CsvUtil.getReader(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetDetector.detect(tempCsvFile)));
     		    reader.setContainsHeader(true);
-    		    Set<String> header = reader.stream().findFirst().get().getFieldMap().keySet();
-    		    ArrayList<String> headerInfo = ListUtil.toList(header);
-    		    // 表头校验
-                if (!CSVUtils.validateCSVHeader(headerInfo, headerInfos)) {
-                    throw new CNException(RCode.EXCELFILE_HEADER_TEMPLATE_ERROR);
-                }
-                CsvReader reader2 = CsvUtil.getReader(ResourceUtil.getReader(tempCsvFile.getPath(), CharsetDetector.detect(tempCsvFile)));
-    		    reader2.setContainsHeader(true);
-    			reader2.stream().forEach(row -> {
+    			reader.stream().forEach(row -> {
     				// 当前行号
     				Map<String, String> tmpMap = Tool.MapUtil.newHashMap();
     				long originalLineNumber = row.getOriginalLineNumber();

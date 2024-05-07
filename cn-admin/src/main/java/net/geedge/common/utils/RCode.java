@@ -432,6 +432,7 @@ public enum RCode {
     IMPORT_IGNORE(805, "Duplicate data, ignore the data in this row"),
     IMPORT_ERROR(806, "Import data error"),
     EXCELFILE_EMPTY_ERROR(807,"Import file data is required"),
+    EXCELFILE_HEADER_TEMPLATE_REQUIRED(803,"The header row is required,please check db config"),
     ERROR(999, "error"); //通用错误/未知错误
 
 	
