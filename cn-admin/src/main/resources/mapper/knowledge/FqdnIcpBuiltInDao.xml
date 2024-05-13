@@ -44,11 +44,16 @@
             </when>
             <otherwise>
                 select icp_site_license as icpSiteLicense, icp_company_name as icpCompanyName,
-                icp_company_type as icpCompanyType, 1 as isValid from
-                (select * from cn_fqdn_icp_built_in
-                where fqdn = SUBSTRING_INDEX(#{resource},'.',-4) or fqdn = SUBSTRING_INDEX(#{resource},'.',-3) or fqdn = SUBSTRING_INDEX(#{resource},'.',-2)) a
-                where #{resource} like CONCAT('%','.',fqdn)
-                ORDER BY id DESC limit 1
+                icp_company_type as icpCompanyType, 1 as isValid
+                from cn_fqdn_icp_built_in
+                where fqdn in (
+                SUBSTRING_INDEX(#{resource},'.',-4),
+                SUBSTRING_INDEX(#{resource},'.',-3),
+                SUBSTRING_INDEX(#{resource},'.',-2)
+                )
+                and #{resource} like CONCAT('%','.',fqdn)
+                order by id desc
+                limit 1
             </otherwise>
         </choose>
     </select>

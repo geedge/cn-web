@@ -46,11 +46,16 @@
             <otherwise>
                 select category_name as categoryName, category_group as categoryGroup,
                 reputation_level as reputationLevel, update_time as updateTime,
-                create_time as createTime, 1 as isValid from
-                (select * from cn_fqdn_category_built_in
-                where fqdn = SUBSTRING_INDEX(#{resource},'.',-4) or fqdn = SUBSTRING_INDEX(#{resource},'.',-3) or fqdn = SUBSTRING_INDEX(#{resource},'.',-2)) a
-                where #{resource} like CONCAT('%','.',fqdn)
-                ORDER BY id DESC limit 1
+                create_time as createTime, 1 as isValid
+                from cn_fqdn_category_built_in
+                where fqdn in (
+                SUBSTRING_INDEX(#{resource},'.',-4),
+                SUBSTRING_INDEX(#{resource},'.',-3),
+                SUBSTRING_INDEX(#{resource},'.',-2)
+                )
+                and #{resource} like CONCAT('%','.',fqdn)
+                order by LENGTH(fqdn) desc,id desc
+                limit 1
             </otherwise>
         </choose>
     </select>
