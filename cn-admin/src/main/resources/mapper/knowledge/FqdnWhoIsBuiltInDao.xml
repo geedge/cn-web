@@ -57,7 +57,8 @@
                 update_time as updateTime, create_time as createTime, 1 as isValid from
                 (select * from cn_fqdn_who_is_built_in
                 where fqdn = SUBSTRING_INDEX(#{resource},'.',-4) or fqdn = SUBSTRING_INDEX(#{resource},'.',-3) or fqdn = SUBSTRING_INDEX(#{resource},'.',-2)) a
-                where #{resource} like CONCAT('%','.',fqdn) limit 1
+                where #{resource} like CONCAT('%','.',fqdn)
+                ORDER BY id DESC limit 1
             </otherwise>
         </choose>
     </select>
