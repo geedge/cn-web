@@ -40,7 +40,8 @@
                 reputation_level as reputationLevel, update_time as updateTime,
                 create_time as createTime, 1 as isValid from
                 cn_fqdn_category_built_in
-                where fqdn = #{resource} limit 1
+                where fqdn = #{resource}
+                ORDER BY id DESC limit 1
             </when>
             <otherwise>
                 select category_name as categoryName, category_group as categoryGroup,

@@ -48,7 +48,8 @@
                 whois_create_date as createDate, whois_expire_date as expireDate,
                 update_time as updateTime, create_time as createTime, 1 as isValid from
                 cn_fqdn_who_is_built_in
-                where fqdn = #{resource} limit 1
+                where fqdn = #{resource}
+                ORDER BY id DESC limit 1
             </when>
             <otherwise>
                 select whois_registrar_name as registrarName, whois_registrant_org as registrantOrg,

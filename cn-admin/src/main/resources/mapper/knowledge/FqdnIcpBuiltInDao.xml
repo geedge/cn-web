@@ -39,7 +39,8 @@
                 select icp_site_license as icpSiteLicense, icp_company_name as icpCompanyName,
                 icp_company_type as icpCompanyType, 1 as isValid from
                 cn_fqdn_icp_built_in
-                where fqdn = #{resource} limit 1
+                where fqdn = #{resource}
+                ORDER BY id DESC limit 1
             </when>
             <otherwise>
                 select icp_site_license as icpSiteLicense, icp_company_name as icpCompanyName,
