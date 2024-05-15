@@ -41,9 +41,13 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 		String sTime = (String) params.get("startTime");
 		String eTime = (String) params.get("endTime");
 		String level = (String) params.get("level");
+		String subscriberId = (String)params.get("subscriberId");
 		ValidateUtils.is(sTime).notNull(RCode.NOT_NULL_ERROR);
 		ValidateUtils.is(eTime).notNull(RCode.NOT_NULL_ERROR);
 		ValidateUtils.is(level).notNull(RCode.NOT_NULL_ERROR);
+		Long userId = ShiroUtils.getUserId();
+		params.put("userId", userId);
+		params.put("subscriberId", subscriberId);
 		IPage<UserSubscriber> page=this.page(new Query(UserSubscriber.class).getPage(params));
 		List<UserSubscriber> userSubscribers=this.baseMapper.queryPage(page,params);
 		page.setRecords(userSubscribers);
