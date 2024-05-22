@@ -21,7 +21,7 @@ import java.util.Map;
  * @Date: 2024/05/21/17:37
  */
 public class GeoUtil {
-    public static final String GEO_JSON_PATH = "cn-admin/src/main/resources/config/geolocation.json";
+    public static final String GEO_JSON_PATH = "./config/geolocation.json";
 
     private static SimpleFeatureCollection featureCollection;
 
