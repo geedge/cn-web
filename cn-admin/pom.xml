@@ -22,6 +22,7 @@
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<apache.poi.version>3.14</apache.poi.version>
 		<jackson.version>2.10.1</jackson.version>
+		<geotools.version>20.3</geotools.version>
 
 
 		<!--先将镜像build到${docker.build}的docker中,然后再根据imageName向对应的docker.registry中推送,可以build完不push,这俩可以是一个机器-->
@@ -53,6 +54,36 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.jts</groupId>
+			<artifactId>jts-core</artifactId>
+			<version>1.18.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-data</artifactId>
+			<version>${geotools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-geometry</artifactId>
+			<version>${geotools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-main</artifactId>
+			<version>${geotools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-geojson-core</artifactId>
+			<version>28.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-geojson</artifactId>
+			<version>28.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.jsqlparser</groupId>
