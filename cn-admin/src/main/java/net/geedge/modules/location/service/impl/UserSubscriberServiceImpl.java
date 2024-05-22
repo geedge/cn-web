@@ -22,6 +22,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.GeoUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
@@ -66,6 +67,8 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 				Map<String, SubscriberDto> idDto = subscriberDtos.stream().collect(Collectors.toMap(SubscriberDto::getSubscriberId, Function.identity()));
 				userSubscribers.forEach(us -> {
 					SubscriberDto dto = idDto.get(us.getSubscriberId());
+					Map<String, Object> reverseGeocode = GeoUtil.reverseGeocode(dto.getSubscriberLongitude(),dto.getSubscriberLatitude());
+					BeanUtil.copyProperties(reverseGeocode, dto, false);
 					if(ObjectUtil.isNotEmpty(dto)) {
 						us.setActive(1);
 						us.setSubscriberDto(dto);
