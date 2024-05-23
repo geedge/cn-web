@@ -67,9 +67,9 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 				Map<String, SubscriberDto> idDto = subscriberDtos.stream().collect(Collectors.toMap(SubscriberDto::getSubscriberId, Function.identity()));
 				userSubscribers.forEach(us -> {
 					SubscriberDto dto = idDto.get(us.getSubscriberId());
-					Map<String, Object> reverseGeocode = GeoUtil.reverseGeocode(dto.getSubscriberLongitude(),dto.getSubscriberLatitude());
-					BeanUtil.copyProperties(reverseGeocode, dto, false);
 					if(ObjectUtil.isNotEmpty(dto)) {
+						Map<String, Object> reverseGeocode = GeoUtil.reverseGeocode(dto.getSubscriberLongitude(),dto.getSubscriberLatitude());
+						BeanUtil.copyProperties(reverseGeocode, dto, false);
 						us.setActive(1);
 						us.setSubscriberDto(dto);
 					}
