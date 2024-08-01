@@ -24,6 +24,11 @@
         select * from
         cn_psiphon3_ip
         where knowledge_id = #{params.knowledgeId}
+        <where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>

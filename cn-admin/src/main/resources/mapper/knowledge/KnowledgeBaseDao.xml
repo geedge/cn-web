@@ -14,7 +14,6 @@
         <result property="isBuiltIn" column="is_built_in"></result>
         <result property="isPublished" column="is_published"></result>
         <result property="status" column="status"></result>
-        <result property="color" column="color"></result>
         <association property="user" column="op_user" select="queryUserById"></association>
     </resultMap>
 

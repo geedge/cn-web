@@ -20,7 +20,7 @@ public interface BasicImportAndExportDao extends BaseMapper{
      * @param
      * @return
      */
-    List<Map<String,Object>> selectDataId(@Param("tableName") String tableName, @Param("params") List<String> columnVal,@Param("knowledgeId") Integer knowledgeId,@Param("datas") List<Map<String, String>> importDataList);
+    List<Map<String,Object>> selectDataId(@Param("tableName") String tableName, @Param("params") List<String> columnVal,@Param("datas") List<Map<String, String>> importDataList);
     
     /**
      * 指定表名 删除id集合
@@ -28,6 +28,13 @@ public interface BasicImportAndExportDao extends BaseMapper{
      * @param deleteIds
      */
     void deleteList(@Param("tableName") String tableName,  @Param("deleteIds") List<Integer> deleteIds);
+
+    /**
+     * 指定表名 删除id集合
+     * @param tableName
+     * @param deleteIds
+     */
+    void deleteLongList(@Param("tableName") String tableName,  @Param("deleteIds") List<Long> deleteIds);
     
     /**
      * 根据knowledgeId进行数据删除
@@ -35,4 +42,10 @@ public interface BasicImportAndExportDao extends BaseMapper{
      * @param knowledgeId
      */
     void deleteListByKnowledgeId(@Param("tableName") String tableName,@Param("knowledgeId") Integer knowledgeId);
+
+    /**
+     * 清空指定表数据
+     * @param tableName
+     */
+    void deleteTable(@Param("tableName") String tableName);
 }

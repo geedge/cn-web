@@ -20,4 +20,10 @@ public class SubscriberDto {
 	private Double subscriberLongitude;
 	
 	private Double subscriberLatitude;
+	
+	private String country;
+	
+	private String superAdministrativeArea;
+	
+	private String administrativeArea;
 }

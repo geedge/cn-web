@@ -22,6 +22,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import net.geedge.common.smartvalidate.ValidateUtils;
+import net.geedge.common.utils.GeoUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
@@ -41,9 +42,13 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 		String sTime = (String) params.get("startTime");
 		String eTime = (String) params.get("endTime");
 		String level = (String) params.get("level");
+		String subscriberId = (String)params.get("subscriberId");
 		ValidateUtils.is(sTime).notNull(RCode.NOT_NULL_ERROR);
 		ValidateUtils.is(eTime).notNull(RCode.NOT_NULL_ERROR);
 		ValidateUtils.is(level).notNull(RCode.NOT_NULL_ERROR);
+		Long userId = ShiroUtils.getUserId();
+		params.put("userId", userId);
+		params.put("subscriberId", subscriberId);
 		IPage<UserSubscriber> page=this.page(new Query(UserSubscriber.class).getPage(params));
 		List<UserSubscriber> userSubscribers=this.baseMapper.queryPage(page,params);
 		page.setRecords(userSubscribers);
@@ -63,6 +68,8 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 				userSubscribers.forEach(us -> {
 					SubscriberDto dto = idDto.get(us.getSubscriberId());
 					if(ObjectUtil.isNotEmpty(dto)) {
+						Map<String, Object> reverseGeocode = GeoUtil.reverseGeocode(dto.getSubscriberLongitude(),dto.getSubscriberLatitude());
+						BeanUtil.copyProperties(reverseGeocode, dto, false);
 						us.setActive(1);
 						us.setSubscriberDto(dto);
 					}

@@ -45,6 +45,4 @@ public class AppCategoryBuiltIn {
     private Integer opUser;
 
     private Integer isValid;
-
-    private Integer knowledgeId;
 }

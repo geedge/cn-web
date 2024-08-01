@@ -34,8 +34,16 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -65,6 +73,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
 import cn.hutool.log.Log;
 import freemarker.template.Template;
 import net.geedge.common.exception.CNException;
@@ -73,6 +82,7 @@ import net.geedge.common.utils.FreeMarkerUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.RCode;
+import net.geedge.common.utils.Tool;
 import net.geedge.common.utils.Tool.ResponseUtil;
 import net.geedge.modules.report.dao.ReportJobDao;
 import net.geedge.modules.report.entity.ReportJob;
@@ -105,6 +115,9 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 	
 	@Autowired
 	private ReportTempService reportTempService;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 		
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -214,7 +227,11 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		return html;
 	}
 
-	@Override
+	/**
+	 * 原先直接请求hos进行文件下载 改为调用QGW服务进行下载 
+	 * 该方法注释
+	 */
+	/*@Override
 	public void downloadPdf(Integer jobId, HttpServletResponse response) throws Exception{
 		ReportJob job = this.getBaseMapper().selectById(jobId);
 		String s3Enable = sysConfigService.getValue("s3_enable");
@@ -262,9 +279,56 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 			log.warn(RCode.REPORT_NOT_FINSHED.getMsg());
 			throw new CNException(RCode.REPORT_NOT_FINSHED);
 		}
+	}*/
+	@Override
+	public void downloadPdf(Integer jobId, HttpServletResponse response) throws Exception{
+		ReportJob job = this.getBaseMapper().selectById(jobId);
+		String s3Enable = sysConfigService.getValue("s3_enable");
+		String galaxyUrl = sysConfigService.getValue("galaxy_url");
+		String s3BucketName = sysConfigService.getValue("s3_bucket_name");
+		if(Integer.valueOf(s3Enable)==1 && job.getState()==1 && job.getUpload()==1) {
+			String path = StrUtil.str(galaxyUrl+"v1/hos/"+s3BucketName+StrUtil.C_SLASH+job.getName()+job.getCtime().getTime()+".pdf");
+			HttpHeaders headers = new HttpHeaders();
+	    	headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	    	org.springframework.http.HttpEntity entity = new org.springframework.http.HttpEntity<>(headers);
+			// 调用QGW服务获取文件地址信息
+			ResponseEntity<Map> res = restTemplate.exchange(path, HttpMethod.GET, entity, Map.class);
+			String downloadPath = "";
+			if(res.getStatusCodeValue() == 200) {
+				List<Map> ll = (List<Map>) res.getBody().get("data");
+				downloadPath = (String)ll.get(0).get("fileUrl");
+			}else {
+				log.error("report download failed status and msg : {} {}",res.getStatusCodeValue(),res.getBody());
+				throw new CNException(RCode.REPORT_DOWNLOAD_FAILED);
+			}
+			if(StrUtil.isNotEmpty(downloadPath)) {
+				ResponseEntity<byte[]> resFile = restTemplate.exchange(downloadPath, HttpMethod.GET, null, byte[].class);
+				Tool.ResponseUtil.downloadFile(response, job.getName()+job.getCtime().getTime()+".pdf",
+						resFile.getBody());
+			}else {
+				log.error("report download failed download path is empty");
+				throw new CNException(RCode.REPORT_DOWNLOAD_FAILED);
+			}
+		}else if(job.getState()==1){
+			this.queryView(jobId);
+			String fileName = job.getName()+job.getCtime().getTime()+".pdf";
+			File file = FileUtil.file(Constant.TEMP_PATH + File.separator+fileName);
+			boolean exist = FileUtil.exist(file);
+			if(!exist) {
+				throw new CNException("s3upload file not existsm file name :"+fileName);
+			}
+			ResponseUtil.downloadFile(response, file);
+		}else {
+			log.warn(RCode.REPORT_NOT_FINSHED.getMsg());
+			throw new CNException(RCode.REPORT_NOT_FINSHED);
+		}
 	}
 	
-	@Override
+	/**
+	 * 原先直接请求hos进行文件批量下载 改为调用QGW服务进行批量下载 
+	 * 该方法注释
+	 */
+	/*@Override
 	public void batchDownloadPdf(List<String> jobIds, HttpServletResponse response) throws Exception {
 		ZipOutputStream zipOut = null;
 		List<File> files =new ArrayList<File>();
@@ -355,9 +419,98 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
                 file.delete();
             }
         }
-	}
-
+	}*/
 	@Override
+	public void batchDownloadPdf(List<String> jobIds, HttpServletResponse response) throws Exception {
+		ZipOutputStream zipOut = null;
+		List<File> files =new ArrayList<File>();
+        try{
+			Collection<ReportJob> reportJobs = this.listByIds(jobIds);
+	        if(ObjectUtil.isEmpty(reportJobs)) {
+	        	throw new CNException(RCode.REPORT_NOT_FINSHED);
+	        }
+			String s3Enable = sysConfigService.getValue("s3_enable");
+			String galaxyUrl = sysConfigService.getValue("galaxy_url");
+			String s3BucketName = sysConfigService.getValue("s3_bucket_name");
+			HttpHeaders headers = new HttpHeaders();
+	    	headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	    	org.springframework.http.HttpEntity entity = new org.springframework.http.HttpEntity<>(headers);
+			for(ReportJob job : reportJobs) {
+				String fileName = job.getName()+job.getCtime().getTime()+".pdf";
+				File file = FileUtil.file(Constant.TEMP_PATH+File.separator+fileName);
+				if(file.exists()) {
+					file.delete();
+				}
+				BufferedOutputStream outputStream = FileUtil.getOutputStream(Constant.TEMP_PATH+File.separator+fileName);
+				if(Integer.valueOf(s3Enable)==1 && job.getState()==1 && job.getUpload()==1) {
+					String path = StrUtil.str(galaxyUrl+"v1/hos/"+s3BucketName+StrUtil.C_SLASH+job.getName()+job.getCtime().getTime()+".pdf");
+					// 调用QGW服务获取文件地址信息
+					ResponseEntity<Map> res = restTemplate.exchange(path, HttpMethod.GET, entity, Map.class);
+					String downloadPath = "";
+					if(res.getStatusCodeValue() == 200) {
+						List<Map> ll = (List<Map>) res.getBody().get("data");
+						downloadPath = (String)ll.get(0).get("fileUrl");
+					}else {
+						log.error("report download failed status and msg : {} {}",res.getStatusCodeValue(),res.getBody());
+						throw new CNException(RCode.REPORT_DOWNLOAD_FAILED);
+					}
+					if(StrUtil.isNotEmpty(downloadPath)) {
+						ResponseEntity<byte[]> resFile = restTemplate.exchange(downloadPath, HttpMethod.GET, null, byte[].class);
+						FileUtil.writeBytes(resFile.getBody(), file);
+						files.add(file);
+					}else {
+						log.error("report download failed download path is empty");
+						throw new CNException(RCode.REPORT_DOWNLOAD_FAILED);
+					}
+				}else if(job.getState()==1){
+					this.queryView(job.getId());
+					File f = FileUtil.file(Constant.TEMP_PATH + File.separator+fileName);
+					boolean exist = FileUtil.exist(f);
+					if(!exist) {
+						throw new CNException("s3upload file not existsm file name :"+fileName);
+					}
+					files.add(f);
+				}else {
+					log.warn(RCode.REPORT_NOT_FINSHED.getMsg());
+					throw new CNException(RCode.REPORT_NOT_FINSHED);
+				}
+			}
+			if(ObjectUtil.isEmpty(files)) {
+				throw new CNException(RCode.REPORT_NOT_FINSHED);
+			}
+			response.setHeader("Content-Disposition", "attachment;filename=report.zip");
+	        response.setContentType("application/zip");
+	        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+	        OutputStream out = response.getOutputStream();
+	        zipOut =  new ZipOutputStream(out);
+	        byte[] data = new byte[1024];
+	        for(File file : files) {
+	        	int count;
+	        	BufferedInputStream inputStream = FileUtil.getInputStream(file);
+	        	BufferedInputStream bfs = new BufferedInputStream(inputStream);
+	        	ZipEntry entry =new ZipEntry(file.getName());
+	        	zipOut.putNextEntry(entry);
+	        	while ((count = bfs.read(data, 0, 1024)) != -1) {
+	        		zipOut.write(data, 0, count);
+	            }
+	            IoUtil.close(bfs);
+	            IoUtil.close(inputStream);
+	        }
+        }catch(Exception e) {
+        	log.error("batchDownloadPdf error : {}",e.getMessage());
+        	throw e;
+        }finally {
+        	IoUtil.close(zipOut);
+        	for (File file : files) {
+                file.delete();
+            }
+        }
+	}
+	/**
+	 * 原先直接请求hos进行文件上传 改为调用QGW服务进行上传 
+	 * 该方法注释
+	 */
+	/*@Override
 	public void upload(String fileName) throws FileNotFoundException {
 		String s3Path = sysConfigService.getValue("s3_path");
 		String accessKey = sysConfigService.getValue("s3_accessKey");
@@ -404,8 +557,30 @@ public class ReportJobServiceImpl extends ServiceImpl<ReportJobDao, ReportJob> i
 		IoUtil.close(inputStream);
 		// 关闭AmazonS3Client
 		s3.shutdown();
-	}
+	}*/
 
+	@Override
+	public void upload(String fileName) throws FileNotFoundException {
+		String galaxyUrl = sysConfigService.getValue("galaxy_url");
+		String bucketName = sysConfigService.getValue("s3_bucket_name");
+		File file = new File(Constant.TEMP_PATH + File.separator + fileName);
+		if(!file.exists()) {
+			log.error("report upload file not exists, please check ");
+			return;
+		}
+		FileSystemResource fileResource = new FileSystemResource(file);
+		HttpHeaders headers = new HttpHeaders();
+    	headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+    	MultiValueMap<String, Object> body = new LinkedMultiValueMap<String,Object>();
+        body.add("file", fileResource);
+    	org.springframework.http.HttpEntity entity = new org.springframework.http.HttpEntity<>(body,headers);
+    	ResponseEntity<Map> response = restTemplate.exchange(galaxyUrl + "v1/hos/"+bucketName+StrUtil.C_SLASH+fileName,HttpMethod.POST,entity,Map.class);
+    	if(response.getStatusCodeValue() != 200) {
+    		log.error("report upload failed status and msg : {} {}",response.getStatusCodeValue(),response.getBody());
+    		throw new CNException(RCode.REPORT_UPLOAD_FAILED);
+    	}
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(rollbackFor = Exception.class)

@@ -31,9 +31,9 @@ public class FqdnIcpBuiltInServiceImpl extends ServiceImpl<FqdnIcpBuiltInDao, Fq
 	private Log log = Log.get();
 	
     @Override
-    public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+    public PageUtils queryList(Map<String, Object> params) {
         IPage page = this.page(new Query(FqdnIcpBuiltIn.class).getPage(params));
-        List<FqdnIcpBuiltIn> fqdnIcpBuiltIns = this.baseMapper.queryPageByKnowledgeId(page, params);
+        List<FqdnIcpBuiltIn> fqdnIcpBuiltIns = this.baseMapper.queryPage(page, params);
         page.setRecords(fqdnIcpBuiltIns);
         return new PageUtils(page);
     }
@@ -49,7 +49,7 @@ public class FqdnIcpBuiltInServiceImpl extends ServiceImpl<FqdnIcpBuiltInDao, Fq
 			try {
 				PreparedStatement pstm = conn.prepareStatement("insert into cn_fqdn_icp_built_in (fqdn,source,query_success,is_accessible,"
 						+ "status_code,match_pattern,icp_owner,icp_company_name,icp_company_type,icp_main_page,icp_site_license,icp_site_name,"
-						+ "icp_verify_time,create_time,update_time,knowledge_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						+ "icp_verify_time,create_time,update_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				for(FqdnIcpBuiltIn fqdnIcpBuiltIn : fqdnIcpBuiltIns) {
 					pstm.setString(1, fqdnIcpBuiltIn.getFqdn());
 					pstm.setString(2, fqdnIcpBuiltIn.getSource());
@@ -82,7 +82,6 @@ public class FqdnIcpBuiltInServiceImpl extends ServiceImpl<FqdnIcpBuiltInDao, Fq
 					pstm.setString(13, fqdnIcpBuiltIn.getIcpVerifyTime());
 					pstm.setTimestamp(14, new java.sql.Timestamp(fqdnIcpBuiltIn.getCreateTime().getTime()));
 					pstm.setTimestamp(15, new java.sql.Timestamp(fqdnIcpBuiltIn.getUpdateTime().getTime()));
-					pstm.setInt(16, fqdnIcpBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -100,7 +99,7 @@ public class FqdnIcpBuiltInServiceImpl extends ServiceImpl<FqdnIcpBuiltInDao, Fq
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_fqdn_icp_built_in set fqdn=?,source=?,query_success=?,is_accessible=?,"
 						+ "status_code=?,match_pattern=?,icp_owner=?,icp_company_name=?,icp_company_type=?,icp_main_page=?,icp_site_license=?,icp_site_name=?,"
-						+ "icp_verify_time=?,update_time=?,knowledge_id=? where id =?");
+						+ "icp_verify_time=?,update_time=? where id =?");
 				for(FqdnIcpBuiltIn fqdnIcpBuiltIn : fqdnIcpBuiltIns) {
 					pstm.setString(1, fqdnIcpBuiltIn.getFqdn());
 					pstm.setString(2, fqdnIcpBuiltIn.getSource());
@@ -132,8 +131,7 @@ public class FqdnIcpBuiltInServiceImpl extends ServiceImpl<FqdnIcpBuiltInDao, Fq
 					pstm.setString(12, fqdnIcpBuiltIn.getIcpSiteName());
 					pstm.setString(13, fqdnIcpBuiltIn.getIcpVerifyTime());
 					pstm.setTimestamp(14, new java.sql.Timestamp(fqdnIcpBuiltIn.getUpdateTime().getTime()));
-					pstm.setInt(15, fqdnIcpBuiltIn.getKnowledgeId());
-					pstm.setInt(16, fqdnIcpBuiltIn.getId());
+					pstm.setInt(15, fqdnIcpBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

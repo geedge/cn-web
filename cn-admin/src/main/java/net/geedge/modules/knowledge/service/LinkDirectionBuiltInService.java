@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface LinkDirectionBuiltInService extends IService<LinkDirectionBuiltIn>{
 
-    PageUtils queryListByKnowledgeId(Map<String,Object> params);
+    PageUtils queryList(Map<String,Object> params);
 
     void saveBatchJDBC(Connection conn,List<LinkDirectionBuiltIn> linkDirectionBuiltIns);
     

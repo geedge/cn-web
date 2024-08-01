@@ -10,12 +10,11 @@
         <result property="startIpBinary" column="start_ip_binary"></result>
         <result property="endIpBinary" column="end_ip_binary"></result>
         <result property="idcRenter" column="idc_renter"></result>
-        <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
     
     <insert id="insertBatchForBinary">
     	insert into cn_idc_renter_built_in (addr_format,ip1,ip2,start_ip_binary,
-    	end_ip_binary,idc_renter,knowledge_id)
+    	end_ip_binary,idc_renter)
     	values
     	<foreach collection="idcRenterBuiltIns" item="idcRenterBuiltIn" separator=",">
     		(
@@ -24,8 +23,7 @@
     		#{idcRenterBuiltIn.ip2},
     		INET6_ATON(#{idcRenterBuiltIn.startIpBinary}),
     		INET6_ATON(#{idcRenterBuiltIn.endIpBinary}),
-    		#{idcRenterBuiltIn.idcRenter},
-    		#{idcRenterBuiltIn.knowledgeId}
+    		#{idcRenterBuiltIn.idcRenter}
     		)
     	</foreach>
     </insert>
@@ -38,16 +36,19 @@
             ip2 = #{idcRenterBuiltIn.ip2},
     		start_ip_binary = INET6_ATON(#{idcRenterBuiltIn.startIpBinary}),
     		end_ip_binary = INET6_ATON(#{idcRenterBuiltIn.endIpBinary}),
-    		idc_renter = #{idcRenterBuiltIn.idcRenter},
-    		knowledge_id = #{idcRenterBuiltIn.knowledgeId}
+    		idc_renter = #{idcRenterBuiltIn.idcRenter}
     		where id = #{idcRenterBuiltIn.id}
     	</foreach>
     </update>
 
-	<select id="queryPageByKnowledgeId" resultMap="idcRenterBuiltIn">
+	<select id="queryPage" resultMap="idcRenterBuiltIn">
 		select * from
 		cn_idc_renter_built_in
-		where knowledge_id = #{params.knowledgeId}
+		<where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
 		<if test="params.orderBy == null or params.orderBy == ''">
 			ORDER BY id
 		</if>

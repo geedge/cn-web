@@ -28,9 +28,9 @@ public class LinkDirectionBuiltInServiceImpl extends ServiceImpl<LinkDirectionBu
 	private Log log = Log.get();
 	
     @Override
-    public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+    public PageUtils queryList(Map<String, Object> params) {
         IPage page = this.page(new Query(LinkDirectionBuiltIn.class).getPage(params));
-        List<LinkDirectionBuiltIn> linkDirectionBuiltIns = this.baseMapper.queryPageByKnowledgeId(page, params);
+        List<LinkDirectionBuiltIn> linkDirectionBuiltIns = this.baseMapper.queryPage(page, params);
         page.setRecords(linkDirectionBuiltIns);
         return new PageUtils(page);
     }
@@ -40,7 +40,7 @@ public class LinkDirectionBuiltInServiceImpl extends ServiceImpl<LinkDirectionBu
 		if(ObjectUtil.isNotEmpty(linkDirectionBuiltIns)) {
 			try {
 				PreparedStatement pstm = conn.prepareStatement("insert into cn_link_direction_built_in (interface_name,direction,bandwidth,peer_province,peer_city,"
-						+ "link_id,knowledge_id) values (?,?,?,?,?,?,?)");
+						+ "link_id) values (?,?,?,?,?,?)");
 				for(LinkDirectionBuiltIn linkDirectionBuiltIn : linkDirectionBuiltIns) {
 					pstm.setString(1, linkDirectionBuiltIn.getInterfaceName());
 					pstm.setInt(2, linkDirectionBuiltIn.getDirection());
@@ -48,7 +48,6 @@ public class LinkDirectionBuiltInServiceImpl extends ServiceImpl<LinkDirectionBu
 					pstm.setString(4, linkDirectionBuiltIn.getPeerProvince());
 					pstm.setString(5, linkDirectionBuiltIn.getPeerCity());
 					pstm.setInt(6, linkDirectionBuiltIn.getLinkId());
-					pstm.setInt(7, linkDirectionBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -65,7 +64,7 @@ public class LinkDirectionBuiltInServiceImpl extends ServiceImpl<LinkDirectionBu
 		if(ObjectUtil.isNotEmpty(linkDirectionBuiltIns)) {
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_link_direction_built_in set interface_name =? ,direction =?,bandwidth =?,peer_province =?,peer_city=?,"
-						+ "link_id=?,knowledge_id=? where id =?");
+						+ "link_id=? where id =?");
 				for(LinkDirectionBuiltIn linkDirectionBuiltIn : linkDirectionBuiltIns) {
 					pstm.setString(1, linkDirectionBuiltIn.getInterfaceName());
 					pstm.setInt(2, linkDirectionBuiltIn.getDirection());
@@ -73,8 +72,7 @@ public class LinkDirectionBuiltInServiceImpl extends ServiceImpl<LinkDirectionBu
 					pstm.setString(4, linkDirectionBuiltIn.getPeerProvince());
 					pstm.setString(5, linkDirectionBuiltIn.getPeerCity());
 					pstm.setInt(6, linkDirectionBuiltIn.getLinkId());
-					pstm.setInt(7, linkDirectionBuiltIn.getKnowledgeId());
-					pstm.setInt(8, linkDirectionBuiltIn.getId());
+					pstm.setInt(7, linkDirectionBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

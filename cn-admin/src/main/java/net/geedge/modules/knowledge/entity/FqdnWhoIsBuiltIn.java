@@ -59,6 +59,4 @@ public class FqdnWhoIsBuiltIn {
     private Date createTime;
 
     private Date updateTime;
-
-    private Integer knowledgeId;
 }

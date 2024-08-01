@@ -53,7 +53,4 @@ public class IpLocationBuiltIn {
     private Date opTime;
 
     private Integer opUser;
-
-    private Integer knowledgeId;
-
 }

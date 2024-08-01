@@ -11,17 +11,16 @@ import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import cn.hutool.log.Log;
-import net.geedge.modules.report.job.ReportHandlerJob;
+import net.geedge.modules.election.job.HaJob;
 import net.geedge.modules.report.job.ReportHandlerTask;
 import net.geedge.modules.report.job.ReportRegisterJob;
+import net.geedge.modules.sys.job.LoginSessionCleanJob;
 import net.geedge.modules.sys.job.SysComponentJob;
 
 /**
@@ -48,6 +47,9 @@ public class JobConfig {
 	@Autowired
 	private Scheduler scheduler;
     
+	@Value("${nezha.sysLoginSessionCleanJobCron:0/10 * * * * ?}")
+    private String sysLoginSessionCleanJobCron;
+
 	/*@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;*/
     private static final String JOB_NAME = "CNJOB";
@@ -55,7 +57,7 @@ public class JobConfig {
     private String reportHandlerTaskName = "REPORT_HANDLER_TASK";
     private String reportRegisterJobName = "REPORT_REGISTER_JOB";
     private String sysComponentJobName = "SYSCOMPONENT_JOB";
-    
+    private String sysLoginSessionCleanName = "SYS_LOGIN_SESSION_CLEAN_JOB";
     @Bean
 	public JobDetail reportRegisterJobDetail() {
 	    return JobBuilder.newJob(ReportRegisterJob.class).withIdentity(JOB_NAME + reportRegisterJobName).storeDurably().build();
@@ -66,16 +68,21 @@ public class JobConfig {
         return JobBuilder.newJob(ReportHandlerTask.class).withIdentity(JOB_NAME + reportHandlerTaskName).storeDurably().build();
     }
     
-    @Bean
-    public JobDetail haJobDetail() {
-        return JobBuilder.newJob(HaJob.class).withIdentity(JOB_NAME + haJobName).storeDurably().build();
-    }
+	@Bean
+	public JobDetail haJobDetail() {
+	    return JobBuilder.newJob(HaJob.class).withIdentity(JOB_NAME + haJobName).storeDurably().build();
+	}
     
     @Bean
     public JobDetail sysComponentJobDetail() {
         return JobBuilder.newJob(SysComponentJob.class).withIdentity(JOB_NAME + sysComponentJobName).storeDurably().build();
     }
     
+    @Bean
+    public JobDetail sysLoginSessionCleanJobDetail() {
+        return JobBuilder.newJob(LoginSessionCleanJob.class).withIdentity(JOB_NAME + sysLoginSessionCleanName).storeDurably().build();
+    }
+
     @PostConstruct
     public void init() throws SchedulerException {
     	
@@ -90,6 +97,9 @@ public class JobConfig {
 
         //sys component 状态更新线程
         createCronScheduleJob(sysComponentJobName, sysComponentJobDetail(), StringUtils.isEmpty(sysComponentJobCron) ? "0/30 * * * * ?" : sysComponentJobCron);
+        
+        // 定时清理过期session
+        createCronScheduleJob(sysLoginSessionCleanName, sysLoginSessionCleanJobDetail(), StringUtils.isEmpty(sysLoginSessionCleanJobCron) ? "0/10 * * * * ?" : sysLoginSessionCleanJobCron);
 
     }
 

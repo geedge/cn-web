@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface IocDarkwebService extends IService<IocDarkweb> {
 
-    PageUtils queryListByKnowledgeId(Map<String,Object> params);
+    PageUtils queryList(Map<String,Object> params);
 
     Map<String, Object> queryIpEntityTag(String resource);
 

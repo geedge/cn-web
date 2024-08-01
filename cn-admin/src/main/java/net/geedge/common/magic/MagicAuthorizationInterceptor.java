@@ -1,16 +1,22 @@
 package net.geedge.common.magic;
 
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import net.geedge.common.utils.Tool;
-import net.geedge.modules.sys.entity.SysUserEntity;
-import net.geedge.modules.sys.service.SysUserService;
-import net.geedge.modules.sys.shiro.ShiroUtils;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.stereotype.Component;
 import org.ssssssss.magicapi.core.context.MagicUser;
 import org.ssssssss.magicapi.core.exception.MagicLoginException;
 import org.ssssssss.magicapi.core.interceptor.AuthorizationInterceptor;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import net.geedge.common.utils.ObjectUtils;
+import net.geedge.common.utils.Tool;
+import net.geedge.modules.sys.entity.SysUserEntity;
+import net.geedge.modules.sys.service.SysUserService;
+import net.geedge.modules.sys.shiro.MariadbSession;
+import net.geedge.modules.sys.shiro.ShiroUtils;
 
 
 
@@ -27,18 +33,16 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
 
     private MagicUser magicUser;
 
-    private final RedisTemplate redisTemplate;
 
-    public MagicAuthorizationInterceptor(SysUserService sysUserService,RedisTemplate redisTemplate) {
+    public MagicAuthorizationInterceptor(SysUserService sysUserService) {
         this.sysUserService = sysUserService;
-        this.redisTemplate = redisTemplate;
     }
     /**
      * 配置是否需要登录
      */
     @Override
     public boolean requireLogin() {
-        return true;
+        return false;
     }
 
     /**
@@ -46,9 +50,9 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
      */
     @Override
     public MagicUser getUserByToken(String token) throws MagicLoginException {
-        if (requireLogin() && token != null && redisTemplate.hasKey(token)) {
-            String str = (String)redisTemplate.opsForValue().get(token);
-            MagicUser magicUser = JSON.parseObject(str,MagicUser.class);
+    	SysUserEntity user = ShiroUtils.getUserEntityBySessionId(token);
+        if (requireLogin() && token != null && user != null) {
+            MagicUser magicUser = this.magicUser = new MagicUser(user.getUsername(), user.getUsername(), token);
             return magicUser;
         } else {
             throw new MagicLoginException("Token invalid please check certification information");
@@ -67,8 +71,11 @@ public class MagicAuthorizationInterceptor implements AuthorizationInterceptor {
                 this.validToken = Tool.IdUtil.simpleUUID();
                 // 登录成功后 构造MagicUser对象
                 this.magicUser = new MagicUser(username, username, this.validToken);
-                String str = JSON.toJSONString(this.magicUser);
-                redisTemplate.opsForValue().set(this.validToken,str,100000);
+                MariadbSession session = new MariadbSession();
+                SimplePrincipalCollection primaryPrincipal = new SimplePrincipalCollection(sysUser, "");
+    			session.setAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY, primaryPrincipal);
+    			session.setId(validToken);
+    			ShiroUtils.save(session);
                 return this.magicUser;
             }
         }

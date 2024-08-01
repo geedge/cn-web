@@ -1,23 +1,17 @@
 package net.geedge.common.config;
 
-import Aladdin.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import javax.servlet.Filter;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.catalina.connector.Connector;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -27,9 +21,6 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
@@ -38,16 +29,15 @@ import cn.hutool.core.util.StrUtil;
 import net.geedge.common.interceptor.LicenseShiroFilter;
 import net.geedge.common.interceptor.TokenCheckFilter;
 import net.geedge.common.utils.Constant;
-import net.geedge.common.utils.R;
-import net.geedge.common.utils.RCode;
-import net.geedge.common.utils.Tool;
 import net.geedge.modules.sys.dao.SysApiKeyDao;
+import net.geedge.modules.sys.dao.SysLoginSessionDao;
 import net.geedge.modules.sys.dao.SysUserDao;
 import net.geedge.modules.sys.entity.SysConfigEntity;
 import net.geedge.modules.sys.service.LicenseService;
 import net.geedge.modules.sys.service.SysConfigService;
-import net.geedge.modules.sys.shiro.MySessionManager;
-import net.geedge.modules.sys.shiro.ShiroUtils;
+import net.geedge.modules.sys.shiro.MariadbSessionDao;
+import net.geedge.modules.sys.shiro.MariadbSessionFactory;
+import net.geedge.modules.sys.shiro.MariadbSessionManager;
 import net.geedge.modules.sys.shiro.UserRealm;
 
 /**
@@ -55,15 +45,8 @@ import net.geedge.modules.sys.shiro.UserRealm;
  *
  */
 @Configuration
-@DependsOn(value = { "mybatisPlusConfig", "redisConfig" })
+@DependsOn(value = {"mybatisPlusConfig"})
 public class ShiroConfig {
-
-	@Autowired
-	private RedisConfig config;
-
-	@Autowired
-	private RedisTemplate<String, String> redisTemplate;
-
 	@Autowired
 	private SysUserDao sysUserDao;
 
@@ -79,6 +62,9 @@ public class ShiroConfig {
 	@Value("${compileType:release}")
 	private String compileType;
 	
+	@Autowired
+	private SysLoginSessionDao loginSessionDao;
+
 	@Bean("shiroFilter")
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
@@ -119,8 +105,7 @@ public class ShiroConfig {
 		
 		Integer loginExpiration = getTimeOutData();
 		Map<String, Filter> cumstomFilterMap = new LinkedHashMap<String, Filter>();
-		TokenCheckFilter tokenCheckFilter = new TokenCheckFilter(redisTemplate, loginExpiration, sysUserDao,
-				sysApiKeyDao);
+		TokenCheckFilter tokenCheckFilter = new TokenCheckFilter(sysApiKeyDao,loginSessionDao);
 		LicenseShiroFilter licenseShiroFilter = new LicenseShiroFilter(licenseService,compileType);
 		cumstomFilterMap.put("tokenCheckFilter", tokenCheckFilter);
 		cumstomFilterMap.put("licenseShiroFilter", licenseShiroFilter);
@@ -154,52 +139,14 @@ public class ShiroConfig {
 	}
 
 	/**
-	 * 配置shiro redisManager 使用的是shiro-redis开源插件
-	 *
-	 * @return
+	 *  shiro sessionDao层的实现 通过mariadb管理
 	 */
 	@Bean
-	public RedisManager redisManager() {
-		RedisManager redisManager = new RedisManager();
-		redisManager.setHost(config.getRedisHost() + ":" + config.getRedisPort());
-		redisManager.setTimeout(Tool.NumberUtil.parseInt(Tool.StrUtil.toString(config.getRedisTimeout())));
-		redisManager.setDatabase(config.getRedisDatabase());
-		if (Tool.StrUtil.isNotBlank(config.getRedisPin())) {
-			redisManager.setPassword(config.getRedisPin());
-		}
-		return redisManager;
+	public SessionDAO sessionDAO(){
+		MariadbSessionDao sessionDao = new MariadbSessionDao();
+		return sessionDao;
 	}
 
-	/**
-	 * cacheManager 缓存 redis实现 使用的是shiro-redis开源插件
-	 *
-	 * @return
-	 */
-	@Bean
-	public RedisCacheManager cacheManager() {
-		Integer loginExpiration = getTimeOutData();
-		RedisCacheManager redisCacheManager = new RedisCacheManager();
-		redisCacheManager.setRedisManager(redisManager());
-		// 配置缓存过期时间
-		redisCacheManager.setExpire(loginExpiration * 60);
-		redisCacheManager.setKeyPrefix(ShiroUtils.REDIS_KEYPREFIX);
-		// user entity ID
-		redisCacheManager.setPrincipalIdFieldName("userId");
-		return redisCacheManager;
-	}
-
-	/**
-	 * RedisSessionDAO shiro sessionDao层的实现 通过redis 使用的是shiro-redis开源插件
-	 */
-	@Bean
-	public RedisSessionDAO redisSessionDAO() {
-		Integer loginExpiration = getTimeOutData();
-		RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-		redisSessionDAO.setRedisManager(redisManager());
-		redisSessionDAO.setExpire(loginExpiration * 60);
-		redisSessionDAO.setKeyPrefix(ShiroUtils.REDIS_KEYPREFIX);
-		return redisSessionDAO;
-	}
 
 	/**
 	 * 身份认证realm; (这个需要自己写，账号密码校验；权限等)
@@ -221,8 +168,13 @@ public class ShiroConfig {
 	 */
 	@Bean
 	public SessionManager sessionManager() {
-		MySessionManager mySessionManager = new MySessionManager();
-		mySessionManager.setSessionDAO(redisSessionDAO());
+		Integer loginExpiration = getTimeOutData();
+		MariadbSessionManager mySessionManager = new MariadbSessionManager();
+		mySessionManager.setSessionDAO(sessionDAO());
+		mySessionManager.setGlobalSessionTimeout(loginExpiration * 60 * 1000);
+		// Disable Session ID cookie
+		mySessionManager.setSessionIdCookieEnabled(false);
+		mySessionManager.setSessionFactory(new MariadbSessionFactory());
 		return mySessionManager;
 	}
 
@@ -231,9 +183,7 @@ public class ShiroConfig {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		// 设置realm.
 		securityManager.setRealm(myShiroRealm());
-		// 自定义缓存实现 使用redis
-		securityManager.setCacheManager(cacheManager());
-		// 自定义session管理 使用redis
+		// 自定义session管理
 		securityManager.setSessionManager(sessionManager());
 		return securityManager;
 	}

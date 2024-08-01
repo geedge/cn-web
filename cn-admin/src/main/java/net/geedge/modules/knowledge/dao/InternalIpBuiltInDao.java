@@ -18,5 +18,5 @@ public interface InternalIpBuiltInDao extends BaseMapper<InternalIpBuiltIn>{
     
     void updateBatchForBinary(@Param("internalIpBuiltIns")List<InternalIpBuiltIn> internalIpBuiltIns);
 
-    List<InternalIpBuiltIn> queryPageByKnowledgeId(IPage<InternalIpBuiltIn> page, @Param("params") Map<String, Object> params);
+    List<InternalIpBuiltIn> queryPage(IPage<InternalIpBuiltIn> page, @Param("params") Map<String, Object> params);
 }

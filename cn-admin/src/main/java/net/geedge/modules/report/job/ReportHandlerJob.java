@@ -1,9 +1,6 @@
 package net.geedge.modules.report.job;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.quartz.DisallowConcurrentExecution;
@@ -11,27 +8,14 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.QuartzJobBean;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
-import cn.hutool.core.date.DateField;
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import net.geedge.common.utils.Constant;
-import net.geedge.modules.report.entity.ReportJob;
-import net.geedge.modules.report.entity.ReportTask;
+import net.geedge.modules.election.dao.LeaderElectionDao;
 import net.geedge.modules.report.entity.ReportTemp;
 import net.geedge.modules.report.service.ReportJobService;
 import net.geedge.modules.report.service.ReportTaskService;
@@ -40,10 +24,6 @@ import net.geedge.modules.report.service.ReportTempService;
 @DisallowConcurrentExecution
 public class ReportHandlerJob extends QuartzJobBean {
 	private Log log = Log.get();
-	
-	@Autowired
-	private RedisTemplate redisTemplate;
-	
 	@Autowired
 	private ReportTempService reportTempService;
 	
@@ -60,8 +40,10 @@ public class ReportHandlerJob extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		Thread.currentThread().setName("ReportHandlerJob");
 		// 检查 haMode
-    	String serverId = (String) redisTemplate.opsForValue().get(Constant.SYS_HA_LOCK);
-        if(!StrUtil.equals(serverId, Constant.SERVER_ID)) return;
+		LeaderElectionDao dao = LeaderElectionDao.getInstance();
+        boolean isLeader = dao.isLeader(Constant.SYS_HA_LOCK, Constant.SERVER_ID);
+        log.info("[LoginSessionCleanJob] [Get HA_LOCK] [isLeader: {}]", isLeader);
+        if (BooleanUtil.negate(isLeader)) return;
         
         log.info("ReportHandlerJob create tasks start");
         StopWatch sw = new StopWatch();

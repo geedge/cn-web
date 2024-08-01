@@ -2,7 +2,6 @@ package net.geedge.modules.report.job;
 
 import java.io.File;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -21,7 +20,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -40,6 +38,7 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
@@ -47,6 +46,7 @@ import freemarker.template.Template;
 import net.geedge.common.utils.Constant;
 import net.geedge.common.utils.FreeMarkerUtil;
 import net.geedge.common.utils.Tool.ListUtil;
+import net.geedge.modules.election.dao.LeaderElectionDao;
 import net.geedge.modules.report.entity.ReportJob;
 import net.geedge.modules.report.entity.ReportResult;
 import net.geedge.modules.report.entity.ReportTask;
@@ -60,9 +60,6 @@ import net.geedge.modules.sys.service.SysConfigService;
 @DisallowConcurrentExecution
 public class ReportHandlerTask extends QuartzJobBean {
 	private Log log = Log.get();
-	
-	@Autowired
-	private RedisTemplate redisTemplate;
 	
 	@Autowired
 	private ReportTaskService reportTaskService;
@@ -88,29 +85,31 @@ public class ReportHandlerTask extends QuartzJobBean {
 	@Override
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		Thread.currentThread().setName("ReportHandlerTask");
-		// 检查 haMode
-    	String serverId = (String) redisTemplate.opsForValue().get(Constant.SYS_HA_LOCK);
-        if(!StrUtil.equals(serverId, Constant.SERVER_ID)) return;
+		// 检查HA
+		LeaderElectionDao dao = LeaderElectionDao.getInstance();
+        boolean isLeader = dao.isLeader(Constant.SYS_HA_LOCK, Constant.SERVER_ID);
+        log.info("[LoginSessionCleanJob] [Get HA_LOCK] [isLeader: {}]", isLeader);
+        if (BooleanUtil.negate(isLeader)) return;
         
         log.info("ReportHandlerTask start");
         
         StopWatch sw = new StopWatch();
         sw.start();   
         
-        List<ReportTask> tasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda().lt(ReportTask::getState, 3).orderByAsc(ReportTask::getState));
-        
-        Map<Integer, List<ReportTask>> stateTasks = tasks.stream().collect(Collectors.groupingBy(ReportTask::getState));
-        
         /**
          * 根据延迟时间过滤掉不符合条件的任务数据
          */
-        List<ReportTask> unsubmit = stateTasks.get(0);
+        DateTime dateTime = null;
         String delayTime = sysConfigService.getValue("delay_time");
-        if(StrUtil.isNotBlank(delayTime) && Integer.valueOf(delayTime) > 0 && ObjectUtil.isNotEmpty(unsubmit)) {
-        	DateTime dateTime = DateUtil.offset(new Date(), DateField.MINUTE, -Integer.valueOf(delayTime));
-            List<ReportTask> collects = unsubmit.stream().filter(task -> task.getEndTime().getTime() < dateTime.getTime()).collect(Collectors.toList());
-            stateTasks.put(0, collects);
+        if(StrUtil.isNotBlank(delayTime) && Integer.valueOf(delayTime) > 0) {
+        	dateTime = DateUtil.offset(new Date(), DateField.MINUTE, -Integer.valueOf(delayTime));
         }
+        
+        List<ReportTask> tasks = reportTaskService.list(new QueryWrapper<ReportTask>().lambda()
+        		.lt(ReportTask::getState, 3).lt(ObjectUtil.isNotEmpty(dateTime),ReportTask::getEndTime,dateTime)
+        		.orderByAsc(ReportTask::getState).last(" limit 50 "));
+        
+        Map<Integer, List<ReportTask>> stateTasks = tasks.stream().collect(Collectors.groupingBy(ReportTask::getState));
         
         // 获取远程服务接口地址信息
         String rpcHost = sysConfigService.getValue("galaxy_url");

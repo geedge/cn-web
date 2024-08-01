@@ -337,6 +337,15 @@ public enum RCode {
 
     PLUGIN_LEARNING_JOB_GROUP_ISNULL(592001, "The job group is required"),
 
+    TAG_PARAM_NOTNULL(593001,"Tag data is required"),
+    TAG_NAME_NOT_MODIFIED(593002,"Tag name not modified"),
+    TAG_ID_ISNULL(593003,"Tag id is required"),
+    TAG_BUILTIN_ERROR(593004,"Tag built-in data can not be removed"),
+    TAG_NOT_EXIST(593005,"Tag does not exist"),
+    TAG_FILE_ISNULL(593006,"Tag file is required"),
+    TAG_IMPORT_ACTION_ISNULL(593007,"Tag import action is required"),
+    TAG_IMPORT_ACTION_VALUE_ERROR(593008,"Tag import action must be one of overwrite,append,update"),
+
     ENTITY_RESOURCE_ISNULL(601001,"Entity resource is null"),
     ENTITY_DETAIL_NOT_EXIST(601002,"Entity detail not exist"),
     ENTITY_TAG_NOT_EXIST(601003,"Entity tag not exist"),
@@ -409,6 +418,8 @@ public enum RCode {
 	REPORT_SCHEDULER_CRON_IS_NULL(311013,"Report scheduler cron is required"),
 	REPORT_BUILD_IN_ERROR(311014,"Report build_in data cannot remove"),
 	REPORT_CRON_MONTH_WEEK_DATE_ERROR(311015,"Report cron month week date error must in (1-5)"),
+	REPORT_UPLOAD_FAILED(311016,"Report upload file failed"),
+	REPORT_DOWNLOAD_FAILED(311017,"Report download file failed"),
 	
 	/**
 	 * 导入相关错误提示
@@ -421,6 +432,7 @@ public enum RCode {
     IMPORT_IGNORE(805, "Duplicate data, ignore the data in this row"),
     IMPORT_ERROR(806, "Import data error"),
     EXCELFILE_EMPTY_ERROR(807,"Import file data is required"),
+    EXCELFILE_HEADER_TEMPLATE_REQUIRED(803,"The header row is required,please check db config"),
     ERROR(999, "error"); //通用错误/未知错误
 
 	

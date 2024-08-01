@@ -21,6 +21,4 @@ public class InternalIpBuiltIn {
 	private String startIpBinary;
 	
 	private String endIpBinary;
-		
-	private Integer knowledgeId;
 }

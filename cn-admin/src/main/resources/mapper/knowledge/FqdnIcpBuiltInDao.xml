@@ -19,12 +19,15 @@
         <result property="icpVerifyTime" column="icp_verify_time"></result>
         <result property="createTime" column="create_time"></result>
         <result property="updateTime" column="update_time"></result>
-        <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
-    <select id="queryPageByKnowledgeId" resultMap="FqdnIcpBuiltIn">
+    <select id="queryPage" resultMap="FqdnIcpBuiltIn">
         select * from
         cn_fqdn_icp_built_in
-        where knowledge_id = #{params.knowledgeId}
+        <where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>
@@ -34,16 +37,23 @@
         <choose>
             <when test="!isFuzzyQuery">
                 select icp_site_license as icpSiteLicense, icp_company_name as icpCompanyName,
-                icp_company_type as icpCompanyType, 1 as isValid, knowledge_id as knowledgeId from
+                icp_company_type as icpCompanyType, 1 as isValid from
                 cn_fqdn_icp_built_in
-                where fqdn = #{resource} limit 1
+                where fqdn = #{resource}
+                ORDER BY id DESC limit 1
             </when>
             <otherwise>
                 select icp_site_license as icpSiteLicense, icp_company_name as icpCompanyName,
-                icp_company_type as icpCompanyType, 1 as isValid, knowledge_id as knowledgeId from
-                (select * from cn_fqdn_icp_built_in
-                where fqdn = SUBSTRING_INDEX(#{resource},'.',-4) or fqdn = SUBSTRING_INDEX(#{resource},'.',-3) or fqdn = SUBSTRING_INDEX(#{resource},'.',-2)) a
-                where #{resource} like CONCAT('%','.',fqdn) limit 1
+                icp_company_type as icpCompanyType, 1 as isValid
+                from cn_fqdn_icp_built_in
+                where fqdn in (
+                SUBSTRING_INDEX(#{resource},'.',-4),
+                SUBSTRING_INDEX(#{resource},'.',-3),
+                SUBSTRING_INDEX(#{resource},'.',-2)
+                )
+                and #{resource} like CONCAT('%','.',fqdn)
+                order by id desc
+                limit 1
             </otherwise>
         </choose>
     </select>

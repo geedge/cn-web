@@ -9,7 +9,7 @@
 			<foreach collection="params" item="param" separator=",">
 				${param}
 			</foreach>
-		FROM ${tableName} WHERE knowledge_id = #{knowledgeId} and
+		FROM ${tableName} WHERE
         <foreach collection="datas" item="data" separator="or" open="(" close=")">
 			<foreach collection="params" item="param" open="(" close=")" separator="and">
 				${param} = '${data[param]}'
@@ -23,8 +23,19 @@
 			#{id}
 		</foreach>
 	</delete>
+
+	<delete id="deleteLongList">
+		delete from ${tableName} where id in
+		<foreach collection="deleteIds" item="id" separator="," open="(" close=")" >
+			#{id}
+		</foreach>
+	</delete>
 	
 	<delete id="deleteListByKnowledgeId">
 		delete from ${tableName} where knowledge_id = #{knowledgeId}
+	</delete>
+
+	<delete id="deleteTable">
+		delete from ${tableName}
 	</delete>
 </mapper>

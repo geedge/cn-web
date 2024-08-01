@@ -31,9 +31,9 @@ public class IocDarkwebServiceImpl extends ServiceImpl<IocDarkwebDao, IocDarkweb
 	private Log log = Log.get();
 	
     @Override
-    public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+    public PageUtils queryList(Map<String, Object> params) {
         IPage page = this.page(new Query(IocDarkweb.class).getPage(params));
-        List<IocDarkweb> iocDarkwebs = this.baseMapper.queryPageByKnowledgeId(page, params);
+        List<IocDarkweb> iocDarkwebs = this.baseMapper.queryPage(page, params);
         page.setRecords(iocDarkwebs);
         return new PageUtils(page);
     }
@@ -56,8 +56,8 @@ public class IocDarkwebServiceImpl extends ServiceImpl<IocDarkwebDao, IocDarkweb
 						+ "asn,operating_system,country,city,latitude,longtitude,tor_fingerprint,tor_dir_port,tor_or_port,tor_flags,tor_version,"
 						+ "tor_nickname,tor_exit_policy,i2p_hash,i2p_method,i2p_version,i2p_is_floodfill,i2p_bandwidth,i2p_is_hidden,i2p_is_reachable,"
 						+ "i2p_publish_time,mtproxy_port,mtproxy_secret,obfs4_port,obfs4_fingerprint,obfs4_cert,obfs4_iat_mode,snowflake_port,"
-						+ "first_appear_time,last_appear_time,create_time,update_time,knowledge_id) "
-						+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						+ "first_appear_time,last_appear_time,create_time,update_time) "
+						+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				for(IocDarkweb iocDarkweb : iocDarkwebs) {
 					pstm.setString(1, iocDarkweb.getIocValue());
 					pstm.setString(2, iocDarkweb.getIocType());
@@ -132,7 +132,6 @@ public class IocDarkwebServiceImpl extends ServiceImpl<IocDarkwebDao, IocDarkweb
 					pstm.setLong(35, iocDarkweb.getLastAppearTime());
 					pstm.setLong(36, iocDarkweb.getCreateTime());
 					pstm.setLong(37, iocDarkweb.getUpdateTime());
-					pstm.setInt(38, iocDarkweb.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -152,7 +151,7 @@ public class IocDarkwebServiceImpl extends ServiceImpl<IocDarkwebDao, IocDarkweb
 						+ "asn=?,operating_system=?,country=?,city=?,latitude=?,longtitude=?,tor_fingerprint=?,tor_dir_port=?,tor_or_port=?,tor_flags=?,tor_version=?,"
 						+ "tor_nickname=?,tor_exit_policy=?,i2p_hash=?,i2p_method=?,i2p_version=?,i2p_is_floodfill=?,i2p_bandwidth=?,i2p_is_hidden=?,i2p_is_reachable=?,"
 						+ "i2p_publish_time=?,mtproxy_port=?,mtproxy_secret=?,obfs4_port=?,obfs4_fingerprint=?,obfs4_cert=?,obfs4_iat_mode=?,snowflake_port=?,"
-						+ "first_appear_time=?,last_appear_time=?,update_time=?,knowledge_id=? where id =?");
+						+ "first_appear_time=?,last_appear_time=?,update_time=? where id =?");
 				for(IocDarkweb iocDarkweb : iocDarkwebs) {
 					pstm.setString(1, iocDarkweb.getIocValue());
 					pstm.setString(2, iocDarkweb.getIocType());
@@ -226,8 +225,7 @@ public class IocDarkwebServiceImpl extends ServiceImpl<IocDarkwebDao, IocDarkweb
 					pstm.setLong(34, iocDarkweb.getFirstAppearTime());
 					pstm.setLong(35, iocDarkweb.getLastAppearTime());
 					pstm.setLong(36, iocDarkweb.getUpdateTime());
-					pstm.setInt(37, iocDarkweb.getKnowledgeId());
-					pstm.setInt(38, iocDarkweb.getId());
+					pstm.setInt(37, iocDarkweb.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

@@ -14,6 +14,6 @@ import java.util.Map;
 @Mapper
 public interface LinkDirectionBuiltInDao extends BaseMapper<LinkDirectionBuiltIn>{
 
-    List<LinkDirectionBuiltIn> queryPageByKnowledgeId(IPage<LinkDirectionBuiltIn> page, @Param("params") Map<String, Object> params);
+    List<LinkDirectionBuiltIn> queryPage(IPage<LinkDirectionBuiltIn> page, @Param("params") Map<String, Object> params);
 
 }

@@ -19,12 +19,15 @@
         <result property="cTime" column="c_time"></result>
         <result property="opUser" column="op_user"></result>
         <result property="isValid" column="is_valid"></result>
-        <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
-    <select id="queryPageByKnowledgeId" resultMap="AppCategoryBuiltIn">
+    <select id="queryPage" resultMap="AppCategoryBuiltIn">
         select * from
         cn_app_category_built_in
-        where knowledge_id = #{params.knowledgeId}
+        <where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>
@@ -36,7 +39,7 @@
                app_description as appDescription, app_longname as appLongname,
                app_technology as appTechnology, app_company as appCompany,
                app_company_category as appCompanyCategory, op_time as updateTime,
-               c_time as createTime, is_valid as isValid, knowledge_id as knowledgeId from
+               c_time as createTime, is_valid as isValid from
         cn_app_category_built_in
         where app_name = #{resource}
         limit 1

@@ -16,7 +16,7 @@ import java.util.Map;
 @Mapper
 public interface IocDarkwebDao extends BaseMapper<IocDarkweb> {
 
-    List<IocDarkweb> queryPageByKnowledgeId(IPage<IocDarkweb> page, @Param("params") Map<String, Object> params);
+    List<IocDarkweb> queryPage(IPage<IocDarkweb> page, @Param("params") Map<String, Object> params);
 
     Map<String, Object> queryIpEntityTag(@Param("resource") String resource);
 

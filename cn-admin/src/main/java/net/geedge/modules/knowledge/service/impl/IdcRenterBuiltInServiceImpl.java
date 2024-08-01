@@ -42,9 +42,9 @@ public class IdcRenterBuiltInServiceImpl extends ServiceImpl<IdcRenterBuiltInDao
 	}
 
 	@Override
-	public PageUtils queryListByKnowledgeId(Map<String, Object> params) {
+	public PageUtils queryList(Map<String, Object> params) {
 		IPage page = this.page(new Query(IdcRenterBuiltIn.class).getPage(params));
-		List<IdcRenterBuiltIn> idcRenterBuiltIns = this.baseMapper.queryPageByKnowledgeId(page, params);
+		List<IdcRenterBuiltIn> idcRenterBuiltIns = this.baseMapper.queryPage(page, params);
 		page.setRecords(idcRenterBuiltIns);
 		return new PageUtils(page);
 	}
@@ -54,7 +54,7 @@ public class IdcRenterBuiltInServiceImpl extends ServiceImpl<IdcRenterBuiltInDao
 		if(ObjectUtil.isNotEmpty(idcRenterBuiltIns)) {
 			try {
 				PreparedStatement pstm = conn.prepareStatement("insert into cn_idc_renter_built_in (addr_format,ip1,ip2,start_ip_binary,"
-						+ "    	end_ip_binary,idc_renter,knowledge_id)"
+						+ "    	end_ip_binary,idc_renter)"
 						+ "    	values (?,?,?,INET6_ATON(?),INET6_ATON(?),?,?)");
 				for(IdcRenterBuiltIn idcRenterBuiltIn : idcRenterBuiltIns) {
 					pstm.setString(1, idcRenterBuiltIn.getAddrFormat());
@@ -63,7 +63,6 @@ public class IdcRenterBuiltInServiceImpl extends ServiceImpl<IdcRenterBuiltInDao
 					pstm.setString(4, idcRenterBuiltIn.getStartIpBinary());
 					pstm.setString(5, idcRenterBuiltIn.getEndIpBinary());
 					pstm.setString(6, idcRenterBuiltIn.getIdcRenter());
-					pstm.setInt(7, idcRenterBuiltIn.getKnowledgeId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();
@@ -80,7 +79,7 @@ public class IdcRenterBuiltInServiceImpl extends ServiceImpl<IdcRenterBuiltInDao
 		if(ObjectUtil.isNotEmpty(idcRenterBuiltIns)) {
 			try {
 				PreparedStatement pstm = conn.prepareStatement("update cn_idc_renter_built_in set addr_format=?,ip1=?,ip2=?,start_ip_binary=INET6_ATON(?),"
-						+ "end_ip_binary=INET6_ATON(?),idc_renter=?,knowledge_id=? where id =?");
+						+ "end_ip_binary=INET6_ATON(?),idc_renter=? where id =?");
 				for(IdcRenterBuiltIn idcRenterBuiltIn : idcRenterBuiltIns) {
 					pstm.setString(1, idcRenterBuiltIn.getAddrFormat());
 					pstm.setString(2, idcRenterBuiltIn.getIp1());
@@ -88,8 +87,7 @@ public class IdcRenterBuiltInServiceImpl extends ServiceImpl<IdcRenterBuiltInDao
 					pstm.setString(4, idcRenterBuiltIn.getStartIpBinary());
 					pstm.setString(5, idcRenterBuiltIn.getEndIpBinary());
 					pstm.setString(6, idcRenterBuiltIn.getIdcRenter());
-					pstm.setInt(7, idcRenterBuiltIn.getKnowledgeId());
-					pstm.setInt(8, idcRenterBuiltIn.getId());
+					pstm.setInt(7, idcRenterBuiltIn.getId());
 					pstm.addBatch();
 				}
 				pstm.executeBatch();

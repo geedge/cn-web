@@ -22,6 +22,4 @@ public class IdcRenterBuiltIn {
 	private String endIpBinary;
 	
 	private String idcRenter;
-	
-	private Integer knowledgeId;
 }

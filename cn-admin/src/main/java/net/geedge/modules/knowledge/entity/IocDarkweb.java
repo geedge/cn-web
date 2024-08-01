@@ -87,6 +87,4 @@ public class IocDarkweb {
     private Long createTime;
 
     private Long updateTime;
-
-    private Integer knowledgeId;
 }

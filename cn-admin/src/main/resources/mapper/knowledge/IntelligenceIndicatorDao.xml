@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.IntelligenceIndicatorDao">
+
+    <resultMap id="intelligenceIndicator" type="net.geedge.modules.knowledge.entity.IntelligenceIndicator">
+        <result property="id" column="id"></result>
+        <result property="type" column="type"></result>
+        <result property="sourceId" column="source_id"></result>
+        <result property="sourceName" column="source_name"></result>
+        <result property="ipAddrFormat" column="ip_addr_format"></result>
+        <result property="ip1" column="ip1"></result>
+        <result property="ip2" column="ip2"></result>
+        <result property="startIpBinary" column="start_ip_binary"></result>
+        <result property="endIpBinary" column="end_ip_binary"></result>
+        <result property="domain" column="domain"></result>
+        <result property="method" column="method"></result>
+        <result property="confidence" column="confidence"></result>
+        <result property="tags" column="tags"></result>
+        <result property="description" column="description"></result>
+        <result property="firstSeenTime" column="first_seen_time"></result>
+        <result property="lastSeenTime" column="last_seen_time"></result>
+        <result property="createdTime" column="created_time"></result>
+        <result property="updatedTime" column="updated_time"></result>
+    </resultMap>
+
+    <select id="indicatorTrend" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT FROM_UNIXTIME(date) as statTime, IFNULL(ipIndicatorCount,0) as ipCount, IFNULL(domainIndicatorCount,0) as domainCount
+        FROM
+            (
+                SELECT statTime, SUM(case when type='IP' then 1 else 0 end) as ipIndicatorCount, SUM(case when type='Domain' then 1 else 0 end) as domainIndicatorCount
+                FROM
+                    (
+                        SELECT FLOOR(UNIX_TIMESTAMP(created_time)/(#{params.step}*3600)) * (#{params.step}*3600) AS statTime,type
+                        FROM cn_intelligence_indicator
+                        WHERE tags = #{params.name} and created_time >= #{params.startTime} and created_time &lt; #{params.endTime}
+                    ) cn_knowledge_table
+                GROUP BY statTime
+                ORDER BY statTime
+            ) table1
+                RIGHT JOIN
+            (
+                SELECT FLOOR(UNIX_TIMESTAMP(@cdate := DATE_ADD(@cdate,INTERVAL - #{params.step} HOUR))/(#{params.step}*3600)) * (#{params.step}*3600) date
+                FROM (SELECT @cdate :=DATE_ADD(#{params.endTime}, INTERVAL + #{params.step} HOUR) FROM cn_intelligence_indicator) t2
+                WHERE @cdate &gt; #{params.startTime}
+            ) table2
+            ON  statTime = date
+        ORDER BY date
+    </select>
+
+    <insert id="insertBatchForBinary">
+        insert into cn_intelligence_indicator (type,source_id,source_name,ip_addr_format,
+        ip1,ip2,start_ip_binary,end_ip_binary,domain,method,confidence,tags,description,first_seen_time,last_seen_time,created_time,updated_time)
+        values
+        <foreach collection="intelligenceIndicators" item="tag" separator=",">
+            (
+            #{tag.type},
+            #{tag.sourceId},
+            #{tag.sourceName},
+            #{tag.ipAddrFormat},
+            <choose>
+                <when test="tag.ip1==null">
+                    "",
+                </when>
+                <otherwise>
+                    #{tag.ip1},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="tag.ip2==null">
+                    "",
+                </when>
+                <otherwise>
+                    #{tag.ip2},
+                </otherwise>
+            </choose>
+            INET6_ATON(#{tag.startIpBinary}),
+            INET6_ATON(#{tag.endIpBinary}),
+            <choose>
+                <when test="tag.domain==null">
+                    "",
+                </when>
+                <otherwise>
+                    #{tag.domain},
+                </otherwise>
+            </choose>
+            #{tag.method},
+            #{tag.confidence},
+            #{tag.tags},
+            #{tag.description},
+            #{tag.firstSeenTime},
+            #{tag.lastSeenTime},
+            #{tag.createdTime},
+            #{tag.updatedTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateBatchForBinary">
+        <foreach collection="intelligenceIndicators" item="tag" separator=";">
+            update cn_intelligence_indicator  set
+            type = #{tag.type},
+            ip_addr_format = #{tag.ipAddrFormat},
+            <choose>
+                <when test="tag.ip1==null">
+                    ip1 = "",
+                </when>
+                <otherwise>
+                    ip1 = #{tag.ip1},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="tag.ip2==null">
+                    ip2 = "",
+                </when>
+                <otherwise>
+                    ip2 = #{tag.ip2},
+                </otherwise>
+            </choose>
+            start_ip_binary = INET6_ATON(#{tag.startIpBinary}),
+            end_ip_binary = INET6_ATON(#{tag.endIpBinary}),
+            <choose>
+                <when test="tag.domain==null">
+                    domain = "",
+                </when>
+                <otherwise>
+                    domain = #{tag.domain},
+                </otherwise>
+            </choose>
+            tags = #{tag.tags},
+            last_seen_time = #{tag.lastSeenTime},
+            updated_time = #{tag.updatedTime}
+            where id = #{tag.id}
+        </foreach>
+    </update>
+
+    <select id="queryByTag" resultMap="intelligenceIndicator">
+        select * from
+        cn_intelligence_indicator
+        where tags = #{params.name}
+    </select>
+
+    <select id="queryList" resultMap="intelligenceIndicator">
+        select * from
+        cn_intelligence_indicator
+        <where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
+        <if test="params.orderBy == null or params.orderBy == ''">
+            ORDER BY id
+        </if>
+    </select>
+
+    <select id="queryDomainEntityTags" parameterType="java.util.List" resultType="java.lang.String">
+        select tags from
+            cn_intelligence_indicator
+        where type = "Domain" and (domain = concat ('$', #{resource}) or LOCATE(substring_index(domain, '*', -1), #{resource}) > 0) and updated_time in
+        (select MAX(updated_time) from
+            cn_intelligence_indicator
+        where type = "Domain" and (domain = concat ('$', #{resource}) or LOCATE(substring_index(domain, '*', -1), #{resource}) > 0)
+        group by tags)
+    </select>
+
+    <select id="queryIpEntityTags" resultType="java.lang.String">
+        select tags from
+            cn_intelligence_indicator
+        where type = "IP" and start_ip_binary &lt;= INET6_ATON(#{resource}) and end_ip_binary &gt;= INET6_ATON(#{resource}) AND updated_time in
+        (select MAX(updated_time) from
+            cn_intelligence_indicator
+        where type = "IP" and start_ip_binary &lt;= INET6_ATON(#{resource}) and end_ip_binary &gt;= INET6_ATON(#{resource})
+        group by tags)
+    </select>
+</mapper>

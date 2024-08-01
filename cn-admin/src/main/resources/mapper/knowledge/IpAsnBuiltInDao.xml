@@ -15,19 +15,22 @@
         <result property="isValid" column="is_valid"></result>
         <result property="opTime" column="op_time"></result>
         <result property="opUser" column="op_user"></result>
-        <result property="knowledgeId" column="knowledge_id"></result>
     </resultMap>
-    <select id="queryPageByKnowledgeId" resultMap="IpAsnBuiltIn">
+    <select id="queryPage" resultMap="IpAsnBuiltIn">
         select * from
         cn_ip_asn_built_in
-        where knowledge_id = #{params.knowledgeId}
+        <where>
+        	<if test="params.q !=null and params.q != ''">
+				and ${params.q}
+			</if>
+        </where>
         <if test="params.orderBy == null or params.orderBy == ''">
             ORDER BY id
         </if>
     </select>
 
     <select id="queryEntityDetail" resultType="java.util.Map">
-        SELECT t.id as id,t.asn as asn,t.organization as organization,t.knowledge_id as knowledgeId,t.is_valid as isValid FROM
+        SELECT t.id as id,t.asn as asn,t.organization as organization,t.is_valid as isValid FROM
         (SELECT * FROM cn_ip_asn_built_in
         WHERE
         <choose>
@@ -46,7 +49,7 @@
     
     <insert id="insertBatchForBinary">
     	insert into cn_ip_asn_built_in (addr_type,addr_format,ip1,ip2,start_ip_binary,
-    	end_ip_binary,asn,organization,op_user,is_valid,knowledge_id,op_time)
+    	end_ip_binary,asn,organization,op_user,is_valid,op_time)
     	values
     	<foreach collection="ipAsnBuiltIns" item="ip" separator=",">
     		(
@@ -60,7 +63,6 @@
     		#{ip.organization},
     		#{ip.opUser},
     		#{ip.isValid},
-    		#{ip.knowledgeId},
     		#{ip.opTime}
     		)
     	</foreach>
@@ -79,8 +81,7 @@
     		organization= #{organization},
     		op_time = #{ip.opTime},
     		op_user = #{ip.opUser},
-    		is_valid = #{ip.isValid},
-    		knowledge_id = #{ip.knowledgeId}
+    		is_valid = #{ip.isValid}
     		where id = #{ip.asnId}
     	</foreach>
     </update>

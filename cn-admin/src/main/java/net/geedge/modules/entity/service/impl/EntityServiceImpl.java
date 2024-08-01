@@ -6,18 +6,22 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.net.InetAddresses;
+import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.*;
 import net.geedge.modules.entity.service.EntityService;
 import net.geedge.modules.knowledge.entity.KnowledgeBase;
+import net.geedge.modules.knowledge.entity.Tag;
 import net.geedge.modules.knowledge.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.ssssssss.magicapi.core.service.MagicAPIService;
 
 import java.math.BigInteger;
-import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,35 +52,26 @@ public class EntityServiceImpl implements EntityService {
     private AppCategoryBuiltInService appCategoryBuiltInService;
 
     @Autowired
-    private AppTagUserDefinedService appTagUserDefinedService;
-
-    @Autowired
     private IocMalwareService iocMalwareService;
 
     @Autowired
     private IocDarkwebService iocDarkwebService;
 
     @Autowired
-    private VpnLearningIpService vpnLearningIpService;
-
-    @Autowired
-    private VpnLearningDomainService vpnLearningDomainService;
-
-    @Autowired
-    private IpTagUserDefinedService ipTagUserDefinedService;
-
-    @Autowired
-    private DomainTagUserDefinedService domainTagUserDefinedService;
-
-    @Autowired
     private DnsServerInfoBuiltInService dnsServerInfoBuiltInService;
+
+    @Autowired
+    private MagicAPIService magicAPIService;
+
+    @Autowired
+    private  TagService tagService;
 
     @Override
     public R queryEntityDetail(String entityType, String resource) {
         Map<String, Object> data = new HashMap<>();
         if ("app".equals(entityType)){
             Map<String, Object> category = appCategoryBuiltInService.queryEntityDetail(resource);
-            addValidDataToMap(data, "category", category);
+            addValidDataToMap(data, "category", category, Constant.APP_CATEGORY_BUILT_IN);
         } else if ("domain".equals(entityType)){
             Map<String, Object> whois = fqdnWhoIsBuiltInService.queryEntityDetail(resource, false);
             Map<String, Object> icp = fqdnIcpBuiltInService.queryEntityDetail(resource, false);
@@ -91,9 +86,9 @@ public class EntityServiceImpl implements EntityService {
                 category = fqdnCategoryBuiltInService.queryEntityDetail(resource, true);
             }
             dateToTimestamp(whois);
-            addValidDataToMap(data, "whois", whois);
-            addValidDataToMap(data, "icp", icp);
-            addValidDataToMap(data, "category", category);
+            addValidDataToMap(data, "whois", whois, Constant.FQDN_WHO_IS_BUILT_IN);
+            addValidDataToMap(data, "icp", icp, Constant.FQDN_ICP_BUILT_IN);
+            addValidDataToMap(data, "category", category, Constant.FQDN_CATEGORY_BUILT_IN);
         } else if ("ip".equals(entityType)){
             boolean isIpv6 = false;
             try {
@@ -109,17 +104,21 @@ public class EntityServiceImpl implements EntityService {
                 return R.error(400,"ip "+e.getMessage()+"is not ipv4 or ipv6");
             }
             Map<String, Object> location = ipLocationBuiltInService.queryEntityDetail(ipNumber);
-            addValidDataToMap(data, "asn", asn);
-            addValidDataToMap(data, "location", location);
+            addValidDataToMap(data, "asn", asn, Constant.IP_ASN_BUILT_IN);
+            addValidDataToMap(data, "location", location, Constant.IP_LOCATION_BUILT_IN);
+        } else if ("subscriber".equals(entityType)){
+            Map<String,Object> params = new HashMap<>();
+            params.put("resource",resource);
+            return magicAPIService.execute("GET", "/v1/entity/detail/basic/subscriber", params);
         }
         return R.ok(data);
     }
 
-    private void addValidDataToMap(Map<String, Object> map, String key, Map<String, Object> value) {
+    private void addValidDataToMap(Map<String, Object> map, String key, Map<String, Object> value, String source) {
         map.put(key, null);
-        if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get("knowledgeId"))) {
-            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get("knowledgeId")));
-            if (knowledgeBase.getStatus() == 1 && "1".equals(value.get("isValid").toString())) {
+        if (ObjectUtil.isNotEmpty(value)) {
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("source", source));
+            if (ObjectUtil.isNotEmpty(knowledgeBase) && knowledgeBase.getStatus() == 1 && "1".equals(value.get("isValid").toString())) {
                 map.put(key, value);
             }
         }
@@ -147,46 +146,41 @@ public class EntityServiceImpl implements EntityService {
     @Override
     public R queryEntityTag(String entityType, String resource) {
         Map<String, Object> data = new HashMap<>();
-        if ("app".equals(entityType)){
-            List<Map> userDefinedTags = appTagUserDefinedService.queryAppEntityTag(resource);
-            addValidListToMap(data, "userDefinedTags", userDefinedTags);
-        } else if ("domain".equals(entityType)){
+        if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource, false);
             Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
-            List<Map> vpnLearningDomain = vpnLearningDomainService.queryDomainEntityTag(resource);
+            List<Map<String, Object>> tags = tagService.queryDomainEntityTags(resource);
+            tags = tags.stream().sorted((m1,m2) -> ((Timestamp) m2.get("updateTime")).compareTo((Timestamp) m1.get("updateTime"))).collect(Collectors.toList());
             if (ObjectUtil.isEmpty(malware)) {
                 malware = iocMalwareService.queryDomainEntityTag(resource, true);
             }
             if (ObjectUtil.isEmpty(darkweb)) {
                 darkweb = iocDarkwebService.queryDomainEntityTag(resource, true);
             }
-            List<Map> userDefinedTags = domainTagUserDefinedService.queryDomainEntityTag(resource);
-            addValidDataToMap(data, "malware", malware);
-            addValidDataToMap(data, "darkweb", darkweb);
-            addValidListToMap(data, "vpnLearningDomain", vpnLearningDomain);
-            addValidListToMap(data, "userDefinedTags", userDefinedTags);
+            addValidDataToMap(data, "malware", malware, Constant.IOC_MALWARE);
+            addValidDataToMap(data, "darkweb", darkweb, Constant.IOC_DARKWEB);
+            addValidListToMap(data, "tags", tags, Constant.INTELLIGENCE_INDICATOR);
         } else if ("ip".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryIpEntityTag(resource);
             Map<String, Object> darkweb = iocDarkwebService.queryIpEntityTag(resource);
             Map<String, Object> dnsServerInfo = dnsServerInfoBuiltInService.queryIpEntityTag(resource);
-            List<Map> vpnLearningIp = vpnLearningIpService.queryIpEntityTag(resource);
-            List<Map> userDefinedTags = ipTagUserDefinedService.queryIpEntityTag(resource);
-            addValidDataToMap(data, "malware", malware);
-            addValidDataToMap(data, "darkweb", darkweb);
-            addValidDataToMap(data, "dnsServerInfo", dnsServerInfo);
-            addValidListToMap(data, "vpnLearningIp", vpnLearningIp);
-            addValidListToMap(data, "userDefinedTags", userDefinedTags);
+            List<Map<String, Object>> tags = tagService.queryIpEntityTags(resource);
+            tags = tags.stream().sorted((m1,m2) -> ((Timestamp) m2.get("updateTime")).compareTo((Timestamp) m1.get("updateTime"))).collect(Collectors.toList());
+            addValidDataToMap(data, "malware", malware, Constant.IOC_MALWARE);
+            addValidDataToMap(data, "darkweb", darkweb, Constant.IOC_DARKWEB);
+            addValidDataToMap(data, "dnsServerInfo", dnsServerInfo, Constant.DNS_SERVER_INFO_BUILT_IN);
+            addValidListToMap(data, "tags", tags, Constant.INTELLIGENCE_INDICATOR);
         }
         return R.ok(data);
     }
 
-    private void addValidListToMap(Map<String, Object> map, String key, List<Map> value) {
+    private void addValidListToMap(Map<String, Object> map, String key, List<Map<String, Object>> value, String source) {
         map.put(key, null);
         List<Map> list = new ArrayList<>();
-        if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get(0).get("knowledgeId"))) {
+        if (ObjectUtil.isNotEmpty(value)) {
             for (int i = 0; i<value.size(); i++) {
-                KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get(i).get("knowledgeId")));
-                if (knowledgeBase.getStatus() == 1 && "1".equals(value.get(i).get("isValid").toString())) {
+                KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().like("source", source));
+                if (ObjectUtil.isNotEmpty(knowledgeBase) && knowledgeBase.getStatus() == 1 && "1".equals(value.get(i).get("isValid").toString())) {
                     list.add(value.get(i));
                 }
             }
@@ -230,11 +224,8 @@ public class EntityServiceImpl implements EntityService {
     }
 
     private List<Map<String,Object>> createEntityList(String entityType, String resource) {
-        List<Map<String,Object>> entityList = new ArrayList<>();
-        List<Map> userDefinedTags = new ArrayList<>();
-        if ("app".equals(entityType)){
-            userDefinedTags = createEnableList(appTagUserDefinedService.queryAppEntityTag(resource));
-        } else if ("domain".equals(entityType)){
+        List<Map<String,Object>> entityList = Tool.CollectionUtil.newArrayList();
+        if ("domain".equals(entityType)){
             Map<String, Object> malware = iocMalwareService.queryDomainEntityTag(resource,false);
             Map<String, Object> darkweb = iocDarkwebService.queryDomainEntityTag(resource, false);
             if (ObjectUtil.isEmpty(malware)) {
@@ -243,53 +234,68 @@ public class EntityServiceImpl implements EntityService {
             if (ObjectUtil.isEmpty(darkweb)) {
                 darkweb = iocDarkwebService.queryDomainEntityTag(resource, true);
             }
-            List<Map> vpnLearningDomain = createEnableList(vpnLearningDomainService.queryDomainEntityTag(resource));
-            userDefinedTags = createEnableList(domainTagUserDefinedService.queryDomainEntityTag(resource));
-            malware = createEnableMap("malware", malware);
-            darkweb = createEnableMap("darkweb", darkweb);
+            malware = createEnableMap("malware", malware, Constant.IOC_MALWARE);
+            darkweb = createEnableMap("darkweb", darkweb, Constant.IOC_DARKWEB);
+            List<Map<String, Object>> tags = tagService.queryDomainEntityTags(resource);
+            List<Map<String,Object>> tagList = createTagList(tags,Constant.INTELLIGENCE_INDICATOR);
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
-            vpnLearningDomain = listChangeTimestamp(vpnLearningDomain);
-            addListTag("vpnLearningDomain",entityList, vpnLearningDomain);
+            entityList.addAll(tagList);
         } else if ("ip".equals(entityType)){
-            Map<String, Object> malware = createEnableMap("malware", iocMalwareService.queryIpEntityTag(resource));
-            Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryIpEntityTag(resource));
-            Map<String, Object> dnsServerInfo = createEnableMap("dnsServerInfo", dnsServerInfoBuiltInService.queryIpEntityTag(resource));
-            List<Map> vpnLearningIp = createEnableList(vpnLearningIpService.queryIpEntityTag(resource));
-            userDefinedTags = createEnableList(ipTagUserDefinedService.queryIpEntityTag(resource));
+            Map<String, Object> malware = createEnableMap("malware", iocMalwareService.queryIpEntityTag(resource), Constant.IOC_MALWARE);
+            Map<String, Object> darkweb = createEnableMap("darkweb", iocDarkwebService.queryIpEntityTag(resource), Constant.IOC_DARKWEB);
+            Map<String, Object> dnsServerInfo = createEnableMap("dnsServerInfo", dnsServerInfoBuiltInService.queryIpEntityTag(resource), Constant.DNS_SERVER_INFO_BUILT_IN);
+            List<Map<String, Object>> tags = tagService.queryIpEntityTags(resource);
+            List<Map<String,Object>> tagList = createTagList(tags,Constant.INTELLIGENCE_INDICATOR);
             mapChangeTimestamp(malware);
             mapChangeTimestamp(darkweb);
             mapChangeTimestamp(dnsServerInfo);
             addEntityList(entityList, malware);
             addEntityList(entityList, darkweb);
             addEntityList(entityList, dnsServerInfo);
-            vpnLearningIp = listChangeTimestamp(vpnLearningIp);
-            addListTag("vpnLearningIp",entityList, vpnLearningIp);
+            entityList.addAll(tagList);
         }
-        userDefinedTags = listChangeTimestamp(userDefinedTags);
-        addListTag("userDefinedTag",entityList, userDefinedTags);
         sortByUpdateTime(entityList);
         return entityList;
     }
 
-    private Map<String, Object> createEnableMap(String key, Map<String, Object> value) {
+    private Map<String, Object> createEnableMap(String key, Map<String, Object> value, String source) {
         Map<String, Object> map = new HashMap<>();
-        if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get("knowledgeId"))) {
-            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get("knowledgeId")));
-            if (knowledgeBase.getStatus() == 1) {
+        if (ObjectUtil.isNotEmpty(value)) {
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().like("source", source));
+            if (ObjectUtil.isNotEmpty(knowledgeBase) && knowledgeBase.getStatus() == 1) {
                 map.put(key, value);
             }
         }
         return map;
     }
 
-    private List<Map> createEnableList(List<Map> value) {
+    private List<Map<String,Object>> createTagList(List<Map<String, Object>> tags,String source) {
+        List<Map<String,Object>> result = Tool.CollectionUtil.newArrayList();
+        if (ObjectUtil.isNotEmpty(tags)) {
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("source", source));
+            if (ObjectUtil.isNotEmpty(knowledgeBase) && knowledgeBase.getStatus() == 1) {
+                tags.stream().forEach(tag -> {
+                    Map<String,Object> map = Tool.MapUtil.newHashMap();
+                    Date updateTime = (Date) tag.get("updateTime");
+                    Date createTime = (Date) tag.get("createTime");
+                    tag.put("updateTime", updateTime.getTime() / 1000);
+                    tag.put("createTime", createTime.getTime() / 1000);
+                    map.put("tags",tag);
+                    result.add(map);
+                });
+            }
+        }
+        return result;
+    }
+
+    private List<Map> createEnableList(List<Map> value, String source) {
         List<Map> list = null;
-        if (ObjectUtil.isNotEmpty(value) && ObjectUtil.isNotEmpty(value.get(0).get("knowledgeId"))) {
-            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("knowledge_id", value.get(0).get("knowledgeId")));
-            if (knowledgeBase.getStatus() == 1) {
+        if (ObjectUtil.isNotEmpty(value)) {
+            KnowledgeBase knowledgeBase = knowledgeBaseService.getOne(new QueryWrapper<KnowledgeBase>().eq("source", source));
+            if (ObjectUtil.isNotEmpty(knowledgeBase) && knowledgeBase.getStatus() == 1) {
                 list = value;
             }
         }
@@ -351,10 +357,10 @@ public class EntityServiceImpl implements EntityService {
         }
     }
 
-    private List<Map> listChangeTimestamp(List<Map> tagsList) {
-        List<Map> newList = new ArrayList<>();
+    private List<Map<String,Object>> listChangeTimestamp(List<Map<String,Object>> tagsList) {
+        List<Map<String,Object>> newList = new ArrayList<>();
         if (ObjectUtil.isNotEmpty(tagsList)) {
-            for (Map tagMap : tagsList) {
+            for (Map<String,Object> tagMap : tagsList) {
                 if (ObjectUtil.isNotEmpty(tagMap)) {
                     if (ObjectUtil.isNotEmpty(tagMap.get("updateTime"))) {
                         Date updateTime = (Date) tagMap.get("updateTime");

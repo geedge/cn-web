@@ -13,6 +13,10 @@
 	<select id="queryPage" resultMap="userSubscriber">
         select * from
         user_subscriber us
+        where user_id = #{params.userId}
+        <if test="params.subscriberId !=null and params.subscriberId != ''">
+			and subscriber_id like CONCAT('%', #{params.subscriberId}, '%')
+		</if>
     </select>
     
 </mapper>

@@ -15,7 +15,7 @@ import net.geedge.modules.knowledge.entity.IpAsnBuiltIn;
  */
 public interface IpAsnBuiltInService extends IService<IpAsnBuiltIn> {
 
-    PageUtils queryListByKnowledgeId(Map<String,Object> params);
+    PageUtils queryList(Map<String,Object> params);
 
     Map<String, Object> queryEntityDetail(String resource,boolean isIpv6);
     
