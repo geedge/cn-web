@@ -21,7 +21,7 @@ ADD  go.tar.gz ./
 
 #默认启动jar
 #ENTRYPOINT ["java","-jar","syncconfigtoredis.jar"]
-RUN yum -y install bind-utils pango.x86_64 libXcomposite.x86_64 libXcursor.x86_64 libXdamage.x86_64 libXext.x86_64 libXi.x86_64 libXtst.x86_64 cups-libs.x86_64 libXScrnSaver.x86_64 libXrandr.x86_64 GConf2.x86_64 alsa-lib.x86_64 atk.x86_64 gtk3.x86_64 && chmod -R 755 /opt/cn/cn-web/go/ && go build xjar.go && chmod +x /opt/cn/cn-web/xjar
+RUN chmod -R 755 /opt/cn/cn-web/go/ && go build xjar.go && chmod +x /opt/cn/cn-web/xjar
 #默认启动jar
 ENTRYPOINT ["sh","-c","./xjar java --add-opens java.base/jdk.internal.loader=ALL-UNNAMED --add-opens jdk.zipfs/jdk.nio.zipfs=ALL-UNNAMED -jar cn-admin.xjar"]
 
