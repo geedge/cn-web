@@ -13,5 +13,5 @@ public interface UserSubscriberService extends IService<UserSubscriber>{
 	
 	void insertFollow(UserSubscriber userSubscriber);
 	
-	void deleteFollow(String subscriberId);
+	void deleteFollow(String subscriberIds);
 }

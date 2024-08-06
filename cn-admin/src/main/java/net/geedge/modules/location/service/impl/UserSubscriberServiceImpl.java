@@ -1,5 +1,6 @@
 package net.geedge.modules.location.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,15 +13,15 @@ import org.springframework.stereotype.Service;
 import org.ssssssss.magicapi.core.service.MagicAPIService;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import net.geedge.common.exception.CNException;
 import net.geedge.common.smartvalidate.ValidateUtils;
 import net.geedge.common.utils.GeoUtil;
 import net.geedge.common.utils.PageUtils;
@@ -82,6 +83,11 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 	@Override
 	public void insertFollow(UserSubscriber userSubscriber) {
 		Long userId = ShiroUtils.getUserId();
+		List<UserSubscriber> userSubs = this.baseMapper.selectList(new LambdaQueryWrapper<UserSubscriber>().eq(UserSubscriber::getSubscriberId, userSubscriber.getSubscriberId())
+				.eq(UserSubscriber::getUserId, userId));
+		if(ObjectUtil.isNotEmpty(userSubs)) {
+			throw new CNException(RCode.DATA_EXISTS_ERROR);
+		}
 		userSubscriber.setCtime(new Date());
 		userSubscriber.setUtime(new Date());
 		userSubscriber.setUserId(userId);
@@ -89,7 +95,8 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 	}
 
 	@Override
-	public void deleteFollow(String subscriberId) {
-		this.baseMapper.delete(new QueryWrapper<UserSubscriber>().lambda().eq(UserSubscriber::getSubscriberId, subscriberId));
+	public void deleteFollow(String subscriberIds) {
+		this.baseMapper.delete(new QueryWrapper<UserSubscriber>().lambda()
+				.in(UserSubscriber::getSubscriberId, StrUtil.split(subscriberIds, StrUtil.C_COMMA)));
 	}
 }

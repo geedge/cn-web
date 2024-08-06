@@ -40,9 +40,9 @@ public class LocationIntelligenceController {
 	}
 	
 	@DeleteMapping("/follow")
-	public R removeFollow(@RequestParam String subscriberId) {
-		ValidateUtils.is(subscriberId).notNull(RCode.NOT_NULL_ERROR);
-		userSubscriberService.deleteFollow(subscriberId);
+	public R removeFollow(@RequestParam String subscriberIds) {
+		ValidateUtils.is(subscriberIds).notNull(RCode.NOT_NULL_ERROR);
+		userSubscriberService.deleteFollow(subscriberIds);
 		return R.ok();
 	}
 

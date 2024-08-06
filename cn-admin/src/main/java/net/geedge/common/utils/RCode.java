@@ -433,8 +433,9 @@ public enum RCode {
     IMPORT_ERROR(806, "Import data error"),
     EXCELFILE_EMPTY_ERROR(807,"Import file data is required"),
     EXCELFILE_HEADER_TEMPLATE_REQUIRED(803,"The header row is required,please check db config"),
+    DATA_EXISTS_ERROR(998,"The data already exists, please do not add it again"),
     ERROR(999, "error"); //通用错误/未知错误
-
+	
 	
 	
 	private RCode(Integer code, String msg) {
