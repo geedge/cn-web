@@ -33,9 +33,9 @@ public class LocationIntelligenceController {
 	}
 	
 	@PostMapping("/follow")
-	public R addFollow(@RequestBody UserSubscriber userSubscriber) {
-		ValidateUtils.is(userSubscriber.getSubscriberId()).notNull(RCode.NOT_NULL_ERROR);
-		userSubscriberService.insertFollow(userSubscriber);
+	public R addFollow(@RequestParam String subscriberIds) {
+		ValidateUtils.is(subscriberIds).notNull(RCode.NOT_NULL_ERROR);
+		userSubscriberService.insertFollow(subscriberIds);
 		return R.ok();
 	}
 	

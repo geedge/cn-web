@@ -1,6 +1,6 @@
 package net.geedge.modules.location.service.impl;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -81,17 +81,25 @@ public class UserSubscriberServiceImpl extends ServiceImpl<UserSubscriberDao, Us
 	}
 
 	@Override
-	public void insertFollow(UserSubscriber userSubscriber) {
+	public void insertFollow(String subscriberIds) {
 		Long userId = ShiroUtils.getUserId();
-		List<UserSubscriber> userSubs = this.baseMapper.selectList(new LambdaQueryWrapper<UserSubscriber>().eq(UserSubscriber::getSubscriberId, userSubscriber.getSubscriberId())
-				.eq(UserSubscriber::getUserId, userId));
-		if(ObjectUtil.isNotEmpty(userSubs)) {
-			throw new CNException(RCode.DATA_EXISTS_ERROR);
+		List<UserSubscriber> usersubscribers = new ArrayList<UserSubscriber>();
+		List<String> subscribers = StrUtil.split(subscriberIds, StrUtil.C_COMMA);
+		subscribers = subscribers.stream().distinct().collect(Collectors.toList());
+		for(String subscriberId : subscribers) {
+			UserSubscriber userSubscriber = new UserSubscriber();
+			List<UserSubscriber> userSubs = this.baseMapper.selectList(new LambdaQueryWrapper<UserSubscriber>().eq(UserSubscriber::getSubscriberId, subscriberId)
+					.eq(UserSubscriber::getUserId, userId));
+			if(ObjectUtil.isNotEmpty(userSubs)) {
+				throw new CNException(RCode.DATA_EXISTS_ERROR);
+			}
+			userSubscriber.setSubscriberId(subscriberId);
+			userSubscriber.setCtime(new Date());
+			userSubscriber.setUtime(new Date());
+			userSubscriber.setUserId(userId);
+			usersubscribers.add(userSubscriber);
 		}
-		userSubscriber.setCtime(new Date());
-		userSubscriber.setUtime(new Date());
-		userSubscriber.setUserId(userId);
-		this.baseMapper.insert(userSubscriber);
+		this.saveBatch(usersubscribers);
 	}
 
 	@Override

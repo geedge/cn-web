@@ -11,7 +11,7 @@ public interface UserSubscriberService extends IService<UserSubscriber>{
 	
 	PageUtils getFollowedList(Map<String,Object> params);
 	
-	void insertFollow(UserSubscriber userSubscriber);
+	void insertFollow(String subscriberIds);
 	
 	void deleteFollow(String subscriberIds);
 }
