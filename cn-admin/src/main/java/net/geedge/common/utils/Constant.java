@@ -288,18 +288,47 @@ public class Constant {
 	 */
 	public enum RuleType {
 		
-		INDICATOR_MATHCH("indicator_match"),
+		INDICATOR_MATHCH("indicator_match",1),
 		
-		THRESHOLD("threshold");
+		THRESHOLD("threshold",2),
+		
+		SEQUENCE("cep",3),
+		
+		UNORDERED_SEQUENCE("occur_all",4);
 
 		private String value;
+		
+		private int index;
 
-		RuleType(String value) {
+		RuleType(String value, int index) {
 			this.value = value;
+			this.index = index;
 		}
 
 		public String getValue() {
 			return value;
+		}
+		
+		public Integer getIndex() {
+			return index;
+		}
+		
+		public static Integer getIndex(String value) {
+			for(RuleType type:RuleType.values()) {
+				if(type.getValue().equals(value)) {
+					return type.getIndex();
+				}
+			}
+			return null;
+		}
+		
+		public static String getVal(Integer index) {
+			for(RuleType type:RuleType.values()) {
+				if(type.getIndex().equals(index)) {
+					return type.getValue();
+				}
+			}
+			return null;
 		}
 	}
 

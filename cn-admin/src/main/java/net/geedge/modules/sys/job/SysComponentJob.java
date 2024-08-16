@@ -43,7 +43,7 @@ public class SysComponentJob extends QuartzJobBean {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		Thread.currentThread().setName("SysComponentJob");
+		/*Thread.currentThread().setName("SysComponentJob");
 		// 获取本机ip
 		String localHost = NetUtil.getLocalIPBySocket(databaseHost, Integer.valueOf(databasePort));
 		String protocol = "http";
@@ -71,6 +71,6 @@ public class SysComponentJob extends QuartzJobBean {
 		}
 		// 删除超过3min没有更新的component
 		long ltime = System.currentTimeMillis() - 3 * 60 * 1000;
-		sysComponentService.remove(Wrappers.lambdaQuery(new SysComponent()).lt(SysComponent::getUtime, ltime));
+		sysComponentService.remove(Wrappers.lambdaQuery(new SysComponent()).lt(SysComponent::getUtime, ltime));*/
 	}
 }

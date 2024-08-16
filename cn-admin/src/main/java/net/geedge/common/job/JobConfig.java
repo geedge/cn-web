@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import cn.hutool.log.Log;
+import net.geedge.modules.detection.job.DetectionEventExpiredJob;
 import net.geedge.modules.election.job.HaJob;
 import net.geedge.modules.report.job.ReportHandlerTask;
 import net.geedge.modules.report.job.ReportRegisterJob;
@@ -47,9 +48,11 @@ public class JobConfig {
 	@Autowired
 	private Scheduler scheduler;
     
-	@Value("${nezha.sysLoginSessionCleanJobCron:0/10 * * * * ?}")
+	@Value("${cn.sysLoginSessionCleanJobCron:0/10 * * * * ?}")
     private String sysLoginSessionCleanJobCron;
 
+	@Value("${cn.detectionEventExpiredJobCron:0 0/1 * * * ? *}")
+    private String detectionEventExpiredJobCron;
 	/*@Autowired
 	private SchedulerFactoryBean schedulerFactoryBean;*/
     private static final String JOB_NAME = "CNJOB";
@@ -58,6 +61,7 @@ public class JobConfig {
     private String reportRegisterJobName = "REPORT_REGISTER_JOB";
     private String sysComponentJobName = "SYSCOMPONENT_JOB";
     private String sysLoginSessionCleanName = "SYS_LOGIN_SESSION_CLEAN_JOB";
+    private String detectionEventExpiredName = "DETECTION_EVENT_EXPIRED_JOB";
     @Bean
 	public JobDetail reportRegisterJobDetail() {
 	    return JobBuilder.newJob(ReportRegisterJob.class).withIdentity(JOB_NAME + reportRegisterJobName).storeDurably().build();
@@ -82,6 +86,11 @@ public class JobConfig {
     public JobDetail sysLoginSessionCleanJobDetail() {
         return JobBuilder.newJob(LoginSessionCleanJob.class).withIdentity(JOB_NAME + sysLoginSessionCleanName).storeDurably().build();
     }
+    
+    @Bean
+    public JobDetail detectionEventExpiredJobDetail() {
+        return JobBuilder.newJob(DetectionEventExpiredJob.class).withIdentity(JOB_NAME + detectionEventExpiredName).storeDurably().build();
+    }
 
     @PostConstruct
     public void init() throws SchedulerException {
@@ -100,7 +109,9 @@ public class JobConfig {
         
         // 定时清理过期session
         createCronScheduleJob(sysLoginSessionCleanName, sysLoginSessionCleanJobDetail(), StringUtils.isEmpty(sysLoginSessionCleanJobCron) ? "0/10 * * * * ?" : sysLoginSessionCleanJobCron);
-
+        
+        //定时处理过期event
+        createCronScheduleJob(detectionEventExpiredName, detectionEventExpiredJobDetail(), StringUtils.isEmpty(detectionEventExpiredJobCron) ? "0 0/1 * * * ? *" : detectionEventExpiredJobCron);
     }
 
     /**
