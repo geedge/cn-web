@@ -103,12 +103,6 @@ build_image:
   when: on_success
   only:
     - dev-24.08
-  artifacts:
-    name: "cn-admin.jar"
-    when: on_success
-    paths:
-      - ./cn-admin/target/cn-admin.jar
-    expire_in: 1 day
   tags:
     - galaxy
 
