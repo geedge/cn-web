@@ -354,7 +354,7 @@
 		    <groupId>com.clickhouse</groupId>
 		    <!-- or clickhouse-grpc-client if you prefer gRPC -->
 		    <artifactId>clickhouse-http-client</artifactId>
-		    <version>0.6.0</version>
+		    <version>0.6.4</version>
 		</dependency>
 		<dependency>
 		   <groupId>org.apache.httpcomponents.client5</groupId>
