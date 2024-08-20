@@ -57,7 +57,7 @@ public class DetectionRunner implements CommandLineRunner{
 	
 	@Override
 	public void run(String... args) throws Exception {
-		/*Map<String, Event> cache = Context.DETECTTION_EVENT_CACHE;
+		Map<String, Event> cache = Context.DETECTTION_EVENT_CACHE;
 		// 查询ck获取正在进行的event事件数据 更新到缓存中
 		queryEventDataToCache(cache);
 		log.info("[DetectionRunner] [Get Event Data Cache] [Count : {}]",cache.size());
@@ -182,7 +182,7 @@ public class DetectionRunner implements CommandLineRunner{
 			}
 		}finally {
 			kafkaConsumer.close();
-		}*/
+		}
 	}
 	
 	

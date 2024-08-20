@@ -352,14 +352,10 @@
 	    
 		<dependency>
 		    <groupId>com.clickhouse</groupId>
-		    <!-- or clickhouse-grpc-client if you prefer gRPC -->
-		    <artifactId>clickhouse-http-client</artifactId>
-		    <version>0.6.4</version>
-		</dependency>
-		<dependency>
-		   <groupId>org.apache.httpcomponents.client5</groupId>
-		   <artifactId>httpclient5</artifactId>
-		   <version>5.2.3</version>
+		    <artifactId>clickhouse-jdbc</artifactId>
+		    <version>0.6.0</version>
+		    <!-- use uber jar with all dependencies included, change classifier to http for smaller jar -->
+		    <classifier>all</classifier>
 		</dependency>
 		
 	</dependencies>
