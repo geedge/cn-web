@@ -21,7 +21,7 @@ stages:
 
 before_script:
   - export CNWEB_TAG=$(date +%Y%m%d%H%M%S)
-  - docker login
+  - docker login -u admin -p admin http://192.168.40.153:9080/harbor
 
 generate_git-log:
   stage: gen_git-log
