@@ -38,50 +38,59 @@ public class DetectionEventExpiredJob extends QuartzJobBean {
 	private ClickHouseNode clickHouseNode;
 
 	@Override
-	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
-		// 获取缓存中的event数据
-		Map<String, Event> cache = Context.DETECTTION_EVENT_CACHE;
-		Long currentTime = new Date().getTime()/1000;
-		if(ObjectUtil.isNotEmpty(cache)) {
-			log.info("[DetectionEventExpiredJob] [Get Event Data Cache] [Count: {}]",cache.size());
-			List<Event> events = new ArrayList<Event>();
-			for(String key : cache.keySet()) {
-				Event event = cache.get(key);
-				if(currentTime - (event.getEndTime() + event.getReset() * 60) > 0) {
-					event.setStatus(1);
-					if(event.getRuleType().equals(Constant.RuleType.INDICATOR_MATHCH.getIndex())) {
-						event.setEndTime(new Date().getTime()/1000);
+	protected void executeInternal(JobExecutionContext arg0){
+		try {
+			// 获取缓存中的event数据
+			Map<String, Event> cache = Context.DETECTTION_EVENT_CACHE;
+			Long currentTime = new Date().getTime() / 1000;
+			if (ObjectUtil.isNotEmpty(cache)) {
+				log.info("[DetectionEventExpiredJob] [Get Event Data Cache] [Count: {}]", cache.size());
+				List<Event> events = new ArrayList<Event>();
+				List<String> removeKeys = new ArrayList<String>();
+				for (String key : cache.keySet()) {
+					Event event = cache.get(key);
+					if (currentTime - (event.getEndTime() + event.getReset() * 60) > 0) {
+						event.setStatus(1);
+						if (event.getRuleType().equals(Constant.RuleType.INDICATOR_MATHCH.getIndex())) {
+							event.setEndTime(new Date().getTime() / 1000);
+						}
+						event.setDurationS(event.getReset().longValue() * 60);
+						events.add(event);
+						removeKeys.add(key);
+						log.info("[DetectionEventExpiredJob] [Remove Event Data Cache] [id : {}]", event.getEventId());
 					}
-					event.setDurationS(event.getReset().longValue() * 60);
-					events.add(event);
-					cache.remove(key);
-					log.info("[DetectionEventExpiredJob] [Remove Event Data Cache] [id : {}]",event.getEventId());
 				}
-			}
-			log.info("[DetectionEventExpiredJob] [Update data count :{}]",events.size());
-			if(ObjectUtils.isNotEmpty(events)) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("insert into cn_event_local values ");
-				for(Event dto : events) {
-					sb.append("(");
-					sb.append(dto.getEventId()+",'"+dto.getMatchIds()+"','"+dto.getKeyFields()+"','"+dto.getKeyValues()+"',"+dto.getRuleId()+",'"
-							+ dto.getRuleVersion()+"','"+dto.getRuleType()+"',"+dto.getIsBuiltin()+",'"+dto.getEventType()+"','"+dto.getEventName()
-							+ "',"+dto.getReset()+","+ dto.getStartTime()+","+dto.getEndTime()+","+dto.getDurationS()+","+dto.getStatus());
-					sb.append("),");
+				log.info("[DetectionEventExpiredJob] [Update data count :{}]", events.size());
+				if (ObjectUtils.isNotEmpty(events)) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("insert into cn_event_local values ");
+					for (Event dto : events) {
+						sb.append("(");
+						sb.append(dto.getEventId() + ",'" + dto.getMatchIds() + "','" + dto.getKeyFields() + "','" + dto.getKeyValues() + "'," + dto.getRuleId() + ",'"
+								+ dto.getRuleVersion() + "','" + dto.getRuleType() + "'," + dto.getIsBuiltin() + ",'" + dto.getEventType() + "','" + dto.getEventName()
+								+ "'," + dto.getReset() + "," + dto.getStartTime() + "," + dto.getEndTime() + "," + dto.getDurationS() + "," + dto.getStatus());
+						sb.append("),");
+					}
+					String batchInsertSql = sb.substring(0, sb.length() - 1);
+					log.info("[DetectionEventExpiredJob] [Save Event Data] [SQL: {}]", batchInsertSql);
+					//批量存储到clickhouse
+					clickHouseClient.write(clickHouseNode)
+							.format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
+							.query(batchInsertSql)
+							.execute();
+					//存入数据库后 移除缓存中数据
+					for (String key : removeKeys) {
+						cache.remove(key);
+					}
 				}
-				String batchInsertSql = sb.substring(0, sb.length()-1);
-				log.info("[DetectionEventExpiredJob] [Save Event Data] [SQL: {}]",batchInsertSql);
-				//批量存储到clickhouse
-				clickHouseClient.write(clickHouseNode)
-				        .format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
-				        .query(batchInsertSql)
-				        .execute();
+				log.info("[DetectionEventExpiredJob] [Remaining unprocessed data count :{}]", cache.size());
+				log.info("[DetectionEventExpiredJob] [Save Event Data Finished]");
+			} else {
+				log.info("[DetectionEventExpiredJob] [Get EVENT DATA] [MSG: {}]", "NO DATA");
 			}
-			log.info("[DetectionEventExpiredJob] [Remaining unprocessed data count :{}]",cache.size());
-			log.info("[DetectionEventExpiredJob] [Save Event Data Finished]");
-		}else{
-			log.info("[DetectionEventExpiredJob] [Get EVENT DATA] [MSG: {}]","NO DATA");
+		}catch(Exception e){
+			e.printStackTrace();
+			log.error("[DetectionEventExpiredJob] [Error info] : {}",e.getMessage());
 		}
 	}
-
 }
