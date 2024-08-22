@@ -54,7 +54,7 @@ public class DetectionEventExpiredJob extends QuartzJobBean {
 						if (event.getRuleType().equals(Constant.RuleType.INDICATOR_MATHCH.getIndex())) {
 							event.setEndTime(new Date().getTime() / 1000);
 						}
-						event.setDurationS(event.getReset().longValue() * 60);
+						event.setDurationS(event.getEndTime()-event.getStartTime());
 						events.add(event);
 						removeKeys.add(key);
 						log.info("[DetectionEventExpiredJob] [Remove Event Data Cache] [id : {}]", event.getEventId());
