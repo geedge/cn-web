@@ -82,9 +82,9 @@ public class DetectionEventExpiredJob extends QuartzJobBean {
 					for (String key : removeKeys) {
 						cache.remove(key);
 					}
+					log.info("[DetectionEventExpiredJob] [Save Event Data Finished]");
 				}
 				log.info("[DetectionEventExpiredJob] [Remaining unprocessed data count :{}]", cache.size());
-				log.info("[DetectionEventExpiredJob] [Save Event Data Finished]");
 			} else {
 				log.info("[DetectionEventExpiredJob] [Get EVENT DATA] [MSG: {}]", "NO DATA");
 			}

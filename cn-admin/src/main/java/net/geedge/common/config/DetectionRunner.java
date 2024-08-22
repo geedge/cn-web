@@ -146,7 +146,9 @@ public class DetectionRunner implements CommandLineRunner{
 							}
 						}
 						// 更新缓存中的数据信息
-						cache.put(StrUtil.join(StrUtil.DASHED,dto.getKeyFields(),dto.getKeyValues(),dto.getRuleId(),dto.getRuleVersion()), dto);
+						if(dto.getStatus()!=1){
+							cache.put(StrUtil.join(StrUtil.DASHED,dto.getKeyFields(),dto.getKeyValues(),dto.getRuleId(),dto.getRuleVersion()), dto);
+						}
 						// 更新当前保存数据内容
 						eventMap.put(StrUtil.join(StrUtil.DASHED,dto.getKeyFields(),dto.getKeyValues(),dto.getRuleId(),dto.getRuleVersion()), dto);
 					}
