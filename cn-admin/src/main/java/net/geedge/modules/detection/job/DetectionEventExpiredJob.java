@@ -77,7 +77,7 @@ public class DetectionEventExpiredJob extends QuartzJobBean {
 					clickHouseClient.write(clickHouseNode)
 							.format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
 							.query(batchInsertSql)
-							.execute();
+							.executeAndWait();
 					//存入数据库后 移除缓存中数据
 					for (String key : removeKeys) {
 						cache.remove(key);
