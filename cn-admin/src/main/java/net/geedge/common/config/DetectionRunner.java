@@ -39,8 +39,6 @@ import net.geedge.modules.detection.entity.MatchDto;
 public class DetectionRunner implements CommandLineRunner{
 
 	private Log log = Log.get();
-	@Autowired
-	private ClickHouseClient clickHouseClient;
 	
 	@Autowired
 	private ClickHouseNode clickHouseNode;
@@ -63,6 +61,7 @@ public class DetectionRunner implements CommandLineRunner{
 		SnowflakeId snowflakeId = new SnowflakeId(datacenterId,workNumId);
 		try {
 			while(true) {
+				ClickHouseResponse resp = null;
 				try {
 					Map<String,Event> eventMap = new HashMap<String,Event>();
 					ConsumerRecords<Object, Object> datas = kafkaConsumer.poll(Duration.ofSeconds(60));
@@ -167,10 +166,11 @@ public class DetectionRunner implements CommandLineRunner{
 						String batchInsertSql = sb.substring(0, sb.length()-1);
 						
 						//批量存储到clickhouse
-						clickHouseClient.write(clickHouseNode)
-						        .format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
-						        .query(batchInsertSql)
-						        .executeAndWait();
+						ClickHouseClient clickHouseClient = ClickHouseClient.newInstance(clickHouseNode.getProtocol());
+						resp = clickHouseClient.write(clickHouseNode)
+								.format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
+								.query(batchInsertSql)
+								.executeAndWait();
 						log.info("[DetectionRunner] [Ck Save Data Finished]");
 					}else {
 						log.info("[DetectionRunner] [ Data None]");
@@ -179,6 +179,10 @@ public class DetectionRunner implements CommandLineRunner{
 				}catch(Exception e) {
 					e.printStackTrace();
 					log.error("[DetectionRunner] [Error Info :{}]",e.getMessage());
+				}finally{
+					if(ObjectUtil.isNotEmpty(resp)){
+						resp.close();
+					}
 				}
 			}
 		}finally {
@@ -212,6 +216,7 @@ public class DetectionRunner implements CommandLineRunner{
 				+ "		   HAVING"
 				+ "        		status1 = 0"
 				+ "		   ORDER BY end_time DESC";
+		ClickHouseClient clickHouseClient = ClickHouseClient.newInstance(clickHouseNode.getProtocol());
 		ClickHouseResponse response = clickHouseClient.write(clickHouseNode)
 				.format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
 				.query(cacheSql)
@@ -236,6 +241,7 @@ public class DetectionRunner implements CommandLineRunner{
 			event.setStatus(0);
 			eventCache.put(StrUtil.join(StrUtil.DASHED,event.getKeyFields(),event.getKeyValues(),event.getRuleId(),event.getRuleVersion()), event);
 		}
+		response.close();
 		log.info("[DetectionRunner] [Get Ck Data To Cache ] [Finished]");
 	}
 }

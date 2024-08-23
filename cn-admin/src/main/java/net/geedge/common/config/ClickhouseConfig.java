@@ -32,10 +32,4 @@ public class ClickhouseConfig {
 				ClickHouseNode.of(url)).credentials(credentials).build();
 		return server;
 	}
-	
-	@Bean
-	public ClickHouseClient clickHouseClient() {
-		ClickHouseClient client = ClickHouseClient.newInstance(clickHouseNode().getProtocol());
-		return client;
-	}
 }

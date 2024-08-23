@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.util.IOUtils;
+import com.clickhouse.client.ClickHouseResponse;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -30,15 +32,14 @@ import net.geedge.modules.detection.entity.Event;
 @DisallowConcurrentExecution
 public class DetectionEventExpiredJob extends QuartzJobBean {
 	private Log log = Log.get();
-
-	@Autowired
-	private ClickHouseClient clickHouseClient;
 	
 	@Autowired
 	private ClickHouseNode clickHouseNode;
 
 	@Override
 	protected void executeInternal(JobExecutionContext arg0){
+
+		ClickHouseResponse resp = null;
 		try {
 			// 获取缓存中的event数据
 			Map<String, Event> cache = Context.DETECTTION_EVENT_CACHE;
@@ -74,7 +75,8 @@ public class DetectionEventExpiredJob extends QuartzJobBean {
 					String batchInsertSql = sb.substring(0, sb.length() - 1);
 					log.info("[DetectionEventExpiredJob] [Save Event Data] [SQL: {}]", batchInsertSql);
 					//批量存储到clickhouse
-					clickHouseClient.write(clickHouseNode)
+					ClickHouseClient clickHouseClient = ClickHouseClient.newInstance(clickHouseNode.getProtocol());
+					resp = clickHouseClient.write(clickHouseNode)
 							.format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
 							.query(batchInsertSql)
 							.executeAndWait();
@@ -91,6 +93,10 @@ public class DetectionEventExpiredJob extends QuartzJobBean {
 		}catch(Exception e){
 			e.printStackTrace();
 			log.error("[DetectionEventExpiredJob] [Error info] : {}",e.getMessage());
+		}finally{
+			if(ObjectUtils.isNotEmpty(resp)){
+				resp.close();
+			}
 		}
 	}
 }
