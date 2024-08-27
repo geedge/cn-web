@@ -62,6 +62,7 @@ public class DetectionRunner implements CommandLineRunner{
 		try {
 			while(true) {
 				ClickHouseResponse resp = null;
+				ClickHouseClient clickHouseClient = null;
 				try {
 					Map<String,Event> eventMap = new HashMap<String,Event>();
 					ConsumerRecords<Object, Object> datas = kafkaConsumer.poll(Duration.ofSeconds(60));
@@ -166,11 +167,12 @@ public class DetectionRunner implements CommandLineRunner{
 						String batchInsertSql = sb.substring(0, sb.length()-1);
 						
 						//批量存储到clickhouse
-						ClickHouseClient clickHouseClient = ClickHouseClient.newInstance(clickHouseNode.getProtocol());
+						clickHouseClient = ClickHouseClient.newInstance(clickHouseNode.getProtocol());
 						resp = clickHouseClient.write(clickHouseNode)
 								.format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
 								.query(batchInsertSql)
 								.executeAndWait();
+
 						log.info("[DetectionRunner] [Ck Save Data Finished]");
 					}else {
 						log.info("[DetectionRunner] [ Data None]");
@@ -182,6 +184,9 @@ public class DetectionRunner implements CommandLineRunner{
 				}finally{
 					if(ObjectUtil.isNotEmpty(resp)){
 						resp.close();
+					}
+					if(ObjectUtil.isNotEmpty(clickHouseClient)){
+						clickHouseClient.close();
 					}
 				}
 			}
@@ -242,6 +247,7 @@ public class DetectionRunner implements CommandLineRunner{
 			eventCache.put(StrUtil.join(StrUtil.DASHED,event.getKeyFields(),event.getKeyValues(),event.getRuleId(),event.getRuleVersion()), event);
 		}
 		response.close();
+		clickHouseClient.close();
 		log.info("[DetectionRunner] [Get Ck Data To Cache ] [Finished]");
 	}
 }

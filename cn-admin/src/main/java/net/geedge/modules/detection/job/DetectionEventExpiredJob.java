@@ -40,6 +40,7 @@ public class DetectionEventExpiredJob extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext arg0){
 
 		ClickHouseResponse resp = null;
+		ClickHouseClient clickHouseClient = null;
 		try {
 			// 获取缓存中的event数据
 			Map<String, Event> cache = Context.DETECTTION_EVENT_CACHE;
@@ -75,7 +76,7 @@ public class DetectionEventExpiredJob extends QuartzJobBean {
 					String batchInsertSql = sb.substring(0, sb.length() - 1);
 					log.info("[DetectionEventExpiredJob] [Save Event Data] [SQL: {}]", batchInsertSql);
 					//批量存储到clickhouse
-					ClickHouseClient clickHouseClient = ClickHouseClient.newInstance(clickHouseNode.getProtocol());
+					clickHouseClient = ClickHouseClient.newInstance(clickHouseNode.getProtocol());
 					resp = clickHouseClient.write(clickHouseNode)
 							.format(ClickHouseFormat.RowBinaryWithNamesAndTypes)
 							.query(batchInsertSql)
@@ -96,6 +97,9 @@ public class DetectionEventExpiredJob extends QuartzJobBean {
 		}finally{
 			if(ObjectUtils.isNotEmpty(resp)){
 				resp.close();
+			}
+			if(ObjectUtils.isNotEmpty(clickHouseClient)){
+				clickHouseClient.close();
 			}
 		}
 	}
