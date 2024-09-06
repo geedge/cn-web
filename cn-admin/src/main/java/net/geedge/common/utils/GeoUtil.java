@@ -1,5 +1,6 @@
 package net.geedge.common.utils;
 
+import cn.hutool.core.util.ObjectUtil;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.geojson.feature.FeatureJSON;
@@ -37,6 +38,9 @@ public class GeoUtil {
 
     public static Map<String,Object> reverseGeocode(Double longitude, Double latitude){
         Map result = Tool.MapUtil.newHashMap();
+        if(ObjectUtil.isEmpty(longitude)||ObjectUtil.isEmpty(latitude)){
+            return result;
+        }
         GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
         Coordinate coordinate = new Coordinate(longitude, latitude);
         Point point = geometryFactory.createPoint(coordinate);
