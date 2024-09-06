@@ -49,10 +49,12 @@ public class MatchDto {
 		
 	private String event_info;
 	
-	private Integer threshold_num;
+	private Integer threshold_value;
 	
-	private Integer records_num;
-		
+	private Integer metric_value;
+
+	private Integer unit;
+
 	private Long start_time;
 	
 	private Long end_time;
