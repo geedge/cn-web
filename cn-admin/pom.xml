@@ -509,7 +509,7 @@
 					</imageTags>
 
 					<!--Dockerfile的路径,下面放置Dockerfile文件及Dockerfile中依赖的内容,例如config文件夹(数据卷共享)-->
-					<dockerDirectory>src/main/resources</dockerDirectory>
+					<dockerDirectory>${project.basedir}/src/main/resources</dockerDirectory>
 					<buildArgs>
 						<!--向Dockerfile中传入参数,k-v格式-->
 						<!--						<JDK_IMAGE>${docker.registry}:${docker.registry.port}/common/jdk:1.8.0_73</JDK_IMAGE>-->
