@@ -36,13 +36,17 @@ public class GeoUtil {
         }
     }
 
-    public static Map<String,Object> reverseGeocode(Double longitude, Double latitude){
+    public static Map<String,Object> reverseGeocode(Object longitude, Object latitude){
         Map result = Tool.MapUtil.newHashMap();
         if(ObjectUtil.isEmpty(longitude)||ObjectUtil.isEmpty(latitude)){
             return result;
         }
+
+        double lon  = new Double(longitude.toString());
+        double lat = new Double(latitude.toString());
+
         GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
-        Coordinate coordinate = new Coordinate(longitude, latitude);
+        Coordinate coordinate = new Coordinate(lon, lat);
         Point point = geometryFactory.createPoint(coordinate);
         SimpleFeatureIterator iterator = featureCollection.features();
         try {
