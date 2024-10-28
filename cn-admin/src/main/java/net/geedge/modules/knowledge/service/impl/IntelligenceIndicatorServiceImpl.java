@@ -198,6 +198,11 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
     }
 
     @Override
+    public List<String> querySubscriberEntityTags(String resource) {
+        return this.baseMapper.querySubscriberEntityTags(resource);
+    }
+
+    @Override
     public PageUtils queryList(Map<String, Object> params) {
         IPage page = this.page(new Query(IntelligenceIndicator.class).getPage(params));
         List<IntelligenceIndicator> intelligenceIndicators = this.baseMapper.queryList(page, params);

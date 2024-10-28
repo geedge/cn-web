@@ -13,6 +13,7 @@
         <result property="startIpBinary" column="start_ip_binary"></result>
         <result property="endIpBinary" column="end_ip_binary"></result>
         <result property="domain" column="domain"></result>
+        <result property="subscriber" column="subscriber"></result>
         <result property="method" column="method"></result>
         <result property="confidence" column="confidence"></result>
         <result property="tags" column="tags"></result>
@@ -24,10 +25,12 @@
     </resultMap>
 
     <select id="indicatorTrend" parameterType="java.util.Map" resultType="java.util.Map">
-        SELECT FROM_UNIXTIME(date) as statTime, IFNULL(ipIndicatorCount,0) as ipCount, IFNULL(domainIndicatorCount,0) as domainCount
+        SELECT FROM_UNIXTIME(date) as statTime, IFNULL(ipIndicatorCount,0) as ipCount, IFNULL(domainIndicatorCount,0) as domainCount,
+               IFNULL(subscriberIndicatorCount,0) as subscriberCount
         FROM
             (
-                SELECT statTime, SUM(case when type='IP' then 1 else 0 end) as ipIndicatorCount, SUM(case when type='Domain' then 1 else 0 end) as domainIndicatorCount
+                SELECT statTime, SUM(case when type='IP' then 1 else 0 end) as ipIndicatorCount, SUM(case when type='Domain' then 1 else 0 end) as domainIndicatorCount,
+                       SUM(case when type='Subscriber' then 1 else 0 end) as subscriberIndicatorCount
                 FROM
                     (
                         SELECT FLOOR(UNIX_TIMESTAMP(created_time)/(#{params.step}*3600)) * (#{params.step}*3600) AS statTime,type
@@ -83,6 +86,14 @@
                     #{tag.domain},
                 </otherwise>
             </choose>
+            <choose>
+                <when test="tag.subscriber==null">
+                    "",
+                </when>
+                <otherwise>
+                    #{tag.subscriber},
+                </otherwise>
+            </choose>
             #{tag.method},
             #{tag.confidence},
             #{tag.tags},
@@ -124,6 +135,14 @@
                 </when>
                 <otherwise>
                     domain = #{tag.domain},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="tag.subscriber==null">
+                    "",
+                </when>
+                <otherwise>
+                    #{tag.subscriber},
                 </otherwise>
             </choose>
             tags = #{tag.tags},
@@ -169,6 +188,16 @@
         (select MAX(updated_time) from
             cn_intelligence_indicator
         where type = "IP" and start_ip_binary &lt;= INET6_ATON(#{resource}) and end_ip_binary &gt;= INET6_ATON(#{resource})
+        group by tags)
+    </select>
+
+    <select id="querySubscriberEntityTags" resultType="java.lang.String">
+        select tags from
+            cn_intelligence_indicator
+        where type = "Subscriber" and (subscriber = concat ('$', #{resource}) or LOCATE(substring_index(subscriber, '*', -1), #{resource}) > 0) and updated_time in
+        (select MAX(updated_time) from
+        cn_intelligence_indicator
+        where type = "Subscriber" and (subscriber = concat ('$', #{resource}) or LOCATE(substring_index(subscriber, '*', -1), #{resource}) > 0)
         group by tags)
     </select>
 </mapper>

@@ -37,5 +37,7 @@ public interface IntelligenceIndicatorService extends IService<IntelligenceIndic
 
     List<String> queryIpEntityTags(String resource);
 
+    List<String> querySubscriberEntityTags(String resource);
+
     PageUtils queryList(Map<String,Object> params);
 }

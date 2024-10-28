@@ -28,5 +28,7 @@ public interface IntelligenceIndicatorDao extends BaseMapper<IntelligenceIndicat
 
     List<String> queryIpEntityTags(@Param("resource") String resource);
 
+    List<String> querySubscriberEntityTags(@Param("resource") String resource);
+
     List<IntelligenceIndicator> queryList(IPage<IntelligenceIndicator> page, @Param("params") Map<String, Object> params);
 }

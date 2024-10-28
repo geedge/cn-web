@@ -30,4 +30,6 @@ public interface TagService extends IService<Tag> {
     List<Map<String,Object>> queryDomainEntityTags(String resource);
 
     List<Map<String,Object>> queryIpEntityTags(String resource);
+
+    List<Map<String,Object>> querySubscriberEntityTags(String resource);
 }

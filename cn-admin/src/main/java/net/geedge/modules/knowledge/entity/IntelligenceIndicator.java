@@ -34,6 +34,8 @@ public class IntelligenceIndicator {
 
     private String domain;
 
+    private String subscriber;
+
     private String method;
 
     private String confidence;

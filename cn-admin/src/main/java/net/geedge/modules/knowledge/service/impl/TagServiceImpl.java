@@ -21,6 +21,7 @@ import net.geedge.common.exception.CNException;
 import net.geedge.common.utils.*;
 import net.geedge.modules.knowledge.dao.TagDao;
 import net.geedge.modules.knowledge.entity.*;
+import net.geedge.modules.knowledge.enums.EntityType;
 import net.geedge.modules.knowledge.service.*;
 import net.geedge.modules.sys.service.BasicImportAndExportService;
 import net.geedge.modules.sys.service.SysConfigService;
@@ -183,7 +184,7 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
                 } else {
                     intelligenceIndicator.setId(Long.valueOf(String.valueOf(data.get("id"))));
                 }
-                if(data.get("entityType").equals("IP")) {
+                if(data.get("entityType").equals(EntityType.IP.getValue())) {
                     String[] ipData = KnowledgeCheckUtil.ipToData((String) data.get("entityValue"));
                     // 计算ip binary
                     Map<String, String> ipHandler = KnowledgeCheckUtil.ipBinaryHandler(ipData[0],ipData[1],ipData[2]);
@@ -192,8 +193,10 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
                     intelligenceIndicator.setIp2(ipData[2]);
                     intelligenceIndicator.setStartIpBinary(ipHandler.get("start_ip_binary"));
                     intelligenceIndicator.setEndIpBinary(ipHandler.get("end_ip_binary"));
-                } else {
+                } else if(data.get("entityType").equals(EntityType.DOMAIN.getValue())) {
                     intelligenceIndicator.setDomain((String) data.get("entityValue"));
+                } else if(data.get("entityType").equals(EntityType.SUBSCRIBER.getValue())) {
+                    intelligenceIndicator.setSubscriber((String) data.get("entityValue"));
                 }
                 intelligenceIndicator.setSourceId(Constant.SOURCE_ID);
                 intelligenceIndicator.setSourceName(Constant.SOURCE_NAME);
@@ -431,7 +434,7 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
                         }
                         tmpMap.put(headerName, value);
                     }
-                    if("IP".equals(tmpMap.get("type"))) {
+                    if(EntityType.IP.getValue().equals(tmpMap.get("type"))) {
                         Map<String, String> ipHandlerResult = KnowledgeCheckUtil.ipBinaryHandler(tmpMap.get("ip_addr_format"),tmpMap.get("ip1"),tmpMap.get("ip2"));
                         tmpMap.put("start_ip_binary",ipHandlerResult.get("start_ip_binary"));
                         tmpMap.put("end_ip_binary",ipHandlerResult.get("end_ip_binary"));
@@ -601,6 +604,16 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
     public List<Map<String,Object>> queryIpEntityTags(String resource) {
         List<Map<String,Object>> result = Tool.CollectionUtil.newArrayList();
         List<String> tagNames = intelligenceIndicatorService.queryIpEntityTags(resource);
+        if(ObjectUtil.isNotEmpty(tagNames)) {
+            result = this.baseMapper.queryTagList(tagNames);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Map<String,Object>> querySubscriberEntityTags(String resource) {
+        List<Map<String,Object>> result = Tool.CollectionUtil.newArrayList();
+        List<String> tagNames = intelligenceIndicatorService.querySubscriberEntityTags(resource);
         if(ObjectUtil.isNotEmpty(tagNames)) {
             result = this.baseMapper.queryTagList(tagNames);
         }
