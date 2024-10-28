@@ -170,6 +170,10 @@ public class EntityServiceImpl implements EntityService {
             addValidDataToMap(data, "darkweb", darkweb, Constant.IOC_DARKWEB);
             addValidDataToMap(data, "dnsServerInfo", dnsServerInfo, Constant.DNS_SERVER_INFO_BUILT_IN);
             addValidListToMap(data, "tags", tags, Constant.INTELLIGENCE_INDICATOR);
+        } else if("subscriber".equals(entityType)){
+            List<Map<String, Object>> tags = tagService.querySubscriberEntityTags(resource);
+            tags = tags.stream().sorted((m1,m2) -> ((Timestamp) m2.get("updateTime")).compareTo((Timestamp) m1.get("updateTime"))).collect(Collectors.toList());
+            addValidListToMap(data, "tags", tags, Constant.INTELLIGENCE_INDICATOR);
         }
         return R.ok(data);
     }

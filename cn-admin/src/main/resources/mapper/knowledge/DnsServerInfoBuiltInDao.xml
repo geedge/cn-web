@@ -9,7 +9,7 @@
         <result property="locationProvince" column="location_province"></result>
         <result property="locationRegion" column="location_region"></result>
         <result property="asn" column="asn"></result>
-        <result property="dnsServerRolr" column="dns_server_role"></result>
+        <result property="dnsServerRole" column="dns_server_role"></result>
         <result property="orgnization" column="orgnization"></result>
         <result property="operationSystem" column="operation_system"></result>
         <result property="dnsSoftware" column="dns_software"></result>

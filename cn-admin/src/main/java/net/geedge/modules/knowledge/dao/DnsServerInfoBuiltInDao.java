@@ -14,6 +14,5 @@ import java.util.Map;
 public interface DnsServerInfoBuiltInDao extends BaseMapper<DnsServerInfoBuiltIn>{
 
     Map<String, Object> queryIpEntityTag(@Param("resource") String resource);
-    
-    void saveBatchTest(@Param("dnsServerInfoBuiltIns")List<DnsServerInfoBuiltIn> dnsServerInfoBuiltIns);
+
 }
