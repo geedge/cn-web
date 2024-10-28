@@ -576,7 +576,7 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
 
     private String createEntityValue(IntelligenceIndicator intelligenceIndicator) {
         String entityValue = null;
-        if("IP".equals(intelligenceIndicator.getType())) {
+        if(EntityType.IP.getValue().equals(intelligenceIndicator.getType())) {
             if(StrUtil.equals(intelligenceIndicator.getIpAddrFormat(),Constant.IpFormatType.SINGLE.getValue())){
                 entityValue = intelligenceIndicator.getIp1();
             } else if(StrUtil.equals(intelligenceIndicator.getIpAddrFormat(),Constant.IpFormatType.RANGE.getValue())){
@@ -584,8 +584,10 @@ public class TagServiceImpl extends ServiceImpl<TagDao, Tag> implements TagServi
             } else {
                 entityValue = intelligenceIndicator.getIp1() + "/" + intelligenceIndicator.getIp2();
             }
-        } else {
+        } else if(EntityType.DOMAIN.getValue().equals(intelligenceIndicator.getType())) {
             entityValue = intelligenceIndicator.getDomain();
+        } else if(EntityType.SUBSCRIBER.getValue().equals(intelligenceIndicator.getType())) {
+            entityValue = intelligenceIndicator.getSubscriber();
         }
         return entityValue;
     }
