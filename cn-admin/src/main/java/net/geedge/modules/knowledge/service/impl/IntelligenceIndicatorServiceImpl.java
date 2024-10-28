@@ -115,9 +115,9 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
         if(ObjectUtil.isNotEmpty(intelligenceIndicators)) {
             try {
                 PreparedStatement pstm = conn.prepareStatement("insert into cn_intelligence_indicator (type, source_id, source_name, " +
-                        "ip_addr_format, ip1, ip2, start_ip_binary, end_ip_binary, domain, method, confidence, tags, description, first_seen_time, last_seen_time, " +
+                        "ip_addr_format, ip1, ip2, start_ip_binary, end_ip_binary, domain,subscriber, method, confidence, tags, description, first_seen_time, last_seen_time, " +
                         "created_time, updated_time) "
-                        + "values (?,?,?,?,?,?,INET6_ATON(?),INET6_ATON(?),?,?,?,?,?,?,?,?,?)");
+                        + "values (?,?,?,?,?,?,INET6_ATON(?),INET6_ATON(?),?,?,?,?,?,?,?,?,?,?)");
                 for(IntelligenceIndicator intelligenceIndicator : intelligenceIndicators) {
                     pstm.setString(1, intelligenceIndicator.getType());
                     pstm.setString(2, intelligenceIndicator.getSourceId());
@@ -128,14 +128,15 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
                     pstm.setString(7, intelligenceIndicator.getStartIpBinary());
                     pstm.setString(8, intelligenceIndicator.getEndIpBinary());
                     pstm.setString(9, intelligenceIndicator.getDomain());
-                    pstm.setString(10, intelligenceIndicator.getMethod());
-                    pstm.setString(11, intelligenceIndicator.getConfidence());
-                    pstm.setString(12, intelligenceIndicator.getTags());
-                    pstm.setString(13, intelligenceIndicator.getDescription());
-                    pstm.setTimestamp(14, new java.sql.Timestamp(intelligenceIndicator.getFirstSeenTime().getTime()));
-                    pstm.setTimestamp(15, new java.sql.Timestamp(intelligenceIndicator.getLastSeenTime().getTime()));
-                    pstm.setTimestamp(16, new java.sql.Timestamp(intelligenceIndicator.getCreatedTime().getTime()));
-                    pstm.setTimestamp(17, new java.sql.Timestamp(intelligenceIndicator.getUpdatedTime().getTime()));
+                    pstm.setString(10, intelligenceIndicator.getSubscriber());
+                    pstm.setString(11, intelligenceIndicator.getMethod());
+                    pstm.setString(12, intelligenceIndicator.getConfidence());
+                    pstm.setString(13, intelligenceIndicator.getTags());
+                    pstm.setString(14, intelligenceIndicator.getDescription());
+                    pstm.setTimestamp(15, new java.sql.Timestamp(intelligenceIndicator.getFirstSeenTime().getTime()));
+                    pstm.setTimestamp(16, new java.sql.Timestamp(intelligenceIndicator.getLastSeenTime().getTime()));
+                    pstm.setTimestamp(17, new java.sql.Timestamp(intelligenceIndicator.getCreatedTime().getTime()));
+                    pstm.setTimestamp(18, new java.sql.Timestamp(intelligenceIndicator.getUpdatedTime().getTime()));
                     pstm.addBatch();
                 }
                 pstm.executeBatch();
@@ -152,7 +153,7 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
         if(ObjectUtil.isNotEmpty(intelligenceIndicators)) {
             try {
                 PreparedStatement pstm = conn.prepareStatement("update cn_intelligence_indicator set type=?, source_id=?, source_name=?, " +
-                        "ip_addr_format=?, ip1=?, ip2=?, start_ip_binary=INET6_ATON(?), end_ip_binary=INET6_ATON(?), domain=?, method=?, confidence=?, tags=?, description=?, " +
+                        "ip_addr_format=?, ip1=?, ip2=?, start_ip_binary=INET6_ATON(?), end_ip_binary=INET6_ATON(?), domain=?,subscriber=?, method=?, confidence=?, tags=?, description=?, " +
                         "last_seen_time=?, updated_time=? where id =?");
                 for(IntelligenceIndicator intelligenceIndicator : intelligenceIndicators) {
                     pstm.setString(1, intelligenceIndicator.getType());
@@ -164,13 +165,14 @@ public class IntelligenceIndicatorServiceImpl extends ServiceImpl<IntelligenceIn
                     pstm.setString(7, intelligenceIndicator.getStartIpBinary());
                     pstm.setString(8, intelligenceIndicator.getEndIpBinary());
                     pstm.setString(9, intelligenceIndicator.getDomain());
-                    pstm.setString(10, intelligenceIndicator.getMethod());
-                    pstm.setString(11, intelligenceIndicator.getConfidence());
-                    pstm.setString(12, intelligenceIndicator.getTags());
-                    pstm.setString(13, intelligenceIndicator.getDescription());
-                    pstm.setTimestamp(14, new java.sql.Timestamp(intelligenceIndicator.getLastSeenTime().getTime()));
-                    pstm.setTimestamp(15, new java.sql.Timestamp(intelligenceIndicator.getUpdatedTime().getTime()));
-                    pstm.setLong(16, intelligenceIndicator.getId());
+                    pstm.setString(10, intelligenceIndicator.getSubscriber());
+                    pstm.setString(11, intelligenceIndicator.getMethod());
+                    pstm.setString(12, intelligenceIndicator.getConfidence());
+                    pstm.setString(13, intelligenceIndicator.getTags());
+                    pstm.setString(14, intelligenceIndicator.getDescription());
+                    pstm.setTimestamp(15, new java.sql.Timestamp(intelligenceIndicator.getLastSeenTime().getTime()));
+                    pstm.setTimestamp(16, new java.sql.Timestamp(intelligenceIndicator.getUpdatedTime().getTime()));
+                    pstm.setLong(17, intelligenceIndicator.getId());
                     pstm.addBatch();
                 }
                 pstm.executeBatch();

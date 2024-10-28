@@ -52,7 +52,7 @@
 
     <insert id="insertBatchForBinary">
         insert into cn_intelligence_indicator (type,source_id,source_name,ip_addr_format,
-        ip1,ip2,start_ip_binary,end_ip_binary,domain,method,confidence,tags,description,first_seen_time,last_seen_time,created_time,updated_time)
+        ip1,ip2,start_ip_binary,end_ip_binary,domain,subscriber,method,confidence,tags,description,first_seen_time,last_seen_time,created_time,updated_time)
         values
         <foreach collection="intelligenceIndicators" item="tag" separator=",">
             (
@@ -139,10 +139,10 @@
             </choose>
             <choose>
                 <when test="tag.subscriber==null">
-                    "",
+                    subscriber = "",
                 </when>
                 <otherwise>
-                    #{tag.subscriber},
+                    subscriber = #{tag.subscriber},
                 </otherwise>
             </choose>
             tags = #{tag.tags},
