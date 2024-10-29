@@ -194,10 +194,10 @@
     <select id="querySubscriberEntityTags" resultType="java.lang.String">
         select tags from
             cn_intelligence_indicator
-        where type = "Subscriber" and (subscriber = concat ('$', #{resource}) or LOCATE(substring_index(subscriber, '*', -1), #{resource}) > 0) and updated_time in
+        where type = "Subscriber" and subscriber = #{resource} and updated_time in
         (select MAX(updated_time) from
         cn_intelligence_indicator
-        where type = "Subscriber" and (subscriber = concat ('$', #{resource}) or LOCATE(substring_index(subscriber, '*', -1), #{resource}) > 0)
+        where type = "Subscriber" and subscriber = #{resource}
         group by tags)
     </select>
 </mapper>
