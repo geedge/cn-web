@@ -272,7 +272,8 @@ public class EntityExplorerServiceImpl implements EntityExplorerService {
                     List<Expression> expressions = parameters.getExpressions();
                     whereBuffer.append(StrUtil.concat(false," AND (has(",expressions.get(0).toString(),", concat('ip.',",expressions.get(1).toString(),
                             ")) OR has(",expressions.get(0).toString(),", concat('domain.',",expressions.get(1).toString(),
-                            ")) OR has(",expressions.get(0).toString(),", concat('app.',",expressions.get(1).toString(),")))"));
+                            ")) OR has(",expressions.get(0).toString(),", concat('app.',",expressions.get(1).toString(),
+                            ")) OR has(",expressions.get(0).toString(),", concat('subscriber.',",expressions.get(1).toString(),")))"));
                 }
             }
             @Override
