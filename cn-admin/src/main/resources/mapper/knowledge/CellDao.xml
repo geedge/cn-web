@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.geedge.modules.knowledge.dao.CellDao">
+
+    <resultMap id="cell" type="net.geedge.modules.knowledge.entity.Cell">
+        <result property="id" column="id"></result>
+        <result property="cellId" column="cell_id"></result>
+        <result property="nodebId" column="nodeb_id"></result>
+        <result property="azimuth" column="azimuth"></result>
+        <result property="technology" column="technology"></result>
+        <result property="lacTac" column="lac_tac"></result>
+        <result property="mcc" column="mcc"></result>
+        <result property="mnc" column="mnc"></result>
+        <result property="latitude" column="latitude"></result>
+        <result property="longitude" column="longitude"></result>
+        <result property="coverageRadius" column="coverage_radius"></result>
+        <result property="operator" column="operator"></result>
+        <result property="vendor" column="vendor"></result>
+        <result property="fddSpectrum" column="fdd_spectrum"></result>
+    </resultMap>
+
+    <select id="queryCellList" resultType="net.geedge.modules.knowledge.entity.Cell">
+        select * from
+        cn_cell
+        <where>
+            <if test="params.ids != null and params.ids.size > 0">
+                and id in
+                <foreach item="id" collection="params.ids" separator="," open="(" close=")" index="">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="params.cellIds != null and params.cellIds.size > 0">
+                and cell_id in
+                <foreach item="cellId" collection="params.cellIds" separator="," open="(" close=")" index="">
+                    #{cellId}
+                </foreach>
+            </if>
+            <if test="params.nodebIds != null and params.nodebIds.size > 0">
+                and nodeb_id in
+                <foreach item="nodebId" collection="params.nodebIds" separator="," open="(" close=")" index="">
+                    #{nodebId}
+                </foreach>
+            </if>
+            <if test="params.technology != null and params.technology !=''">
+                and technology = #{params.technology}
+            </if>
+            <if test="params.lacTac != null">
+                and lac_tac = #{params.lacTac}
+            </if>
+            <if test="params.mcc != null">
+                and mcc = #{params.mcc}
+            </if>
+            <if test="params.mnc != null">
+                and mcc = #{params.mnc}
+            </if>
+            <if test="params.operator != null and params.operator !=''">
+                and operator like CONCAT('%', #{params.operator}, '%')
+            </if>
+            <if test="params.vendor != null and params.vendor !=''">
+                and vendor = #{params.vendor}
+            </if>
+            <if test="params.minLatitude != null">
+                and latitude >= #{params.minLatitude}
+            </if>
+            <if test="params.maxLatitude != null">
+                and latitude &lt;= #{params.minLatitude}
+            </if>
+            <if test="params.minLongitude != null">
+                and longitude >= #{params.minLongitude}
+            </if>
+            <if test="params.maxLongitude != null">
+                and longitude &lt;= #{params.maxLongitude}
+            </if>
+        </where>
+    </select>
+
+</mapper>
