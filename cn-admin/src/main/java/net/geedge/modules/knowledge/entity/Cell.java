@@ -1,6 +1,7 @@
 package net.geedge.modules.knowledge.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -40,4 +41,10 @@ public class Cell {
 
     private String fddSpectrum;
 
+    @TableField(exist = false)
+    private String country;
+    @TableField(exist = false)
+    private String superAdministrativeArea;
+    @TableField(exist = false)
+    private String administrativeArea;
 }

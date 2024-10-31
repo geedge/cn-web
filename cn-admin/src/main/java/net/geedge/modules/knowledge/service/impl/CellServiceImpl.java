@@ -3,6 +3,7 @@ package net.geedge.modules.knowledge.service.impl;
 import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import net.geedge.common.utils.GeoUtil;
 import net.geedge.common.utils.PageUtils;
 import net.geedge.common.utils.Query;
 import net.geedge.common.utils.Tool;
@@ -33,8 +34,18 @@ public class CellServiceImpl extends ServiceImpl<CellDao, Cell> implements CellS
             params.put("nodebIds", Arrays.asList(nodebIds.split(",")));
         }
         IPage page = this.page(new Query(Cell.class).getPage(params));
-        List<Cell> list = this.baseMapper.queryCellList(page, params);
-        page.setRecords(list);
+        List<Cell> cells = this.baseMapper.queryCellList(page, params);
+        if(Tool.ObjectUtil.isNotEmpty(cells)){
+            cells.stream().forEach(cell -> {
+                Map<String, Object> result = GeoUtil.reverseGeocode(cell.getLongitude(), cell.getLatitude());
+                if(Tool.ObjectUtil.isNotEmpty(result)){
+                    cell.setCountry(result.get("country").toString());
+                    cell.setAdministrativeArea(result.get("administrativeArea").toString());
+                    cell.setSuperAdministrativeArea(result.get("superAdministrativeArea").toString());
+                }
+            });
+        }
+        page.setRecords(cells);
         return new PageUtils(page);
     }
 
