@@ -7,9 +7,9 @@
 variables:
   XJAR_PIN: 111111
   # sys_i18n 数据源信息
-  CN_DB_HOST: "192.168.44.53"
+  CN_DB_HOST: "192.168.44.55"
   CN_DB_USER: "root"
-  CN_DB_PASSWORD: "111111"
+  CN_DB_PASSWORD: "galaxy2019"
   CN_DB_NAME: "cn_api"
 
 stages:
